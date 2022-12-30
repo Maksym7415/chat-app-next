@@ -3,7 +3,7 @@ import {
   socketEmitDeleteConversation,
   socketEmitClearConversation,
 } from "../config/socket/actions/socketEmit";
-// import { Paths } from "../routing/config/paths";
+import { PATHS } from "@/config/constants/paths";
 // import { updateConversationListAction } from "../reduxToolkit/conversations/slice";
 
 export const actionsConversationList = (data) => (dispatch) => {
@@ -32,7 +32,6 @@ export const actionsSelectedConversation = (props) => {
 
   const { typeAction, dataConversation = null } = props;
 
-  console.log(props);
   let _conversations = {};
 
   if (Object.keys(selectedChats).length) {
@@ -75,13 +74,13 @@ export const actionCreateNewConversation = (history, item) => {
   );
 
   if (chat) {
-    // return history.push(`${Paths.chat}/${chat.conversationId}`, {
+    // return history.push(`${PATHS.chat}/${chat.conversationId}`, {
     //   id: chat.conversationId,
     //   conversationData: chat,
     // });
   }
 
-  // return history.push(Paths.newChat, {
+  // return history.push(PATHS.newChat, {
   //   conversationData: {
   //     conversationAvatar: item.userAvatar,
   //     conversationName: item.fullName,

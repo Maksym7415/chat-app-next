@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { SIDE_LEFT_TYPE_CONTENT } from "@/config/constants/general";
 
 export const initialState = {
   isLoading: false,
   openConversationId: null,
   sideLeftConfig: {
-    // page: eSideLeftConfigPage.conversations,
+    page: SIDE_LEFT_TYPE_CONTENT.conversations,
   },
   allMessages: {},
   messageEdit: {

@@ -2,7 +2,7 @@ import { store } from "../../../reduxToolkit/store";
 import { socket } from "../index";
 import { actionsConversationList } from "../../../actions";
 // import { getUserConversationsRequest } from "../../../reduxToolkit/conversations/requests";
-// import { Paths } from "../../../routing/config/paths";
+import { PATHS } from "@/config/constants/paths";
 import {
   setAllMessagesAction,
   setMessagesChatAction,
@@ -195,7 +195,7 @@ export const socketOnUserIdNewChat = (userId, history) => {
     //       if (message.User?.id !== userId) {
     //         return;
     //       }
-    //       history.push(`${Paths.chat}/${conversationId}`, {
+    //       history.push(`${PATHS.chat}/${conversationId}`, {
     //         id: conversationId,
     //         conversationData: data[conversationId],
     //       });
@@ -217,7 +217,7 @@ export const socketOnDeleteConversation = ({ params, history }) => {
     //   delete copyConversationsList[id];
     // });
     // if (ids.includes(params?.id)) {
-    //   history.push(Paths.main);
+    //   history.push(PATHS.main);
     // }
     // store.dispatch(setAllMessagesAction({ ...copyAllMessages }));
     // store.dispatch(setConversationListAction(copyConversationsList));

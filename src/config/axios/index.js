@@ -11,7 +11,7 @@ const parseErrorCode = (error) => {
       alert(error.response?._response);
     }
     if (error.response.status === 401) {
-      store.dispatch(actionLogOut());
+      // store.dispatch(actionLogOut());
     } else if (error.response.status === 404) {
       const { message } = error.response.data;
     }

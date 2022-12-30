@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import ClientPage from "./ClientPage";
-import { namesCookies } from "@/config/cookiesStorage";
+import { namesCookies } from "@/config/constants/general";
 
 const VerificationPage = async () => {
   const token = await cookies().get(namesCookies.accessToken)?.value;

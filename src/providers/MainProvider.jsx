@@ -6,7 +6,10 @@ import createCache from "@emotion/cache";
 import CssBaseline from "@mui/material/CssBaseline";
 import Theme from "@/config/theme";
 import { store } from "src/reduxToolkit/store";
-import AuthProvider from "./AuthProvider";
+import ContextMenu from "@/components/contextMenu";
+import ModalCustom from "@/components/modal";
+import DrawerCustom from "@/components/drawer";
+import DialogCustom from "@/components/dialogWindow/Dialog";
 
 const cache = createCache({
   key: "css",
@@ -16,8 +19,14 @@ const cache = createCache({
 const MainProvider = ({ session, children }) => {
   return (
     <Theme>
-      <CssBaseline />
-      <Provider store={store}>{children}</Provider>
+      <Provider store={store}>
+        <DrawerCustom />
+        <ContextMenu />
+        <ModalCustom />
+        <DialogCustom />
+        <CssBaseline />
+        {children}
+      </Provider>
     </Theme>
   );
 };

@@ -8,6 +8,7 @@ import * as config from "./config";
 import AuthForm from "@/components/authForm";
 import languages from "@/config/translations";
 import { postSingUpRequest } from "@/store/auth/requests";
+import { PATHS } from "@/config/constants/paths";
 
 const SignUpClientPage = () => {
   // HOOKS
@@ -35,7 +36,7 @@ const SignUpClientPage = () => {
           login: data.email,
         },
         cb: () => {
-          history.push(Paths.verification);
+          history.push(PATHS.verification);
         },
         errorCb: (dataError) => {
           dataError?.message && setErrorBack(dataError?.message);

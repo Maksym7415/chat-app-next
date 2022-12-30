@@ -65,45 +65,25 @@ export default function SignInPage() {
   };
 
   return (
-    <>
-      <AuthForm
-        title={languages[lang].authorization.signIn}
-        submitBtnTitle={languages[lang].authorization.signIn}
-        configFields={config.signInFields}
-        onSubmit={onSubmit}
-        errorBack={errorBack}
-        optionsForm={{
-          control,
-          handleSubmit,
-          errors,
-        }}
-        render={{
-          text: (styles) => (
-            <p className={styles.text} onClick={() => router.push("sign-up")}>
-              {languages[lang].authorization.haveNoAccount}{" "}
-              {languages[lang].authorization.signUp} ?
-            </p>
-          ),
-        }}
-      />
-      {/* <button
-        onClick={() => {
-          // setCookie(null, "token", "111___111");
-          // nookies.set(null, "token", "complex", {});
-          Cookies.set("token", "complex");
-        }}
-      >
-        setCookie
-      </button>
-      <button
-        onClick={() => {
-          // const token = nookies.get(null, "token");
-          // console.log(token, "token");
-          console.log(Cookies.get("token"), "token");
-        }}
-      >
-        getCookie
-      </button> */}
-    </>
+    <AuthForm
+      title={languages[lang].authorization.signIn}
+      submitBtnTitle={languages[lang].authorization.signIn}
+      configFields={config.signInFields}
+      onSubmit={onSubmit}
+      errorBack={errorBack}
+      optionsForm={{
+        control,
+        handleSubmit,
+        errors,
+      }}
+      render={{
+        text: (styles) => (
+          <p className={styles.text} onClick={() => router.push("sign-up")}>
+            {languages[lang].authorization.haveNoAccount}{" "}
+            {languages[lang].authorization.signUp} ?
+          </p>
+        ),
+      }}
+    />
   );
 }

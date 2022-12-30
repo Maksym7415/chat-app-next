@@ -1,9 +1,18 @@
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import ClientPage from "./ClientPage";
+import { namesCookies } from "@/config/constants/general";
 
-export default async function HomePage(props) {
+const HomePage = async (props) => {
+  const token = await cookies().get(namesCookies.accessToken)?.value;
+
+  if (!token) redirect("/sign-in");
+
   return (
-    <main>
-      <ClientPage />
-    </main>
+    <>
+      <ClientPage token={token} />
+    </>
   );
-}
+};
+
+export default HomePage;

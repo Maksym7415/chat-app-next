@@ -1,4 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
+"use client"
 import { useSnackbar, VariantType } from "notistack";
 
 let useSnackbarRef;

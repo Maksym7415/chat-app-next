@@ -1,10 +1,8 @@
-// "use client";
-import nookies from "nookies";
+"use client";
 
-export const namesCookies = {
-  accessToken: "accessToken",
-  lang: "@@lang",
-};
+import nookies from "nookies";
+import Cookies from "js-cookie";
+import { namesCookies } from "@/config/constants/general";
 
 // Token
 export const setTokenCook = (accessToken) => {
@@ -12,7 +10,8 @@ export const setTokenCook = (accessToken) => {
 };
 
 export const getTokenCook = () => {
-  return nookies.set(null, namesCookies.accessToken)?.value;
+  // return nookies.get(null, namesCookies.accessToken)?.value;
+  return Cookies.get(namesCookies.accessToken);
 };
 
 export const removeTokenCook = () => {

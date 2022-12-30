@@ -17,9 +17,6 @@ const AuthProvider = ({ children }) => {
 
   const router = useRouter();
 
-  console.log(router, "router");
-  // console.log(token, "token");
-
   // if (pathName === "/sign-in") {
   //   if (token) router.push("sign-up");
   // }

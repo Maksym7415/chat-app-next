@@ -3,22 +3,40 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
 import shallow from "zustand/shallow";
-
-import AuthForm from "@/components/authForm";
-import languages from "@/config/translations";
-import { postVerificationRequest } from "@/store/auth/requests";
+import Main from "@/core/main";
 import { useAuth } from "@/storeZustand/auth/store";
+import { useConversationsStore } from "@/storeZustand/conversations/store";
 
-const MainClientPage = () => {
+const MainClientPage = ({ token }) => {
+  const { authTokenAction } = useAuth(
+    (state) => ({
+      authTokenAction: state.authTokenAction,
+    }),
+    shallow
+  );
+  const { getUserConversationsRequest } = useConversationsStore(
+    (state) => ({
+      getUserConversationsRequest: state.getUserConversationsRequest,
+    }),
+    shallow
+  );
+
+  useEffect(() => {
+    getUserConversationsRequest();
+    authTokenAction(token);
+  }, []);
+
   return (
-    <div
+    <>
+      {/* <div
       className={"flex items-center overflow-x-auto flex-nowrap py-5"}
       style={{ backgroundColor: "red" }}
     >
       Main
-    </div>
+    </div> */}
+      <Main />
+    </>
   );
 };
 

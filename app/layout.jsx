@@ -15,7 +15,6 @@ const fontSans = FontSans({
 const RootLayout = async ({ children, ...rest }) => {
   const session = await unstable_getServerSession();
 
-  // console.log(rest, "rest");
   return (
     <html lang="en" className={clsx(fontSans.variable)}>
       {/*

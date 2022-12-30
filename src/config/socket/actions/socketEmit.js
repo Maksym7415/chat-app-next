@@ -136,7 +136,6 @@ export const socketEmitChatCreation = ({
     imageData,
     imageFormat,
     (success) => {
-      console.log(success, "success");
       if (success) {
         cb && cb();
       }
