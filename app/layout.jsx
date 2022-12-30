@@ -1,14 +1,34 @@
-import './globals.css'
+import { Inter as FontSans } from "@next/font/google";
+import { clsx } from "clsx";
+import { unstable_getServerSession } from "next-auth/next";
 
-export default function RootLayout({ children }) {
+import "./globals.css";
+import "./reset.scss";
+
+import Providers from "@/providers/MainProvider";
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const RootLayout = async ({ children, ...rest }) => {
+  const session = await unstable_getServerSession();
+
+  // console.log(rest, "rest");
   return (
-    <html lang="en">
+    <html lang="en" className={clsx(fontSans.variable)}>
       {/*
         <head /> will contain the components returned by the nearest parent
         head.jsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body>{children}</body>
+      <body>
+        <Providers session={session}>{children}</Providers>
+        {/* {children} */}
+      </body>
     </html>
-  )
-}
+  );
+};
+
+export default RootLayout;
