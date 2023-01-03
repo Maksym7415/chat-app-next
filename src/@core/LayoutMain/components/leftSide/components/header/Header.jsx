@@ -2,7 +2,6 @@
 
 import { useState, memo, useEffect } from "react";
 import shallow from "zustand/shallow";
-import { makeStyles } from "@mui/styles";
 import TopCenterComponent from "./components/topCenterComponent";
 import TopLeftComponent from "./components/topLeftComponent";
 import { getSearchContactRequest } from "@/store/search/requests";
@@ -10,22 +9,14 @@ import { useAppStore } from "@/storeZustand/app/store";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/config/constants/general";
 
 // STYLES
-const useStyles = makeStyles((theme) => ({
-  container: {
-    padding: "15px 5px",
-  },
-  containerTop: {
-    display: "flex",
-    alignItems: "center",
-  },
-  wrapperTopCenterComponent: {
-    display: "flex",
-  },
-}));
+const classes = {
+  container: "px-[8px] py-[15px]",
+  containerTop: "flex",
+  wrapperTopCenterComponent: "flex",
+};
 
 const Header = ({ children }) => {
   // HOOKS
-  const classes = useStyles();
 
   const { sideLeftConfig, setSideLeftConfigAction } = useAppStore(
     (state) => ({
@@ -81,7 +72,7 @@ const Header = ({ children }) => {
 
   return (
     <div className={classes.container}>
-      <div className={classes.containerTop}>
+      <div className={`${classes.containerTop} flex`}>
         <TopLeftComponent />
         <div className={classes.wrapperTopCenterComponent}>
           <TopCenterComponent parentSettings={settings.topCenterComponent} />

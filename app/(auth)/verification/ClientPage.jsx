@@ -3,34 +3,32 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
 import shallow from "zustand/shallow";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
 import languages from "@/config/translations";
-import { postVerificationRequest } from "@/store/auth/requests";
-import { useAuth } from "@/storeZustand/auth/store";
+import { useAuthStore } from "@/storeZustand/auth/store";
+import { useSettingStore } from "@/storeZustand/setting/store";
 
 const VerificationClientPage = () => {
   // HOOKS
-  const dispatch = useDispatch();
   const router = useRouter();
 
-  const { loginSingIn, verificationCode, postVerificationRequest } = useAuth(
+  const { lang } = useSettingStore(
     (state) => ({
-      loginSingIn: state.loginSingIn,
-      verificationCode: state.verificationCode,
-      postVerificationRequest: state.postVerificationRequest,
+      lang: state.lang,
     }),
     shallow
   );
-
-  // SELECTORS
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-  // this provided to prevent redirect in case we signing up, making automatically login and redirecting user straight to verification page
-  // const { loginSingIn, verificationCode } = useSelector(
-  //   ({ authSlice }) => authSlice
-  // );
+  const { loginSingIn, verificationCode, postVerificationRequest } =
+    useAuthStore(
+      (state) => ({
+        loginSingIn: state.loginSingIn,
+        verificationCode: state.verificationCode,
+        postVerificationRequest: state.postVerificationRequest,
+      }),
+      shallow
+    );
 
   // STATES
   const [errorBack, setErrorBack] = useState("");
@@ -60,8 +58,6 @@ const VerificationClientPage = () => {
       },
     };
 
-    // dispatch(postVerificationRequest(sendData));
-
     postVerificationRequest(sendData);
 
     errorBack && setErrorBack("");
@@ -74,10 +70,6 @@ const VerificationClientPage = () => {
       setValue("verificationCode", `${verificationCode}`);
     }
   }, [verificationCode]);
-
-  // if (!loginSingIn) {
-  //   redirect("/sign-in");
-  // }
 
   return (
     <AuthForm

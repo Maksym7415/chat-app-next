@@ -5,7 +5,7 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 import { colors } from "./config/colors";
 
-let theme = createTheme({
+export let theme = createTheme({
   colors: {
     ...colors.gray_light,
     ...colors.white,

@@ -1,8 +1,5 @@
 import * as React from "react";
 import { makeStyles } from "@mui/styles";
-import { Box } from "@mui/material";
-
-// need ts
 
 const useStyles = makeStyles((theme) => ({
   wrapperInfoCenter: {
@@ -14,18 +11,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RenderInfoCenterBox = ({ children, styles }: any) => {
+const RenderInfoCenterBox = ({ children, styles }) => {
   // STYLES
   const classes = useStyles();
 
   return (
-    <Box
-      className={classes.wrapperInfoCenter}
-      sx={{ width: "100%" }}
-      style={styles}
-    >
+    <div className={classes.wrapperInfoCenter} style={styles}>
       {children}
-    </Box>
+    </div>
   );
 };
 

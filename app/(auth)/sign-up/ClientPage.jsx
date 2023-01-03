@@ -3,20 +3,30 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
 import languages from "@/config/translations";
-import { postSingUpRequest } from "@/store/auth/requests";
 import { PATHS } from "@/config/constants/paths";
+import { useSettingStore } from "@/storeZustand/setting/store";
+import { useAuthStore } from "@/storeZustand/auth/store";
 
 const SignUpClientPage = () => {
   // HOOKS
-  const dispatch = useDispatch();
   const router = useRouter();
 
   // SELECTORS
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const { lang } = useSettingStore(
+    (state) => ({
+      lang: state.lang,
+    }),
+    shallow
+  );
+  const { postSingUpRequest } = useAuthStore(
+    (state) => ({
+      postSingUpRequest: state.postSingUpRequest,
+    }),
+    shallow
+  );
 
   // STATES
   const [errorBack, setErrorBack] = useState("");
@@ -28,21 +38,19 @@ const SignUpClientPage = () => {
 
   // FUNCTIONS
   const onSubmit = (data) => {
-    dispatch(
-      postSingUpRequest({
-        data: {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          login: data.email,
-        },
-        cb: () => {
-          history.push(PATHS.verification);
-        },
-        errorCb: (dataError) => {
-          dataError?.message && setErrorBack(dataError?.message);
-        },
-      })
-    );
+    postSingUpRequest({
+      data: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        login: data.email,
+      },
+      cb: () => {
+        history.push(PATHS.verification);
+      },
+      errorCb: (dataError) => {
+        dataError?.message && setErrorBack(dataError?.message);
+      },
+    });
 
     errorBack && setErrorBack("");
   };

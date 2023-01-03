@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Search = ({ params, heightContent }) => {
+const Search = ({ params }) => {
   // HOOKS
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -71,7 +71,7 @@ const Search = ({ params, heightContent }) => {
   }
 
   return (
-    <div className={classes.container} style={{ height: heightContent }}>
+    <div className={classes.container}>
       {![TYPES_FROM_TO_SEARCH_SCREEN.main].includes(params?.from) && (
         <Header
           placeholder={settings.header.placeholder}

@@ -2,6 +2,7 @@
 
 import { useMemo, memo } from "react";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 import { contextMenu } from "react-contexify";
 import shallow from "zustand/shallow";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,16 +18,17 @@ import {
   actionsSelectedConversation,
   actionsTypeActionsConversation,
 } from "@/actions/index";
-import { useAuth } from "@/storeZustand/auth/store";
+import { useAuthStore } from "@/storeZustand/auth/store";
 
 const ConversationItem = ({ data, usersTyping }) => {
   // HOOKS
   const dispatch = useDispatch();
   const classes = useStyles();
+  const router = useRouter();
 
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-  const { authToken } = useAuth(
+  const { authToken } = useAuthStore(
     (state) => ({
       authToken: state.authToken,
     }),
@@ -42,10 +44,12 @@ const ConversationItem = ({ data, usersTyping }) => {
     arr.forEach((el) => (str += el.firstName));
     return str;
   };
+  console.log(router, "router");
 
   const handleClickChatItem = (id) => {
     // if (+params.id === id) return;
-    // history.push(`${PATHS.chat}/${id}`, {
+    router.push(`${PATHS.chat}/${id}`);
+    // router.push(`${PATHS.chat}/${id}`, {
     //   id: data.conversationId,
     //   conversationData: data,
     // });

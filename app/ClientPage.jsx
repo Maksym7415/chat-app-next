@@ -1,15 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import shallow from "zustand/shallow";
-import Main from "@/core/main";
-import { useAuth } from "@/storeZustand/auth/store";
+import LayoutMain from "@/core/LayoutMain";
+import { useAuthStore } from "@/storeZustand/auth/store";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
 
 const MainClientPage = ({ token }) => {
-  const { authTokenAction } = useAuth(
+  const { authTokenAction } = useAuthStore(
     (state) => ({
       authTokenAction: state.authTokenAction,
     }),
@@ -29,13 +27,7 @@ const MainClientPage = ({ token }) => {
 
   return (
     <>
-      {/* <div
-      className={"flex items-center overflow-x-auto flex-nowrap py-5"}
-      style={{ backgroundColor: "red" }}
-    >
-      Main
-    </div> */}
-      <Main />
+      <LayoutMain />
     </>
   );
 };

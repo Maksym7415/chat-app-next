@@ -23,7 +23,7 @@ const initialState = {
   headers: { accessToken: "" },
 };
 
-export const useAuth = create((set, get) => ({
+export const useAuthStore = create((set, get) => ({
   // STATES
   ...initialState,
 

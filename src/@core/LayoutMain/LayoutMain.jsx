@@ -6,7 +6,6 @@ import { makeStyles } from "@mui/styles";
 import { useDispatch, useSelector } from "react-redux";
 import shallow from "zustand/shallow";
 import LeftSide from "./components/leftSide";
-import MainContent from "./components/mainContent";
 import { socket } from "@/config/socket";
 import {
   socketOnUserIdChat,
@@ -17,26 +16,21 @@ import {
   socketOnClearConversation,
 } from "@/config/socket/actions/socketOn";
 import { getUserProfileDataRequest } from "@/store/user/requests";
-import { useAuth } from "@/storeZustand/auth/store";
+import { useAuthStore } from "@/storeZustand/auth/store";
 
 // STYLES
-const useStyles = makeStyles((theme) => ({
-  container: {
-    height: "100vh",
-    display: "flex",
-    backgroundImage: `url(/bg5.png)`,
-  },
-}));
+const classes = {
+  container: "flex h-screen bg-[url('/bg5.png')]",
+};
 
 const styleRnd = {
   position: "relative",
   borderRight: "1px solid rgba(0, 0, 0, 0.2)",
 };
 
-const MainPage = () => {
+const MainPage = ({ children }) => {
   // HOOKS
   const dispatch = useDispatch();
-  const classes = useStyles();
 
   // SELECTORS
   const conversationsList = useSelector(
@@ -44,7 +38,7 @@ const MainPage = () => {
   );
   // const authToken = useSelector(({ authSlice }) => authSlice.authToken);
 
-  const { authToken } = useAuth(
+  const { authToken } = useAuthStore(
     (state) => ({
       authToken: state.authToken,
     }),
@@ -110,7 +104,7 @@ const MainPage = () => {
       >
         <LeftSide />
       </Rnd>
-      <MainContent />
+      {children}
     </main>
   );
 };

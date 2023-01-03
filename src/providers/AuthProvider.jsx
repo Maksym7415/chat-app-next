@@ -6,12 +6,12 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // import { useActions } from "@/hooks/useActions";
-// import { useAuth } from "@/hooks/useAuth";
+// import { useAuthStore } from "@/hooks/useAuthStore";
 
 const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
   const pathName = usePathname();
-  // const { user } = useAuth()
+  // const { user } = useAuthStore()
   // const { checkAuth, logout } = useActions()
   // const token = useSelector(({ authSlice }) => authSlice.headers.accessToken);
 

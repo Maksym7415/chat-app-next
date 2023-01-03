@@ -1,7 +1,7 @@
 export const PATHS = {
   main: "/",
-  signIn: "/signIn",
-  signUp: "/signUp",
+  signIn: "/sign-in",
+  signUp: "/sign-up",
   verification: "/verification",
   profile: "/profile",
   chat: "/chat",

@@ -12,7 +12,7 @@ import { fullDate } from "../../../../helpers";
 import Snackbar from "@/helpers/notistack";
 import { setDialogWindowClearConfigAction } from "../../redux/slice";
 import { socketEmitChatCreation } from "../../../../config/socket/actions/socketEmit";
-import { useAuth } from "@/storeZustand/auth/store";
+import { useAuthStore } from "@/storeZustand/auth/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
 import shallow from "zustand/shallow";
 
@@ -31,7 +31,7 @@ const NewChat = () => {
     shallow
   );
 
-  const { authToken } = useAuth(
+  const { authToken } = useAuthStore(
     (state) => ({
       authToken: state.authToken,
     }),

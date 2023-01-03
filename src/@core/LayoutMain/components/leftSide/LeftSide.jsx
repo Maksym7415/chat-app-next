@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, memo } from "react";
-import { makeStyles } from "@mui/styles";
 import Conversations from "@/screens/conversations/index";
 import SearchPage from "@/screens/search";
 import Header from "./components/header";
@@ -13,18 +12,13 @@ import { useAppStore } from "@/storeZustand/app/store";
 import shallow from "zustand/shallow";
 
 // STYLES
-const useStyles = makeStyles((theme) => ({
-  container: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-    background: "#ffffff",
-  },
-}));
+const classes = {
+  container: "flex bg-white flex-col h-full",
+};
 
 const LeftSide = () => {
   // HOOKS
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const { sideLeftConfig } = useAppStore(
     (state) => ({
@@ -35,18 +29,15 @@ const LeftSide = () => {
 
   // RENDERS
   const renderContent = useMemo(() => {
-    const heightContent = `calc(100vh - ${0}px)`;
-
     switch (sideLeftConfig.page) {
       case SIDE_LEFT_TYPE_CONTENT.conversations:
-        return <Conversations heightContent={heightContent} />;
+        return <Conversations />;
       case SIDE_LEFT_TYPE_CONTENT.searchContacts:
         return (
           <SearchPage
             params={{
               from: TYPES_FROM_TO_SEARCH_SCREEN.main,
             }}
-            heightContent={heightContent}
           />
         );
       default:

@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ConversationsPage = ({ heightContent }) => {
+const ConversationsPage = () => {
   // HOOKS
   const classes = useStyles();
 
@@ -28,14 +28,6 @@ const ConversationsPage = ({ heightContent }) => {
     }),
     shallow
   );
-
-  // SELECTORS
-  // const conversationsList = useSelector(
-  //   ({ conversationsSlice }) => conversationsSlice.conversationsList.data
-  // );
-  // const usersTyping = useSelector(
-  //   ({ conversationsSlice }) => conversationsSlice.conversationTypeState
-  // );
 
   // VARIABLES
   const dataSortDate = useMemo(
@@ -49,7 +41,7 @@ const ConversationsPage = ({ heightContent }) => {
   );
 
   return (
-    <div className={classes.container} style={{ height: heightContent }}>
+    <div className={classes.container}>
       {dataSortDate.map((conversation) => {
         return (
           <ConversationItem

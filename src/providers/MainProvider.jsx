@@ -18,16 +18,16 @@ const cache = createCache({
 
 const MainProvider = ({ session, children }) => {
   return (
-    <Theme>
-      <Provider store={store}>
-        <DrawerCustom />
-        <ContextMenu />
-        <ModalCustom />
-        <DialogCustom />
-        <CssBaseline />
-        {children}
-      </Provider>
-    </Theme>
+    // <Theme>
+    <Provider store={store}>
+      <DrawerCustom />
+      <ContextMenu />
+      <ModalCustom />
+      <DialogCustom />
+      {/* <CssBaseline /> */}
+      {children}
+    </Provider>
+    // </Theme>
   );
 };
 

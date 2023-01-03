@@ -10,14 +10,14 @@ import * as config from "./config";
 import AuthForm from "@/components/authForm";
 import languages from "@/config/translations";
 import { postLoginRequest } from "@/store/auth/requests";
-import { useAuth } from "@/storeZustand/auth/store";
+import { useAuthStore } from "@/storeZustand/auth/store";
 
 export default function SignInPage() {
   // HOOKS
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { loginSingIn, postLoginRequest } = useAuth(
+  const { loginSingIn, postLoginRequest } = useAuthStore(
     (state) => ({
       loginSingIn: state.loginSingIn,
       postLoginRequest: state.postLoginRequest,
