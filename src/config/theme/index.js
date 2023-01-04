@@ -110,9 +110,9 @@ const cache = createCache({
 
 function Theme(props) {
   return (
-    <CacheProvider value={cache}>
-      <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
-    </CacheProvider>
+    // <CacheProvider value={cache}>
+    <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
+    // </CacheProvider>
   );
 }
 

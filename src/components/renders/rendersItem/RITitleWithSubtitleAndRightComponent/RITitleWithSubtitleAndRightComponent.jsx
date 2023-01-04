@@ -1,7 +1,6 @@
-import React from "react";
-import useStyles from "./styles";
+"use client";
 
-// need ts
+import useStyles from "./styles";
 
 const RITitleWithSubtitleAndRightComponent = ({
   title = "",
@@ -14,7 +13,7 @@ const RITitleWithSubtitleAndRightComponent = ({
     title: {},
     subTitle: {},
   },
-}: any) => {
+}) => {
   // HOOKS
   const classesRoot = useStyles();
 

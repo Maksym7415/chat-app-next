@@ -6,6 +6,7 @@ import "./globals.css";
 import "./reset.scss";
 
 import Providers from "@/providers/MainProvider";
+import EmotionRootStyleRegistry from "./EmotionRootStyleRegistry";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -23,7 +24,9 @@ const RootLayout = async ({ children, ...rest }) => {
       */}
       <head />
       <body>
-        <Providers session={session}>{children}</Providers>
+        <EmotionRootStyleRegistry>
+          <Providers session={session}>{children}</Providers>
+        </EmotionRootStyleRegistry>
         {/* {children} */}
       </body>
     </html>

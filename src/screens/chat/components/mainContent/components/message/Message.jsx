@@ -1,8 +1,9 @@
 "use client";
 
-import { useLayoutEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import clsx from "clsx";
 import { contextMenu } from "react-contexify";
+import shallow from "zustand/shallow";
 import { useDispatch, useSelector } from "react-redux";
 import { Divider, IconButton } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
@@ -17,10 +18,9 @@ import {
   actionsMessagesChat,
 } from "@/actions/index";
 import { TYPES_CONVERSATIONS } from "@/config/constants/general";
-import store from "@/store/store";
-// import { setContextMenuConfigAction } from "@/components/contextMenu/redux/slice";
-
-// need ts
+import {store} from "@/store/store";
+import { CONTEXT_MENU_ID } from "@/config/constants/general";
+import { useAppStore } from "@/storeZustand/app/store";
 
 const stylePaper = {
   padding: "15px",
@@ -48,6 +48,13 @@ const Message = ({
     ({ appSlice }) => appSlice.selectedMessages
   );
   const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
+
+  const { setContextMenuConfigAction } = useAppStore(
+    (state) => ({
+      setContextMenuConfigAction: state.setContextMenuConfigAction,
+    }),
+    shallow
+  );
 
   const selfMessage = userInfo.id === messageData.User?.id;
 
@@ -88,7 +95,7 @@ const Message = ({
   };
 
   // USEEFFECTS
-  useLayoutEffect(() => {
+  useEffect(() => {
     // shared message
     if (messageData.forwardedUser) {
       return setSettings((prev) => ({
@@ -156,27 +163,26 @@ const Message = ({
         style={{
           justifyContent: selfMessage ? "flex-end" : "flex-start",
         }}
-        // onContextMenu={(event) => {
-        //   if (selectedMessages.active) return;
+        onContextMenu={(event) => {
+          if (selectedMessages.active) return;
 
-        //   dispatch(
-        //     setContextMenuConfigAction({
-        //       isShowMenu: true,
-        //       messageId: 0,
-        //       config: config.selectedMessageContext(lang).filter((item) => {
-        //         if (!selfMessage) {
-        //           return !item.self;
-        //         }
-        //         return true;
-        //       }),
-        //       callBackItem: handleClickContextMessage,
-        //     })
-        //   );
-        //   contextMenu.show({
-        //     id: eContextMenuId.main,
-        //     event: event,
-        //   });
-        // }}
+          setContextMenuConfigAction({
+            isShowMenu: true,
+            messageId: 0,
+            config: config.selectedMessageContext(lang).filter((item) => {
+              if (!selfMessage) {
+                return !item.self;
+              }
+              return true;
+            }),
+            callBackItem: handleClickContextMessage,
+          });
+
+          contextMenu.show({
+            id: CONTEXT_MENU_ID.main,
+            event: event,
+          });
+        }}
       >
         {[TYPES_CONVERSATIONS.chat].includes(typeConversation) &&
           isShowAvatar && (

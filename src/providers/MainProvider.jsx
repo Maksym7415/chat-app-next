@@ -24,7 +24,7 @@ const MainProvider = ({ session, children }) => {
       <ContextMenu />
       <ModalCustom />
       <DialogCustom />
-      {/* <CssBaseline /> */}
+      <CssBaseline />
       {children}
     </Provider>
     // </Theme>

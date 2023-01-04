@@ -1,27 +1,41 @@
+"use client";
+
 import { useCallback, useEffect, useState } from "react";
 import { Virtuoso } from "react-virtuoso";
-import { useDispatch, useSelector } from "react-redux";
-import useStyles from "./styles";
+import shallow from "zustand/shallow";
 import UserAvatar from "@/components/avatar/userAvatar";
 import RenderConditionsList from "@/components/renders/renderConditionsList";
-
-import { getSearchContactRequest } from "@/store/search/requests";
 import { setStateDirection } from "@/helpers/index";
+import { useSearchStore } from "@/storeZustand/search/store";
 
-// need ts
+// STYLES
+const classes = {
+  container: "h-full bg-white",
+  wrapperContacts: "p-[5px] h-full",
+  wrapperContact:
+    "flex px-[10px] py-[5px] rounded-[20px] cursor-pointer hover:bg-[#dfe7f4]",
+  wrapperInfo: "pl-[20px] overflow-hidden",
+  fullName: "text-[16px] m-0 line-clamp-1",
+  login: "m-[0px] mt-[3px] text-[12px] line-clamp-1",
+  avatarView: "",
+};
 
 const SearchMain = ({ onClickContact }) => {
   // HOOKS
-  const dispatch = useDispatch();
-  const classes = useStyles();
 
-  // SELECTORS
-  const isLoading = useSelector(({ searchSlice }) => searchSlice.isLoading);
-  const searchContacts = useSelector(
-    ({ searchSlice }) => searchSlice.searchContacts
+  const { isLoading, searchContacts, getSearchContactRequest } = useSearchStore(
+    (state) => ({
+      searchContacts: state.searchContacts,
+      isLoading: state.isLoading,
+      getSearchContactRequest: state.getSearchContactRequest,
+    }),
+    shallow
   );
 
+  // STATES
   const [contacts, setContacts] = useState([]);
+
+  // FUNCTIONS
   const loadMore = useCallback(() => {
     if (
       searchContacts.limit &&
@@ -32,16 +46,15 @@ const SearchMain = ({ onClickContact }) => {
         offset: searchContacts.offset + searchContacts.limit,
       };
 
-      dispatch(
-        getSearchContactRequest({
-          params,
-          direction: "down",
-        })
-      );
+      getSearchContactRequest({
+        params,
+        direction: "down",
+      });
     }
     return false;
   }, []);
 
+  // USEEFFECTS
   useEffect(() => {
     setStateDirection({
       direction: searchContacts.direction,
@@ -50,6 +63,7 @@ const SearchMain = ({ onClickContact }) => {
     });
   }, [searchContacts.response]);
 
+  console.log(searchContacts, "searchContacts");
   // RENDER CONDITIONAL
   if (!contacts.length || isLoading) {
     return <RenderConditionsList list={contacts} isLoading={isLoading} />;

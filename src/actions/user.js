@@ -1,15 +1,10 @@
-import { setLangAction } from "../reduxToolkit/setting/slice";
-import {
-  authTokenAction,
-  setAuthHeadersAction,
-} from "../reduxToolkit/auth/slice";
 import { removeTokenCook } from "@/config/cookiesStorage";
-import { redirect } from "next/navigation";
+import { useAuthStore } from "@/storeZustand/auth/store";
+import { useSettingStore } from "@/storeZustand/setting/store";
 
-export const actionLogOut = () => (dispatch) => {
-  dispatch(setLangAction("en"));
-  dispatch(authTokenAction(null));
-  dispatch(setAuthHeadersAction({ accessToken: "" }));
+export const actionLogOut = () => {
+  useSettingStore.getState().setLangAction("en");
+  useAuthStore.getState().authTokenAction(null);
+  useAuthStore.getState().setAuthHeadersAction({ accessToken: "" });
   removeTokenCook();
-  redirect("/sign-in");
 };

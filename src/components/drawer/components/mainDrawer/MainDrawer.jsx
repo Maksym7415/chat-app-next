@@ -1,34 +1,37 @@
-import React from "react";
+import { useRouter } from "next/navigation";
 import { ListItemIcon, ListItemText, List, ListItem } from "@mui/material";
 import * as config from "./config";
-import useStyles from "./styles";
 import { PATHS } from "@/config/constants/paths";
 import { actionLogOut } from "@/actions/index";
 import BaseSelect from "../../../selects/BaseSelect";
-import {
-  putUpdateProfileRequest,
-  getUserProfileDataRequest,
-} from "@/store/user/requests";
-import { setLangAction } from "@/store/setting/slice";
 import { useAppStore } from "@/storeZustand/app/store";
 import { useUserStore } from "@/storeZustand/user/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
 import shallow from "zustand/shallow";
 
+const classes = {
+  list: "",
+  wrapperLangs: "p-[15px]",
+  listItem: "w-full",
+};
+
 function MainDrawer({ closeDrawer }) {
   // HOOKS
-  const classes = useStyles();
+  const router = useRouter();
 
-  const { lang } = useSettingStore(
+  const { lang, setLangAction } = useSettingStore(
     (state) => ({
       lang: state.lang,
+      setLangAction: state.setLangAction,
     }),
     shallow
   );
 
-  const { userInfo } = useUserStore(
+  const { userInfo, getUserProfileDataRequest } = useUserStore(
     (state) => ({
       userInfo: state.userInfo,
+      getUserProfileDataRequest: state.getUserProfileDataRequest,
+      putUpdateProfileRequest: state.putUpdateProfileRequest,
     }),
     shallow
   );
@@ -67,8 +70,8 @@ function MainDrawer({ closeDrawer }) {
         }, 100);
         return;
       case "logout":
-        dispatch(actionLogOut());
-        // history.push(PATHS.signIn);
+        actionLogOut();
+        router.push(PATHS.signIn);
         return;
       default:
         return null;
@@ -84,20 +87,17 @@ function MainDrawer({ closeDrawer }) {
     }
 
     const sendData = { lang: selectLang };
-    dispatch(
-      putUpdateProfileRequest({
-        data: sendData,
-        cb: () => {
-          dispatch(
-            getUserProfileDataRequest({
-              cb: () => {
-                dispatch(setLangAction(selectLang));
-              },
-            })
-          );
-        },
-      })
-    );
+
+    putUpdateProfileRequest({
+      data: sendData,
+      cb: () => {
+        getUserProfileDataRequest({
+          cb: () => {
+            setLangAction(selectLang);
+          },
+        });
+      },
+    });
   };
 
   return (

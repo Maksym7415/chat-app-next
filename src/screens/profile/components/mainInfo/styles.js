@@ -29,12 +29,14 @@ export default makeStyles((theme) => ({
   },
   switchNotification: {},
   dividerNotification: {
-    backgroundColor: theme.colors.gray_10,
+    // backgroundColor: theme.colors.gray_10,
+    backgroundColor: "#D9D9D9",
     marginRight: 15,
   },
   divider: {
     flexDirection: "row",
-    backgroundColor: theme.colors.gray_10,
+    // backgroundColor: theme.colors.gray_10,
+    backgroundColor: "#D9D9D9",
   },
   wrapperList: {
     backgroundColor: "#ffffff",

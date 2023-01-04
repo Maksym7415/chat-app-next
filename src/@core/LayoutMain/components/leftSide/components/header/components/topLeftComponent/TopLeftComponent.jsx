@@ -12,15 +12,13 @@ import { useAppStore } from "@/storeZustand/app/store";
 // need ts
 
 // STYLES
-const useStyles = makeStyles((theme) => ({
-  container: {
-    marginRight: "15px",
-  },
-}));
+const classes = {
+  container: "mr-[15px] ",
+};
 
 const TopLeftComponent = () => {
   // HOOKS
-  const classes = useStyles();
+
 
   const { sideLeftConfig, setSideLeftConfigAction, setDrawerConfigAction } =
     useAppStore(

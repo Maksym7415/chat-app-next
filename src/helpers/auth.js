@@ -4,9 +4,6 @@ import { getTokenCook } from "@/config/cookiesStorage/index";
 export const getHeaders = async () => {
   try {
     const state = await store.getState();
-    const {
-      headers: {},
-    } = state.authSlice;
 
     let headersConfig = {};
 

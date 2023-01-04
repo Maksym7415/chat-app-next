@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, memo, useLayoutEffect } from "react";
+import { useCallback, useState, memo, useEffect } from "react";
 import useStyles from "./styles";
 import { Typography, Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,10 +17,17 @@ const LOAD_MESSAGE_OFFSET = 15;
 
 let prevChatId = -1;
 
+const classes = {
+  wrapperMessages: "flex flex-1 flex-col overflow-y-auto overflow-x-hidden",
+  wrapperSendData: "px-[5px] w-full flex justify-center box-border",
+  sendDataText:
+    "max-w-[125px] w-full flex justify-center px-[7px] py-[1px] text-[#fffefeb5] rounded-[10px] overflow-hidden bg-[rgba(0, 0, 0, 0.4)]",
+};
+
 const MainContent = ({ userId, conversationId, typeConversation }) => {
   //HOOKS
   const dispatch = useDispatch();
-  const classes = useStyles();
+  // const classes = useStyles();
 
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
@@ -77,7 +84,7 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
   }, [firstItemIndex, messages, pagination]);
 
   // USEEFFECTS
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (
       prevChatId !== conversationId &&
       messages.length &&
@@ -119,11 +126,11 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
   };
 
   if (prevChatId !== conversationId && conversationId !== null) {
-    return <></>;
+    return <div className={classes.wrapperMessages}></div>;
   }
 
   return (
-    <Box className={classes.wrapperMessages}>
+    <div className={classes.wrapperMessages}>
       {(() => {
         if (!conversationId) {
           return (
@@ -155,7 +162,7 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
           }
         }
       })()}
-    </Box>
+    </div>
   );
 };
 

@@ -117,8 +117,8 @@ export const useAppStore = create(
       set({ dialogConfig: initialState.dialogConfig });
     },
     //
-    setContextMenuConfigAction(state, { payload }) {
-      state.contextMenuConfig = payload;
+    setContextMenuConfigAction(data) {
+      set({ contextMenuConfig: data });
     },
     setContextMenuClearConfigAction(state) {
       state.contextMenuConfig = initialState.contextMenuConfig;

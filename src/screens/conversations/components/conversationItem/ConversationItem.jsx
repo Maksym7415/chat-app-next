@@ -5,13 +5,11 @@ import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { contextMenu } from "react-contexify";
 import shallow from "zustand/shallow";
-import { useDispatch, useSelector } from "react-redux";
 import { selectedConversationContext } from "./config";
-import useStyles from "./styles";
 import UserAvatar from "@/components/avatar/userAvatar";
 import SvgMaker from "@/components/svgMaker";
 import { PATHS } from "@/config/constants/paths";
-// import { setContextMenuConfigAction } from "@/components/contextMenu/redux/slice";
+import { CONTEXT_MENU_ID } from "@/config/constants/general";
 import { getCurrentDay } from "@/helpers/index";
 import languages from "@/config/translations";
 import {
@@ -19,18 +17,51 @@ import {
   actionsTypeActionsConversation,
 } from "@/actions/index";
 import { useAuthStore } from "@/storeZustand/auth/store";
+import { useAppStore } from "@/storeZustand/app/store";
+import { useSettingStore } from "@/storeZustand/setting/store";
 
-const ConversationItem = ({ data, usersTyping }) => {
+const classes = {
+  container:
+    "px-[5px] py-[10px] min-h-[82px] cursor-pointer mt-[5px] hover:bg-[#dfe7f4] rounded-[20px]",
+  wrapperTop: "flex justify-between",
+  wrapperTopRight: "flex",
+  wrapperTopRightStatus: "mr-[1px]",
+  time: "font-normal text-[13px] text-[#95999A]",
+  selectedChat: "bg-red",
+  dataView: "flex",
+  wrapperBody: "flex-1 overflow-hidden",
+  title: "font-bold text-[16px] text-[#222222]",
+  avatarView: "mr-[10px]",
+  whoSenderName: "font-bold text-[15px] m-[0px] text-[#434449]",
+  message: "flex",
+  innerMessage: "",
+  messageText:
+    "font-normal text-[15px] text-[#8D8E90] m-[0px] overflow-hidden line-clamp-1",
+  numberOfUnreadMessages: "ml-[5px] bg-[#dfe7f4] text-[#ffffff]",
+  wrapperTopLeft: "",
+  activeConversation: "bg-[#dfe7f4]",
+};
+
+const ConversationItem = ({ data, usersTyping, paramsId }) => {
   // HOOKS
-  const dispatch = useDispatch();
-  const classes = useStyles();
   const router = useRouter();
 
   // SELECTORS
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const { lang } = useSettingStore(
+    (state) => ({
+      lang: state.lang,
+    }),
+    shallow
+  );
   const { authToken } = useAuthStore(
     (state) => ({
       authToken: state.authToken,
+    }),
+    shallow
+  );
+  const { setContextMenuConfigAction } = useAppStore(
+    (state) => ({
+      setContextMenuConfigAction: state.setContextMenuConfigAction,
     }),
     shallow
   );
@@ -44,15 +75,10 @@ const ConversationItem = ({ data, usersTyping }) => {
     arr.forEach((el) => (str += el.firstName));
     return str;
   };
-  console.log(router, "router");
 
   const handleClickChatItem = (id) => {
-    // if (+params.id === id) return;
+    if (+paramsId === id) return;
     router.push(`${PATHS.chat}/${id}`);
-    // router.push(`${PATHS.chat}/${id}`, {
-    //   id: data.conversationId,
-    //   conversationData: data,
-    // });
   };
 
   const handleClickContextChatItem = (item) => {
@@ -89,22 +115,21 @@ const ConversationItem = ({ data, usersTyping }) => {
   return (
     <div
       onContextMenu={(event) => {
-        // dispatch(
-        //   setContextMenuConfigAction({
-        //     isShowMenu: true,
-        //     messageId: 0,
-        //     config: contextMenuConfig,
-        //     callBackItem: handleClickContextChatItem,
-        //   })
-        // );
-        // contextMenu.show({
-        //   id: eContextMenuId.main,
-        //   event: event,
-        // });
+        setContextMenuConfigAction({
+          isShowMenu: true,
+          messageId: 0,
+          config: contextMenuConfig,
+          callBackItem: handleClickContextChatItem,
+        });
+
+        contextMenu.show({
+          id: CONTEXT_MENU_ID.main,
+          event: event,
+        });
       }}
       onClick={() => handleClickChatItem(data.conversationId)}
       className={clsx(classes.container, {
-        // [classes.activeConversation]: data.conversationId === +params.id,
+        [classes.activeConversation]: data.conversationId === +paramsId,
       })}
     >
       <div className={classes.dataView}>

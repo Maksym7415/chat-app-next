@@ -18,3 +18,7 @@ export const namesCookies = {
   accessToken: "accessToken",
   lang: "@@lang",
 };
+
+export const CONTEXT_MENU_ID = {
+  main: "id_main_menu",
+};

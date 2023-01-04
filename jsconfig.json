@@ -12,7 +12,8 @@
       "@/helpers/*": ["src/helpers/*"],
       "@/core/*": ["src/@core/*"],
       "@/actions/*": ["src/actions/*"],
-      "@/screens/*": ["src/screens/*"]
+      "@/screens/*": ["src/screens/*"],
+      "@/ui/*": ["src/ui/*"]
     }
   }
 }

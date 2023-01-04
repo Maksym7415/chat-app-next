@@ -4,9 +4,9 @@ import { useState, memo, useEffect } from "react";
 import shallow from "zustand/shallow";
 import TopCenterComponent from "./components/topCenterComponent";
 import TopLeftComponent from "./components/topLeftComponent";
-import { getSearchContactRequest } from "@/store/search/requests";
 import { useAppStore } from "@/storeZustand/app/store";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/config/constants/general";
+import { useSearchStore } from "@/storeZustand/search/store";
 
 // STYLES
 const classes = {
@@ -22,6 +22,13 @@ const Header = ({ children }) => {
     (state) => ({
       sideLeftConfig: state.sideLeftConfig,
       setSideLeftConfigAction: state.setSideLeftConfigAction,
+    }),
+    shallow
+  );
+
+  const { getSearchContactRequest } = useSearchStore(
+    (state) => ({
+      getSearchContactRequest: state.getSearchContactRequest,
     }),
     shallow
   );

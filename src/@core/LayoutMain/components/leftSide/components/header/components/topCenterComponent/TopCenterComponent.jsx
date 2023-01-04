@@ -10,10 +10,13 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/config/constants/general";
 import { useAppStore } from "@/storeZustand/app/store";
 
+const classes = {
+  inputSearch: "w-full max-w-[240px] p-[0] pl-[5px] rounded-[20px] h-[40px]",
+};
 function TopCenterComponent({ parentSettings }) {
   // HOOKS
   const dispatch = useDispatch();
-  const classes = useStyles();
+  // const classes = useStyles();
 
   // SELECTORS
   const { sideLeftConfig } = useAppStore(
@@ -36,13 +39,11 @@ function TopCenterComponent({ parentSettings }) {
 
   const getRequest = () => {
     parentSettings.getRequest &&
-      dispatch(
-        parentSettings.getRequest({
-          params: {
-            search: debouncedSearchValue,
-          },
-        })
-      );
+      parentSettings.getRequest({
+        params: {
+          search: debouncedSearchValue,
+        },
+      });
   };
 
   // USEEFFECTS

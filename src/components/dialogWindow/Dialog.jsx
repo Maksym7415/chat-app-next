@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Dialog,
   DialogTitle,
@@ -6,21 +5,22 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import shallow from "zustand/shallow";
 import CloseIcon from "@mui/icons-material/Close";
-import { useDispatch, useSelector } from "react-redux";
 import NewChat from "./components/newChat";
 import ShareMessage from "./components/shareMessage";
-import useStyles from "./styles";
-import { setDialogWindowClearConfigAction } from "./redux/slice";
 import { useAppStore } from "@/storeZustand/app/store";
-import shallow from "zustand/shallow";
 
-// need ts
-
+// STYLES
+const classes = {
+  closeIcon: "w-[30px] h-[30px]",
+  closeIconButton: "w-[30px] h-[30px]",
+  titleContainer: "w-full flex justify-between",
+  title: "text-[1.3rem] block",
+  dialogContent: "w-[400px] h-full relative p-[0px]",
+};
 const DialogComponent = () => {
   // HOOKS
-  const dispatch = useDispatch();
-  const classes = useStyles();
 
   const { dialogConfig, setDialogWindowClearConfigAction } = useAppStore(
     (state) => ({

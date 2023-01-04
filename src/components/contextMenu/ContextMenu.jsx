@@ -1,14 +1,12 @@
-import React from "react";
 import { Menu, Item } from "react-contexify";
-import { useDispatch, useSelector } from "react-redux";
 import "react-contexify/dist/ReactContexify.css";
+import shallow from "zustand/shallow";
 import { makeStyles } from "@mui/styles";
 import SvgMaker from "../svgMaker";
-import { useAppStoreSelector } from "../../hooks/redux";
-// import { eContextMenuId } from "../../ts/enums/app";
+import { CONTEXT_MENU_ID } from "@/config/constants/general";
 import { useAppStore } from "@/storeZustand/app/store";
-import shallow from "zustand/shallow";
 
+// makeStyles
 const useStyles = makeStyles((theme) => ({
   wrapperIcon: {
     marginRight: 10,
@@ -36,25 +34,24 @@ const ContextMenu = () => {
   );
 
   return (
-    <></>
-    // <Menu id={eContextMenuId.main}>
-    //   {contextMenuConfig?.config?.map((item: any) => (
-    //     <Item
-    //       key={item.id}
-    //       onClick={() => contextMenuConfig.callBackItem(item)}
-    //       closeOnClick={item?.NoCloseOnClick ? false : true}
-    //       className={classes.item}
-    //     >
-    //       {item?.iconComponent || item?.icon?.name ? (
-    //         <div className={classes.wrapperIcon}>
-    //           {item?.iconComponent}
-    //           {item?.icon?.name && <SvgMaker name={item?.icon?.name} />}
-    //         </div>
-    //       ) : null}
-    //       {item.title}
-    //     </Item>
-    //   ))}
-    // </Menu>
+    <Menu id={CONTEXT_MENU_ID.main}>
+      {contextMenuConfig?.config?.map((item) => (
+        <Item
+          key={item.id}
+          onClick={() => contextMenuConfig.callBackItem(item)}
+          closeOnClick={item?.NoCloseOnClick ? false : true}
+          className={classes.item}
+        >
+          {item?.iconComponent || item?.icon?.name ? (
+            <div className={classes.wrapperIcon}>
+              {item?.iconComponent}
+              {item?.icon?.name && <SvgMaker name={item?.icon?.name} />}
+            </div>
+          ) : null}
+          {item.title}
+        </Item>
+      ))}
+    </Menu>
   );
 };
 

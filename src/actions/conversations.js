@@ -4,6 +4,8 @@ import {
   socketEmitClearConversation,
 } from "../config/socket/actions/socketEmit";
 import { PATHS } from "@/config/constants/paths";
+import { useConversationsStore } from "@/storeZustand/conversations/store";
+
 // import { updateConversationListAction } from "../reduxToolkit/conversations/slice";
 
 export const actionsConversationList = (data) => (dispatch) => {
@@ -65,19 +67,23 @@ export const actionsSelectedConversation = (props) => {
   }
 };
 
-export const actionCreateNewConversation = (history, item) => {
+export const actionCreateNewConversation = (router, item) => {
+  // const conversationsList =
+  //   store.getState().conversationsSlice.conversationsList.data;
+
+  // const { conversationsList } = useConversationsStore((state) => ({
+  //   conversationsList: state.conversationsList.data,
+  // }));
+
   const conversationsList =
-    store.getState().conversationsSlice.conversationsList.data;
+    useConversationsStore.getState().conversationsList.data;
 
   const chat = Object.values(conversationsList).find(
     (el) => el.conversationName === item.fullName
   );
 
   if (chat) {
-    // return history.push(`${PATHS.chat}/${chat.conversationId}`, {
-    //   id: chat.conversationId,
-    //   conversationData: chat,
-    // });
+    return router.push(`${PATHS.chat}/${chat.conversationId}`);
   }
 
   // return history.push(PATHS.newChat, {

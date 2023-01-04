@@ -28,9 +28,5 @@ export default function ChatLayout({ children }) {
     authTokenAction(token);
   }, []);
 
-  return (
-    <>
-      <LayoutMain>{children}</LayoutMain>
-    </>
-  );
+  return <>{children}</>;
 }

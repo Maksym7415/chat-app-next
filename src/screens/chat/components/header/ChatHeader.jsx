@@ -2,6 +2,7 @@
 
 import { useMemo, useState, memo } from "react";
 import clsx from "clsx";
+import shallow from "zustand/shallow";
 import { useDispatch, useSelector } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -22,7 +23,8 @@ import {
 } from "@/actions/index";
 import { findValueKeyInNestedArr } from "@/helpers/index";
 // import { setDrawerConfigAction } from "@/components/drawer/redux/slice";
-import store from "@/store/store";
+import { store } from "@/store/store";
+import { useAppStore } from "@/storeZustand/app/store";
 
 const classes = {
   container: "flex p-[16px] bg-white w-full",
@@ -48,10 +50,15 @@ const ChatHeader = ({
   // const classes = useStyles();
 
   // SELECTORS
-  const selectedMessages = useSelector(
-    ({ appSlice }) => appSlice.selectedMessages
-  );
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+
+  const { selectedMessages, setDrawerConfigAction } = useAppStore(
+    (state) => ({
+      selectedMessages: state.selectedMessages,
+      setDrawerConfigAction: state.setDrawerConfigAction,
+    }),
+    shallow
+  );
 
   // STATES
   const [anchorEl, setAnchorEl] = useState(null);
@@ -112,18 +119,16 @@ const ChatHeader = ({
     return (
       <div
         onClick={() => {
-          store.dispatch(
-            setDrawerConfigAction({
-              anchor: "right",
-              open: true,
-              width: "400px",
-              type: "profile",
-              configContent: {
-                typeProfile: conversationData.conversationType,
-                conversationData,
-              },
-            })
-          );
+          setDrawerConfigAction({
+            anchor: "right",
+            open: true,
+            width: "400px",
+            type: "profile",
+            configContent: {
+              typeProfile: conversationData.conversationType,
+              conversationData,
+            },
+          });
         }}
         className={classes.wrapperConversationData}
       >

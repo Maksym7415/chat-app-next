@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useRef, useState } from "react";
+import Image from "next/image";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
@@ -10,7 +13,7 @@ import "swiper/css/pagination";
 // import required modules
 import { EffectFade, Navigation, Pagination } from "swiper";
 
-const ImagesProfile = ({ images, noImagesComponent }: any) => {
+const ImagesProfile = ({ images, noImagesComponent }) => {
   // REFS
   const swiperRef = useRef(null);
 
@@ -35,7 +38,12 @@ const ImagesProfile = ({ images, noImagesComponent }: any) => {
           images?.map((image) => {
             return (
               <SwiperSlide key={image.id}>
-                <img src={image.src} />
+                <Image
+                  src={image.src}
+                  width={1000}
+                  height={1000}
+                  alt="Picture of the author"
+                />
               </SwiperSlide>
             );
           })

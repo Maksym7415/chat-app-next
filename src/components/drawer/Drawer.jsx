@@ -1,8 +1,9 @@
-import * as React from "react";
+"use client";
+
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import MainDrawer from "./components/mainDrawer";
-// import ProfilePage from "../../pages/profile";
+import ProfilePage from "@/screens/profile/Profile";
 import { useAppStore } from "@/storeZustand/app/store";
 import shallow from "zustand/shallow";
 
@@ -36,16 +37,14 @@ const SwipeableTemporaryDrawer = () => {
       {(() => {
         switch (drawerConfig?.type) {
           case "profile":
-            return <></>;
-            {
-              /* return (
+            return (
               <ProfilePage
                 typeProfile={drawerConfig.configContent?.typeProfile}
                 conversationData={drawerConfig.configContent?.conversationData}
                 closeDrawer={toggleDrawer(anchor, false)}
               />
-            ); */
-            }
+            );
+
           case "main":
             return <MainDrawer closeDrawer={toggleDrawer(anchor, false)} />;
           default:

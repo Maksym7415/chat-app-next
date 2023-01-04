@@ -1,25 +1,19 @@
 "use client";
 
 import { useMemo } from "react";
+import { usePathname } from "next/navigation";
 import shallow from "zustand/shallow";
-import { makeStyles } from "@mui/styles";
 import ConversationItem from "./components/conversationItem";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
 
 // STYLES
-const useStyles = makeStyles((theme) => ({
-  container: {
-    overflowY: "auto",
-    overflowX: "hidden",
-    padding: "0px 10px 10px",
-    height: "100%",
-    position: "relative",
-  },
-}));
+const classes = {
+  container: "overflow-y-auto p-[10px] pt-[0px] h-full relative",
+};
 
 const ConversationsPage = () => {
   // HOOKS
-  const classes = useStyles();
+  const pathname = usePathname();
 
   const { conversationsList, usersTyping } = useConversationsStore(
     (state) => ({
@@ -39,6 +33,7 @@ const ConversationsPage = () => {
       ) || [],
     [conversationsList]
   );
+  const pathnameSplit = pathname.split("/");
 
   return (
     <div className={classes.container}>
@@ -48,6 +43,7 @@ const ConversationsPage = () => {
             data={conversation}
             usersTyping={usersTyping}
             key={conversation.conversationId}
+            paramsId={pathnameSplit[pathnameSplit.length - 1]}
           />
         );
       })}

@@ -4,19 +4,30 @@ import React, { useState } from "react";
 import { Button, Grid, Box } from "@mui/material";
 import useStyles from "./styles";
 import { useDispatch, useSelector } from "react-redux";
-import { getSearchContactRequest } from "../../../../reduxToolkit/search/requests";
 import UserAvatar from "../../../avatar/userAvatar";
-import languages from "../../../../config/translations";
+import languages from "@/config/translations";
 import SelectsAsyncPaginateSearch from "../../../SelectsAsyncPaginateSearch";
 import { fullDate } from "../../../../helpers";
 import Snackbar from "@/helpers/notistack";
-import { setDialogWindowClearConfigAction } from "../../redux/slice";
-import { socketEmitChatCreation } from "../../../../config/socket/actions/socketEmit";
+import { socketEmitChatCreation } from "@/config/socket/actions/socketEmit";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
 import shallow from "zustand/shallow";
+import { useSearchStore } from "@/storeZustand/search/store";
+import { useAppStore } from "@/storeZustand/app/store";
+import CustomButton from "@/components/buttons/customButton/index";
 
-// need ts
+// makeStyles
+// STYLES
+const classes = {
+  container: "m-[0px] px-[10px] py-[20px] h-full flex flex-col",
+  wrapperContact: "flex px-[10px] py-[5px] cursor-pointer rounded-[20px]",
+  wrapperInfo: "pl-[20px]",
+  fullName: "text-[16px] m-[0px] line-camp-1",
+  login: "m-[0px] mt-[3px] text-[12px] line-camp-1",
+  avatarView: "",
+  containerSelect: "",
+};
 
 const NewChat = () => {
   // HOOKS
@@ -34,6 +45,20 @@ const NewChat = () => {
   const { authToken } = useAuthStore(
     (state) => ({
       authToken: state.authToken,
+    }),
+    shallow
+  );
+
+  const { getSearchContactRequest } = useSearchStore(
+    (state) => ({
+      getSearchContactRequest: state.getSearchContactRequest,
+    }),
+    shallow
+  );
+
+  const { setDialogWindowClearConfigAction } = useAppStore(
+    (state) => ({
+      setDialogWindowClearConfigAction: state.setDialogWindowClearConfigAction,
     }),
     shallow
   );
@@ -62,7 +87,7 @@ const NewChat = () => {
       imageData: {},
       imageFormat: "",
       cb: () => {
-        dispatch(setDialogWindowClearConfigAction());
+        setDialogWindowClearConfigAction();
         return Snackbar.success("Create new chat");
       },
     });
@@ -78,17 +103,17 @@ const NewChat = () => {
         settings={{
           isMulti: true,
           getSearchRequest: async (searchQuery, page) => {
-            const response = await dispatch(
-              getSearchContactRequest({
-                params: {
-                  search: searchQuery,
-                  offset: page !== 1 ? (page - 1) * 10 : 0,
-                },
-              })
-            );
+            const response = await getSearchContactRequest({
+              params: {
+                search: searchQuery,
+                offset: page !== 1 ? (page - 1) * 10 : 0,
+              },
+            });
+
+            console.log(response, "response");
             return {
-              options: response.payload.response,
-              limit: response.payload.limit,
+              options: response.response,
+              limit: response.limit,
             };
           },
           getOptionValue: (option) => option.id,
@@ -122,14 +147,12 @@ const NewChat = () => {
           },
         }}
       />
-      <Button
-        autoFocus
-        className={classes.createChatButton}
-        variant="contained"
+      <CustomButton
         onClick={createChat}
+        style={{ margin: "10px auto 0", width: "100%", maxWidth: "200px" }}
       >
         {languages[lang].generals.createAChat}
-      </Button>
+      </CustomButton>
     </Grid>
   );
 };

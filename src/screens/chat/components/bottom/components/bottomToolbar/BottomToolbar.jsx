@@ -11,10 +11,10 @@ import {
   Fade,
   Box,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useStyles from "./styles";
 import * as config from "./config";
-import store from "@/store/store";
+import { store } from "@/store/store";
 import {
   actionsMessagesChat,
   actionsClearSelectedMessages,

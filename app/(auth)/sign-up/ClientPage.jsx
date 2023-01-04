@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import shallow from "zustand/shallow";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
 import languages from "@/config/translations";

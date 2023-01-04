@@ -1,14 +1,17 @@
-import React from "react";
+"use client";
+
+import { useState, useEffect } from "react";
 import { IconButton } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import useStyles from "./styles";
-import ImagesProfile from "../../../../components/carousel/imagesProfile";
-import {
-  useAppStoreDispatch,
-  useAppStoreSelector,
-} from "../../../../hooks/redux";
+import ImagesProfile from "@/components/carousel/imagesProfile";
+// import {
+//   useAppStoreDispatch,
+//   useAppStoreSelector,
+// } from "../../../../hooks/redux";
 
-import DefaultAvatar from "../../../../components/avatar/defaultAvatar/";
+import DefaultAvatar from "@/components/avatar/defaultAvatar";
 
 // need ts
 // rework avatars
@@ -33,30 +36,28 @@ const imagesTest = [
   },
 ];
 
-const Header = ({ setting, closeDrawer }: any) => {
+const Header = ({ setting, closeDrawer }) => {
   // HOOKS
-  const dispatch = useAppStoreDispatch();
+  const dispatch = useDispatch();
 
   // STYLES
   const classes = useStyles();
 
   // SELECTORS
-  const userAvatars: any = useAppStoreSelector(
-    ({ userSlice }) => userSlice.avatars
-  );
-  const lang = useAppStoreSelector(({ settingSlice }) => settingSlice.lang);
+  const userAvatars = useSelector(({ userSlice }) => userSlice.avatars);
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
   // STATES
-  const [images, setImages] = React.useState([]);
+  const [images, setImages] = useState([]);
 
   // USEEFFECTS
-  React.useEffect(() => {
+  useEffect(() => {
     setting.avatar &&
       !images.length &&
       setImages([{ id: 1, fileName: setting.avatar }]);
   }, [setting.avatar]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       JSON.stringify(userAvatars.data) !== JSON.stringify(images) &&
       userAvatars.length &&

@@ -1,15 +1,14 @@
+"use client";
+
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import useStyles from "./styles";
 import { useDebounce } from "@/hooks/useDebounce";
 
-// need ts
 // rework
+
+const classes = {};
 
 const Header = ({ placeholder, textInputProps = {}, getRequest, styles }) => {
   // HOOKS
-  const dispatch = useDispatch();
-  const classes = useStyles();
 
   // STATES
   const [search, setSearch] = React.useState("");
@@ -28,13 +27,11 @@ const Header = ({ placeholder, textInputProps = {}, getRequest, styles }) => {
   // USEEFFECTS
   useEffect(() => {
     getRequest &&
-      dispatch(
-        getRequest({
-          params: {
-            search: debouncedSearchValue,
-          },
-        })
-      );
+      getRequest({
+        params: {
+          search: debouncedSearchValue,
+        },
+      });
   }, [debouncedSearchValue]);
 
   return <></>;

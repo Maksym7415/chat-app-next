@@ -1,21 +1,22 @@
-import React from "react";
+"use client";
+import { useState } from "react";
 import { Switch, Divider } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./styles";
-import RITitleWithSubtitleAndRightComponent from "../../../../components/renders/rendersItem/RITitleWithSubtitleAndRightComponent";
-import { TYPES_CONVERSATIONS } from "../../../../config/constants/general";
-import { useAppStoreSelector } from "../../../../hooks/redux";
+import RITitleWithSubtitleAndRightComponent from "@/components/renders/rendersItem/RITitleWithSubtitleAndRightComponent";
+import { TYPES_CONVERSATIONS } from "@/config/constants/general";
 
 // need ts
 
-const MainInfo = ({ typeProfile }: any) => {
+const MainInfo = ({ typeProfile }) => {
   // HOOKS
   const classes = useStyles();
 
   // SELECTORS
-  const lang = useAppStoreSelector(({ settingSlice }) => settingSlice.lang);
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
   // STATES
-  const [isSwitchOn, setIsSwitchOn] = React.useState(false);
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
 
   // FUNCTIONS
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);

@@ -1,6 +1,5 @@
 "use client";
 
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,8 +8,8 @@ import shallow from "zustand/shallow";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
 import languages from "@/config/translations";
-import { postLoginRequest } from "@/store/auth/requests";
 import { useAuthStore } from "@/storeZustand/auth/store";
+import { useSettingStore } from "@/storeZustand/setting/store";
 
 export default function SignInPage() {
   // HOOKS
@@ -25,9 +24,12 @@ export default function SignInPage() {
     shallow
   );
 
-  // SELECTORS
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-  // const loginSingIn = useSelector(({ authSlice }) => authSlice.loginSingIn);
+  const { lang } = useSettingStore(
+    (state) => ({
+      lang: state.lang,
+    }),
+    shallow
+  );
 
   // STATES
   const [errorBack, setErrorBack] = useState("");

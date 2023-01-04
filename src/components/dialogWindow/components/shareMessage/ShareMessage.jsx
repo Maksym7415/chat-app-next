@@ -6,7 +6,7 @@ import UserAvatar from "../../../avatar/userAvatar";
 import { PATHS } from "@/config/constants/paths";
 import useStyles from "./styles";
 import languages from "@/config/translations";
-import { setDialogWindowClearConfigAction } from "../../redux/slice";
+import { useAppStore } from "@/storeZustand/app/store";
 
 const SharedMessage = ({ data }) => {
   // HOOKS
@@ -17,6 +17,13 @@ const SharedMessage = ({ data }) => {
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
   const conversationsList = useSelector(
     ({ conversationsSlice }) => conversationsSlice.conversationsList.data
+  );
+
+  const { setDialogWindowClearConfigAction } = useAppStore(
+    (state) => ({
+      setDialogWindowClearConfigAction: state.setDialogWindowClearConfigAction,
+    }),
+    shallow
   );
 
   // STATES
@@ -40,7 +47,7 @@ const SharedMessage = ({ data }) => {
     //     from: "shareMessage",
     //   },
     // });
-    dispatch(setDialogWindowClearConfigAction());
+    setDialogWindowClearConfigAction();
   };
 
   return (

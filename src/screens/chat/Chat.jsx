@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useMemo, memo } from "react";
 import { Typography, Box, CircularProgress } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import shallow from "zustand/shallow";
 import { useDispatch, useSelector } from "react-redux";
 import ChatHeader from "./components/header";
@@ -20,17 +19,6 @@ import {
 import { useConversationsStore } from "@/storeZustand/conversations/store";
 
 // STYLES
-const useStyles = makeStyles((theme) => ({
-  container: {
-    height: "100vh",
-    width: "100%",
-    position: "relative",
-    display: "flex",
-    flexDirection: "column",
-  },
-  errorBackText: { fontSize: 28, fontWeight: "500" },
-}));
-
 const classes = {
   container: "flex flex-col h-screen w-full relative ",
   errorBackText: "text-[28px] font-medium ",
@@ -39,9 +27,7 @@ const classes = {
 const Chat = ({ params }) => {
   // HOOKS
   const dispatch = useDispatch();
-  // const classes = useStyles();
 
-  console.log(params, "params");
   // SELECTORS
   const authToken = useSelector(({ authSlice }) => authSlice.authToken);
   const allMessages = useSelector(({ appSlice }) => appSlice.allMessages);
