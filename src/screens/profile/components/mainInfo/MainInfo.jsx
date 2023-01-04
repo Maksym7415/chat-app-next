@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
 import { Switch, Divider } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import shallow from "zustand/shallow";
+import { useDispatch } from "react-redux";
 import useStyles from "./styles";
 import RITitleWithSubtitleAndRightComponent from "@/components/renders/rendersItem/RITitleWithSubtitleAndRightComponent";
-import { TYPES_CONVERSATIONS } from "@/config/constants/general";
+import { TYPES_CONVERSATIONS } from "@/core/constants/general";
+import { useSettingStore } from "@/storeZustand/setting/store";
 
 // need ts
 
@@ -13,7 +15,12 @@ const MainInfo = ({ typeProfile }) => {
   const classes = useStyles();
 
   // SELECTORS
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const { lang } = useSettingStore(
+    (state) => ({
+      lang: state.lang,
+    }),
+    shallow
+  );
 
   // STATES
   const [isSwitchOn, setIsSwitchOn] = useState(false);

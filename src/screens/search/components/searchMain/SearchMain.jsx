@@ -63,7 +63,7 @@ const SearchMain = ({ onClickContact }) => {
     });
   }, [searchContacts.response]);
 
-  console.log(searchContacts, "searchContacts");
+  // console.log(searchContacts, "searchContacts");
   // RENDER CONDITIONAL
   if (!contacts.length || isLoading) {
     return <RenderConditionsList list={contacts} isLoading={isLoading} />;

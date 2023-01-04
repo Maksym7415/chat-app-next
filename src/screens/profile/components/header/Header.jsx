@@ -2,16 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { IconButton } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import shallow from "zustand/shallow";
+import { useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import useStyles from "./styles";
 import ImagesProfile from "@/components/carousel/imagesProfile";
-// import {
-//   useAppStoreDispatch,
-//   useAppStoreSelector,
-// } from "../../../../hooks/redux";
-
 import DefaultAvatar from "@/components/avatar/defaultAvatar";
+import { useSettingStore } from "@/storeZustand/setting/store";
+import { useUserStore } from "@/storeZustand/user/store";
 
 // need ts
 // rework avatars
@@ -43,9 +41,19 @@ const Header = ({ setting, closeDrawer }) => {
   // STYLES
   const classes = useStyles();
 
-  // SELECTORS
-  const userAvatars = useSelector(({ userSlice }) => userSlice.avatars);
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const { lang } = useSettingStore(
+    (state) => ({
+      lang: state.lang,
+    }),
+    shallow
+  );
+
+  const { userAvatars } = useUserStore(
+    (state) => ({
+      userAvatars: state.avatars,
+    }),
+    shallow
+  );
 
   // STATES
   const [images, setImages] = useState([]);

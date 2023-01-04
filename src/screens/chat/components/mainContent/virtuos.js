@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import useStyles from "./styles";
 import { Typography, Box } from "@mui/material";
 import RenderInfoCenterBox from "../../../../components/renders/renderInfoCenterBox";
-import languages from "../../../../config/translations";
+import languages from "../../../../@core/translations";
 import {
   setMessageDate,
   uuid,

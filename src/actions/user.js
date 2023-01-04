@@ -1,4 +1,4 @@
-import { removeTokenCook } from "@/config/cookiesStorage";
+import { removeTokenCook } from "@/core/cookiesStorage";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
 

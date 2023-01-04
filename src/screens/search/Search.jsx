@@ -5,10 +5,10 @@ import { useEffect, useState } from "react";
 import shallow from "zustand/shallow";
 import Header from "./components/header";
 import SearchMain from "./components/searchMain";
-import { TYPES_FROM_TO_SEARCH_SCREEN } from "@/config/constants/general";
+import { TYPES_FROM_TO_SEARCH_SCREEN } from "@/core/constants/general";
 import { getSearchContactRequest } from "@/store/search/requests";
 import { actionCreateNewConversation } from "@/actions/conversations";
-import { SIDE_LEFT_TYPE_CONTENT } from "@/config/constants/general";
+import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { useAppStore } from "@/storeZustand/app/store";
 
 // STYLES

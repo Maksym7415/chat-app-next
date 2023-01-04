@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import ClientPage from "./ClientPage";
-import { namesCookies } from "@/config/constants/general";
+import { namesCookies } from "@/core/constants/general";
 
 const SignInPage = async () => {
   const token = await cookies().get(namesCookies.accessToken)?.value;

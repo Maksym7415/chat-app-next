@@ -3,13 +3,13 @@
 import React, { useState } from "react";
 import { Button, Grid, Box } from "@mui/material";
 import useStyles from "./styles";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import UserAvatar from "../../../avatar/userAvatar";
-import languages from "@/config/translations";
+import languages from "@/core/translations";
 import SelectsAsyncPaginateSearch from "../../../SelectsAsyncPaginateSearch";
 import { fullDate } from "../../../../helpers";
 import Snackbar from "@/helpers/notistack";
-import { socketEmitChatCreation } from "@/config/socket/actions/socketEmit";
+import { socketEmitChatCreation } from "@/core/socket/actions/socketEmit";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
 import shallow from "zustand/shallow";

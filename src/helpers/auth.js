@@ -1,5 +1,5 @@
 import { store } from "../reduxToolkit/store";
-import { getTokenCook } from "@/config/cookiesStorage/index";
+import { getTokenCook } from "@/core/cookiesStorage/index";
 
 export const getHeaders = async () => {
   try {

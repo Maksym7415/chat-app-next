@@ -2,11 +2,10 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import { Rnd } from "react-rnd";
-import { makeStyles } from "@mui/styles";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import shallow from "zustand/shallow";
 import LeftSide from "./components/leftSide";
-import { socket } from "@/config/socket";
+import { socket } from "@/core/socket";
 import {
   socketOnUserIdChat,
   socketOnTypingStateId,
@@ -14,9 +13,10 @@ import {
   socketOnUserIdNewChat,
   socketOnDeleteConversation,
   socketOnClearConversation,
-} from "@/config/socket/actions/socketOn";
+} from "@/core/socket/actions/socketOn";
 import { getUserProfileDataRequest } from "@/store/user/requests";
 import { useAuthStore } from "@/storeZustand/auth/store";
+import { useConversationsStore } from "@/storeZustand/conversations/store";
 
 // STYLES
 const classes = {
@@ -32,12 +32,12 @@ const MainPage = ({ children }) => {
   // HOOKS
   const dispatch = useDispatch();
 
-  // SELECTORS
-  const conversationsList = useSelector(
-    ({ conversationsSlice }) => conversationsSlice.conversationsList.data
+  const { conversationsList } = useConversationsStore(
+    (state) => ({
+      conversationsList: state.conversationsList.data,
+    }),
+    shallow
   );
-  // const authToken = useSelector(({ authSlice }) => authSlice.authToken);
-
   const { authToken } = useAuthStore(
     (state) => ({
       authToken: state.authToken,

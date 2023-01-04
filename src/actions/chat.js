@@ -7,7 +7,7 @@ import {
 // import { setDialogWindowConfigAction } from "../components/dialogWindow/redux/slice";
 import { actionsForTypeWithObjKey } from "../helpers/actionsForType";
 import Snackbar from "../helpers/notistack";
-import { socketEmitChatsDeleteMessage } from "../config/socket/actions/socketEmit";
+import { socketEmitChatsDeleteMessage } from "../@core/socket/actions/socketEmit";
 import { actionsConversationList } from "./conversations";
 import { store } from "../reduxToolkit/store";
 

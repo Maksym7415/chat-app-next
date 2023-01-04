@@ -4,12 +4,12 @@ import { useEffect, useState, useMemo } from "react";
 import clsx from "clsx";
 import { contextMenu } from "react-contexify";
 import shallow from "zustand/shallow";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Divider, IconButton } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import * as config from "./config";
 import useStyles from "./styles";
-import languages from "@/config/translations";
+import languages from "@/core/translations";
 import { getCurrentDay } from "@/helpers/index";
 import UserAvatar from "@/components/avatar/userAvatar";
 import {
@@ -17,10 +17,12 @@ import {
   actionsSelectedMessages,
   actionsMessagesChat,
 } from "@/actions/index";
-import { TYPES_CONVERSATIONS } from "@/config/constants/general";
-import {store} from "@/store/store";
-import { CONTEXT_MENU_ID } from "@/config/constants/general";
+import { TYPES_CONVERSATIONS } from "@/core/constants/general";
+import { store } from "@/store/store";
+import { CONTEXT_MENU_ID } from "@/core/constants/general";
 import { useAppStore } from "@/storeZustand/app/store";
+import { useUserStore } from "@/storeZustand/user/store";
+import { useSettingStore } from "@/storeZustand/setting/store";
 
 const stylePaper = {
   padding: "15px",
@@ -42,15 +44,21 @@ const Message = ({
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  // SELECTORS
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-  const selectedMessages = useSelector(
-    ({ appSlice }) => appSlice.selectedMessages
-  );
-  const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
-
-  const { setContextMenuConfigAction } = useAppStore(
+  const { lang } = useSettingStore(
     (state) => ({
+      lang: state.lang,
+    }),
+    shallow
+  );
+  const { userInfo } = useUserStore(
+    (state) => ({
+      userAvatars: state.userInfo,
+    }),
+    shallow
+  );
+  const { selectedMessages, setContextMenuConfigAction } = useAppStore(
+    (state) => ({
+      selectedMessages: state.selectedMessages,
       setContextMenuConfigAction: state.setContextMenuConfigAction,
     }),
     shallow

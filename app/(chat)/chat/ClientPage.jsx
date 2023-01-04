@@ -2,7 +2,7 @@
 
 import { Typography } from "@mui/material";
 import shallow from "zustand/shallow";
-import languages from "@/config/translations";
+import languages from "@/core/translations";
 import { useSettingStore } from "@/storeZustand/setting/store";
 
 const ChatClientPage = () => {

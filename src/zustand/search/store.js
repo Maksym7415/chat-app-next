@@ -1,7 +1,7 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
-import { pathBackSearch } from "@/config/constants/urlBack";
-import API from "@/config/axios";
+import { pathBackSearch } from "@/core/constants/urlBack";
+import API from "@/core/axios";
 
 const initialState = {
   searchContacts: {
@@ -23,6 +23,9 @@ export const useSearchStore = create(
     // ACTIONS
     setLoadingSearchContacts(data) {
       set({ isLoading: data });
+    },
+    setSearchContactsAction(data) {
+      set({ searchContacts: data });
     },
 
     // REQUEST

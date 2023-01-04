@@ -1,5 +1,5 @@
 import { makeStyles } from "@mui/styles";
-import { errorText } from "../../config/globalStyles";
+import { errorText } from "../../@core/globalStyles";
 
 export default makeStyles((theme) => ({
   container: {

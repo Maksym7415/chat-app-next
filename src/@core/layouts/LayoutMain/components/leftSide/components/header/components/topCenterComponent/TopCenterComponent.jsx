@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import shallow from "zustand/shallow";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, OutlinedInput } from "@mui/material";
 import useStyles from "./styles";
 import { useDebounce } from "@/hooks/useDebounce";
-import { SIDE_LEFT_TYPE_CONTENT } from "@/config/constants/general";
+import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { useAppStore } from "@/storeZustand/app/store";
 
 const classes = {
@@ -16,7 +16,6 @@ const classes = {
 function TopCenterComponent({ parentSettings }) {
   // HOOKS
   const dispatch = useDispatch();
-  // const classes = useStyles();
 
   // SELECTORS
   const { sideLeftConfig } = useAppStore(
@@ -51,9 +50,9 @@ function TopCenterComponent({ parentSettings }) {
     getRequest();
   }, [debouncedSearchValue]);
 
-  useEffect(() => {
-    getRequest();
-  }, [parentSettings]);
+  // useEffect(() => {
+  //   getRequest();
+  // }, [parentSettings]);
 
   return (
     <>

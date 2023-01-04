@@ -1,6 +1,8 @@
 import { socket } from "../index";
 import { store } from "../../../reduxToolkit/store";
 import { fullDate, handleGetBufferFile } from "../../../helpers";
+import { useAppStore } from "@/storeZustand/app/store";
+import { useAuthStore } from "@/storeZustand/auth/store";
 
 let filesCount = 0;
 
@@ -104,9 +106,10 @@ export const socketEmitSendMessage = ({
   conversationId,
   setMessage,
 }) => {
-  const { userId } = store.getState().authSlice.authToken;
-  const messageEdit = store.getState().appSlice.messageEdit;
+  const { userId } = useAuthStore.getState().authToken;
+  const messageEdit = useAppStore.getState().messageEdit;
 
+  console.log(userId, "userId");
   const body = {
     conversationId: id,
     message: messageSend,
@@ -115,6 +118,9 @@ export const socketEmitSendMessage = ({
     opponentId,
     forwardedFromId: forwardedFromId || null,
   };
+
+  console.log(body, "body");
+
   socket.emit("chats", body, (success) => {
     if (success) setMessage((prev) => ({ ...prev, [conversationId]: "" }));
   });

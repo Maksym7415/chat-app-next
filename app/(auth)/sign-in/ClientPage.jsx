@@ -2,24 +2,22 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import shallow from "zustand/shallow";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
-import languages from "@/config/translations";
+import languages from "@/core/translations";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
+import { AuthService } from "@/services/auth/auth.service";
 
 export default function SignInPage() {
   // HOOKS
-  const dispatch = useDispatch();
   const router = useRouter();
 
-  const { loginSingIn, postLoginRequest } = useAuthStore(
+  const { loginSingIn } = useAuthStore(
     (state) => ({
       loginSingIn: state.loginSingIn,
-      postLoginRequest: state.postLoginRequest,
     }),
     shallow
   );
@@ -59,9 +57,7 @@ export default function SignInPage() {
       },
     };
 
-    // dispatch(postLoginRequest(sendData));
-
-    postLoginRequest(sendData);
+    AuthService.postLogin(sendData);
 
     errorBack && setErrorBack("");
   };

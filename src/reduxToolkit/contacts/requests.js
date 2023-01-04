@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import API from "../../config/axios";
-import { pathBackSearch } from "../../config/constants/urlBack";
+import API from "../../@core/axios";
+import { pathBackSearch } from "../../@core/constants/urlBack";
 
 export const postCheckEmailsRequest = createAsyncThunk(
   "contacts/postCheckEmailsRequest",

@@ -3,7 +3,7 @@ import "react-contexify/dist/ReactContexify.css";
 import shallow from "zustand/shallow";
 import { makeStyles } from "@mui/styles";
 import SvgMaker from "../svgMaker";
-import { CONTEXT_MENU_ID } from "@/config/constants/general";
+import { CONTEXT_MENU_ID } from "@/core/constants/general";
 import { useAppStore } from "@/storeZustand/app/store";
 
 // makeStyles

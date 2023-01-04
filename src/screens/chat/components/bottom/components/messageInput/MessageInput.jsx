@@ -3,19 +3,22 @@
 import { useState, useEffect } from "react";
 import clsx from "clsx";
 import { TextField } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import useStyles from "./styles";
+import { useDispatch } from "react-redux";
+import shallow from "zustand/shallow";
 import {
   socketEmitChatsTypingState,
   socketEmitSendMessage,
-} from "@/config/socket/actions/socketEmit";
-import languages from "@/config/translations/index";
+} from "@/core/socket/actions/socketEmit";
+import languages from "@/core/translations/index";
 import { fullDate } from "@/helpers/index";
 import { editMessageAction, shareMessageAction } from "@/store/app/slice";
 import RightInputComponent from "./components/RightInputComponent";
 import LeftInputComponent from "./components/LeftInputComponent";
 import MessageEdit from "./components/messageEdit";
 import SharedMessages from "./components/sharedMessages";
+import { useSettingStore } from "@/storeZustand/setting/store";
+import { useAppStore } from "@/storeZustand/app/store";
+import { useConversationsStore } from "@/storeZustand/conversations/store";
 
 // STYLES
 const classes = {
@@ -29,14 +32,26 @@ const MessageInput = ({ conversationId, userId, firstName, opponentId }) => {
   const dispatch = useDispatch();
   // const classes = useStyles();
 
-  // SELECTORS
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-  const typing = useSelector(
-    ({ conversationsSlice }) => conversationsSlice.conversationTypeState
+  const { lang } = useSettingStore(
+    (state) => ({
+      lang: state.lang,
+    }),
+    shallow
   );
-  const messageEdit = useSelector(({ appSlice }) => appSlice.messageEdit);
-  const forwardMessages = useSelector(
-    ({ appSlice }) => appSlice.forwardMessages
+
+  const { typing } = useConversationsStore(
+    (state) => ({
+      typing: state.conversationTypeState,
+    }),
+    shallow
+  );
+
+  const { messageEdit, forwardMessages } = useAppStore(
+    (state) => ({
+      messageEdit: state.messageEdit,
+      forwardMessages: state.forwardMessages,
+    }),
+    shallow
   );
 
   // STATES

@@ -7,13 +7,13 @@
       "@/providers/*": ["src/providers/*"],
       "@/styles/*": ["styles/*"],
       "@/components/*": ["src/components/*"],
-      "@/config/*": ["src/config/*"],
       "@/hooks/*": ["src/hooks/*"],
       "@/helpers/*": ["src/helpers/*"],
       "@/core/*": ["src/@core/*"],
       "@/actions/*": ["src/actions/*"],
       "@/screens/*": ["src/screens/*"],
-      "@/ui/*": ["src/ui/*"]
+      "@/ui/*": ["src/ui/*"],
+      "@/services/*": ["src/services/*"]
     }
   }
 }

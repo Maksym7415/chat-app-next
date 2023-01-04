@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { ListItemIcon, ListItemText, List, ListItem } from "@mui/material";
 import * as config from "./config";
-import { PATHS } from "@/config/constants/paths";
+import { PATHS } from "@/core/constants/paths";
 import { actionLogOut } from "@/actions/index";
 import BaseSelect from "../../../selects/BaseSelect";
 import { useAppStore } from "@/storeZustand/app/store";

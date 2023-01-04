@@ -6,9 +6,10 @@ import { useForm } from "react-hook-form";
 import shallow from "zustand/shallow";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
-import languages from "@/config/translations";
+import languages from "@/core/translations";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
+import { AuthService } from "@/services/auth/auth.service";
 
 const VerificationClientPage = () => {
   // HOOKS
@@ -20,15 +21,13 @@ const VerificationClientPage = () => {
     }),
     shallow
   );
-  const { loginSingIn, verificationCode, postVerificationRequest } =
-    useAuthStore(
-      (state) => ({
-        loginSingIn: state.loginSingIn,
-        verificationCode: state.verificationCode,
-        postVerificationRequest: state.postVerificationRequest,
-      }),
-      shallow
-    );
+  const { loginSingIn, verificationCode } = useAuthStore(
+    (state) => ({
+      loginSingIn: state.loginSingIn,
+      verificationCode: state.verificationCode,
+    }),
+    shallow
+  );
 
   // STATES
   const [errorBack, setErrorBack] = useState("");
@@ -58,7 +57,9 @@ const VerificationClientPage = () => {
       },
     };
 
-    postVerificationRequest(sendData);
+    // postVerificationRequest(sendData);
+
+    AuthService.postVerification(sendData);
 
     errorBack && setErrorBack("");
   };

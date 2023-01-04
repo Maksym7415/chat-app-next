@@ -7,7 +7,7 @@ import Header from "./components/header";
 import {
   TYPES_FROM_TO_SEARCH_SCREEN,
   SIDE_LEFT_TYPE_CONTENT,
-} from "@/config/constants/general";
+} from "@/core/constants/general";
 import { useAppStore } from "@/storeZustand/app/store";
 import shallow from "zustand/shallow";
 

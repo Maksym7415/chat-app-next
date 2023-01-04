@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 import CssBaseline from "@mui/material/CssBaseline";
-import Theme from "@/config/theme";
+import Theme from "@/core/theme";
 import { store } from "src/reduxToolkit/store";
 import ContextMenu from "@/components/contextMenu";
 import ModalCustom from "@/components/modal";

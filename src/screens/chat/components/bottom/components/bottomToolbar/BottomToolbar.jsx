@@ -11,7 +11,6 @@ import {
   Fade,
   Box,
 } from "@mui/material";
-import { useSelector } from "react-redux";
 import useStyles from "./styles";
 import * as config from "./config";
 import { store } from "@/store/store";
@@ -20,14 +19,10 @@ import {
   actionsClearSelectedMessages,
 } from "@/actions/index";
 
-const BottomToolbar = ({ conversationId }) => {
+const BottomToolbar = ({ conversationId, selectedMessages }) => {
   // HOOKS
   const classes = useStyles();
 
-  // SELECTORS
-  const selectedMessages = useSelector(
-    ({ appSlice }) => appSlice.selectedMessages
-  );
 
   // VARIABLES
   const selectedMessagesAmount = Object.keys(selectedMessages.messages).length;

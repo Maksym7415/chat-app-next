@@ -4,9 +4,9 @@ import {
   setLoginSingInAction,
   setAuthHeadersAction,
 } from "./slice";
-import API from "../../config/axios";
-import { pathBackAuth } from "../../config/constants/urlBack";
-import { setTokenCook } from "@/config/cookiesStorage";
+import API from "../../@core/axios";
+import { pathBackAuth } from "../../@core/constants/urlBack";
+import { setTokenCook } from "@/core/cookiesStorage";
 
 export const postLoginRequest = createAsyncThunk(
   "auth/postLoginRequest",

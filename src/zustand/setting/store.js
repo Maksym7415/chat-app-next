@@ -1,6 +1,6 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
-import { setLanguageCook } from "@/config/cookiesStorage/index";
+import { setLanguageCook } from "@/core/cookiesStorage/index";
 
 const initialState = {
   error: {},

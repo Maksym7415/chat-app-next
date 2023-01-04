@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import API from "../../config/axios";
-import { pathBackConversations } from "../../config/constants/urlBack";
+import API from "../../@core/axios";
+import { pathBackConversations } from "../../@core/constants/urlBack";
 import { updateUserHistoryConversation } from "./slice";
 
 export const getUserConversationsRequest = createAsyncThunk(

@@ -1,22 +1,33 @@
-import React from "react";
+import { useState } from "react";
+import shallow from "zustand/shallow";
 import { Typography, TextField, Box } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { shareMessageAction } from "../../../../reduxToolkit/app/slice";
 import UserAvatar from "../../../avatar/userAvatar";
-import { PATHS } from "@/config/constants/paths";
+import { PATHS } from "@/core/constants/paths";
 import useStyles from "./styles";
-import languages from "@/config/translations";
+import languages from "@/core/translations";
 import { useAppStore } from "@/storeZustand/app/store";
+import { useConversationsStore } from "@/storeZustand/conversations/store";
+import { useSettingStore } from "@/storeZustand/setting/store";
 
 const SharedMessage = ({ data }) => {
   // HOOKS
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // SELECTORS
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-  const conversationsList = useSelector(
-    ({ conversationsSlice }) => conversationsSlice.conversationsList.data
+  const { lang } = useSettingStore(
+    (state) => ({
+      lang: state.lang,
+    }),
+    shallow
+  );
+
+  const { conversationsList } = useConversationsStore(
+    (state) => ({
+      conversationsList: state.conversationsList.data,
+    }),
+    shallow
   );
 
   const { setDialogWindowClearConfigAction } = useAppStore(
@@ -27,7 +38,7 @@ const SharedMessage = ({ data }) => {
   );
 
   // STATES
-  const [searchNameChat, setSearchNameChat] = React.useState("");
+  const [searchNameChat, setSearchNameChat] = useState("");
 
   // VARIABLES
   const conversationsFiltered = Object.values(conversationsList).filter(

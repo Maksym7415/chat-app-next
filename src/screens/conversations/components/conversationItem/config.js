@@ -1,5 +1,5 @@
 import { actionsTypeActionsConversation } from "@/actions/index";
-import languages from "@/config/translations";
+import languages from "@/core/translations";
 
 export const selectedConversationContext = (lang) => [
   {

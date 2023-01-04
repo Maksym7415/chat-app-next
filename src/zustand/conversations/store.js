@@ -1,7 +1,7 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
-import API from "@/config/axios";
-import { pathBackConversations } from "@/config/constants/urlBack";
+import API from "@/core/axios";
+import { pathBackConversations } from "@/core/constants/urlBack";
 
 const initialState = {
   conversationMessages: {
@@ -59,6 +59,11 @@ export const useConversationsStore = create(
         conversationsList: {
           data: data,
         },
+      });
+    },
+    setConversationMessagesAction(data) {
+      set({
+        conversationMessages: data,
       });
     },
     updateUserHistoryConversation(data) {

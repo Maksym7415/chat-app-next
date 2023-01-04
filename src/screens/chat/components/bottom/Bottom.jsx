@@ -1,26 +1,32 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+import shallow from "zustand/shallow";
 import { useMemo, memo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import MessageInput from "./components/messageInput/MessageInput";
 import BottomToolbar from "./components/bottomToolbar";
+import { useAppStore } from "@/storeZustand/app/store";
 
 const ChatBottom = ({ firstName, userId, opponentId, conversationData }) => {
   // HOOKS
-  // const params = useParams();
+  const pathname = usePathname();
 
-  const params = {};
-  // SELECTORS
-  const selectedMessages = useSelector(
-    ({ appSlice }) => appSlice.selectedMessages
+  const { selectedMessages } = useAppStore(
+    (state) => ({
+      selectedMessages: state.selectedMessages,
+    }),
+    shallow
   );
 
   // VARIABLES
-  const conversationId = useMemo(() => params?.id || 0, [params]);
+  const conversationId = useMemo(() => {
+    const pathnameSplit = pathname.split("/");
+    return +pathnameSplit[pathnameSplit.length - 1];
+  }, [pathname]);
 
   const renderBottom = () => {
     if (selectedMessages.active) {
-      return <BottomToolbar conversationId={conversationId} />;
+      return <BottomToolbar conversationId={conversationId} selectedMessages={selectedMessages}/>;
     } else {
       return (
         <MessageInput

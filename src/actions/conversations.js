@@ -2,23 +2,24 @@ import { store } from "../reduxToolkit/store";
 import {
   socketEmitDeleteConversation,
   socketEmitClearConversation,
-} from "../config/socket/actions/socketEmit";
-import { PATHS } from "@/config/constants/paths";
+} from "../@core/socket/actions/socketEmit";
+import { PATHS } from "@/core/constants/paths";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
+import { useAppStore } from "@/storeZustand/app/store";
 
 // import { updateConversationListAction } from "../reduxToolkit/conversations/slice";
 
 export const actionsConversationList = (data) => (dispatch) => {
   switch (data.mode) {
-    case "updateMessageConversation":
-      return dispatch(
-        updateConversationListAction({
-          [data.conversationId]: {
-            ...data.conversationsList[data.conversationId],
-            Messages: data.messages,
-          },
-        })
-      );
+    // case "updateMessageConversation":
+    //   return dispatch(
+    //     updateConversationListAction({
+    //       [data.conversationId]: {
+    //         ...data.conversationsList[data.conversationId],
+    //         Messages: data.messages,
+    //       },
+    //     })
+    //   );
     default:
       return null;
   }
@@ -30,8 +31,8 @@ export const actionsTypeActionsConversation = {
 };
 
 export const actionsSelectedConversation = (props) => {
-  const selectedChats = store.getState().appSlice.selectedChats;
-
+  const selectedChats = useAppStore.getState().selectedChats;
+  
   const { typeAction, dataConversation = null } = props;
 
   let _conversations = {};
@@ -68,13 +69,6 @@ export const actionsSelectedConversation = (props) => {
 };
 
 export const actionCreateNewConversation = (router, item) => {
-  // const conversationsList =
-  //   store.getState().conversationsSlice.conversationsList.data;
-
-  // const { conversationsList } = useConversationsStore((state) => ({
-  //   conversationsList: state.conversationsList.data,
-  // }));
-
   const conversationsList =
     useConversationsStore.getState().conversationsList.data;
 

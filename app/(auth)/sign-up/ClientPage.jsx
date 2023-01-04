@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 import shallow from "zustand/shallow";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
-import languages from "@/config/translations";
-import { PATHS } from "@/config/constants/paths";
+import languages from "@/core/translations";
+import { PATHS } from "@/core/constants/paths";
 import { useSettingStore } from "@/storeZustand/setting/store";
-import { useAuthStore } from "@/storeZustand/auth/store";
+import { AuthService } from "@/services/auth/auth.service";
 
 const SignUpClientPage = () => {
   // HOOKS
@@ -19,12 +19,6 @@ const SignUpClientPage = () => {
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,
-    }),
-    shallow
-  );
-  const { postSingUpRequest } = useAuthStore(
-    (state) => ({
-      postSingUpRequest: state.postSingUpRequest,
     }),
     shallow
   );
@@ -39,7 +33,7 @@ const SignUpClientPage = () => {
 
   // FUNCTIONS
   const onSubmit = (data) => {
-    postSingUpRequest({
+    AuthService.postSing({
       data: {
         firstName: data.firstName,
         lastName: data.lastName,

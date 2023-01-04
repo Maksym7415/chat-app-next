@@ -2,7 +2,7 @@ import {
   actionsTypeActionsConversation,
   actionsTypeActionsChat,
 } from "@/actions/index";
-import languages from "@/config/translations/index";
+import languages from "@/core/translations/index";
 
 export const headerSelectedChatsAmount = (lang) => [
   {

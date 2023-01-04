@@ -2,7 +2,7 @@
 
 import nookies from "nookies";
 import Cookies from "js-cookie";
-import { namesCookies } from "@/config/constants/general";
+import { namesCookies } from "@/core/constants/general";
 
 // Token
 export const setTokenCook = (accessToken) => {

@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState, memo } from "react";
-import useStyles from "./styles";
+import shallow from "zustand/shallow";
 import Header from "./components/header";
 import MainInfo from "./components/mainInfo";
-import { TYPES_CONVERSATIONS } from "../../config/constants/general";
+import { TYPES_CONVERSATIONS } from "../../@core/constants/general";
 import { getNameShort } from "../../helpers";
-import { useAppStoreSelector } from "../../hooks/redux";
+import { useSettingStore } from "@/storeZustand/setting/store";
+import { useUserStore } from "@/storeZustand/user/store";
 
 const classes = {
   container: "flex-1",
@@ -17,9 +18,19 @@ const ProfilePage = ({ typeProfile, conversationData, closeDrawer }) => {
   // HOOKS
   // const classes = useStyles();
 
-  // SELECTORS
-  const lang = useAppStoreSelector(({ settingSlice }) => settingSlice.lang);
-  const { userInfo } = useAppStoreSelector(({ userSlice }) => userSlice);
+  const { lang } = useSettingStore(
+    (state) => ({
+      lang: state.lang,
+    }),
+    shallow
+  );
+
+  const { userInfo } = useUserStore(
+    (state) => ({
+      userAvatars: state.userInfo,
+    }),
+    shallow
+  );
 
   // STATES
   const [setting, setSetting] = useState({

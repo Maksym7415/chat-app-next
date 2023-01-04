@@ -5,8 +5,12 @@ import shallow from "zustand/shallow";
 import TopCenterComponent from "./components/topCenterComponent";
 import TopLeftComponent from "./components/topLeftComponent";
 import { useAppStore } from "@/storeZustand/app/store";
-import { SIDE_LEFT_TYPE_CONTENT } from "@/config/constants/general";
+import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { useSearchStore } from "@/storeZustand/search/store";
+import {
+  SearchService,
+  getSearchContactFetcher,
+} from "@/services/search/search.service";
 
 // STYLES
 const classes = {
@@ -17,6 +21,8 @@ const classes = {
 
 const Header = ({ children }) => {
   // HOOKS
+
+  const {} = SearchService.useGetUserConversations();
 
   const { sideLeftConfig, setSideLeftConfigAction } = useAppStore(
     (state) => ({
@@ -63,7 +69,11 @@ const Header = ({ children }) => {
         setSettings(() => ({
           topCenterComponent: {
             placeholder: "Search",
-            getRequest: getSearchContactRequest,
+            getRequest: (options) => {
+              getSearchContactFetcher({
+                options,
+              });
+            },
           },
         }));
         return;

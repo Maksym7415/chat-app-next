@@ -8,10 +8,10 @@ import shallow from "zustand/shallow";
 import { selectedConversationContext } from "./config";
 import UserAvatar from "@/components/avatar/userAvatar";
 import SvgMaker from "@/components/svgMaker";
-import { PATHS } from "@/config/constants/paths";
-import { CONTEXT_MENU_ID } from "@/config/constants/general";
+import { PATHS } from "@/core/constants/paths";
+import { CONTEXT_MENU_ID } from "@/core/constants/general";
 import { getCurrentDay } from "@/helpers/index";
-import languages from "@/config/translations";
+import languages from "@/core/translations";
 import {
   actionsSelectedConversation,
   actionsTypeActionsConversation,

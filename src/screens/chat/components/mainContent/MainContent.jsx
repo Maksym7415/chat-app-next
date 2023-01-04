@@ -1,16 +1,19 @@
 "use client";
 
 import { useCallback, useState, memo, useEffect } from "react";
-import useStyles from "./styles";
+import shallow from "zustand/shallow";
 import { Typography, Box } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
-import languages from "@/config/translations";
+import languages from "@/core/translations";
 import { setMessageDate, uuid, getMessagesWithSendDate } from "@/helpers/index";
 import Message from "./components/message";
 import { Virtuoso } from "react-virtuoso";
 import { getConversationMessagesRequest } from "@/store/conversations/requests";
 import { setAllMessagesAction, setMessagesChatAction } from "@/store/app/slice";
+import { useSettingStore } from "@/storeZustand/setting/store";
+import { useConversationsStore } from "@/storeZustand/conversations/store";
+import { useAppStore } from "@/storeZustand/app/store";
 
 // need ts
 const LOAD_MESSAGE_OFFSET = 15;
@@ -29,13 +32,24 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
   const dispatch = useDispatch();
   // const classes = useStyles();
 
-  // SELECTORS
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-  const userHistoryConversations = useSelector(
-    ({ conversationsSlice }) => conversationsSlice.userHistoryConversations
+  const { lang } = useSettingStore(
+    (state) => ({
+      lang: state.lang,
+    }),
+    shallow
   );
-
-  const messages = useSelector(({ appSlice }) => appSlice.messagesChat);
+  const { messages } = useAppStore(
+    (state) => ({
+      messages: state.messagesChat,
+    }),
+    shallow
+  );
+  const { userHistoryConversations } = useConversationsStore(
+    (state) => ({
+      userHistoryConversations: state.userHistoryConversations,
+    }),
+    shallow
+  );
 
   // VARIABLES
   const pagination =

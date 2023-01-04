@@ -1,7 +1,12 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import ClientPage from "./ClientPage";
-import { namesCookies } from "@/config/constants/general";
+import { namesCookies } from "@/core/constants/general";
+// import { ConversationsService } from "@/services/conversations/conversations.service";
+// import {
+//   setAuthHeadersAction,
+//   authTokenAction,
+// } from "../src/reduxToolkit/auth/slice";
 
 const HomePage = async (props) => {
   const token = await cookies().get(namesCookies.accessToken)?.value;

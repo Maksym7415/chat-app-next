@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo, memo } from "react";
 import { Typography, Box, CircularProgress } from "@mui/material";
 import shallow from "zustand/shallow";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import ChatHeader from "./components/header";
 import ChatBottom from "./components/bottom";
 import ChatContent from "./components/mainContent";
@@ -17,6 +17,9 @@ import {
   setOpenConversationIdAction,
 } from "@/store/app/slice";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
+import Meta from "@/core/seo/Meta";
+import { useAuthStore } from "@/storeZustand/auth/store";
+import { useAppStore } from "@/storeZustand/app/store";
 
 // STYLES
 const classes = {
@@ -28,13 +31,19 @@ const Chat = ({ params }) => {
   // HOOKS
   const dispatch = useDispatch();
 
-  // SELECTORS
-  const authToken = useSelector(({ authSlice }) => authSlice.authToken);
-  const allMessages = useSelector(({ appSlice }) => appSlice.allMessages);
-  const openConversationId = useSelector(
-    ({ appSlice }) => appSlice.openConversationId
+  const { authToken } = useAuthStore(
+    (state) => ({
+      authToken: state.authToken,
+    }),
+    shallow
   );
-
+  const { allMessages, openConversationId } = useAppStore(
+    (state) => ({
+      allMessages: state.allMessages,
+      openConversationId: state.openConversationId,
+    }),
+    shallow
+  );
   const { conversationsList } = useConversationsStore(
     (state) => ({
       conversationsList: state.conversationsList.data,
@@ -114,25 +123,28 @@ const Chat = ({ params }) => {
   // }
 
   return (
-    <Box className={classes.container}>
-      <ChatHeader
-        conversationData={conversationData}
-        conversationId={conversationId}
-        typeConversation={typeConversation}
-        messages={allMessages?.[conversationId] || []}
-      />
-      <ChatContent
-        typeConversation={typeConversation}
-        conversationId={conversationId}
-        userId={authToken.userId}
-      />
-      <ChatBottom
-        firstName={authToken.firstName}
-        userId={authToken.userId}
-        opponentId={opponentId}
-        conversationData={conversationData}
-      />
-    </Box>
+    <>
+      <Meta title={conversationData?.conversationName || "Chat"} />
+      <Box className={classes.container}>
+        <ChatHeader
+          conversationData={conversationData}
+          conversationId={conversationId}
+          typeConversation={typeConversation}
+          messages={allMessages?.[conversationId] || []}
+        />
+        <ChatContent
+          typeConversation={typeConversation}
+          conversationId={conversationId}
+          userId={authToken.userId}
+        />
+        <ChatBottom
+          firstName={authToken.firstName}
+          userId={authToken.userId}
+          opponentId={opponentId}
+          conversationData={conversationData}
+        />
+      </Box>
+    </>
   );
 };
 

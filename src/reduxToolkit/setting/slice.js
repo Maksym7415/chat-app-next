@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import { setLanguageLS } from "../../config/localStorage";
+// import { setLanguageLS } from "../../@core/localStorage";
 
 const settingSlice = createSlice({
   name: "settingSlice",

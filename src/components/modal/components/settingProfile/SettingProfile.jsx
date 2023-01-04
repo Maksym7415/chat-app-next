@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useStyles from "./styles";
 import * as config from "./config";
@@ -40,7 +40,7 @@ const SettingProfile = ({ closeDrawer }) => {
   );
 
   // STATES
-  const [errorBack, setErrorBack] = React.useState("");
+  const [errorBack, setErrorBack] = useState("");
 
   const {
     control,
@@ -80,7 +80,7 @@ const SettingProfile = ({ closeDrawer }) => {
   };
 
   // USEEFFECTS
-  React.useEffect(() => {
+  useEffect(() => {
     // set defaultValues form from back
     if (!getValues("firstName") && userInfo.firstName) {
       setValue("firstName", `${userInfo.firstName}`);

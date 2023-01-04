@@ -4,15 +4,19 @@ import React from "react";
 const Label = ({ children, animateRerendering, color }) => {
   return (
     <div
-      className={clsx("rounded-full px-1.5 shadow-[0_0_1px_4px_black]", {
-        "bg-zinc-800 text-zinc-500": color === "default",
-        "bg-vercel-pink text-pink-100": color === "pink",
-        "bg-vercel-blue text-blue-100": color === "blue",
-        "bg-vercel-cyan text-cyan-100": color === "cyan",
-        "bg-vercel-violet text-violet-100": color === "violet",
-        "bg-vercel-orange text-orange-100": color === "orange",
-        "animate-[highlight_1s_ease-in-out_1]": animateRerendering,
-      })}
+      className={clsx(
+        "rounded-full px-1.5 shadow-[0_0_1px_4px_black]",
+        {
+          "bg-zinc-800 text-[#000000]": color === "default",
+          "bg-vercel-pink text-pink-100": color === "pink",
+          "bg-vercel-blue text-blue-100": color === "blue",
+          "bg-vercel-cyan text-cyan-100": color === "cyan",
+          "bg-vercel-violet text-violet-100": color === "violet",
+          "bg-vercel-orange text-orange-100": color === "orange",
+          "animate-[highlight_1s_ease-in-out_1]": animateRerendering,
+        },
+        "text-[#000000]"
+      )}
     >
       {children}
     </div>
@@ -23,7 +27,7 @@ export const Boundary = ({
   labels = ["children"],
   size = "default",
   color = "default",
-  animateRerendering = true,
+  animateRerendering = false,
 }) => {
   return (
     <div
@@ -42,7 +46,7 @@ export const Boundary = ({
     >
       <div
         className={clsx(
-          "absolute -top-2.5 flex space-x-1 text-[9px] uppercase leading-4 tracking-widest",
+          "absolute -top-0.5 flex space-x-1 text-[9px] uppercase leading-4 tracking-widest ",
           {
             "left-5": size === "small",
             "left-9": size === "default",

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import API from "../../config/axios";
-import { pathBackUser } from "../../config/constants/urlBack";
+import API from "../../@core/axios";
+import { pathBackUser } from "../../@core/constants/urlBack";
 
 // need ts
 

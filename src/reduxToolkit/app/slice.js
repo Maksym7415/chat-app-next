@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { SIDE_LEFT_TYPE_CONTENT } from "@/config/constants/general";
+import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 
 export const initialState = {
   isLoading: false,

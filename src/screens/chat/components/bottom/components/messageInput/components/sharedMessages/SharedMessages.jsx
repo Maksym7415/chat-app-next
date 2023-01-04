@@ -1,21 +1,24 @@
-import React from "react";
+import shallow from "zustand/shallow";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import useStyles from "./styles";
-import languages from "@/config/translations";
+import languages from "@/core/translations";
 import SvgMaker from "@/components/svgMaker";
-
 import { shareMessageAction } from "@/store/app/slice";
-// need ts
+import { useSettingStore } from "@/storeZustand/setting/store";
 
 const SharedMessages = ({ forwardMessages }) => {
   //HOOKS
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // SELECTORS
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const { lang } = useSettingStore(
+    (state) => ({
+      lang: state.lang,
+    }),
+    shallow
+  );
 
   const handleClose = () => {
     dispatch(shareMessageAction({}));
