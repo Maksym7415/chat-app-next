@@ -14,17 +14,17 @@ export const socket = socketIO(REACT_APP_SOCKET_URL, {
   jsonp: false,
 });
 
-export const startSocketIO = (store) => {
-  // socket.connect();
-  // socket.on('connect', () => {
-  //   console.log('connect');
-  //   // const { userId } = store.getState().user;
-  // });
-  // socket.on('disconnect', () => {
-  //   console.log('connection to server lost.');
-  // });
-  // socket.on('newMessage', message => {
-  //   console.log(message, 'message');
-  //   // store.dispatch(storePublicMessages([message]));
-  // });
-};
+// export const startSocketIO = (store) => {
+//   socket.connect();
+//   socket.on('connect', () => {
+//     console.log('connect');
+//     // const { userId } = store.getState().user;
+//   });
+//   socket.on('disconnect', () => {
+//     console.log('connection to server lost.');
+//   });
+//   socket.on('newMessage', message => {
+//     console.log(message, 'message');
+//     // store.dispatch(storePublicMessages([message]));
+//   });
+// };

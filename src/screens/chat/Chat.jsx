@@ -3,7 +3,6 @@
 import { useEffect, useState, useMemo, memo } from "react";
 import { Typography, Box, CircularProgress } from "@mui/material";
 import shallow from "zustand/shallow";
-import { useDispatch } from "react-redux";
 import ChatHeader from "./components/header";
 import ChatBottom from "./components/bottom";
 import ChatContent from "./components/mainContent";
@@ -20,6 +19,7 @@ import { useConversationsStore } from "@/storeZustand/conversations/store";
 import Meta from "@/core/seo/Meta";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useAppStore } from "@/storeZustand/app/store";
+import { ConversationsService } from "@/services/conversations/conversations.service";
 
 // STYLES
 const classes = {
@@ -29,7 +29,6 @@ const classes = {
 
 const Chat = ({ params }) => {
   // HOOKS
-  const dispatch = useDispatch();
 
   const { authToken } = useAuthStore(
     (state) => ({
@@ -37,10 +36,19 @@ const Chat = ({ params }) => {
     }),
     shallow
   );
-  const { allMessages, openConversationId } = useAppStore(
+  const {
+    allMessages,
+    openConversationId,
+    setAllMessagesAction,
+    setMessagesChatAction,
+    setOpenConversationIdAction,
+  } = useAppStore(
     (state) => ({
       allMessages: state.allMessages,
       openConversationId: state.openConversationId,
+      setAllMessagesAction: state.setAllMessagesAction,
+      setMessagesChatAction: state.setMessagesChatAction,
+      setOpenConversationIdAction: state.setOpenConversationIdAction,
     }),
     shallow
   );
@@ -69,37 +77,34 @@ const Chat = ({ params }) => {
   useEffect(() => {
     if (!allMessages[conversationId] && conversationId) {
       setIsFetching(true);
-      dispatch(
-        getConversationMessagesRequest({
-          data: {
-            id: conversationId,
-            offset: 0,
-          },
-          cb: (response) => {
-            const messages = getMessagesWithSendDate(response.data).messages;
+      ConversationsService.getConversationMessages({
+        data: {
+          id: conversationId,
+          offset: 0,
+        },
+        cb: (response) => {
+          const messages = getMessagesWithSendDate(response.data).messages;
 
-            dispatch(
-              setAllMessagesAction({
-                [conversationId]: messages,
-              })
-            );
-            dispatch(setMessagesChatAction(messages));
-            errorBack && setErrorBack("");
-            setIsFetching(false);
-          },
-          errorCb: (error) => {
-            setErrorBack(error.message);
-            setIsFetching(false);
-          },
-        })
-      );
+          setAllMessagesAction({
+            [conversationId]: messages,
+          });
+
+          setMessagesChatAction(messages);
+          errorBack && setErrorBack("");
+          setIsFetching(false);
+        },
+        errorCb: (error) => {
+          setErrorBack(error.message);
+          setIsFetching(false);
+        },
+      });
     } else {
       const messages = allMessages[conversationId] || [];
-      dispatch(setMessagesChatAction(messages));
+      setMessagesChatAction(messages);
     }
 
     conversationId !== openConversationId &&
-      dispatch(setOpenConversationIdAction(conversationId));
+      setOpenConversationIdAction(conversationId);
 
     return () => {
       actionsClearSelectedMessages(false);

@@ -1,4 +1,3 @@
-import { store } from "../reduxToolkit/store";
 import {
   socketEmitDeleteConversation,
   socketEmitClearConversation,
@@ -7,19 +6,16 @@ import { PATHS } from "@/core/constants/paths";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
 import { useAppStore } from "@/storeZustand/app/store";
 
-// import { updateConversationListAction } from "../reduxToolkit/conversations/slice";
-
-export const actionsConversationList = (data) => (dispatch) => {
+export const actionsConversationList = (data) => {
   switch (data.mode) {
-    // case "updateMessageConversation":
-    //   return dispatch(
-    //     updateConversationListAction({
-    //       [data.conversationId]: {
-    //         ...data.conversationsList[data.conversationId],
-    //         Messages: data.messages,
-    //       },
-    //     })
-    //   );
+    case "updateMessageConversation":
+      return useConversationsStore.getState().updateConversationListAction({
+        [data.conversationId]: {
+          ...data.conversationsList[data.conversationId],
+          Messages: data.messages,
+        },
+      });
+
     default:
       return null;
   }
@@ -32,7 +28,7 @@ export const actionsTypeActionsConversation = {
 
 export const actionsSelectedConversation = (props) => {
   const selectedChats = useAppStore.getState().selectedChats;
-  
+
   const { typeAction, dataConversation = null } = props;
 
   let _conversations = {};
@@ -80,6 +76,7 @@ export const actionCreateNewConversation = (router, item) => {
     return router.push(`${PATHS.chat}/${chat.conversationId}`);
   }
 
+  return router.push(PATHS.newChat);
   // return history.push(PATHS.newChat, {
   //   conversationData: {
   //     conversationAvatar: item.userAvatar,

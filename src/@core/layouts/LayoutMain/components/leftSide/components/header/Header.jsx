@@ -32,13 +32,6 @@ const Header = ({ children }) => {
     shallow
   );
 
-  const { getSearchContactRequest } = useSearchStore(
-    (state) => ({
-      getSearchContactRequest: state.getSearchContactRequest,
-    }),
-    shallow
-  );
-
   // STATES
   const [settings, setSettings] = useState({
     noSettings: true,

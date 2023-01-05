@@ -4,7 +4,6 @@ import { useEffect, useState, useMemo } from "react";
 import clsx from "clsx";
 import { contextMenu } from "react-contexify";
 import shallow from "zustand/shallow";
-import { useDispatch } from "react-redux";
 import { Divider, IconButton } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import * as config from "./config";
@@ -41,7 +40,6 @@ const Message = ({
   conversationId,
 }) => {
   // HOOKS
-  const dispatch = useDispatch();
   const classes = useStyles();
 
   const { lang } = useSettingStore(
@@ -52,7 +50,7 @@ const Message = ({
   );
   const { userInfo } = useUserStore(
     (state) => ({
-      userAvatars: state.userInfo,
+      userInfo: state.userInfo,
     }),
     shallow
   );
@@ -64,7 +62,7 @@ const Message = ({
     shallow
   );
 
-  const selfMessage = userInfo.id === messageData.User?.id;
+  const selfMessage = userInfo?.id === messageData.User?.id;
 
   // STATES
   const [settings, setSettings] = useState({
@@ -81,15 +79,8 @@ const Message = ({
   const handleOnPressChat = () => {
     if (selectedMessages.active && messageData.message) {
       selectedMessages?.messages?.[messageData.id]
-        ? store.dispatch(
-            actionsSelectedMessages(
-              messageData,
-              actionsTypeObjectSelected.remove
-            )
-          )
-        : store.dispatch(
-            actionsSelectedMessages(messageData, actionsTypeObjectSelected.add)
-          );
+        ? actionsSelectedMessages(messageData, actionsTypeObjectSelected.remove)
+        : actionsSelectedMessages(messageData, actionsTypeObjectSelected.add);
     }
   };
 

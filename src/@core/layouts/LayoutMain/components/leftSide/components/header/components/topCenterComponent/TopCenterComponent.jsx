@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import shallow from "zustand/shallow";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, OutlinedInput } from "@mui/material";
@@ -14,10 +13,7 @@ const classes = {
   inputSearch: "w-full max-w-[240px] p-[0] pl-[5px] rounded-[20px] h-[40px]",
 };
 function TopCenterComponent({ parentSettings }) {
-  // HOOKS
-  const dispatch = useDispatch();
 
-  // SELECTORS
   const { sideLeftConfig } = useAppStore(
     (state) => ({
       sideLeftConfig: state.sideLeftConfig,

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import shallow from "zustand/shallow";
 import { Typography, TextField, Box } from "@mui/material";
-import { useDispatch } from "react-redux";
 import { shareMessageAction } from "../../../../reduxToolkit/app/slice";
 import UserAvatar from "../../../avatar/userAvatar";
 import { PATHS } from "@/core/constants/paths";
@@ -14,7 +13,6 @@ import { useSettingStore } from "@/storeZustand/setting/store";
 const SharedMessage = ({ data }) => {
   // HOOKS
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   const { lang } = useSettingStore(
     (state) => ({
@@ -30,9 +28,10 @@ const SharedMessage = ({ data }) => {
     shallow
   );
 
-  const { setDialogWindowClearConfigAction } = useAppStore(
+  const { setDialogWindowClearConfigAction, shareMessageAction } = useAppStore(
     (state) => ({
       setDialogWindowClearConfigAction: state.setDialogWindowClearConfigAction,
+      shareMessageAction: state.shareMessageAction,
     }),
     shallow
   );
@@ -51,7 +50,7 @@ const SharedMessage = ({ data }) => {
   };
 
   const handleShareMessageId = (conversationId) => {
-    dispatch(shareMessageAction(data));
+    shareMessageAction(data);
     // history.push({
     //   pathname: `${PATHS.chat}/${conversationId}`,
     //   state: {

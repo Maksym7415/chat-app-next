@@ -6,6 +6,7 @@ import LayoutMain from "@/core/layouts/LayoutMain";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
 import { getTokenCook } from "@/core/cookiesStorage/index";
+import { ConversationsService } from "@/services/conversations/conversations.service";
 
 export default function ChatLayout({ children }) {
   const token = getTokenCook();
@@ -16,15 +17,9 @@ export default function ChatLayout({ children }) {
     }),
     shallow
   );
-  const { getUserConversationsRequest } = useConversationsStore(
-    (state) => ({
-      getUserConversationsRequest: state.getUserConversationsRequest,
-    }),
-    shallow
-  );
+  ConversationsService.useGetUserConversations();
 
   useEffect(() => {
-    getUserConversationsRequest();
     authTokenAction(token);
   }, []);
 

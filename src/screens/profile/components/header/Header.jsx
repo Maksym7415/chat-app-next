@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { IconButton } from "@mui/material";
 import shallow from "zustand/shallow";
-import { useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import useStyles from "./styles";
 import ImagesProfile from "@/components/carousel/imagesProfile";
@@ -36,7 +35,6 @@ const imagesTest = [
 
 const Header = ({ setting, closeDrawer }) => {
   // HOOKS
-  const dispatch = useDispatch();
 
   // STYLES
   const classes = useStyles();

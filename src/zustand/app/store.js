@@ -68,17 +68,17 @@ export const useAppStore = create(
       set({ sideLeftConfig: data });
     },
     setAllMessagesAction(data) {
-      set({ headers: { ...get().allMessages, ...data } });
+      set({ allMessages: data });
     },
     editMessageAction(data) {
-      set({ headers: { ...get().messageEdit, ...data } });
+      set({ messageEdit: { ...get().messageEdit, ...data } });
     },
     setLanguageAction(data) {
       set({ forwardMessages: data });
       state.lang = payload;
     },
     deleteMessageAction(data) {
-      set({ headers: { ...get().messageEdit, ...data } });
+      set({ messageEdit: { ...get().messageEdit, ...data } });
     },
     shareMessageAction(data) {
       set({ forwardMessages: data });

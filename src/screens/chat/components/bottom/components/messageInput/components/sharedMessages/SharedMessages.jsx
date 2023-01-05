@@ -1,17 +1,16 @@
 import shallow from "zustand/shallow";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useDispatch } from "react-redux";
 import useStyles from "./styles";
 import languages from "@/core/translations";
 import SvgMaker from "@/components/svgMaker";
 import { shareMessageAction } from "@/store/app/slice";
 import { useSettingStore } from "@/storeZustand/setting/store";
+import { useAppStore } from "@/storeZustand/app/store";
 
 const SharedMessages = ({ forwardMessages }) => {
   //HOOKS
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   const { lang } = useSettingStore(
     (state) => ({
@@ -20,8 +19,15 @@ const SharedMessages = ({ forwardMessages }) => {
     shallow
   );
 
+  const { shareMessageAction } = useAppStore(
+    (state) => ({
+      shareMessageAction: state.shareMessageAction,
+    }),
+    shallow
+  );
+
   const handleClose = () => {
-    dispatch(shareMessageAction({}));
+    shareMessageAction({});
   };
 
   return (

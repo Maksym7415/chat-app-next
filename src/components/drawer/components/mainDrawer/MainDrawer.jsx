@@ -8,6 +8,7 @@ import { useAppStore } from "@/storeZustand/app/store";
 import { useUserStore } from "@/storeZustand/user/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
 import shallow from "zustand/shallow";
+import { UserService } from "@/services/user/user.service";
 
 const classes = {
   list: "",
@@ -27,11 +28,9 @@ function MainDrawer({ closeDrawer }) {
     shallow
   );
 
-  const { userInfo, getUserProfileDataRequest } = useUserStore(
+  const { userInfo } = useUserStore(
     (state) => ({
       userInfo: state.userInfo,
-      getUserProfileDataRequest: state.getUserProfileDataRequest,
-      putUpdateProfileRequest: state.putUpdateProfileRequest,
     }),
     shallow
   );
@@ -88,10 +87,10 @@ function MainDrawer({ closeDrawer }) {
 
     const sendData = { lang: selectLang };
 
-    putUpdateProfileRequest({
+    UserService.putUpdateProfile({
       data: sendData,
       cb: () => {
-        getUserProfileDataRequest({
+        UserService.getUserProfileData({
           cb: () => {
             setLangAction(selectLang);
           },

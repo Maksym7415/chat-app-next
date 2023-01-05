@@ -16,25 +16,19 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { useSnackbar } from "notistack";
-import { useDispatch } from "react-redux";
 import SwipeableViews from "react-swipeable-views";
 import useStyles from "./styles";
 import DefaultAvatar from "../../../../../avatar/defaultAvatar";
-import {
-  getUserAvatars,
-  setMainPhotoRequest,
-  deleteAvatarRequest,
-} from "../../../../../../reduxToolkit/user/requests";
 import * as config from "./config";
 import { getNameShort } from "../../../../../../helpers";
 import { useUserStore } from "@/storeZustand/user/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
+import { UserService } from "@/services/user/user.service";
 
 const ITEM_HEIGHT = 30;
 
 const Avatars = () => {
   // HOOKS
-  const dispatch = useDispatch();
   const classes = useStyles();
   // const { enqueueSnackbar } = useSnackbar();
 
@@ -86,28 +80,24 @@ const Avatars = () => {
         // }
         return;
       case "setMainPhoto":
-        dispatch(
-          setMainPhotoRequest({
-            photoId: photoSelected.id,
-            params: {
-              url: photoSelected.fileName,
-            },
-            cb: () => {
-              // enqueueSnackbar("Success set main photo", { variant: "success" });
-              setMainAvatar(photoSelected);
-            },
-          })
-        );
+        UserService.putMainPhoto({
+          photoId: photoSelected.id,
+          params: {
+            url: photoSelected.fileName,
+          },
+          cb: () => {
+            // enqueueSnackbar("Success set main photo", { variant: "success" });
+            setMainAvatar(photoSelected);
+          },
+        });
         return;
       case "deletePhoto":
-        dispatch(
-          deleteAvatarRequest({
-            params: {
-              id: photoSelected.id,
-            },
-            cb: () => dispatch(getUserAvatars({})),
-          })
-        );
+        UserService.deleteAvatar({
+          params: {
+            id: photoSelected.id,
+          },
+          cb: () => UserService.getUserAvatars(),
+        });
         return;
       default:
         return null;
@@ -135,7 +125,7 @@ const Avatars = () => {
 
   useEffect(() => {
     if (!userAvatars.length) {
-      dispatch(getUserAvatars({}));
+      UserService.getUserAvatars();
     }
   }, []);
 

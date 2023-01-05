@@ -7,6 +7,10 @@ import UserAvatar from "@/components/avatar/userAvatar";
 import RenderConditionsList from "@/components/renders/renderConditionsList";
 import { setStateDirection } from "@/helpers/index";
 import { useSearchStore } from "@/storeZustand/search/store";
+import {
+  SearchService,
+  getSearchContactFetcher,
+} from "@/services/search/search.service";
 
 // STYLES
 const classes = {
@@ -23,11 +27,10 @@ const classes = {
 const SearchMain = ({ onClickContact }) => {
   // HOOKS
 
-  const { isLoading, searchContacts, getSearchContactRequest } = useSearchStore(
+  const { isLoading, searchContacts } = useSearchStore(
     (state) => ({
       searchContacts: state.searchContacts,
       isLoading: state.isLoading,
-      getSearchContactRequest: state.getSearchContactRequest,
     }),
     shallow
   );
@@ -46,7 +49,7 @@ const SearchMain = ({ onClickContact }) => {
         offset: searchContacts.offset + searchContacts.limit,
       };
 
-      getSearchContactRequest({
+      getSearchContactFetcher({
         params,
         direction: "down",
       });

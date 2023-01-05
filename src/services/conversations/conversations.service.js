@@ -1,24 +1,23 @@
 import useSWR from "swr";
 import API from "@/core/axios/index";
 import { pathBackConversations } from "@/core/constants/urlBack";
-// import { useConversationsStore } from "@/storeZustand/conversations/store";
+import { useConversationsStore } from "@/storeZustand/conversations/store";
 
-const getUserConversationsFetcher = async ({
+export const getUserConversationsFetcher = async ({
   url = pathBackConversations.getUserConversations,
   options,
 }) => {
   try {
     const response = await API.get(url);
 
-    console.log(response, "response");
-    const data = response.data.data.reduce((acc, item) => {
+    const data = response?.data?.data?.reduce((acc, item) => {
       acc[item.conversationId] = item;
       return acc;
     }, {});
-
+    console.log(response, "response");
     options?.cb && options.cb(data);
-
-    // useConversationsStore.getState().setConversationListAction(data);
+    console.log("cb");
+    useConversationsStore.getState().setConversationListAction(data);
 
     return data;
   } catch (error) {
@@ -40,7 +39,7 @@ export const ConversationsService = {
       error,
     };
   },
-  async postVerification(options) {
+  async getConversationMessages(options) {
     try {
       const response = await API.get(
         `${pathBackConversations.conversationHistory}/${options.data.id}?offset=${options.data.offset}`
@@ -48,20 +47,18 @@ export const ConversationsService = {
 
       options?.cb && options.cb(response.data);
 
-      // useConversationsStore.getState().updateUserHistoryConversation({
-      //   conversationId: options.data.id,
-      //   data: { pagination: response.data.pagination },
-      // });
+      useConversationsStore.getState().updateUserHistoryConversation({
+        conversationId: options.data.id,
+        data: { pagination: response.data.pagination },
+      });
 
-      // useConversationsStore.getState().setConversationMessagesAction({
-      //   data: response.data.data,
-      //   pagination: response.data.pagination,
-      // });
-
-      return {
+      const data = {
         data: response.data.data,
         pagination: response.data.pagination,
       };
+      useConversationsStore.getState().setConversationMessagesAction(data);
+
+      return data;
     } catch (error) {
       options?.errorCb && options.errorCb(error.data);
 

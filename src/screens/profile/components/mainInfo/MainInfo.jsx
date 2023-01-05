@@ -1,8 +1,8 @@
 "use client";
+
 import { useState } from "react";
 import { Switch, Divider } from "@mui/material";
 import shallow from "zustand/shallow";
-import { useDispatch } from "react-redux";
 import useStyles from "./styles";
 import RITitleWithSubtitleAndRightComponent from "@/components/renders/rendersItem/RITitleWithSubtitleAndRightComponent";
 import { TYPES_CONVERSATIONS } from "@/core/constants/general";

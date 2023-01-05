@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { useEffect, useState, useMemo } from "react";
 import { Rnd } from "react-rnd";
-import { useDispatch } from "react-redux";
 import shallow from "zustand/shallow";
 import LeftSide from "./components/leftSide";
 import { socket } from "@/core/socket";
@@ -14,9 +14,9 @@ import {
   socketOnDeleteConversation,
   socketOnClearConversation,
 } from "@/core/socket/actions/socketOn";
-import { getUserProfileDataRequest } from "@/store/user/requests";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
+import { UserService } from "@/services/user/user.service";
 
 // STYLES
 const classes = {
@@ -28,9 +28,9 @@ const styleRnd = {
   borderRight: "1px solid rgba(0, 0, 0, 0.2)",
 };
 
-const MainPage = ({ children }) => {
-  // HOOKS
-  const dispatch = useDispatch();
+const LayoutMain = ({ children }) => {
+  const router = useRouter();
+  const pathname = usePathname();
 
   const { conversationsList } = useConversationsStore(
     (state) => ({
@@ -53,11 +53,12 @@ const MainPage = ({ children }) => {
     () => Object.values(conversationsList),
     [conversationsList]
   );
+  const pathnameSplit = pathname.split("/");
 
   // USEEFFECTS
   useEffect(() => {
     if (authToken.userId) {
-      dispatch(getUserProfileDataRequest({}));
+      UserService.getUserProfileData();
     }
   }, [authToken]);
 
@@ -70,8 +71,13 @@ const MainPage = ({ children }) => {
       });
     }
     socketOnDeleteMessage();
-    // socketOnUserIdNewChat(authToken.userId, history);
-    // socketOnDeleteConversation({ params, history });
+    socketOnUserIdNewChat(authToken.userId, router);
+    socketOnDeleteConversation({
+      params: {
+        id: pathnameSplit[pathnameSplit.length - 1],
+      },
+      router,
+    });
     socketOnClearConversation();
   }, [conversationsListMass]);
 
@@ -109,4 +115,4 @@ const MainPage = ({ children }) => {
   );
 };
 
-export default MainPage;
+export default LayoutMain;

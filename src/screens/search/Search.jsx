@@ -10,6 +10,10 @@ import { getSearchContactRequest } from "@/store/search/requests";
 import { actionCreateNewConversation } from "@/actions/conversations";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { useAppStore } from "@/storeZustand/app/store";
+import {
+  SearchService,
+  getSearchContactFetcher,
+} from "@/services/search/search.service";
 
 // STYLES
 const classes = {
@@ -47,7 +51,7 @@ const Search = ({ params }) => {
         return setSettings(() => ({
           header: {
             placeholder: "Search",
-            getRequest: getSearchContactRequest,
+            getRequest: getSearchContactFetcher,
           },
         }));
       case TYPES_FROM_TO_SEARCH_SCREEN.profile:

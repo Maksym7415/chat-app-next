@@ -3,13 +3,11 @@
 // import Cookies from "js-cookie";
 import { useRouter, usePathname, redirect } from "next/navigation";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 
 // import { useActions } from "@/hooks/useActions";
 // import { useAuthStore } from "@/hooks/useAuthStore";
 
 const AuthProvider = ({ children }) => {
-  const dispatch = useDispatch();
   const pathName = usePathname();
   // const { user } = useAuthStore()
   // const { checkAuth, logout } = useActions()

@@ -10,6 +10,7 @@ import Snackbar from "../helpers/notistack";
 import { socketEmitChatsDeleteMessage } from "../@core/socket/actions/socketEmit";
 import { actionsConversationList } from "./conversations";
 import { store } from "../reduxToolkit/store";
+import { useAppStore } from "@/storeZustand/app/store";
 
 export const actionsTypeObject = {
   add: "add",
@@ -18,36 +19,34 @@ export const actionsTypeObject = {
 };
 
 export const actionsSelectedMessages =
-  (data, typeAction) => async (dispatch, getState) => {
+async (data, typeAction)  => {
     const { selectedMessages } = getState().appSlice;
 
     const copySelectedMessages = { ...selectedMessages.messages };
 
     switch (typeAction) {
       case actionsTypeObject.add:
-        dispatch(
-          setSelectedMessagesAction({
-            ...selectedMessages,
-            messages: {
-              ...copySelectedMessages,
-              [data?.id]: data,
-            },
-          })
-        );
+        useAppStore.getState().setSelectedMessagesAction({
+          ...selectedMessages,
+          messages: {
+            ...copySelectedMessages,
+            [data?.id]: data,
+          },
+        });
+
         return null;
       case actionsTypeObject.remove:
         delete copySelectedMessages[data?.id];
 
         const active = Object.keys(copySelectedMessages).length ? true : false;
-        dispatch(
-          setSelectedMessagesAction({
-            ...selectedMessages,
-            active,
-            messages: {
-              ...copySelectedMessages,
-            },
-          })
-        );
+        useAppStore.getState().setSelectedMessagesAction({
+          ...selectedMessages,
+          active,
+          messages: {
+            ...copySelectedMessages,
+          },
+        });
+
         return;
       case actionsTypeObject.clear:
         // isDispatch ? props.dispatch(props.setAction({})) : props.setAction({});
@@ -131,24 +130,21 @@ export const actionsMessagesChat = (props) => {
             conversationsList[conversationId].Messages[0]?.id
           )
         ) {
-          store.dispatch(
-            actionsConversationList({
-              mode: "updateMessageConversation",
-              conversationId,
-              messages: [updateAllMessages[updateAllMessages.length - 1]],
-              conversationsList,
-            })
-          );
+          actionsConversationList({
+            mode: "updateMessageConversation",
+            conversationId,
+            messages: [updateAllMessages[updateAllMessages.length - 1]],
+            conversationsList,
+          });
         }
 
-        store.dispatch(
-          setAllMessagesAction({
-            [conversationId]: updateAllMessages,
-          })
-        );
+        useAppStore.getState().setAllMessagesAction({
+          [conversationId]: updateAllMessages,
+        });
+
         openConversationId &&
           conversationId &&
-          store.dispatch(setMessagesChatAction(updateAllMessages));
+          useAppStore.getState().setMessagesChatAction(updateAllMessages);
       };
 
       // sorting through the selected messages and sending them through the socket and, if successful, delete them locally through the function - getRemoveMessages
@@ -169,12 +165,10 @@ export const actionsMessagesChat = (props) => {
     // EDIT MESSAGE
     case actionsTypeActionsChat.editMessage:
       return Object.keys(_messages).map((messageId) =>
-        store.dispatch(
-          editMessageAction({
-            message: _messages[messageId],
-            messageId,
-          })
-        )
+        useAppStore.getState().editMessageAction({
+          message: _messages[messageId],
+          messageId,
+        })
       );
 
     // COPY MESSAGE
@@ -196,12 +190,10 @@ export const actionsMessagesChat = (props) => {
 
     // SELECT MESSAGES
     case actionsTypeActionsChat.selectMessages:
-      return store.dispatch(
-        setSelectedMessagesAction({
-          active: true,
-          messages: _messages,
-        })
-      );
+      return useAppStore.getState().setSelectedMessagesAction({
+        active: true,
+        messages: _messages,
+      });
 
     // FORWARD MESSAGES
     case actionsTypeActionsChat.forwardMessage:
@@ -219,14 +211,12 @@ export const actionsMessagesChat = (props) => {
         return acc;
       }, []);
 
-    // return store.dispatch(
-    //   setDialogWindowConfigAction({
-    //     open: true,
-    //     typeContent: "shareMessage",
-    //     title: "Share Message",
-    //     data: messagesMass,
-    //   })
-    // );
+      return useAppStore.getState().setDialogWindowConfigAction({
+        open: true,
+        typeContent: "shareMessage",
+        title: "Share Message",
+        data: messagesMass,
+      });
 
     default:
       return Snackbar.error("An unknown action in chat is selected");

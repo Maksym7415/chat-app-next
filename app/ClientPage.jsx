@@ -14,12 +14,6 @@ const MainClientPage = ({ token }) => {
     }),
     shallow
   );
-  // const { getUserConversationsRequest } = useConversationsStore(
-  //   (state) => ({
-  //     getUserConversationsRequest: state.getUserConversationsRequest,
-  //   }),
-  //   shallow
-  // );
   ConversationsService.useGetUserConversations();
   useEffect(() => {
     // getUserConversationsRequest();

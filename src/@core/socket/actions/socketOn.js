@@ -13,6 +13,10 @@ import {
 // } from "../../../reduxToolkit/conversations/slice";
 import { useAppStore } from "@/storeZustand/app/store";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
+import {
+  ConversationsService,
+  getUserConversationsFetcher,
+} from "@/services/conversations/conversations.service";
 
 // User Id Chat
 export const socketOnUserIdChat = (chat) =>
@@ -26,22 +30,20 @@ export const socketOnUserIdChat = (chat) =>
     const conversationFindStore = conversationsList?.[chat.conversationId];
 
     const updateMessageConversation = () => {
-      store.dispatch(
-        actionsConversationList({
-          mode: "updateMessageConversation",
-          conversationId: chat.conversationId,
-          messages: message?.isEdit
-            ? [
-                {
-                  ...conversationFindStore?.Messages?.[0],
-                  message: message.message,
-                  isEdit: true,
-                },
-              ]
-            : [message],
-          conversationsList,
-        })
-      );
+      actionsConversationList({
+        mode: "updateMessageConversation",
+        conversationId: chat.conversationId,
+        messages: message?.isEdit
+          ? [
+              {
+                ...conversationFindStore?.Messages?.[0],
+                message: message.message,
+                isEdit: true,
+              },
+            ]
+          : [message],
+        conversationsList,
+      });
     };
     //
     let findComponentDate = null;
@@ -86,13 +88,13 @@ export const socketOnUserIdChat = (chat) =>
         });
       }
 
-      store.dispatch(
-        setAllMessagesAction({ [chat.conversationId]: updateMessages })
-      );
+      useAppStore
+        .getState()
+        .setAllMessagesAction({ [chat.conversationId]: updateMessages });
 
       openConversationId &&
         chat.conversationId &&
-        store.dispatch(setMessagesChatAction(updateMessages));
+        useAppStore.getState().setMessagesChatAction(updateMessages);
     }
 
     if (chat.Messages?.[0]?.id == message?.id) {
@@ -116,12 +118,10 @@ export const socketOnTypingStateId = (chat) => {
         ...conversation,
         [user.userId]: { ...user, isTyping },
       };
-      store.dispatch(
-        updateConversationTypeStateAction({
-          conversationId: conversationId,
-          data,
-        })
-      );
+      useConversationsStore.getState().updateConversationTypeStateAction({
+        conversationId: conversationId,
+        data,
+      });
     };
     const currentUserTypingTimer = () => {
       fConversationType(conversationId, user, true);
@@ -164,22 +164,18 @@ export const socketOnDeleteMessage = () => {
       (message) => ![messageId?.toString()]?.includes(message?.id?.toString())
     );
 
-    store.dispatch(
-      setAllMessagesAction({
-        [conversationId]: updateMessages,
-      })
-    );
+    useAppStore.getState().setAllMessagesAction({
+      [conversationId]: updateMessages,
+    });
 
     if (messageId === conversationFindStore?.Messages?.[0].id) {
-      store.dispatch(
-        actionsConversationList({
-          mode: "updateMessageConversation",
-          conversationId,
-          // messages: [lastMessage || findLastMessage],
-          messages: [lastMessage],
-          conversationsList,
-        })
-      );
+      actionsConversationList({
+        mode: "updateMessageConversation",
+        conversationId,
+        // messages: [lastMessage || findLastMessage],
+        messages: [lastMessage],
+        conversationsList,
+      });
     }
   };
 
@@ -191,26 +187,25 @@ export const socketOnDeleteMessage = () => {
   );
 };
 
-export const socketOnUserIdNewChat = (userId, history) => {
+export const socketOnUserIdNewChat = (userId, router) => {
   return socket.on(`userIdNewChat${userId}`, (message, conversationId) => {
-    // store.dispatch(
-    //   getUserConversationsRequest({
-    //     cb: (data) => {
-    //       // ця перевірка потрібно для того щоб коли інший юзер створює чат зі мною щоб в мене не відкривалося зразу чат з цим юзером
-    //       if (message.User?.id !== userId) {
-    //         return;
-    //       }
-    //       history.push(`${PATHS.chat}/${conversationId}`, {
-    //         id: conversationId,
-    //         conversationData: data[conversationId],
-    //       });
-    //     },
-    //   })
-    // );
+    console.log(message, "message");
+    getUserConversationsFetcher({
+      options: {
+        cb: (data) => {
+          console.log(conversationId, "conversationId");
+          // ця перевірка потрібно для того щоб коли інший юзер створює чат зі мною щоб в мене не відкривалося зразу чат з цим юзером
+          if (message.User?.id !== userId) {
+            return;
+          }
+          router.push(`${PATHS.chat}/${conversationId}`);
+        },
+      },
+    });
   });
 };
 
-export const socketOnDeleteConversation = ({ params, history }) => {
+export const socketOnDeleteConversation = ({ params, router }) => {
   socket.on("deleteChat", ({ ids }) => {
     const allMessages = useAppStore.getState().allMessages;
     const conversationsList =
@@ -223,10 +218,15 @@ export const socketOnDeleteConversation = ({ params, history }) => {
       delete copyConversationsList[id];
     });
     if (ids.includes(params?.id)) {
-      history.push(PATHS.main);
+      router.push(PATHS.main);
     }
-    store.dispatch(setAllMessagesAction({ ...copyAllMessages }));
-    store.dispatch(setConversationListAction(copyConversationsList));
+    console.log(conversationsList, "conversationsList");
+    console.log(copyConversationsList, "copyConversationsList");
+    useAppStore.getState().setAllMessagesAction({ ...copyAllMessages });
+    useConversationsStore
+      .getState()
+      .setConversationListAction(copyConversationsList);
+    console.log("socketOnDeleteConversation");
   });
 };
 
@@ -247,7 +247,11 @@ export const socketOnClearConversation = () => {
         },
       };
     });
-    store.dispatch(setAllMessagesAction({ ...copyAllMessages }));
-    store.dispatch(setConversationListAction(copyConversationsList));
+    console.log(allMessages, "allMessages");
+    console.log(copyAllMessages, "copyAllMessages");
+    useAppStore.getState().setAllMessagesAction({ ...copyAllMessages });
+    useConversationsStore
+      .getState()
+      .setConversationListAction(copyConversationsList);
   });
 };

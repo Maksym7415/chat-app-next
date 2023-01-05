@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Button, Grid, Box } from "@mui/material";
 import useStyles from "./styles";
-import { useDispatch } from "react-redux";
 import UserAvatar from "../../../avatar/userAvatar";
 import languages from "@/core/translations";
 import SelectsAsyncPaginateSearch from "../../../SelectsAsyncPaginateSearch";
@@ -16,6 +15,10 @@ import shallow from "zustand/shallow";
 import { useSearchStore } from "@/storeZustand/search/store";
 import { useAppStore } from "@/storeZustand/app/store";
 import CustomButton from "@/components/buttons/customButton/index";
+import {
+  SearchService,
+  getSearchContactFetcher,
+} from "@/services/search/search.service";
 
 // makeStyles
 // STYLES
@@ -32,7 +35,6 @@ const classes = {
 const NewChat = () => {
   // HOOKS
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   // SELECTORS
   const { lang } = useSettingStore(
@@ -45,13 +47,6 @@ const NewChat = () => {
   const { authToken } = useAuthStore(
     (state) => ({
       authToken: state.authToken,
-    }),
-    shallow
-  );
-
-  const { getSearchContactRequest } = useSearchStore(
-    (state) => ({
-      getSearchContactRequest: state.getSearchContactRequest,
     }),
     shallow
   );
@@ -103,7 +98,7 @@ const NewChat = () => {
         settings={{
           isMulti: true,
           getSearchRequest: async (searchQuery, page) => {
-            const response = await getSearchContactRequest({
+            const response = await getSearchContactFetcher({
               params: {
                 search: searchQuery,
                 offset: page !== 1 ? (page - 1) * 10 : 0,

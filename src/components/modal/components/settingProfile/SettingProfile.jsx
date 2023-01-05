@@ -2,24 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useStyles from "./styles";
 import * as config from "./config";
 import Avatars from "./components/avatars";
 import TextInputCustom from "../../../hookFormsComponents/textInput";
 import CustomButton from "../../../buttons/customButton";
-import {
-  putUpdateProfileRequest,
-  getUserProfileDataRequest,
-} from "../../../../reduxToolkit/user/requests";
 import { useUserStore } from "@/storeZustand/user/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
 import shallow from "zustand/shallow";
+import { UserService } from "@/services/user/user.service";
 
 const SettingProfile = ({ closeDrawer }) => {
   // HOOKS
-  const dispatch = useDispatch();
   const classes = useStyles();
   // const { enqueueSnackbar } = useSnackbar();
 
@@ -63,18 +58,16 @@ const SettingProfile = ({ closeDrawer }) => {
       sendData.lastName = data.lastName;
     }
 
-    dispatch(
-      putUpdateProfileRequest({
-        data: sendData,
-        cb: () => {
-          // enqueueSnackbar("Success update info", { variant: "success" });
-          dispatch(getUserProfileDataRequest({}));
-        },
-        errorCb: (error) => {
-          // enqueueSnackbar(error.message, { variant: "error" });
-        },
-      })
-    );
+    UserService.putUpdateProfile({
+      data: sendData,
+      cb: () => {
+        // enqueueSnackbar("Success update info", { variant: "success" });
+        UserService.getUserProfileData();
+      },
+      errorCb: (error) => {
+        // enqueueSnackbar(error.message, { variant: "error" });
+      },
+    });
 
     errorBack && setErrorBack("");
   };

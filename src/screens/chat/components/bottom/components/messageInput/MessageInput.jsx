@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import clsx from "clsx";
 import { TextField } from "@mui/material";
-import { useDispatch } from "react-redux";
 import shallow from "zustand/shallow";
 import {
   socketEmitChatsTypingState,
@@ -29,7 +28,6 @@ const classes = {
 
 const MessageInput = ({ conversationId, userId, firstName, opponentId }) => {
   // HOOKS
-  const dispatch = useDispatch();
   // const classes = useStyles();
 
   const { lang } = useSettingStore(
@@ -46,10 +44,17 @@ const MessageInput = ({ conversationId, userId, firstName, opponentId }) => {
     shallow
   );
 
-  const { messageEdit, forwardMessages } = useAppStore(
+  const {
+    messageEdit,
+    forwardMessages,
+    shareMessageAction,
+    editMessageAction,
+  } = useAppStore(
     (state) => ({
       messageEdit: state.messageEdit,
       forwardMessages: state.forwardMessages,
+      shareMessageAction: state.shareMessageAction,
+      editMessageAction: state.editMessageAction,
     }),
     shallow
   );
@@ -106,7 +111,7 @@ const MessageInput = ({ conversationId, userId, firstName, opponentId }) => {
         sendMessage(conversationId, messageObj, message.User.id);
         return message;
       });
-      dispatch(shareMessageAction([]));
+      shareMessageAction([]);
     }
     if (message[conversationId]) {
       if (messageEdit.messageId) {
@@ -120,17 +125,16 @@ const MessageInput = ({ conversationId, userId, firstName, opponentId }) => {
   };
 
   const handleClearSharedMessages = () => {
-    dispatch(shareMessageAction([]));
+    shareMessageAction([]);
     setSharedMessages([]);
   };
 
   const clearMessageEdit = () => {
-    dispatch(
-      editMessageAction({
-        message: {},
-        messageId: null,
-      })
-    );
+    editMessageAction({
+      message: {},
+      messageId: null,
+    });
+
     setMessage((prev) => ({ ...prev, [conversationId]: "" }));
   };
 

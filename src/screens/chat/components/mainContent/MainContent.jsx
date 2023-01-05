@@ -3,19 +3,16 @@
 import { useCallback, useState, memo, useEffect } from "react";
 import shallow from "zustand/shallow";
 import { Typography, Box } from "@mui/material";
-import { useDispatch } from "react-redux";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
 import languages from "@/core/translations";
 import { setMessageDate, uuid, getMessagesWithSendDate } from "@/helpers/index";
 import Message from "./components/message";
 import { Virtuoso } from "react-virtuoso";
-import { getConversationMessagesRequest } from "@/store/conversations/requests";
-import { setAllMessagesAction, setMessagesChatAction } from "@/store/app/slice";
 import { useSettingStore } from "@/storeZustand/setting/store";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
 import { useAppStore } from "@/storeZustand/app/store";
+import { ConversationsService } from "@/services/conversations/conversations.service";
 
-// need ts
 const LOAD_MESSAGE_OFFSET = 15;
 
 let prevChatId = -1;
@@ -29,8 +26,6 @@ const classes = {
 
 const MainContent = ({ userId, conversationId, typeConversation }) => {
   //HOOKS
-  const dispatch = useDispatch();
-  // const classes = useStyles();
 
   const { lang } = useSettingStore(
     (state) => ({
@@ -38,9 +33,11 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
     }),
     shallow
   );
-  const { messages } = useAppStore(
+  const { messages, setMessagesChatAction, setAllMessagesAction } = useAppStore(
     (state) => ({
       messages: state.messagesChat,
+      setMessagesChatAction: state.setMessagesChatAction,
+      setAllMessagesAction: state.setAllMessagesAction,
     }),
     shallow
   );
@@ -68,19 +65,16 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
       data.offset = pagination.currentPage + LOAD_MESSAGE_OFFSET;
     }
 
-    dispatch(
-      getConversationMessagesRequest({
-        data,
-        cb: (response) => {
-          dispatch(
-            setAllMessagesAction({
-              [conversationId]: [...response.data, ...messages],
-            })
-          );
-          cb && cb(getMessagesWithSendDate(response.data).messages);
-        },
-      })
-    );
+    ConversationsService.getConversationMessages({
+      data,
+      cb: (response) => {
+        setAllMessagesAction({
+          [conversationId]: [...response.data, ...messages],
+        });
+
+        cb && cb(getMessagesWithSendDate(response.data).messages);
+      },
+    });
   };
 
   const prependItems = useCallback(() => {
@@ -90,7 +84,7 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
       loadMessages(true, (newMessages) => {
         const nextFirstItemIndex = firstItemIndex - newMessages.length;
         setFirstItemIndex(() => nextFirstItemIndex);
-        dispatch(setMessagesChatAction([...newMessages, ...messages]));
+        setMessagesChatAction([...newMessages, ...messages]);
       });
     }
 
