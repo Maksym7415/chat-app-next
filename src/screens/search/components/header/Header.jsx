@@ -5,6 +5,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 
 // rework
 
+// STYLES
 const classes = {};
 
 const Header = ({ placeholder, textInputProps = {}, getRequest, styles }) => {

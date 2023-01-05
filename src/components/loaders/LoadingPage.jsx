@@ -2,17 +2,14 @@
 
 import CircularProgress from "@mui/material/CircularProgress";
 
+// STYLES
+const classes = {
+  container: "h-screen w-screen flex items-center justify-center",
+};
+
 const LoadingPage = () => {
   return (
-    <div
-      style={{
-        height: "100vh",
-        width: "100vw",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <div className={classes.container}>
       <div>
         <CircularProgress size={60} />
       </div>

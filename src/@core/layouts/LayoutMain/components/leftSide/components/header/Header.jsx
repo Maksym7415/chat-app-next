@@ -6,7 +6,6 @@ import TopCenterComponent from "./components/topCenterComponent";
 import TopLeftComponent from "./components/topLeftComponent";
 import { useAppStore } from "@/storeZustand/app/store";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
-import { useSearchStore } from "@/storeZustand/search/store";
 import {
   SearchService,
   getSearchContactFetcher,
@@ -19,11 +18,12 @@ const classes = {
   wrapperTopCenterComponent: "flex",
 };
 
-const Header = ({ children }) => {
-  // HOOKS
+// rework
 
+const Header = ({ children }) => {
   const {} = SearchService.useGetUserConversations();
 
+  // STORE
   const { sideLeftConfig, setSideLeftConfigAction } = useAppStore(
     (state) => ({
       sideLeftConfig: state.sideLeftConfig,
@@ -44,6 +44,7 @@ const Header = ({ children }) => {
     },
   });
 
+  // FUNCTIONS
   const newSideLeftConfigSet = () => {
     switch (sideLeftConfig.page) {
       case SIDE_LEFT_TYPE_CONTENT.conversations:

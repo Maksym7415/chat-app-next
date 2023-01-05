@@ -29,9 +29,11 @@ const styleRnd = {
 };
 
 const LayoutMain = ({ children }) => {
+  // HOOKS
   const router = useRouter();
   const pathname = usePathname();
 
+  // STORE
   const { conversationsList } = useConversationsStore(
     (state) => ({
       conversationsList: state.conversationsList.data,

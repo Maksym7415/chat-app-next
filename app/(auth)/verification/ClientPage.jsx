@@ -15,6 +15,7 @@ const VerificationClientPage = () => {
   // HOOKS
   const router = useRouter();
 
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,

@@ -2,12 +2,13 @@
 
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import shallow from "zustand/shallow";
 import MainDrawer from "./components/mainDrawer";
 import ProfilePage from "@/screens/profile/Profile";
 import { useAppStore } from "@/storeZustand/app/store";
-import shallow from "zustand/shallow";
 
 const SwipeableTemporaryDrawer = () => {
+  // STORE
   const { drawerConfig, setDrawerConfigAction } = useAppStore(
     (state) => ({
       drawerConfig: state.drawerConfig,

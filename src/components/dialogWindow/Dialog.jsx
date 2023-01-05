@@ -20,8 +20,7 @@ const classes = {
   dialogContent: "w-[400px] h-full relative p-[0px]",
 };
 const DialogComponent = () => {
-  // HOOKS
-
+  // STORE
   const { dialogConfig, setDialogWindowClearConfigAction } = useAppStore(
     (state) => ({
       dialogConfig: state.dialogConfig,

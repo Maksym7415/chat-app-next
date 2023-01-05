@@ -20,6 +20,7 @@ import { useAuthStore } from "@/storeZustand/auth/store";
 import { useAppStore } from "@/storeZustand/app/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
 
+// STYLES
 const classes = {
   container:
     "px-[5px] py-[10px] min-h-[82px] cursor-pointer mt-[5px] hover:bg-[#dfe7f4] rounded-[20px]",
@@ -46,7 +47,7 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
   // HOOKS
   const router = useRouter();
 
-  // SELECTORS
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,

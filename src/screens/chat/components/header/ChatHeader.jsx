@@ -20,12 +20,10 @@ import {
   actionsTypeActionsChat,
   actionsTypeActionsConversation,
 } from "@/actions/index";
-import { findValueKeyInNestedArr } from "@/helpers/index";
-// import { setDrawerConfigAction } from "@/components/drawer/redux/slice";
-import { store } from "@/store/store";
 import { useAppStore } from "@/storeZustand/app/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
 
+// STYLES
 const classes = {
   container: "flex p-[16px] bg-white w-full",
   containerTop: "flex w-full",
@@ -46,9 +44,7 @@ const ChatHeader = ({
   typeConversation,
   messages,
 }) => {
-  //HOOKS
-  // const classes = useStyles();
-
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,

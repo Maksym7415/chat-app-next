@@ -2,8 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../../@core/axios";
 import { pathBackUser } from "../../@core/constants/urlBack";
 
-// need ts
-
 export const getUserProfileDataRequest = createAsyncThunk(
   "user/getUserProfileDataRequest",
   async (options) => {

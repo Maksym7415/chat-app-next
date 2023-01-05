@@ -1,10 +1,7 @@
-import { store } from "../reduxToolkit/store";
 import { getTokenCook } from "@/core/cookiesStorage/index";
 
 export const getHeaders = async () => {
   try {
-    const state = await store.getState();
-
     let headersConfig = {};
 
     const accessToken = getTokenCook();

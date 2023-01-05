@@ -1,12 +1,10 @@
 import { socket } from "../index";
-import { store } from "../../../reduxToolkit/store";
 import { fullDate, handleGetBufferFile } from "../../../helpers";
 import { useAppStore } from "@/storeZustand/app/store";
 import { useAuthStore } from "@/storeZustand/auth/store";
 
 let filesCount = 0;
 
-// need ts
 
 export const socketEmitSendFiles = (
   data = {

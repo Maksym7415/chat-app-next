@@ -1,16 +1,6 @@
-import { store } from "../../../reduxToolkit/store";
 import { socket } from "../index";
 import { actionsConversationList } from "../../../actions";
-// import { getUserConversationsRequest } from "../../../reduxToolkit/conversations/requests";
 import { PATHS } from "@/core/constants/paths";
-import {
-  setAllMessagesAction,
-  setMessagesChatAction,
-} from "../../../reduxToolkit/app/slice";
-// import {
-//   setConversationListAction,
-//   updateConversationTypeStateAction,
-// } from "../../../reduxToolkit/conversations/slice";
 import { useAppStore } from "@/storeZustand/app/store";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
 import {

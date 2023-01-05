@@ -1,5 +1,8 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import { ListItemIcon, ListItemText, List, ListItem } from "@mui/material";
+import shallow from "zustand/shallow";
 import * as config from "./config";
 import { PATHS } from "@/core/constants/paths";
 import { actionLogOut } from "@/actions/index";
@@ -7,9 +10,9 @@ import BaseSelect from "../../../selects/BaseSelect";
 import { useAppStore } from "@/storeZustand/app/store";
 import { useUserStore } from "@/storeZustand/user/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
-import shallow from "zustand/shallow";
 import { UserService } from "@/services/user/user.service";
 
+// STYLES
 const classes = {
   list: "",
   wrapperLangs: "p-[15px]",

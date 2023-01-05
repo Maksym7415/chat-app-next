@@ -4,14 +4,21 @@ import { useState, useEffect } from "react";
 import { IconButton } from "@mui/material";
 import shallow from "zustand/shallow";
 import CloseIcon from "@mui/icons-material/Close";
-import useStyles from "./styles";
 import ImagesProfile from "@/components/carousel/imagesProfile";
 import DefaultAvatar from "@/components/avatar/defaultAvatar";
 import { useSettingStore } from "@/storeZustand/setting/store";
 import { useUserStore } from "@/storeZustand/user/store";
 
-// need ts
 // rework avatars
+
+// STYLES
+const classes = {
+  container: "relative z-2",
+  wrapper: "flex flex-col",
+  containerTop: "flex px-[10px] py-[5px]",
+  content: "relative flex",
+  closeIcon: "",
+};
 
 //test
 const imagesTest = [
@@ -34,11 +41,7 @@ const imagesTest = [
 ];
 
 const Header = ({ setting, closeDrawer }) => {
-  // HOOKS
-
-  // STYLES
-  const classes = useStyles();
-
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,

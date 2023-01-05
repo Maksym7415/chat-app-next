@@ -25,8 +25,7 @@ const classes = {
 };
 
 const SearchMain = ({ onClickContact }) => {
-  // HOOKS
-
+  // STORE
   const { isLoading, searchContacts } = useSearchStore(
     (state) => ({
       searchContacts: state.searchContacts,
@@ -66,7 +65,6 @@ const SearchMain = ({ onClickContact }) => {
     });
   }, [searchContacts.response]);
 
-  // console.log(searchContacts, "searchContacts");
   // RENDER CONDITIONAL
   if (!contacts.length || isLoading) {
     return <RenderConditionsList list={contacts} isLoading={isLoading} />;

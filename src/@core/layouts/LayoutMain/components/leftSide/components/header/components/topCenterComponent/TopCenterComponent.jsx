@@ -4,16 +4,16 @@ import { useEffect, useState } from "react";
 import shallow from "zustand/shallow";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, OutlinedInput } from "@mui/material";
-import useStyles from "./styles";
 import { useDebounce } from "@/hooks/useDebounce";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { useAppStore } from "@/storeZustand/app/store";
 
+// STYLES
 const classes = {
   inputSearch: "w-full max-w-[240px] p-[0] pl-[5px] rounded-[20px] h-[40px]",
 };
 function TopCenterComponent({ parentSettings }) {
-
+  // STORE
   const { sideLeftConfig } = useAppStore(
     (state) => ({
       sideLeftConfig: state.sideLeftConfig,

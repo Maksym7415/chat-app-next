@@ -2,7 +2,6 @@ import axios from "axios";
 import { BASE_URL } from "../constants/url";
 import { getHeaders } from "../../helpers";
 import { actionLogOut } from "../../actions";
-import { store } from "../../reduxToolkit/store";
 
 const parseErrorCode = (error) => {
   if (error.response) {
@@ -11,7 +10,7 @@ const parseErrorCode = (error) => {
       alert(error.response?._response);
     }
     if (error.response.status === 401) {
-      // store.dispatch(actionLogOut());
+      // actionLogOut();
     } else if (error.response.status === 404) {
       const { message } = error.response.data;
     }

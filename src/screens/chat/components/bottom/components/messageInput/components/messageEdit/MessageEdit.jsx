@@ -1,18 +1,22 @@
 "use client";
+
 import shallow from "zustand/shallow";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import useStyles from "./styles";
 import SvgMaker from "@/components/svgMaker/index";
 import languages from "@/core/translations/index";
 import { useSettingStore } from "@/storeZustand/setting/store";
 
-// need ts
+// STYLES
+const classes = {
+  root: "bg-white flex px-[10px] py-[5px] border-b border-[#d1d1d1] items-center",
+  wrapperIconEdit: "pr-[10px]",
+  wrapperMainContent: "flex-1 pl-[15px]",
+  close: "",
+};
 
 const MessageEdit = ({ data, onClose }) => {
-  //HOOKS
-  const classes = useStyles();
-
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,

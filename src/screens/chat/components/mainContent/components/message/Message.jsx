@@ -7,7 +7,6 @@ import shallow from "zustand/shallow";
 import { Divider, IconButton } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import * as config from "./config";
-import useStyles from "./styles";
 import languages from "@/core/translations";
 import { getCurrentDay } from "@/helpers/index";
 import UserAvatar from "@/components/avatar/userAvatar";
@@ -17,7 +16,6 @@ import {
   actionsMessagesChat,
 } from "@/actions/index";
 import { TYPES_CONVERSATIONS } from "@/core/constants/general";
-import { store } from "@/store/store";
 import { CONTEXT_MENU_ID } from "@/core/constants/general";
 import { useAppStore } from "@/storeZustand/app/store";
 import { useUserStore } from "@/storeZustand/user/store";
@@ -32,6 +30,31 @@ const stylePaper = {
   overflow: "hidden",
 };
 
+// STYLES
+const classes = {
+  root: "grid gap-x-[5px] p-[5px]",
+  wrapper: "box-border",
+  wrapperUp: "flex relative",
+  paperSharedMessage: "bg-[#d6f6e3]",
+  wrapperTextMessageShared: "relative px-[0px] py-[10px]",
+  edited: "text-right text-[9px]",
+  paperSenderMessage: "paper-message bg-green-500",
+  paperFriendMessage: "paper-message bg-white",
+  wrapperName: "flex justify-between",
+  wrapperDate: "flex justify-end",
+  name: "text-black",
+  messageSendTime: "text-black",
+  messageText: "text-black break-keep",
+  wrapperMessageUserName: "text-black font-semibold",
+  selectedMessages: "bg-[#84cafe] bg-opacity-20",
+  divider: "absolute left-0 top-0 w-[3px] h-full bg-green-500",
+  wrapperFile: "",
+  image: "w-[200px] h-[200px] object-contain",
+  messageSelectControl: "flex self-end rounded-[50%] border-2 border-white",
+  messageSelected: "bg-[#00C73E] p-[2px]",
+  messageSelectedIcon: "w-[18px] h-[18px] text-white",
+};
+
 const Message = ({
   messageData,
   isShowAvatar,
@@ -39,9 +62,7 @@ const Message = ({
   typeConversation,
   conversationId,
 }) => {
-  // HOOKS
-  const classes = useStyles();
-
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,

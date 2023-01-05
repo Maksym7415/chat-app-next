@@ -3,18 +3,30 @@
 import { useState } from "react";
 import { Switch, Divider } from "@mui/material";
 import shallow from "zustand/shallow";
-import useStyles from "./styles";
 import RITitleWithSubtitleAndRightComponent from "@/components/renders/rendersItem/RITitleWithSubtitleAndRightComponent";
 import { TYPES_CONVERSATIONS } from "@/core/constants/general";
 import { useSettingStore } from "@/storeZustand/setting/store";
 
-// need ts
+// STYLES
+const classes = {
+  wrapperNotification: "flex",
+  switchNotification: "",
+  dividerNotification: "bg-[#D9D9D9] mr-[15px]",
+  divider: "flex bg-[#D9D9D9]",
+  wrapperList: "bg-[#ffffff] pl-[21px]",
+  listTitle: "font-medium text-[15px] text-[#4094D0]",
+  list: "mt-[9px]",
 
+  // wrapperNotification: "",
+  // switchNotification: "",
+  // dividerNotification: "",
+  // divider: "",
+  // wrapperList: "",
+  // listTitle: "",
+  // list: "",
+};
 const MainInfo = ({ typeProfile }) => {
-  // HOOKS
-  const classes = useStyles();
-
-  // SELECTORS
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,
@@ -26,8 +38,12 @@ const MainInfo = ({ typeProfile }) => {
   const [isSwitchOn, setIsSwitchOn] = useState(false);
 
   // FUNCTIONS
-  const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+  const onToggleSwitch = () => {
+    console.log("onToggleSwitch");
+    setIsSwitchOn(!isSwitchOn);
+  };
 
+  console.log(isSwitchOn, "isSwitchOn");
   return (
     <div className={classes.wrapperList}>
       {(() => {
@@ -115,7 +131,10 @@ const MainInfo = ({ typeProfile }) => {
         }}
         renderRightComponent={() => {
           return (
-            <div className={classes.wrapperNotification}>
+            <div
+              className={classes.wrapperNotification}
+              onClick={() => console.log("wrapperNotification")}
+            >
               <Divider
                 className={classes.dividerNotification}
                 orientation="vertical"

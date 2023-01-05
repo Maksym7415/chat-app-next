@@ -11,6 +11,7 @@ const ChatBottom = ({ firstName, userId, opponentId, conversationData }) => {
   // HOOKS
   const pathname = usePathname();
 
+  // STORE
   const { selectedMessages } = useAppStore(
     (state) => ({
       selectedMessages: state.selectedMessages,
@@ -26,7 +27,12 @@ const ChatBottom = ({ firstName, userId, opponentId, conversationData }) => {
 
   const renderBottom = () => {
     if (selectedMessages.active) {
-      return <BottomToolbar conversationId={conversationId} selectedMessages={selectedMessages}/>;
+      return (
+        <BottomToolbar
+          conversationId={conversationId}
+          selectedMessages={selectedMessages}
+        />
+      );
     } else {
       return (
         <MessageInput

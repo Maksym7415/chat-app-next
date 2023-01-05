@@ -10,7 +10,6 @@ import {
 } from "@/core/socket/actions/socketEmit";
 import languages from "@/core/translations/index";
 import { fullDate } from "@/helpers/index";
-import { editMessageAction, shareMessageAction } from "@/store/app/slice";
 import RightInputComponent from "./components/RightInputComponent";
 import LeftInputComponent from "./components/LeftInputComponent";
 import MessageEdit from "./components/messageEdit";
@@ -22,14 +21,12 @@ import { useConversationsStore } from "@/storeZustand/conversations/store";
 // STYLES
 const classes = {
   root: "w-full",
-  wrapperInput: "flex flex-1 p-[0px] bg-white",
+  wrapperInput: "flex flex-1 p-[0px] bg-white items-center",
   input: "flex flex-1 m-[0px] px-[10px] bg-white max-h-[100px]",
 };
 
 const MessageInput = ({ conversationId, userId, firstName, opponentId }) => {
-  // HOOKS
-  // const classes = useStyles();
-
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,

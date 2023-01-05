@@ -11,10 +11,11 @@ import { useAuthStore } from "@/storeZustand/auth/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
 import { AuthService } from "@/services/auth/auth.service";
 
-export default function SignInPage() {
+export default function SignInClientPage() {
   // HOOKS
   const router = useRouter();
 
+  // STORE
   const { loginSingIn } = useAuthStore(
     (state) => ({
       loginSingIn: state.loginSingIn,

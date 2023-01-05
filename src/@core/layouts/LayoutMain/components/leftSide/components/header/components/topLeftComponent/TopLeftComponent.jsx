@@ -5,11 +5,8 @@ import shallow from "zustand/shallow";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { IconButton } from "@mui/material";
-
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { useAppStore } from "@/storeZustand/app/store";
-
-// need ts
 
 // STYLES
 const classes = {
@@ -17,8 +14,7 @@ const classes = {
 };
 
 const TopLeftComponent = () => {
-  // HOOKS
-
+  // STORE
   const { sideLeftConfig, setSideLeftConfigAction, setDrawerConfigAction } =
     useAppStore(
       (state) => ({

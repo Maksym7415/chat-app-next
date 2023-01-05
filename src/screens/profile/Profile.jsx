@@ -9,15 +9,14 @@ import { getNameShort } from "../../helpers";
 import { useSettingStore } from "@/storeZustand/setting/store";
 import { useUserStore } from "@/storeZustand/user/store";
 
+// STYLES
 const classes = {
   container: "flex-1",
   scrollView: "overflow-y-auto p-[10px]",
 };
 
 const ProfilePage = ({ typeProfile, conversationData, closeDrawer }) => {
-  // HOOKS
-  // const classes = useStyles();
-
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,

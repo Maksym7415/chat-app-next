@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable no-unused-expressions */
 import { v4 as uuidv4 } from "uuid";
 
 export function checkIsShowAvatar(array, userId, index) {

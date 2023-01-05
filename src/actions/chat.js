@@ -1,16 +1,8 @@
-import {
-  setSelectedMessagesAction,
-  setAllMessagesAction,
-  editMessageAction,
-  setMessagesChatAction,
-} from "../reduxToolkit/app/slice";
-// import { setDialogWindowConfigAction } from "../components/dialogWindow/redux/slice";
-import { actionsForTypeWithObjKey } from "../helpers/actionsForType";
 import Snackbar from "../helpers/notistack";
 import { socketEmitChatsDeleteMessage } from "../@core/socket/actions/socketEmit";
 import { actionsConversationList } from "./conversations";
-import { store } from "../reduxToolkit/store";
 import { useAppStore } from "@/storeZustand/app/store";
+import { useConversationsStore } from "@/storeZustand/conversations/store";
 
 export const actionsTypeObject = {
   add: "add",
@@ -18,52 +10,39 @@ export const actionsTypeObject = {
   clear: "clear",
 };
 
-export const actionsSelectedMessages =
-async (data, typeAction)  => {
-    const { selectedMessages } = getState().appSlice;
+export const actionsSelectedMessages = async (data, typeAction) => {
+  const selectedMessages = useAppStore.getState().selectedMessages;
 
-    const copySelectedMessages = { ...selectedMessages.messages };
+  const copySelectedMessages = { ...selectedMessages.messages };
 
-    switch (typeAction) {
-      case actionsTypeObject.add:
-        useAppStore.getState().setSelectedMessagesAction({
-          ...selectedMessages,
-          messages: {
-            ...copySelectedMessages,
-            [data?.id]: data,
-          },
-        });
+  switch (typeAction) {
+    case actionsTypeObject.add:
+      useAppStore.getState().setSelectedMessagesAction({
+        ...selectedMessages,
+        messages: {
+          ...copySelectedMessages,
+          [data?.id]: data,
+        },
+      });
 
-        return null;
-      case actionsTypeObject.remove:
-        delete copySelectedMessages[data?.id];
+      return null;
+    case actionsTypeObject.remove:
+      delete copySelectedMessages[data?.id];
 
-        const active = Object.keys(copySelectedMessages).length ? true : false;
-        useAppStore.getState().setSelectedMessagesAction({
-          ...selectedMessages,
-          active,
-          messages: {
-            ...copySelectedMessages,
-          },
-        });
+      const active = Object.keys(copySelectedMessages).length ? true : false;
+      useAppStore.getState().setSelectedMessagesAction({
+        ...selectedMessages,
+        active,
+        messages: {
+          ...copySelectedMessages,
+        },
+      });
 
-        return;
-      case actionsTypeObject.clear:
-        // isDispatch ? props.dispatch(props.setAction({})) : props.setAction({});
-        return {};
-      default:
-        return;
-    }
-    actionsForTypeWithObjKey({
-      prevData: { ...selectedMessages },
-      prevDataKey: { ...selectedMessages.messages },
-      key: data?.id || null,
-      data,
-      typeAction,
-      dispatch: dispatch,
-      setAction: setSelectedMessagesAction,
-    });
-  };
+      return;
+    default:
+      return;
+  }
+};
 
 export const actionsTypeActionsChat = {
   deleteMessages: "deleteMessages",
@@ -75,8 +54,8 @@ export const actionsTypeActionsChat = {
 };
 
 export const actionsMessagesChat = (props) => {
-  const selectedMessages = store.getState().appSlice.selectedMessages;
-  const openConversationId = store.getState().appSlice.openConversationId;
+  const selectedMessages = useAppStore.getState().selectedMessages;
+  const openConversationId = useAppStore.getState().openConversationId;
 
   const { conversationId, typeAction, messageData = null } = props;
 
@@ -101,9 +80,9 @@ export const actionsMessagesChat = (props) => {
     // DELETE MESSAGE
     case actionsTypeActionsChat.deleteMessages:
       const getRemoveMessages = (conversationId, messagesIds) => {
-        const allMessages = store.getState().appSlice.allMessages;
+        const allMessages = useAppStore.getState().allMessages;
         const conversationsList =
-          store.getState().conversationsSlice.conversationsList.data;
+          useConversationsStore.getState().conversationsList.data;
 
         // deleting a message from the message array
         let allMessagesWithoutDeleteMessage = allMessages[

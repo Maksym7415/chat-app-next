@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import ClientPage from "./ClientPage";
 import { namesCookies } from "@/core/constants/general";
 
-const ChatIdPage = async ({ params }) => {
+const NewChatPage = async ({ params }) => {
   const token = await cookies().get(namesCookies.accessToken)?.value;
 
   if (!token) redirect("/sign-in");
@@ -11,4 +11,4 @@ const ChatIdPage = async ({ params }) => {
   return <ClientPage params={params} />;
 };
 
-export default ChatIdPage;
+export default NewChatPage;

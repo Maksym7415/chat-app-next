@@ -17,6 +17,7 @@ const LOAD_MESSAGE_OFFSET = 15;
 
 let prevChatId = -1;
 
+// STYLES
 const classes = {
   wrapperMessages: "flex flex-1 flex-col overflow-y-auto overflow-x-hidden",
   wrapperSendData: "px-[5px] w-full flex justify-center box-border",
@@ -25,8 +26,7 @@ const classes = {
 };
 
 const MainContent = ({ userId, conversationId, typeConversation }) => {
-  //HOOKS
-
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,

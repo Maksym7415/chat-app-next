@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as requests from "./requests";
 
-// need ts
-
 const initialState = {
   userInfo: {
     id: 0,

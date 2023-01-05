@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import shallow from "zustand/shallow";
-import LayoutMain from "@/core/layouts/LayoutMain";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
 import { getTokenCook } from "@/core/cookiesStorage/index";

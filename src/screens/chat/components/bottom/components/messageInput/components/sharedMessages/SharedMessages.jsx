@@ -1,17 +1,24 @@
+"use client";
+
 import shallow from "zustand/shallow";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import useStyles from "./styles";
 import languages from "@/core/translations";
 import SvgMaker from "@/components/svgMaker";
-import { shareMessageAction } from "@/store/app/slice";
 import { useSettingStore } from "@/storeZustand/setting/store";
 import { useAppStore } from "@/storeZustand/app/store";
 
-const SharedMessages = ({ forwardMessages }) => {
-  //HOOKS
-  const classes = useStyles();
+// STYLES
+const classes = {
+  root: "bg-white flex px-[10px] py-[5px] border-b border-[#d1d1d1] items-center",
+  wrapperLeft: "pr-[10px]",
+  wrapperCenter: "flex-1",
+  wrapperRight: "pl-[10px]",
+  title: "text-[#517DA2] font-medium text-[16px]",
+};
 
+const SharedMessages = ({ forwardMessages }) => {
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,

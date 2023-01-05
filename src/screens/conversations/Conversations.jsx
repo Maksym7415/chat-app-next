@@ -15,6 +15,7 @@ const ConversationsPage = () => {
   // HOOKS
   const pathname = usePathname();
 
+  // STORE
   const { conversationsList, usersTyping } = useConversationsStore(
     (state) => ({
       conversationsList: state.conversationsList.data,

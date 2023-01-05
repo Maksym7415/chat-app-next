@@ -22,6 +22,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// need style
+
+// STYLES
+const classes = {
+  wrapperIcon: "mr-[10px]",
+  item: "hover:",
+};
+
 const ContextMenu = () => {
   // HOOKS
   const classes = useStyles();

@@ -11,19 +11,19 @@ import {
   Fade,
   Box,
 } from "@mui/material";
-import useStyles from "./styles";
 import * as config from "./config";
-import { store } from "@/store/store";
 import {
   actionsMessagesChat,
   actionsClearSelectedMessages,
 } from "@/actions/index";
 
+// STYLES
+const classes = {
+  root: "flex px-[0px] py-[10px] justify-center",
+  wrapper: "w-[80%] max-w-[500px]",
+};
+
 const BottomToolbar = ({ conversationId, selectedMessages }) => {
-  // HOOKS
-  const classes = useStyles();
-
-
   // VARIABLES
   const selectedMessagesAmount = Object.keys(selectedMessages.messages).length;
 
@@ -34,7 +34,7 @@ const BottomToolbar = ({ conversationId, selectedMessages }) => {
       typeAction,
     });
 
-    store.dispatch(actionsClearSelectedMessages(true));
+    actionsClearSelectedMessages(true);
   };
 
   return (
@@ -48,7 +48,7 @@ const BottomToolbar = ({ conversationId, selectedMessages }) => {
             aria-label="menu"
             sx={{ mr: 2 }}
             onClick={() => {
-              store.dispatch(actionsClearSelectedMessages(true));
+              actionsClearSelectedMessages(true);
             }}
           >
             <CloseIcon />

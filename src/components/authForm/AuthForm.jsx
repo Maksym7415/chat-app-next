@@ -1,8 +1,16 @@
 import React from "react";
 import { Controller } from "react-hook-form";
-import styles from "./AuthForm.module.scss";
 import TextInputCustom from "../hookFormsComponents/textInput";
 import CustomButton from "../buttons/customButton";
+
+// STYLES
+const classes = {
+  container: "flex-center-center flex-1",
+  wrapperForm: "flex-center-center flex-col w-full max-w-[300px] mt-[16px] ",
+  title: "w-full text-center text-[36px] font-bold",
+  text: "mt-[16px] w-full text-center text-[18px] font-bold cursor-pointer",
+  errorText: "errorText mt-[10px]",
+};
 
 const AuthForm = ({
   title,
@@ -14,9 +22,9 @@ const AuthForm = ({
   render,
 }) => {
   return (
-    <div className={styles.container}>
-      <div className={styles.wrapperForm}>
-        {title && <p className={styles.title}>{title}</p>}
+    <div className={classes.container}>
+      <div className={classes.wrapperForm}>
+        {title && <p className={classes.title}>{title}</p>}
         <React.Fragment>
           {configFields.map((el, key) => (
             <Controller
@@ -38,8 +46,8 @@ const AuthForm = ({
           ))}
         </React.Fragment>
         {errorBack && (
-          <div className={styles.error}>
-            <p className={styles.errorText}>{errorBack}</p>
+          <div className={classes.error}>
+            <p className={classes.errorText}>{errorBack}</p>
           </div>
         )}
         <CustomButton
@@ -48,7 +56,7 @@ const AuthForm = ({
         >
           {submitBtnTitle}
         </CustomButton>
-        {render?.text && render.text(styles)}
+        {render?.text && render.text(classes)}
       </div>
     </div>
   );

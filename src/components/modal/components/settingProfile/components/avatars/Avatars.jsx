@@ -17,7 +17,6 @@ import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { useSnackbar } from "notistack";
 import SwipeableViews from "react-swipeable-views";
-import useStyles from "./styles";
 import DefaultAvatar from "../../../../../avatar/defaultAvatar";
 import * as config from "./config";
 import { getNameShort } from "../../../../../../helpers";
@@ -27,11 +26,20 @@ import { UserService } from "@/services/user/user.service";
 
 const ITEM_HEIGHT = 30;
 
+// STYLES
+const classes = {
+  container: "relative",
+  wrapperAvatar: "p-[2px]",
+  wrapperlangs: "p-[15px]",
+  listItem: "w-full",
+  itemIcon: "mr-[15px]",
+};
+
 const Avatars = () => {
   // HOOKS
-  const classes = useStyles();
-  // const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,
@@ -50,7 +58,6 @@ const Avatars = () => {
   // STATES
   const [photoIndexSelected, setPhotoIndexSelected] = useState(0);
   const [anchorEl, setAnchorEl] = useState();
-
   const [avatars, setAvatars] = useState([]);
   const [mainAvatar, setMainAvatar] = useState({});
   const open = Boolean(anchorEl);
@@ -86,7 +93,7 @@ const Avatars = () => {
             url: photoSelected.fileName,
           },
           cb: () => {
-            // enqueueSnackbar("Success set main photo", { variant: "success" });
+            enqueueSnackbar("Success set main photo", { variant: "success" });
             setMainAvatar(photoSelected);
           },
         });

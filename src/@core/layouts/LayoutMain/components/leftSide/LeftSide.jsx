@@ -17,9 +17,7 @@ const classes = {
 };
 
 const LeftSide = () => {
-  // HOOKS
-  // const classes = useStyles();
-
+  // STORE
   const { sideLeftConfig } = useAppStore(
     (state) => ({
       sideLeftConfig: state.sideLeftConfig,

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Button, Grid, Box } from "@mui/material";
-import useStyles from "./styles";
+import shallow from "zustand/shallow";
 import UserAvatar from "../../../avatar/userAvatar";
 import languages from "@/core/translations";
 import SelectsAsyncPaginateSearch from "../../../SelectsAsyncPaginateSearch";
@@ -11,7 +11,6 @@ import Snackbar from "@/helpers/notistack";
 import { socketEmitChatCreation } from "@/core/socket/actions/socketEmit";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
-import shallow from "zustand/shallow";
 import { useSearchStore } from "@/storeZustand/search/store";
 import { useAppStore } from "@/storeZustand/app/store";
 import CustomButton from "@/components/buttons/customButton/index";
@@ -20,7 +19,6 @@ import {
   getSearchContactFetcher,
 } from "@/services/search/search.service";
 
-// makeStyles
 // STYLES
 const classes = {
   container: "m-[0px] px-[10px] py-[20px] h-full flex flex-col",
@@ -32,11 +30,13 @@ const classes = {
   containerSelect: "",
 };
 
+// rework style
+
 const NewChat = () => {
   // HOOKS
-  const classes = useStyles();
+  // const classes = useStyles();
 
-  // SELECTORS
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,

@@ -1,16 +1,8 @@
-import React from "react";
+"use client";
+
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
-interface IBaseSelectProps {
-  selectSetting: {
-    label: string;
-    selected: string;
-    options: any[];
-    handleChange: (event: any) => void;
-  };
-}
-
-export default function BaseSelect({ selectSetting }: IBaseSelectProps) {
+export default function BaseSelect({ selectSetting }) {
   return (
     <FormControl style={{ width: "100%" }} variant="outlined">
       <InputLabel>{selectSetting.label}</InputLabel>
@@ -19,7 +11,7 @@ export default function BaseSelect({ selectSetting }: IBaseSelectProps) {
         label="Age"
         onChange={selectSetting.handleChange}
       >
-        {selectSetting.options.map((item: any) => (
+        {selectSetting.options.map((item) => (
           <MenuItem value={item.value} key={item.value}>
             {item.label}
           </MenuItem>

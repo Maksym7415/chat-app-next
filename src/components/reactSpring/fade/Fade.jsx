@@ -1,9 +1,9 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef } from "react";
 import { useSpring, animated } from "react-spring";
 
-const Fade = React.forwardRef(function Fade(props, ref) {
+const Fade = forwardRef(function Fade(props, ref) {
   const { in: open, children, onEnter, onExited, ...other } = props;
   const style = useSpring({
     from: { opacity: 0 },

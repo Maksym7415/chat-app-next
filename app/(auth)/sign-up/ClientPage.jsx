@@ -15,7 +15,7 @@ const SignUpClientPage = () => {
   // HOOKS
   const router = useRouter();
 
-  // SELECTORS
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,

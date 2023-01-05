@@ -9,12 +9,6 @@ import ChatContent from "./components/mainContent";
 // import RenderInfoCenterBox from "../../components/renders/renderInfoCenterBox";
 import { getMessagesWithSendDate } from "@/helpers/index";
 import { actionsClearSelectedMessages } from "@/actions/index";
-import { getConversationMessagesRequest } from "@/store/conversations/requests";
-import {
-  setAllMessagesAction,
-  setMessagesChatAction,
-  setOpenConversationIdAction,
-} from "@/store/app/slice";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
 import Meta from "@/core/seo/Meta";
 import { useAuthStore } from "@/storeZustand/auth/store";
@@ -28,8 +22,7 @@ const classes = {
 };
 
 const Chat = ({ params }) => {
-  // HOOKS
-
+  // STORE
   const { authToken } = useAuthStore(
     (state) => ({
       authToken: state.authToken,

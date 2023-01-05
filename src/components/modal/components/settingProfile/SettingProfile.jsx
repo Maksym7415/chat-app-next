@@ -3,23 +3,27 @@
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useSnackbar } from "notistack";
-import useStyles from "./styles";
+import shallow from "zustand/shallow";
 import * as config from "./config";
 import Avatars from "./components/avatars";
 import TextInputCustom from "../../../hookFormsComponents/textInput";
 import CustomButton from "../../../buttons/customButton";
 import { useUserStore } from "@/storeZustand/user/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
-import shallow from "zustand/shallow";
 import { UserService } from "@/services/user/user.service";
+
+// STYLES
+const classes = {
+  container: "w-max w-min-[300px]",
+  wrapperBtn: "mt-[15px] flex justify-center",
+  title: "text-center",
+};
 
 const SettingProfile = ({ closeDrawer }) => {
   // HOOKS
-  const classes = useStyles();
-  // const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
-  // SELECTORS
-
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,
@@ -36,7 +40,6 @@ const SettingProfile = ({ closeDrawer }) => {
 
   // STATES
   const [errorBack, setErrorBack] = useState("");
-
   const {
     control,
     handleSubmit,
@@ -61,11 +64,11 @@ const SettingProfile = ({ closeDrawer }) => {
     UserService.putUpdateProfile({
       data: sendData,
       cb: () => {
-        // enqueueSnackbar("Success update info", { variant: "success" });
+        enqueueSnackbar("Success update info", { variant: "success" });
         UserService.getUserProfileData();
       },
       errorCb: (error) => {
-        // enqueueSnackbar(error.message, { variant: "error" });
+        enqueueSnackbar(error.message, { variant: "error" });
       },
     });
 

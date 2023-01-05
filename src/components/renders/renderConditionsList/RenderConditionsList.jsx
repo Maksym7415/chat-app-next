@@ -1,8 +1,11 @@
 import React from "react";
 import { CircularProgress } from "@mui/material";
-import useStyles from "./styles";
 
-// need ts
+// STYLES
+const classes = {
+  boxCenter: "flex items-center justify-center h-full",
+  noResults: "text-[20px] font-semibold",
+};
 
 const RenderConditionsList = ({
   list = [],
@@ -12,10 +15,7 @@ const RenderConditionsList = ({
     boxCenter: {},
     noResults: {},
   },
-}: any) => {
-  // HOOKS
-  const classes = useStyles();
-
+}) => {
   // RENDER CONDITIONS
   if (isLoading) {
     return (

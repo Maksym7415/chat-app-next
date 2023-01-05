@@ -1,19 +1,38 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import shallow from "zustand/shallow";
 import { Typography, TextField, Box } from "@mui/material";
-import { shareMessageAction } from "../../../../reduxToolkit/app/slice";
 import UserAvatar from "../../../avatar/userAvatar";
 import { PATHS } from "@/core/constants/paths";
-import useStyles from "./styles";
 import languages from "@/core/translations";
 import { useAppStore } from "@/storeZustand/app/store";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
 
+// rework
+
+// STYLES
+const classes = {
+  container: "m-0 p-[10px] h-min-[50vh] h-max-[50vh] relative overflow-hidden",
+  conversation:
+    "flex mt-[10px] rounded-[10px] duration-2000 hover:bg-[#b9e6e1] cursor-pointer ",
+  name: "font-bold",
+  messageText: "max-w-[90%] line-camp-1",
+  inputFilter: "w-full",
+  wrapperConversation: "h-full flex flex-col overflow-auto mt-[10px]",
+  noUsersFound: "flex-center-center",
+  noUsersFoundText: "font-semibold text-[24px]",
+  info: "ml-[10px]",
+};
+
 const SharedMessage = ({ data }) => {
   // HOOKS
-  const classes = useStyles();
+  // const classes = useStyles();
+  const router = useRouter();
 
+  // STORE
   const { lang } = useSettingStore(
     (state) => ({
       lang: state.lang,
@@ -50,7 +69,9 @@ const SharedMessage = ({ data }) => {
   };
 
   const handleShareMessageId = (conversationId) => {
+    console.log(data, "data");
     shareMessageAction(data);
+    router.push(`${PATHS.chat}/${conversationId}`);
     // history.push({
     //   pathname: `${PATHS.chat}/${conversationId}`,
     //   state: {

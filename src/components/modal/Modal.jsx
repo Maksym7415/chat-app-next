@@ -1,35 +1,22 @@
 "use client";
 
-import * as React from "react";
 import { Box, Typography, Backdrop, Modal, IconButton } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import CloseIcon from "@mui/icons-material/Close";
+import shallow from "zustand/shallow";
 import Fade from "../reactSpring/fade/Fade";
 import SettingProfile from "./components/settingProfile";
 import { useAppStore } from "@/storeZustand/app/store";
-import shallow from "zustand/shallow";
 
-// need ts
+// rework fade
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    maxWidth: "90vw",
-    maxHeight: "90vh",
-    overflow: "auto",
-    backgroundColor: "#ffffff",
-    padding: "10px",
-    borderRadius: "20px",
-  },
-}));
+// STYLES
+const classes = {
+  container:
+    "absolute w-max-[90vw] h-max-[90vh] overflow-auto bg-white p-[10px] rounded-[20px] top-[50%] left-[50%] -translate-x-2/4 -translate-y-2/4",
+};
 
 const ModalComponent = () => {
-  // HOOKS
-  const classes = useStyles();
-
+  // STORE
   const { modalConfig, setModalClearConfigAction } = useAppStore(
     (state) => ({
       modalConfig: state.modalConfig,

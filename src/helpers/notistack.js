@@ -1,6 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
-"use client"
-import { useSnackbar, VariantType } from "notistack";
+"use client";
+
+import { useSnackbar } from "notistack";
 
 let useSnackbarRef;
 export const SnackbarUtilsConfigurator = () => {
@@ -22,6 +23,7 @@ export default {
     this.toast(msg, "error");
   },
   toast(msg, variant = "default") {
-    useSnackbarRef.enqueueSnackbar(msg, { variant });
+    console.log(useSnackbarRef, "useSnackbarRef");
+    useSnackbarRef?.enqueueSnackbar(msg, { variant });
   },
 };

@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// need style
 const RenderInfoCenterBox = ({ children, styles }) => {
   // STYLES
   const classes = useStyles();

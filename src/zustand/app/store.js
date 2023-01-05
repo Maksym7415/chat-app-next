@@ -2,7 +2,7 @@ import create from "zustand";
 import { devtools } from "zustand/middleware";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 
-const initialState = {
+export const initialState = {
   isLoading: false,
   openConversationId: null,
   sideLeftConfig: {

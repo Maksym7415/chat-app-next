@@ -1,6 +1,5 @@
 "use client";
 
-import nookies from "nookies";
 import Cookies from "js-cookie";
 import { namesCookies } from "@/core/constants/general";
 
