@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, memo } from "react";
 import clsx from "clsx";
 import { contextMenu } from "react-contexify";
 import shallow from "zustand/shallow";
@@ -36,7 +36,7 @@ const classes = {
   wrapper: "box-border",
   wrapperUp: "flex relative",
   paperSharedMessage: "bg-[#d6f6e3]",
-  wrapperTextMessageShared: "relative px-[0px] py-[10px]",
+  wrapperTextMessageShared: "relative px-[0px] py-[10px] pl-[10px]",
   edited: "text-right text-[9px]",
   paperSenderMessage: "paper-message bg-green-500",
   paperFriendMessage: "paper-message bg-white",
@@ -280,4 +280,4 @@ const Message = ({
   );
 };
 
-export default Message;
+export default memo(Message);

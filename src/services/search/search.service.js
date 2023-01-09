@@ -1,61 +1,59 @@
 import useSWR from "swr";
+import useSWRImmutable from "swr/immutable";
+import { useQuery } from "@tanstack/react-query";
 import API from "@/core/axios/index";
 import { pathBackSearch } from "@/core/constants/urlBack";
 import { useSearchStore } from "@/storeZustand/search/store";
 
-export const getSearchContactFetcher = async ({ url, options }) => {
-  // useSearchStore.getState().setLoadingSearchContacts(true);
-  const params = {};
-
-  const directionAddResponse = options?.direction || "";
-
-  const searchParams = options?.params?.search || "";
-  const offsetParams = options?.params?.offset || 0;
-
-  if (searchParams) {
-    params.searchRequest = searchParams;
-  }
-  if (offsetParams) {
-    params.offset = offsetParams;
-  }
-
+// export const getSearchContactFetcher = async ({ url, options, ...rest }) => {
+export const getSearchContactFetcher = async ([url, params]) => {
   try {
-    console.log(options, "options");
-    const response = await API.get(pathBackSearch.searchContact, {
+    const response = await API.get(url, {
       params,
     });
-    console.log(response, "response");
-    options?.cb && options.cb();
-
-    useSearchStore.getState().setSearchContactsAction({
-      search: searchParams,
-      direction: directionAddResponse,
-      offset: offsetParams,
-
-      ...response.data,
-    });
-
-    return {
-      search: searchParams,
-      direction: directionAddResponse,
-      offset: offsetParams,
-
-      ...response.data,
-    };
+    return response.data;
   } catch (error) {
     return Promise.reject(error);
-  } finally {
-    // useSearchStore.getState().setLoadingSearchContacts(false);
   }
 };
 
 export const SearchService = {
   async useGetUserConversations(options) {
-    const { data, error, isLoading, mutate } = useSWR(
-      ["http://localhost:5051/api/searchContact", options],
-      (url, options) => getSearchContactFetcher(url, options),
-      { revalidateOnFocus: false }
+    console.log(options, "----options");
+    const params = {};
+
+    const directionAddResponse = options?.direction || "";
+
+    const searchParams = options?.params?.search || "";
+    const offsetParams = options?.params?.offset || 0;
+
+    if (searchParams) {
+      params.searchRequest = searchParams;
+    }
+    if (offsetParams) {
+      params.offset = offsetParams;
+    }
+
+    const { data, error, isLoading, mutate } = await useSWRImmutable(
+      [pathBackSearch.searchContact, params],
+      getSearchContactFetcher
     );
+
+    if (
+      data?.response &&
+      JSON.stringify(data?.response) !==
+        JSON.stringify(useSearchStore.getState().searchContacts?.response)
+    ) {
+      options?.cb && options.cb();
+
+      useSearchStore.getState().setSearchContactsAction({
+        search: searchParams,
+        direction: directionAddResponse,
+        offset: offsetParams,
+
+        ...data,
+      });
+    }
 
     return {
       data,

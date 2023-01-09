@@ -6,7 +6,7 @@ import shallow from "zustand/shallow";
 import ChatHeader from "./components/header";
 import ChatBottom from "./components/bottom";
 import ChatContent from "./components/mainContent";
-// import RenderInfoCenterBox from "../../components/renders/renderInfoCenterBox";
+import RenderInfoCenterBox from "../../components/renders/renderInfoCenterBox";
 import { getMessagesWithSendDate } from "@/helpers/index";
 import { actionsClearSelectedMessages } from "@/actions/index";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
@@ -56,6 +56,7 @@ const Chat = ({ params }) => {
   const [errorBack, setErrorBack] = useState("");
   const [isFetching, setIsFetching] = useState(false);
 
+  console.log(params, "params");
   // VARIABLES
   const conversationId = useMemo(() => params?.id || null, [params]);
   const opponentId = 4;
@@ -68,6 +69,7 @@ const Chat = ({ params }) => {
 
   // USEEFFECTS
   useEffect(() => {
+    console.log(allMessages, "allMessages");
     if (!allMessages[conversationId] && conversationId) {
       setIsFetching(true);
       ConversationsService.getConversationMessages({
@@ -100,25 +102,27 @@ const Chat = ({ params }) => {
       setOpenConversationIdAction(conversationId);
 
     return () => {
-      actionsClearSelectedMessages(false);
+      console.log("!---return---!");
+      // setMessagesChatAction([]);
+      // actionsClearSelectedMessages(false);
     };
   }, [conversationId]);
 
-  // if (isFetching) {
-  //   return (
-  //     <RenderInfoCenterBox>
-  //       <CircularProgress size={60} />
-  //     </RenderInfoCenterBox>
-  //   );
-  // }
+  if (isFetching) {
+    return (
+      <RenderInfoCenterBox>
+        <CircularProgress size={60} />
+      </RenderInfoCenterBox>
+    );
+  }
 
-  // if (errorBack) {
-  //   return (
-  //     <RenderInfoCenterBox>
-  //       <Typography className={classes.errorBackText}>{errorBack}</Typography>
-  //     </RenderInfoCenterBox>
-  //   );
-  // }
+  if (errorBack) {
+    return (
+      <RenderInfoCenterBox>
+        <Typography className={classes.errorBackText}>{errorBack}</Typography>
+      </RenderInfoCenterBox>
+    );
+  }
 
   return (
     <>

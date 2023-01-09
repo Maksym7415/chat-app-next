@@ -68,7 +68,7 @@ export const useAppStore = create(
       set({ sideLeftConfig: data });
     },
     setAllMessagesAction(data) {
-      set({ allMessages: data });
+      set({ allMessages: { ...get().allMessages, ...data } });
     },
     editMessageAction(data) {
       set({ messageEdit: { ...get().messageEdit, ...data } });

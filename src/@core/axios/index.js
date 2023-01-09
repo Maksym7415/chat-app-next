@@ -18,7 +18,7 @@ const parseErrorCode = (error) => {
     // error something
   }
 
-  return Promise.reject(error.response);
+  // return Promise.reject(error.response);
 };
 
 const API = axios.create();
@@ -27,6 +27,7 @@ const API = axios.create();
 API.interceptors.request.use(
   async (config) => {
     const headers = await getHeaders();
+
     config.baseURL = BASE_URL;
     config.timeout = 10000;
     if (headers) {

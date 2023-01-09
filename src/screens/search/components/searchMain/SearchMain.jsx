@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { Virtuoso } from "react-virtuoso";
 import shallow from "zustand/shallow";
@@ -10,6 +11,7 @@ import { useSearchStore } from "@/storeZustand/search/store";
 import {
   SearchService,
   getSearchContactFetcher,
+  useSearchContactFetcher,
 } from "@/services/search/search.service";
 
 // STYLES
@@ -25,6 +27,15 @@ const classes = {
 };
 
 const SearchMain = ({ onClickContact }) => {
+  // const { isLoading: loading, data } = useQuery(
+  //   "Most popular movie in sidebar",
+  //   () => getSearchContactFetcher()
+  // );
+
+  // SearchService.useGetUserConversations();
+  // useSearchContactFetcher();
+
+  // console.log(data, "data");
   // STORE
   const { isLoading, searchContacts } = useSearchStore(
     (state) => ({
@@ -33,6 +44,8 @@ const SearchMain = ({ onClickContact }) => {
     }),
     shallow
   );
+
+  // console.log(searchContacts, 'searchContacts')
 
   // STATES
   const [contacts, setContacts] = useState([]);
@@ -48,10 +61,10 @@ const SearchMain = ({ onClickContact }) => {
         offset: searchContacts.offset + searchContacts.limit,
       };
 
-      getSearchContactFetcher({
-        params,
-        direction: "down",
-      });
+      // getSearchContactFetcher({
+      //   params,
+      //   direction: "down",
+      // });
     }
     return false;
   }, []);

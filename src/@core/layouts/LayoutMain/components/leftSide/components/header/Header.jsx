@@ -21,7 +21,7 @@ const classes = {
 // rework
 
 const Header = ({ children }) => {
-  const {} = SearchService.useGetUserConversations();
+  // const {} = SearchService.useGetUserConversations();
 
   // STORE
   const { sideLeftConfig, setSideLeftConfigAction } = useAppStore(
@@ -64,9 +64,9 @@ const Header = ({ children }) => {
           topCenterComponent: {
             placeholder: "Search",
             getRequest: (options) => {
-              getSearchContactFetcher({
-                options,
-              });
+              // getSearchContactFetcher({
+              //   options,
+              // });
             },
           },
         }));
