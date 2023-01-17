@@ -10,6 +10,7 @@ import DialogCustom from "@/components/dialogWindow/Dialog";
 import AuthProvider from "./AuthProvider";
 
 import { SnackbarUtilsConfigurator } from "@/helpers/notistack";
+import HeadProvider from "./HeadProvider/HeadProvider";
 
 const cache = createCache({
   key: "css",
@@ -22,7 +23,7 @@ const MainProvider = ({ children, Component }) => {
   return (
     // <Theme>
 
-    <>
+    <HeadProvider>
       <AuthProvider Component={Component}>
         <SnackbarProvider maxSnack={3}>
           <SnackbarUtilsConfigurator />
@@ -34,7 +35,7 @@ const MainProvider = ({ children, Component }) => {
           {children}
         </SnackbarProvider>
       </AuthProvider>
-    </>
+    </HeadProvider>
 
     // </Theme>
   );

@@ -1,5 +1,3 @@
-"use client";
-
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -9,8 +7,8 @@ import AuthForm from "@/components/authForm";
 import languages from "@/core/translations";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
-import { AuthService } from "@/services/auth/auth.service";
 import { PostVerificationQuery } from "@/services/auth/service";
+import Meta from "@/core/seo/Meta";
 
 const VerificationClientPage = () => {
   // HOOKS
@@ -62,10 +60,6 @@ const VerificationClientPage = () => {
       },
     };
 
-    // postVerificationRequest(sendData);
-
-    // AuthService.postVerification(sendData);
-
     mutate(optionsSendData);
 
     errorBack && setErrorBack("");
@@ -80,19 +74,21 @@ const VerificationClientPage = () => {
   }, [verificationCode]);
 
   return (
-    <AuthForm
-      title={languages[lang].authorization.verification}
-      submitBtnTitle={languages[lang].authorization.verification}
-      configFields={config.verificationFields}
-      isLoading={isLoading}
-      onSubmit={onSubmit}
-      errorBack={errorBack}
-      optionsForm={{
-        control,
-        handleSubmit,
-        errors,
-      }}
-    />
+    <Meta title={"Verification"}>
+      <AuthForm
+        title={languages[lang].authorization.verification}
+        submitBtnTitle={languages[lang].authorization.verification}
+        configFields={config.verificationFields}
+        isLoading={isLoading}
+        onSubmit={onSubmit}
+        errorBack={errorBack}
+        optionsForm={{
+          control,
+          handleSubmit,
+          errors,
+        }}
+      />
+    </Meta>
   );
 };
 

@@ -7,10 +7,9 @@ import shallow from "zustand/shallow";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
 import languages from "@/core/translations";
-import { PATHS } from "@/core/constants/paths";
 import { useSettingStore } from "@/storeZustand/setting/store";
-import { AuthService } from "@/services/auth/auth.service";
 import { PostSingUpQuery } from "@/services/auth/service";
+import Meta from "@/core/seo/Meta";
 
 const SignUpClientPage = () => {
   // HOOKS
@@ -26,11 +25,9 @@ const SignUpClientPage = () => {
 
   const { mutate, isLoading } = PostSingUpQuery({
     cb: () => {
-      console.log("!__Cb");
       router.push("verification");
     },
     errorCb: (dataError) => {
-      console.log("!__errorCb");
       dataError?.message && setErrorBack(dataError?.message);
     },
   });
@@ -45,20 +42,6 @@ const SignUpClientPage = () => {
 
   // FUNCTIONS
   const onSubmit = (data) => {
-    // AuthService.postSing({
-    //   data: {
-    //     firstName: data.firstName,
-    //     lastName: data.lastName,
-    //     login: data.email,
-    //   },
-    //   cb: () => {
-    //     history.push(PATHS.verification);
-    //   },
-    //   errorCb: (dataError) => {
-    //     dataError?.message && setErrorBack(dataError?.message);
-    //   },
-    // });
-
     mutate({
       data: {
         firstName: data.firstName,
@@ -71,27 +54,29 @@ const SignUpClientPage = () => {
   };
 
   return (
-    <AuthForm
-      title={languages[lang].authorization.signUp}
-      submitBtnTitle={languages[lang].authorization.signUp}
-      configFields={config.signUpPage}
-      onSubmit={onSubmit}
-      errorBack={errorBack}
-      isLoading={isLoading}
-      optionsForm={{
-        control,
-        handleSubmit,
-        errors,
-      }}
-      render={{
-        text: (styles) => (
-          <p className={styles.text} onClick={() => router.push("sign-in")}>
-            {languages[lang].authorization.haveAnAccount}{" "}
-            {languages[lang].authorization.signIn}?
-          </p>
-        ),
-      }}
-    />
+    <Meta title={"Sign-up"}>
+      <AuthForm
+        title={languages[lang].authorization.signUp}
+        submitBtnTitle={languages[lang].authorization.signUp}
+        configFields={config.signUpPage}
+        onSubmit={onSubmit}
+        errorBack={errorBack}
+        isLoading={isLoading}
+        optionsForm={{
+          control,
+          handleSubmit,
+          errors,
+        }}
+        render={{
+          text: (styles) => (
+            <p className={styles.text} onClick={() => router.push("sign-in")}>
+              {languages[lang].authorization.haveAnAccount}{" "}
+              {languages[lang].authorization.signIn}?
+            </p>
+          ),
+        }}
+      />
+    </Meta>
   );
 };
 

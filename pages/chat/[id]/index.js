@@ -4,7 +4,7 @@ import Chat from "@/screens/chat/index";
 const ChatIdPage = (props) => {
   console.log(props, "props");
   return (
-    <LayoutMain>
+    <LayoutMain titlePage="ssss">
       <Chat />
     </LayoutMain>
   );

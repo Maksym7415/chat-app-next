@@ -18,3 +18,5 @@ export { flatListFormatDataColumns } from "./flatListFormatDataColumns";
 export { findValueKeyInNestedArr } from "./findValueKeyInNestedArr";
 export { getMessagesWithSendDate } from "./getMessagesWithSendDate";
 export { setStateDirection } from "./setStateDirection";
+// string
+export { onlyText } from "./string/clearText";

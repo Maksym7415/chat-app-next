@@ -132,7 +132,6 @@ const Chat = ({ params }) => {
 
   return (
     <>
-      <Meta title={conversationData?.conversationName || "Chat"} />
       <Box className={classes.container}>
         <ChatHeader
           conversationData={conversationData}

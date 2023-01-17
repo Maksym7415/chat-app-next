@@ -14,6 +14,7 @@ import {
   socketOnDeleteConversation,
   socketOnClearConversation,
 } from "@/core/socket/actions/socketOn";
+import Meta from "@/core/seo/Meta";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
 import { UserService } from "@/services/user/user.service";
@@ -28,7 +29,7 @@ const styleRnd = {
   borderRight: "1px solid rgba(0, 0, 0, 0.2)",
 };
 
-const LayoutMain = ({ children }) => {
+const LayoutMain = ({ children, titlePage = "" }) => {
   // HOOKS
   const router = useRouter();
 
@@ -82,36 +83,38 @@ const LayoutMain = ({ children }) => {
   }, [conversationsListMass]);
 
   return (
-    <main className={classes.container}>
-      <Rnd
-        style={styleRnd}
-        minWidth="20vw"
-        maxWidth="40vw"
-        default={{
-          x: 0,
-          y: 0,
-          width: containerWidth,
-          height: "100%",
-        }}
-        onResize={(e, direction, ref, delta, position) => {
-          ref.offsetWidth < 200 && setContainerWidth(80);
-        }}
-        disableDragging
-        enableResizing={{
-          top: false,
-          right: true,
-          bottom: false,
-          left: false,
-          topRight: false,
-          bottomRight: false,
-          bottomLeft: false,
-          topLeft: false,
-        }}
-      >
-        <LeftSide />
-      </Rnd>
-      {children}
-    </main>
+    <Meta title={titlePage || ""} >
+      <main className={classes.container}>
+        <Rnd
+          style={styleRnd}
+          minWidth="20vw"
+          maxWidth="40vw"
+          default={{
+            x: 0,
+            y: 0,
+            width: containerWidth,
+            height: "100%",
+          }}
+          onResize={(e, direction, ref, delta, position) => {
+            ref.offsetWidth < 200 && setContainerWidth(80);
+          }}
+          disableDragging
+          enableResizing={{
+            top: false,
+            right: true,
+            bottom: false,
+            left: false,
+            topRight: false,
+            bottomRight: false,
+            bottomLeft: false,
+            topLeft: false,
+          }}
+        >
+          <LeftSide />
+        </Rnd>
+        {children}
+      </main>
+    </Meta>
   );
 };
 
