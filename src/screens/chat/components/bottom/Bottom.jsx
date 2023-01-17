@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import shallow from "zustand/shallow";
 import { useMemo, memo } from "react";
 import MessageInput from "./components/messageInput/MessageInput";
@@ -9,7 +9,7 @@ import { useAppStore } from "@/storeZustand/app/store";
 
 const ChatBottom = ({ firstName, userId, opponentId, conversationData }) => {
   // HOOKS
-  const pathname = usePathname();
+  const router = useRouter();
 
   // STORE
   const { selectedMessages } = useAppStore(
@@ -21,9 +21,8 @@ const ChatBottom = ({ firstName, userId, opponentId, conversationData }) => {
 
   // VARIABLES
   const conversationId = useMemo(() => {
-    const pathnameSplit = pathname.split("/");
-    return +pathnameSplit[pathnameSplit.length - 1];
-  }, [pathname]);
+    return router.query?.id;
+  }, [router.query?.id]);
 
   const renderBottom = () => {
     if (selectedMessages.active) {

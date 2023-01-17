@@ -10,16 +10,21 @@ export const AuthService = {
         ...options.data,
       });
 
+      console.log(response, "response");
+
       useAuthStore.getState().setLoginSingInAction(options.data.login);
 
-      options.cb && options.cb(response.data.verificationCode);
+      if (response?.data) {
+        options.cb && options.cb(response.data.verificationCode);
 
-      useAuthStore
-        .getState()
-        .setVerificationCodeAction(response.data.verificationCode);
+        useAuthStore
+          .getState()
+          .setVerificationCodeAction(response.data.verificationCode);
+      }
 
-      return response.data;
+      return response?.data;
     } catch (error) {
+      console.log(error, "error");
       options.errorCb && options.errorCb(error?.data);
 
       return Promise.reject(error);

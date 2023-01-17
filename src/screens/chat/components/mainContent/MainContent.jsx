@@ -95,7 +95,7 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
   useEffect(() => {
     if (
       prevChatId !== conversationId &&
-      messages.length &&
+      messages?.length &&
       pagination.allItems
     ) {
       setFirstItemIndex(pagination.allItems);

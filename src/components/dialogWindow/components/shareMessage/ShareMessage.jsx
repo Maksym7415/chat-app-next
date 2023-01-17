@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import shallow from "zustand/shallow";
 import { Typography, TextField, Box } from "@mui/material";

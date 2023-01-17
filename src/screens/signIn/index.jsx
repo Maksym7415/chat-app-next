@@ -1,6 +1,4 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import shallow from "zustand/shallow";
@@ -9,7 +7,7 @@ import AuthForm from "@/components/authForm";
 import languages from "@/core/translations";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useSettingStore } from "@/storeZustand/setting/store";
-import { AuthService } from "@/services/auth/auth.service";
+import { PostLoginQuery } from "@/services/auth/service";
 
 export default function SignInClientPage() {
   // HOOKS
@@ -42,23 +40,29 @@ export default function SignInClientPage() {
     },
   });
 
+  const { mutate, isLoading } = PostLoginQuery({
+    cb: () => {
+      console.log("!__Cb");
+      router.push("verification");
+    },
+    errorCb: (dataError) => {
+      dataError?.message && setErrorBack(dataError?.message);
+    },
+  });
+
   // FUNCTIONS
   const onSubmit = (data) => {
     const { login } = data;
 
-    const sendData = {
+    const optionsSendData = {
       data: {
         login,
       },
-      cb: () => {
-        router.push("verification");
-      },
-      errorCb: (dataError) => {
-        dataError?.message && setErrorBack(dataError?.message);
-      },
     };
 
-    AuthService.postLogin(sendData);
+    console.log("onSubmit");
+
+    mutate(optionsSendData);
 
     errorBack && setErrorBack("");
   };
@@ -70,6 +74,7 @@ export default function SignInClientPage() {
       configFields={config.signInFields}
       onSubmit={onSubmit}
       errorBack={errorBack}
+      isLoading={isLoading}
       optionsForm={{
         control,
         handleSubmit,

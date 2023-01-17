@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState, useMemo } from "react";
 import { Rnd } from "react-rnd";
 import shallow from "zustand/shallow";
@@ -31,7 +31,6 @@ const styleRnd = {
 const LayoutMain = ({ children }) => {
   // HOOKS
   const router = useRouter();
-  const pathname = usePathname();
 
   // STORE
   const { conversationsList } = useConversationsStore(
@@ -55,7 +54,6 @@ const LayoutMain = ({ children }) => {
     () => Object.values(conversationsList),
     [conversationsList]
   );
-  const pathnameSplit = pathname.split("/");
 
   // USEEFFECTS
   useEffect(() => {
@@ -76,7 +74,7 @@ const LayoutMain = ({ children }) => {
     socketOnUserIdNewChat(authToken.userId, router);
     socketOnDeleteConversation({
       params: {
-        id: pathnameSplit[pathnameSplit.length - 1],
+        id: router.query.id,
       },
       router,
     });

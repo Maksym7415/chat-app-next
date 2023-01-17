@@ -1,23 +1,23 @@
-"use client";
-
-// import Cookies from "js-cookie";
-import { useRouter, usePathname, redirect } from "next/navigation";
+import Cookies from "js-cookie";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { getTokenCook } from "@/core/cookiesStorage/index";
+import { PATHS } from "@/core/constants/paths";
 
-// import { useActions } from "@/hooks/useActions";
-// import { useAuthStore } from "@/hooks/useAuthStore";
-
-const AuthProvider = ({ children }) => {
-  const pathName = usePathname();
-  // const { user } = useAuthStore()
-  // const { checkAuth, logout } = useActions()
+const AuthProvider = ({ children, Component: { isPrivatePage } }) => {
   const router = useRouter();
 
-  // if (pathName === "/sign-in") {
-  //   if (token) router.push("sign-up");
-  // }
+  useEffect(() => {
+    const accessToken = getTokenCook();
+    // console.log(accessToken, "accessToken");
+    // if (accessToken) {
+    // } else {
+    //   isPrivatePage && router.push(PATHS.signIn);
+    // }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return children;
+  return <>{children}</>;
 };
 
 export default AuthProvider;

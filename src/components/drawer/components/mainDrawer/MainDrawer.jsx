@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/router';
 import { ListItemIcon, ListItemText, List, ListItem } from "@mui/material";
 import shallow from "zustand/shallow";
 import * as config from "./config";

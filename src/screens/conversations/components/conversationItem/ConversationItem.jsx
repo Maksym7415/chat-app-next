@@ -2,7 +2,7 @@
 
 import { useMemo, memo } from "react";
 import clsx from "clsx";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { contextMenu } from "react-contexify";
 import shallow from "zustand/shallow";
 import { selectedConversationContext } from "./config";

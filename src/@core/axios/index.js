@@ -10,7 +10,13 @@ const parseErrorCode = (error) => {
       alert(error.response?._response);
     }
     if (error.response.status === 401) {
-      // actionLogOut();
+      console.log("sss");
+      actionLogOut();
+      // if (typeof window === "undefined") {
+      //   throw new CustomError("actionLogOut"); //Throw custom error here
+      // } else {
+      //   window.location.href = "/sign-in";
+      // }
     } else if (error.response.status === 404) {
       const { message } = error.response.data;
     }
@@ -18,7 +24,7 @@ const parseErrorCode = (error) => {
     // error something
   }
 
-  // return Promise.reject(error.response);
+  return Promise.reject(error.response);
 };
 
 const API = axios.create();

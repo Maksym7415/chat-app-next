@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import shallow from "zustand/shallow";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
@@ -10,6 +10,7 @@ import languages from "@/core/translations";
 import { PATHS } from "@/core/constants/paths";
 import { useSettingStore } from "@/storeZustand/setting/store";
 import { AuthService } from "@/services/auth/auth.service";
+import { PostSingUpQuery } from "@/services/auth/service";
 
 const SignUpClientPage = () => {
   // HOOKS
@@ -23,6 +24,17 @@ const SignUpClientPage = () => {
     shallow
   );
 
+  const { mutate, isLoading } = PostSingUpQuery({
+    cb: () => {
+      console.log("!__Cb");
+      router.push("verification");
+    },
+    errorCb: (dataError) => {
+      console.log("!__errorCb");
+      dataError?.message && setErrorBack(dataError?.message);
+    },
+  });
+
   // STATES
   const [errorBack, setErrorBack] = useState("");
   const {
@@ -33,17 +45,25 @@ const SignUpClientPage = () => {
 
   // FUNCTIONS
   const onSubmit = (data) => {
-    AuthService.postSing({
+    // AuthService.postSing({
+    //   data: {
+    //     firstName: data.firstName,
+    //     lastName: data.lastName,
+    //     login: data.email,
+    //   },
+    //   cb: () => {
+    //     history.push(PATHS.verification);
+    //   },
+    //   errorCb: (dataError) => {
+    //     dataError?.message && setErrorBack(dataError?.message);
+    //   },
+    // });
+
+    mutate({
       data: {
         firstName: data.firstName,
         lastName: data.lastName,
         login: data.email,
-      },
-      cb: () => {
-        history.push(PATHS.verification);
-      },
-      errorCb: (dataError) => {
-        dataError?.message && setErrorBack(dataError?.message);
       },
     });
 
@@ -57,6 +77,7 @@ const SignUpClientPage = () => {
       configFields={config.signUpPage}
       onSubmit={onSubmit}
       errorBack={errorBack}
+      isLoading={isLoading}
       optionsForm={{
         control,
         handleSubmit,

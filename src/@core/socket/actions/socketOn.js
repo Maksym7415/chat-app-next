@@ -210,8 +210,8 @@ export const socketOnDeleteConversation = ({ params, router }) => {
     if (ids.includes(params?.id)) {
       router.push(PATHS.main);
     }
-    console.log(conversationsList, "conversationsList");
-    console.log(copyConversationsList, "copyConversationsList");
+    // console.log(conversationsList, "conversationsList");
+    // console.log(copyConversationsList, "copyConversationsList");
     useAppStore.getState().setAllMessagesAction({ ...copyAllMessages });
     useConversationsStore
       .getState()

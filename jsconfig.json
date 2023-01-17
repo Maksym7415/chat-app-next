@@ -13,7 +13,8 @@
       "@/actions/*": ["src/actions/*"],
       "@/screens/*": ["src/screens/*"],
       "@/ui/*": ["src/ui/*"],
-      "@/services/*": ["src/services/*"]
+      "@/services/*": ["src/services/*"],
+      "@/pages/*": ["pages/*"]
     }
   }
 }

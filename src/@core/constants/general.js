@@ -22,3 +22,6 @@ export const namesCookies = {
 export const CONTEXT_MENU_ID = {
   main: "id_main_menu",
 };
+
+export const IS_SERVER = typeof window === "undefined";
+export const IS_CLIENT = typeof window !== "undefined";

@@ -1,5 +1,7 @@
 import React from "react";
 import { Controller } from "react-hook-form";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import TextInputCustom from "../hookFormsComponents/textInput";
 import CustomButton from "../buttons/customButton";
 
@@ -20,10 +22,14 @@ const AuthForm = ({
   onSubmit,
   submitBtnTitle,
   render,
+  isLoading,
 }) => {
   return (
     <div className={classes.container}>
-      <div className={classes.wrapperForm}>
+      <form
+        className={classes.wrapperForm}
+        onSubmit={optionsForm.handleSubmit(onSubmit)}
+      >
         {title && <p className={classes.title}>{title}</p>}
         <React.Fragment>
           {configFields.map((el, key) => (
@@ -53,11 +59,15 @@ const AuthForm = ({
         <CustomButton
           onClick={optionsForm.handleSubmit(onSubmit)}
           style={{ marginTop: 15, width: "100%", maxWidth: "200px" }}
+          disabled={isLoading}
         >
+          {isLoading ? (
+            <CircularProgress size={15} style={{ color: "white" }} />
+          ) : null}{" "}
           {submitBtnTitle}
         </CustomButton>
         {render?.text && render.text(classes)}
-      </div>
+      </form>
     </div>
   );
 };

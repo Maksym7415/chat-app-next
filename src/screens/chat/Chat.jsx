@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/router";
 import { useEffect, useState, useMemo, memo } from "react";
 import { Typography, Box, CircularProgress } from "@mui/material";
 import shallow from "zustand/shallow";
@@ -22,6 +23,8 @@ const classes = {
 };
 
 const Chat = ({ params }) => {
+  const router = useRouter();
+
   // STORE
   const { authToken } = useAuthStore(
     (state) => ({
@@ -58,7 +61,10 @@ const Chat = ({ params }) => {
 
   console.log(params, "params");
   // VARIABLES
-  const conversationId = useMemo(() => params?.id || null, [params]);
+  const conversationId = useMemo(
+    () => router.query.id || null,
+    [router.query.id]
+  );
   const opponentId = 4;
   const conversationData = useMemo(
     () => conversationsList?.[conversationId] || {},
@@ -78,7 +84,7 @@ const Chat = ({ params }) => {
           offset: 0,
         },
         cb: (response) => {
-          const messages = getMessagesWithSendDate(response.data).messages;
+          const messages = getMessagesWithSendDate(response?.data)?.messages;
 
           setAllMessagesAction({
             [conversationId]: messages,
@@ -89,7 +95,7 @@ const Chat = ({ params }) => {
           setIsFetching(false);
         },
         errorCb: (error) => {
-          setErrorBack(error.message);
+          setErrorBack(error?.message);
           setIsFetching(false);
         },
       });
