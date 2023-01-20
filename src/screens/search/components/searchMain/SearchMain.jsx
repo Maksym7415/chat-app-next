@@ -1,7 +1,6 @@
-"use client";
-
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Virtuoso } from "react-virtuoso";
 import shallow from "zustand/shallow";
 import UserAvatar from "@/components/avatar/userAvatar";
@@ -13,6 +12,10 @@ import {
   getSearchContactFetcher,
   useSearchContactFetcher,
 } from "@/services/search/search.service";
+import { useGetSearchContactsQuery } from "@/services/search/service";
+import { useMemo } from "react";
+
+// problem zustand update useEffect
 
 // STYLES
 const classes = {
@@ -27,23 +30,24 @@ const classes = {
 };
 
 const SearchMain = ({ onClickContact }) => {
-  // const { isLoading: loading, data } = useQuery(
-  //   "Most popular movie in sidebar",
-  //   () => getSearchContactFetcher()
-  // );
-
   // SearchService.useGetUserConversations();
   // useSearchContactFetcher();
 
-  // console.log(data, "data");
+  // const searchContactsRedux = useSelector(
+  //   (state) => state.searchSlice.searchContacts
+  // );
+
   // STORE
-  const { isLoading, searchContacts } = useSearchStore(
-    (state) => ({
-      searchContacts: state.searchContacts,
-      isLoading: state.isLoading,
-    }),
-    shallow
-  );
+  // const searchContacts = useSearchStore.getState().searchContacts;
+  const searchContacts = useSearchStore((state) => state.searchContacts);
+  const count = useSearchStore((state) => state.count);
+
+  console.log("SearchMain");
+  // const { isError, error, isLoading, data } = GetSearchContactsQuery({
+  //   params: {
+  //     searchRequest: searchContacts.search,
+  //   },
+  // });
 
   // console.log(searchContacts, 'searchContacts')
 
@@ -52,36 +56,96 @@ const SearchMain = ({ onClickContact }) => {
 
   // FUNCTIONS
   const loadMore = useCallback(() => {
-    if (
-      searchContacts.limit &&
-      searchContacts.response.length >= searchContacts.limit
-    ) {
-      const params = {
-        search: searchContacts.search,
-        offset: searchContacts.offset + searchContacts.limit,
-      };
+    // if (
+    //   searchContacts.limit &&
+    //   searchContacts.response.length >= searchContacts.limit
+    // ) {
+    //   const params = {
+    //     search: searchContacts.search,
+    //     offset: searchContacts.offset + searchContacts.limit,
+    //   };
 
-      // getSearchContactFetcher({
-      //   params,
-      //   direction: "down",
-      // });
-    }
+    //   // getSearchContactFetcher({
+    //   //   params,
+    //   //   direction: "down",
+    //   // });
+    // }
     return false;
   }, []);
 
-  // USEEFFECTS
-  useEffect(() => {
-    setStateDirection({
-      direction: searchContacts.direction,
-      newData: searchContacts.response,
-      setState: setContacts,
-    });
-  }, [searchContacts.response]);
+  // const con = useMemo(
+  //   (props) => {
+  //     console.log(props, "--------------??useMemo");
+  //     setStateDirection({
+  //       direction: searchContacts.direction || "",
+  //       newData: searchContacts.response,
+  //       setState: setContacts,
+  //     });
+  //     return searchContacts.response;
+  //   },
+  //   [searchContacts.response]
+  // );
 
+  // USEEFFECTS
+  // useEffect(() => {
+  //   console.log("??USEEFFECTS");
+  //   setStateDirection({
+  //     direction: searchContacts?.direction || "",
+  //     newData: searchContacts?.response || [],
+  //     setState: setContacts,
+  //   });
+  // }, [searchContacts.response]);
+  console.log(searchContacts, "searchContacts!!");
+  // useEffect(() => {
+  //   console.log("??count____");
+  // }, [count]);
+  // console.log(count, "count_____");
+
+  useEffect(
+    () =>
+      useSearchStore.subscribe(
+        (searchContacts) => {
+          setStateDirection({
+            direction: searchContacts?.direction || "",
+            newData: searchContacts?.response || [],
+            setState: setContacts,
+          });
+        },
+        (store) => store.searchContacts
+      ),
+    []
+  );
+
+  // useEffect(() => {
+  //   console.log("??USEEFFECTS");
+  //   setStateDirection({
+  //     direction: searchContactsRedux.direction || "",
+  //     newData: searchContactsRedux.response,
+  //     setState: setContacts,
+  //   });
+  // }, [searchContactsRedux]);
+
+  // useEffect(() => {
+  //   console.log("??USEEFFECTS 222");
+  // }, [contacts]);
+
+  // console.log(
+  //   searchContacts.response?.length,
+  //   "searchContacts.response?.length"
+  // );
+  // console.log(searchContacts, "searchContacts");
+  // console.log(contacts, "contacts");
   // RENDER CONDITIONAL
-  if (!contacts.length || isLoading) {
-    return <RenderConditionsList list={contacts} isLoading={isLoading} />;
-  }
+  // if (!contacts.length || isLoading) {
+  //   return (
+  //     <RenderConditionsList
+  //       list={contacts}
+  //       isLoading={isLoading}
+  //       isError={isError}
+  //       errorMessage={error?.data?.message}
+  //     />
+  //   );
+  // }
 
   return (
     <>

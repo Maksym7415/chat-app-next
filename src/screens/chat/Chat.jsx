@@ -15,6 +15,7 @@ import Meta from "@/core/seo/Meta";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useAppStore } from "@/storeZustand/app/store";
 import { ConversationsService } from "@/services/conversations/conversations.service";
+import { GetConversationMessagesQuery } from "@/services/conversations/service";
 
 // STYLES
 const classes = {
@@ -59,7 +60,6 @@ const Chat = ({ params }) => {
   const [errorBack, setErrorBack] = useState("");
   const [isFetching, setIsFetching] = useState(false);
 
-  console.log(params, "params");
   // VARIABLES
   const conversationId = useMemo(
     () => router.query.id || null,
@@ -73,32 +73,69 @@ const Chat = ({ params }) => {
   const typeConversation =
     conversationData?.conversationType?.toLowerCase() || "";
 
+  const {} = GetConversationMessagesQuery({
+    params: {
+      // id: conversationId,
+      offset: 0,
+    },
+    additionalUrl: `${conversationId}`,
+    cb: (response) => {
+      console.log(response, "response");
+
+      //
+      useConversationsStore.getState().updateUserHistoryConversation({
+        conversationId,
+        data: { pagination: response?.pagination },
+      });
+
+      const data = {
+        data: response?.data,
+        pagination: response?.pagination,
+      };
+
+      useConversationsStore.getState().setConversationMessagesAction(data);
+      //
+      const messages = getMessagesWithSendDate(response.data)?.messages;
+
+      setAllMessagesAction({
+        [conversationId]: messages,
+      });
+      console.log(messages, "messages");
+      setMessagesChatAction(messages);
+      errorBack && setErrorBack("");
+    },
+    errorCb: (error) => {
+      setErrorBack(error?.message);
+    },
+  });
+
+  // console.log(queryData, "queryData");
+  // console.log(allMessages?.[conversationId], "allMessages?.[conversationId]");
+  // console.log(allMessages, "allMessages");
   // USEEFFECTS
   useEffect(() => {
-    console.log(allMessages, "allMessages");
+    // console.log(allMessages, "allMessages");
     if (!allMessages[conversationId] && conversationId) {
-      setIsFetching(true);
-      ConversationsService.getConversationMessages({
-        data: {
-          id: conversationId,
-          offset: 0,
-        },
-        cb: (response) => {
-          const messages = getMessagesWithSendDate(response?.data)?.messages;
-
-          setAllMessagesAction({
-            [conversationId]: messages,
-          });
-
-          setMessagesChatAction(messages);
-          errorBack && setErrorBack("");
-          setIsFetching(false);
-        },
-        errorCb: (error) => {
-          setErrorBack(error?.message);
-          setIsFetching(false);
-        },
-      });
+      // setIsFetching(true);
+      // ConversationsService.getConversationMessages({
+      //   data: {
+      //     id: conversationId,
+      //     offset: 0,
+      //   },
+      //   cb: (response) => {
+      //     const messages = getMessagesWithSendDate(response?.data)?.messages;
+      //     setAllMessagesAction({
+      //       [conversationId]: messages,
+      //     });
+      //     setMessagesChatAction(messages);
+      //     errorBack && setErrorBack("");
+      //     setIsFetching(false);
+      //   },
+      //   errorCb: (error) => {
+      //     setErrorBack(error?.message);
+      //     setIsFetching(false);
+      //   },
+      // });
     } else {
       const messages = allMessages[conversationId] || [];
       setMessagesChatAction(messages);
@@ -129,6 +166,7 @@ const Chat = ({ params }) => {
       </RenderInfoCenterBox>
     );
   }
+  console.log("!---reder---!");
 
   return (
     <>

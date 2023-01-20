@@ -216,7 +216,7 @@ export const socketOnDeleteConversation = ({ params, router }) => {
     useConversationsStore
       .getState()
       .setConversationListAction(copyConversationsList);
-    console.log("socketOnDeleteConversation");
+    // console.log("socketOnDeleteConversation");
   });
 };
 
@@ -237,8 +237,8 @@ export const socketOnClearConversation = () => {
         },
       };
     });
-    console.log(allMessages, "allMessages");
-    console.log(copyAllMessages, "copyAllMessages");
+    // console.log(allMessages, "allMessages");
+    // console.log(copyAllMessages, "copyAllMessages");
     useAppStore.getState().setAllMessagesAction({ ...copyAllMessages });
     useConversationsStore
       .getState()

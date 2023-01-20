@@ -12,6 +12,7 @@ const getHeaders = ({ token }) => {
 
 const catchHandle = (error) => {
   if (IS_CLIENT) {
+    throw new Error(JSON.stringify(error));
     return Promise.reject(error);
   }
   throw new Error(error);
@@ -19,16 +20,21 @@ const catchHandle = (error) => {
 
 export const getFetcher = async ({ url, options, cookies }) => {
   const params = options?.params || {};
+  const additionalUrl = options?.additionalUrl
+    ? `/${options?.additionalUrl}`
+    : "";
 
+  // console.log(additionalUrl, "additionalUrl");
+  // console.log(params, "params");
   try {
     const accessToken = getTokenCook() || cookies?.accessToken;
     let headers = getHeaders({ token: accessToken });
 
-    const response = await API.get(url, {
+    const response = await API.get(url + additionalUrl, {
       params,
       headers,
     });
-
+    // console.log(response, "response");
     return response;
   } catch (error) {
     return catchHandle(error);

@@ -14,6 +14,7 @@ export const PostLoginQuery = (options) => {
     },
     retry: 0,
     onSuccess(response) {
+      console.log(response, "onSuccess");
       if (response?.data) {
         options.cb && options.cb(response?.data);
 
@@ -23,6 +24,8 @@ export const PostLoginQuery = (options) => {
       }
     },
     onError(error) {
+      console.log(error, "onError");
+      console.dir(error, "onError dir");
       options.errorCb && options.errorCb(error?.data);
     },
   });

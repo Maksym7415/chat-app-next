@@ -18,6 +18,7 @@ import Meta from "@/core/seo/Meta";
 import { useAuthStore } from "@/storeZustand/auth/store";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
 import { UserService } from "@/services/user/user.service";
+import { GetUserConversationsQuery } from "@/services/conversations/service";
 
 // STYLES
 const classes = {
@@ -29,9 +30,10 @@ const styleRnd = {
   borderRight: "1px solid rgba(0, 0, 0, 0.2)",
 };
 
-const LayoutMain = ({ children, titlePage = "" }) => {
+const LayoutMain = ({ children, titlePage = "", params = {} }) => {
   // HOOKS
   const router = useRouter();
+  GetUserConversationsQuery({});
 
   // STORE
   const { conversationsList } = useConversationsStore(
@@ -55,6 +57,30 @@ const LayoutMain = ({ children, titlePage = "" }) => {
     () => Object.values(conversationsList),
     [conversationsList]
   );
+
+  const conversationSelect = useMemo(
+    () => (params?.id ? conversationsList[params?.id] || null : null),
+    [params]
+  );
+
+  console.log(params, "params");
+  console.log(conversationsList, "conversationsList");
+  console.log(conversationSelect, "conversationSelect");
+
+  const getTitlePage = () => {
+    if (titlePage) {
+      return titlePage;
+    }
+
+    if (params?.id) {
+      if (conversationSelect?.conversationName) {
+        return conversationSelect?.conversationName;
+      }
+      return "Chat";
+    }
+
+    return "";
+  };
 
   // USEEFFECTS
   useEffect(() => {
@@ -82,8 +108,10 @@ const LayoutMain = ({ children, titlePage = "" }) => {
     socketOnClearConversation();
   }, [conversationsListMass]);
 
+  // console.log(queryConversations.data, "queryConversations");
+  // console.log(conversationsList, "conversationsList");
   return (
-    <Meta title={titlePage || ""} >
+    <Meta title={getTitlePage()}>
       <main className={classes.container}>
         <Rnd
           style={styleRnd}

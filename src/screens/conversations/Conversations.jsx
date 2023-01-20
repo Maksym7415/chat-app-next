@@ -1,19 +1,9 @@
-"use client";
-
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useEffect } from "react";
 import { useRouter } from "next/router";
 import shallow from "zustand/shallow";
 import ConversationItem from "./components/conversationItem";
 import { useConversationsStore } from "@/storeZustand/conversations/store";
-import { ConversationsService } from "@/services/conversations/conversations.service";
-import { useQuery } from "react-query";
-import {
-  getUserConversationsFetcher,
-  getSpaceXData,
-} from "@/services/conversations/conversations.fetchers";
-import { GetUserConversationsQuery } from "@/services/conversations/service";
-import { queryClient } from "@/pages/_app";
-import { pathBackConversations } from "@/core/constants/urlBack";
+import { useSearchStore } from "@/storeZustand/search/store";
 
 // STYLES
 const classes = {
@@ -24,19 +14,9 @@ const ConversationsPage = () => {
   // HOOKS
   const router = useRouter();
 
-  const [options, setOptions] = useState({});
-  // ConversationsService.useGetUserConversations();
-  // const { data } = useQuery("spacex", getUserConversationsFetcher, {
-  //   staleTime: Infinity,
-  // });
-
-  const queryConversations = GetUserConversationsQuery(options);
-
-  console.log(queryConversations?.data, "spacex");
-  console.log(queryConversations?.isLoading, "isLoading");
-  console.log(queryConversations?.isFetching, "isFetching");
-
   // STORE
+  const searchContacts = useSearchStore((state) => state.searchContacts);
+
   const { conversationsList, usersTyping } = useConversationsStore(
     (state) => ({
       conversationsList: state.conversationsList.data,
@@ -45,7 +25,10 @@ const ConversationsPage = () => {
     shallow
   );
 
-  // console.log(conversationsList, "conversationsList");
+  useEffect(() => {
+    console.log("??----ConversationsPage -USEEFFECTS");
+  }, [searchContacts]);
+
   // VARIABLES
   const dataSortDate = useMemo(
     () =>
@@ -69,23 +52,6 @@ const ConversationsPage = () => {
           />
         );
       })}
-      <button
-        onClick={() => {
-          // queryClient.prefetchQuery(
-          //   [`get_${pathBackConversations.getUserConversations}`],
-          //   async () =>
-          //     await getUserConversationsFetcher({
-          //       options: { params: { search: "hi" } },
-          //     })
-          // );
-          // queryConversations.refetch({
-          //   options: { params: { search: "hi" } },
-          // });
-          setOptions({ sss: "hi" });
-        }}
-      >
-        refetch
-      </button>
     </div>
   );
 };

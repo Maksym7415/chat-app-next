@@ -105,7 +105,7 @@ const NewChat = () => {
               },
             });
 
-            console.log(response, "response");
+            // console.log(response, "response");
             return {
               options: response.response,
               limit: response.limit,

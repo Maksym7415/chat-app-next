@@ -69,7 +69,7 @@ const SharedMessage = ({ data }) => {
   };
 
   const handleShareMessageId = (conversationId) => {
-    console.log(data, "data");
+    // console.log(data, "data");
     shareMessageAction(data);
     router.push(`${PATHS.chat}/${conversationId}`);
     // history.push({

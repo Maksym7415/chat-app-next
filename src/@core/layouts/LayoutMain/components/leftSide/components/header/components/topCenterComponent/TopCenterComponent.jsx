@@ -13,6 +13,8 @@ import {
   getSearchContactFetcher,
   useSearchContactFetcher,
 } from "@/services/search/search.service";
+import { useGetSearchContactsQuery } from "@/services/search/service";
+import { useSearchStore } from "@/storeZustand/search/store";
 
 // STYLES
 const classes = {
@@ -33,11 +35,19 @@ function TopCenterComponent({ parentSettings }) {
   // CUSTOM HOOKS
   const debouncedSearchValue = useDebounce(search, 300);
 
-  SearchService.useGetUserConversations({
+  // SearchService.useGetUserConversations({
+  //   params: {
+  //     search: debouncedSearchValue,
+  //   },
+  // });
+
+  const {} = useGetSearchContactsQuery({
     params: {
-      search: debouncedSearchValue,
+      searchRequest: debouncedSearchValue,
     },
   });
+
+  // console.log(queryData, "queryData");
 
   // FUNCTIONS
   const onChangeText = useCallback((e) => {
@@ -88,6 +98,34 @@ function TopCenterComponent({ parentSettings }) {
           );
         }
       })()}
+      <button
+        onClick={() => {
+          useSearchStore.getState().setCountAction(1);
+
+          useSearchStore.getState().setSearchContactsAction({
+            response: [
+              {
+                id: 2,
+                login: "pwoolam1@nhs.uk",
+                firstName: "Petronia",
+                lastName: "Woolam",
+                tagName: "pwoolam1",
+                fullName: "Petronia Woolam",
+                status: "Available",
+                verificationCode: null,
+                userAvatar: null,
+                userCreationTime: "2022-12-18T08:54:10.000Z",
+                userUpdateTime: null,
+                userLastTimeOnline: null,
+                lang: "en",
+              },
+            ],
+            limit: 10,
+          });
+        }}
+      >
+        count
+      </button>
     </>
   );
 }

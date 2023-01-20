@@ -5,7 +5,6 @@ import { useAuthStore } from "@/storeZustand/auth/store";
 
 let filesCount = 0;
 
-
 export const socketEmitSendFiles = (
   data = {
     userId: "",
@@ -109,7 +108,7 @@ export const socketEmitSendMessage = ({
 
   console.log(userId, "userId");
   const body = {
-    conversationId: id,
+    conversationId: +id,
     message: messageSend,
     messageId: messageEdit.messageId,
     userId,

@@ -20,6 +20,9 @@ const searchSlice = createSlice({
     setLoadingSearchContacts(state, { payload }) {
       state.isLoading = payload;
     },
+    setSearchContactsAction(state, { payload }) {
+      state.searchContacts = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -31,6 +34,7 @@ const searchSlice = createSlice({
   },
 });
 
-export const { setLoadingSearchContacts } = searchSlice.actions;
+export const { setLoadingSearchContacts, setSearchContactsAction } =
+  searchSlice.actions;
 
 export default searchSlice.reducer;

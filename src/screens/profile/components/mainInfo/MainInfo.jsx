@@ -39,11 +39,11 @@ const MainInfo = ({ typeProfile }) => {
 
   // FUNCTIONS
   const onToggleSwitch = () => {
-    console.log("onToggleSwitch");
+    // console.log("onToggleSwitch");
     setIsSwitchOn(!isSwitchOn);
   };
 
-  console.log(isSwitchOn, "isSwitchOn");
+  // console.log(isSwitchOn, "isSwitchOn");
   return (
     <div className={classes.wrapperList}>
       {(() => {

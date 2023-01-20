@@ -10,6 +10,8 @@ const classes = {
 const RenderConditionsList = ({
   list = [],
   isLoading = false,
+  isError = false,
+  errorMessage = "error",
   noResultsText = "No results",
   styles = {
     boxCenter: {},
@@ -17,6 +19,15 @@ const RenderConditionsList = ({
   },
 }) => {
   // RENDER CONDITIONS
+  console.log("RenderConditionsList");
+  if (isError) {
+    return (
+      <div className={classes.boxCenter} style={styles?.boxCenter}>
+        {errorMessage}
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className={classes.boxCenter} style={styles?.boxCenter}>

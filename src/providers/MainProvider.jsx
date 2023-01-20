@@ -11,6 +11,8 @@ import AuthProvider from "./AuthProvider";
 
 import { SnackbarUtilsConfigurator } from "@/helpers/notistack";
 import HeadProvider from "./HeadProvider/HeadProvider";
+import { store } from "@/store/store";
+import { Provider } from "react-redux";
 
 const cache = createCache({
   key: "css",
@@ -24,17 +26,19 @@ const MainProvider = ({ children, Component }) => {
     // <Theme>
 
     <HeadProvider>
-      <AuthProvider Component={Component}>
-        <SnackbarProvider maxSnack={3}>
-          <SnackbarUtilsConfigurator />
-          <DrawerCustom />
-          <ContextMenu />
-          <ModalCustom />
-          <DialogCustom />
-          <CssBaseline />
-          {children}
-        </SnackbarProvider>
-      </AuthProvider>
+      <Provider store={store}>
+        <AuthProvider Component={Component}>
+          <SnackbarProvider maxSnack={3}>
+            <SnackbarUtilsConfigurator />
+            <DrawerCustom />
+            <ContextMenu />
+            <ModalCustom />
+            <DialogCustom />
+            <CssBaseline />
+            {children}
+          </SnackbarProvider>
+        </AuthProvider>
+      </Provider>
     </HeadProvider>
 
     // </Theme>

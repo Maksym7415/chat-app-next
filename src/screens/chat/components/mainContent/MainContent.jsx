@@ -133,6 +133,10 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
     );
   };
 
+  // console.log(prevChatId, "prevChatId");
+  // console.log(conversationId, "conversationId");
+  // console.log(userHistoryConversations, "userHistoryConversations");
+  // console.log(pagination, "pagination");
   if (prevChatId !== conversationId && conversationId !== null) {
     return <div className={classes.wrapperMessages}></div>;
   }
@@ -161,7 +165,7 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
             return (
               <Virtuoso
                 firstItemIndex={firstItemIndex}
-                initialTopMostItemIndex={messages.length - 1}
+                initialTopMostItemIndex={messages?.length - 1}
                 data={messages}
                 startReached={prependItems}
                 itemContent={rowItem}
