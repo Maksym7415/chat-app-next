@@ -1,9 +1,7 @@
-"use client";
-
 import { useRouter } from "next/router";
 import { useEffect, useState, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Rnd } from "react-rnd";
-import shallow from "zustand/shallow";
 import LeftSide from "./components/leftSide";
 import { socket } from "@/core/socket";
 import {
@@ -15,9 +13,8 @@ import {
   socketOnClearConversation,
 } from "@/core/socket/actions/socketOn";
 import Meta from "@/core/seo/Meta";
-import { useAuthStore } from "@/storeZustand/auth/store";
-import { useConversationsStore } from "@/storeZustand/conversations/store";
 import { UserService } from "@/services/user/user.service";
+import { GetUserConversationsQuery } from "@/services/conversations/service";
 
 // STYLES
 const classes = {
@@ -29,23 +26,17 @@ const styleRnd = {
   borderRight: "1px solid rgba(0, 0, 0, 0.2)",
 };
 
-const LayoutMain = ({ children, titlePage = "" }) => {
+const LayoutMain = ({ children, titlePage = "", params = {} }) => {
   // HOOKS
+  const dispatch = useDispatch();
   const router = useRouter();
+  GetUserConversationsQuery({});
 
-  // STORE
-  const { conversationsList } = useConversationsStore(
-    (state) => ({
-      conversationsList: state.conversationsList.data,
-    }),
-    shallow
+  // SELECTORS
+  const conversationsList = useSelector(
+    ({ conversationsSlice }) => conversationsSlice.conversationsList.data
   );
-  const { authToken } = useAuthStore(
-    (state) => ({
-      authToken: state.authToken,
-    }),
-    shallow
-  );
+  const authToken = useSelector(({ authSlice }) => authSlice.authToken);
 
   // STATES
   const [containerWidth, setContainerWidth] = useState(300);
@@ -55,6 +46,30 @@ const LayoutMain = ({ children, titlePage = "" }) => {
     () => Object.values(conversationsList),
     [conversationsList]
   );
+
+  const conversationSelect = useMemo(
+    () => (params?.id ? conversationsList[params?.id] || null : null),
+    [params]
+  );
+
+  console.log(params, "params");
+  console.log(conversationsList, "conversationsList");
+  console.log(conversationSelect, "conversationSelect");
+
+  const getTitlePage = () => {
+    if (titlePage) {
+      return titlePage;
+    }
+
+    if (params?.id) {
+      if (conversationSelect?.conversationName) {
+        return conversationSelect?.conversationName;
+      }
+      return "Chat";
+    }
+
+    return "";
+  };
 
   // USEEFFECTS
   useEffect(() => {
@@ -82,8 +97,10 @@ const LayoutMain = ({ children, titlePage = "" }) => {
     socketOnClearConversation();
   }, [conversationsListMass]);
 
+  // console.log(queryConversations.data, "queryConversations");
+  // console.log(conversationsList, "conversationsList");
   return (
-    <Meta title={titlePage || ""} >
+    <Meta title={getTitlePage()}>
       <main className={classes.container}>
         <Rnd
           style={styleRnd}

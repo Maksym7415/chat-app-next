@@ -23,7 +23,6 @@ export default {
     this.toast(msg, "error");
   },
   toast(msg, variant = "default") {
-    console.log(useSnackbarRef, "useSnackbarRef");
     useSnackbarRef?.enqueueSnackbar(msg, { variant });
   },
 };

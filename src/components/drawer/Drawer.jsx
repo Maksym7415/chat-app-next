@@ -1,18 +1,17 @@
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import shallow from "zustand/shallow";
+import { useDispatch, useSelector } from "react-redux";
+import { setDrawerConfigAction } from "./redux/slice";
 import MainDrawer from "./components/mainDrawer";
 import ProfilePage from "@/screens/profile/Profile";
-import { useAppStore } from "@/storeZustand/app/store";
 
 const SwipeableTemporaryDrawer = () => {
-  // STORE
-  const { drawerConfig, setDrawerConfigAction } = useAppStore(
-    (state) => ({
-      drawerConfig: state.drawerConfig,
-      setDrawerConfigAction: state.setDrawerConfigAction,
-    }),
-    shallow
+  // HOOKS
+  const dispatch = useDispatch();
+
+  // SELECTORS
+  const drawerConfig = useSelector(
+    ({ drawerSlice }) => drawerSlice.drawerConfig
   );
 
   // FUNCTIONS
@@ -25,10 +24,12 @@ const SwipeableTemporaryDrawer = () => {
       return;
     }
 
-    setDrawerConfigAction({
-      anchor,
-      open,
-    });
+    dispatch(
+      setDrawerConfigAction({
+        anchor,
+        open,
+      })
+    );
   };
 
   const renderContent = (anchor) => (

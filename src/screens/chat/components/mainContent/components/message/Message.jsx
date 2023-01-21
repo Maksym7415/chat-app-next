@@ -1,9 +1,7 @@
-"use client";
-
 import { useEffect, useState, useMemo, memo } from "react";
 import clsx from "clsx";
 import { contextMenu } from "react-contexify";
-import shallow from "zustand/shallow";
+import { useDispatch, useSelector } from "react-redux";
 import { Divider, IconButton } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import * as config from "./config";
@@ -17,9 +15,7 @@ import {
 } from "@/actions/index";
 import { TYPES_CONVERSATIONS } from "@/core/constants/general";
 import { CONTEXT_MENU_ID } from "@/core/constants/general";
-import { useAppStore } from "@/storeZustand/app/store";
-import { useUserStore } from "@/storeZustand/user/store";
-import { useSettingStore } from "@/storeZustand/setting/store";
+import { setContextMenuConfigAction } from "@/components/contextMenu/redux/slice";
 
 const stylePaper = {
   padding: "15px",
@@ -62,25 +58,14 @@ const Message = ({
   typeConversation,
   conversationId,
 }) => {
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
-  const { userInfo } = useUserStore(
-    (state) => ({
-      userInfo: state.userInfo,
-    }),
-    shallow
-  );
-  const { selectedMessages, setContextMenuConfigAction } = useAppStore(
-    (state) => ({
-      selectedMessages: state.selectedMessages,
-      setContextMenuConfigAction: state.setContextMenuConfigAction,
-    }),
-    shallow
+  // HOOKS
+  const dispatch = useDispatch();
+
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
+  const selectedMessages = useSelector(
+    ({ appSlice }) => appSlice.selectedMessages
   );
 
   const selfMessage = userInfo?.id === messageData.User?.id;
@@ -100,8 +85,15 @@ const Message = ({
   const handleOnPressChat = () => {
     if (selectedMessages.active && messageData.message) {
       selectedMessages?.messages?.[messageData.id]
-        ? actionsSelectedMessages(messageData, actionsTypeObjectSelected.remove)
-        : actionsSelectedMessages(messageData, actionsTypeObjectSelected.add);
+        ? store.dispatch(
+            actionsSelectedMessages(
+              messageData,
+              actionsTypeObjectSelected.remove
+            )
+          )
+        : store.dispatch(
+            actionsSelectedMessages(messageData, actionsTypeObjectSelected.add)
+          );
     }
   };
 
@@ -186,17 +178,19 @@ const Message = ({
         onContextMenu={(event) => {
           if (selectedMessages.active) return;
 
-          setContextMenuConfigAction({
-            isShowMenu: true,
-            messageId: 0,
-            config: config.selectedMessageContext(lang).filter((item) => {
-              if (!selfMessage) {
-                return !item.self;
-              }
-              return true;
-            }),
-            callBackItem: handleClickContextMessage,
-          });
+          dispatch(
+            setContextMenuConfigAction({
+              isShowMenu: true,
+              messageId: 0,
+              config: config.selectedMessageContext(lang).filter((item) => {
+                if (!selfMessage) {
+                  return !item.self;
+                }
+                return true;
+              }),
+              callBackItem: handleClickContextMessage,
+            })
+          );
 
           contextMenu.show({
             id: CONTEXT_MENU_ID.main,

@@ -52,6 +52,7 @@ const conversationsSlice = createSlice({
       };
     },
     setConversationListAction(state, { payload }) {
+      console.log(payload, "payload");
       state.conversationsList.data = {
         ...payload,
       };

@@ -1,9 +1,7 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import clsx from "clsx";
 import { TextField } from "@mui/material";
-import shallow from "zustand/shallow";
+import { useDispatch, useSelector } from "react-redux";
 import {
   socketEmitChatsTypingState,
   socketEmitSendMessage,
@@ -14,9 +12,6 @@ import RightInputComponent from "./components/RightInputComponent";
 import LeftInputComponent from "./components/LeftInputComponent";
 import MessageEdit from "./components/messageEdit";
 import SharedMessages from "./components/sharedMessages";
-import { useSettingStore } from "@/storeZustand/setting/store";
-import { useAppStore } from "@/storeZustand/app/store";
-import { useConversationsStore } from "@/storeZustand/conversations/store";
 
 // STYLES
 const classes = {
@@ -26,34 +21,17 @@ const classes = {
 };
 
 const MessageInput = ({ conversationId, userId, firstName, opponentId }) => {
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
+  // HOOKS
+  const dispatch = useDispatch();
 
-  const { typing } = useConversationsStore(
-    (state) => ({
-      typing: state.conversationTypeState,
-    }),
-    shallow
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const typing = useSelector(
+    ({ conversationsSlice }) => conversationsSlice.conversationTypeState
   );
-
-  const {
-    messageEdit,
-    forwardMessages,
-    shareMessageAction,
-    editMessageAction,
-  } = useAppStore(
-    (state) => ({
-      messageEdit: state.messageEdit,
-      forwardMessages: state.forwardMessages,
-      shareMessageAction: state.shareMessageAction,
-      editMessageAction: state.editMessageAction,
-    }),
-    shallow
+  const messageEdit = useSelector(({ appSlice }) => appSlice.messageEdit);
+  const forwardMessages = useSelector(
+    ({ appSlice }) => appSlice.forwardMessages
   );
 
   // STATES
@@ -108,7 +86,7 @@ const MessageInput = ({ conversationId, userId, firstName, opponentId }) => {
         sendMessage(conversationId, messageObj, message.User.id);
         return message;
       });
-      shareMessageAction([]);
+      dispatch(shareMessageAction([]));
     }
     if (message[conversationId]) {
       if (messageEdit.messageId) {
@@ -122,15 +100,17 @@ const MessageInput = ({ conversationId, userId, firstName, opponentId }) => {
   };
 
   const handleClearSharedMessages = () => {
-    shareMessageAction([]);
+    dispatch(shareMessageAction([]));
     setSharedMessages([]);
   };
 
   const clearMessageEdit = () => {
-    editMessageAction({
-      message: {},
-      messageId: null,
-    });
+    dispatch(
+      editMessageAction({
+        message: {},
+        messageId: null,
+      })
+    );
 
     setMessage((prev) => ({ ...prev, [conversationId]: "" }));
   };

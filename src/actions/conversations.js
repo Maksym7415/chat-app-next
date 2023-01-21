@@ -3,19 +3,21 @@ import {
   socketEmitClearConversation,
 } from "../@core/socket/actions/socketEmit";
 import { PATHS } from "@/core/constants/paths";
-import { useConversationsStore } from "@/storeZustand/conversations/store";
-import { useAppStore } from "@/storeZustand/app/store";
 
-export const actionsConversationList = (data) => {
+import { store } from "../reduxToolkit/store";
+import { updateConversationListAction } from "../reduxToolkit/conversations/slice";
+
+export const actionsConversationList = (data) => (dispatch) => {
   switch (data.mode) {
     case "updateMessageConversation":
-      return useConversationsStore.getState().updateConversationListAction({
-        [data.conversationId]: {
-          ...data.conversationsList[data.conversationId],
-          Messages: data.messages,
-        },
-      });
-
+      return dispatch(
+        updateConversationListAction({
+          [data.conversationId]: {
+            ...data.conversationsList[data.conversationId],
+            Messages: data.messages,
+          },
+        })
+      );
     default:
       return null;
   }
@@ -27,10 +29,11 @@ export const actionsTypeActionsConversation = {
 };
 
 export const actionsSelectedConversation = (props) => {
-  const selectedChats = useAppStore.getState().selectedChats;
+  const selectedChats = store.getState().appSlice.selectedChats;
 
   const { typeAction, dataConversation = null } = props;
 
+  console.log(props);
   let _conversations = {};
 
   if (Object.keys(selectedChats).length) {
@@ -64,25 +67,27 @@ export const actionsSelectedConversation = (props) => {
   }
 };
 
-export const actionCreateNewConversation = (router, item) => {
+export const actionCreateNewConversation = (history, item) => {
   const conversationsList =
-    useConversationsStore.getState().conversationsList.data;
+    store.getState().conversationsSlice.conversationsList.data;
 
   const chat = Object.values(conversationsList).find(
     (el) => el.conversationName === item.fullName
   );
 
   if (chat) {
-    return router.push(`${PATHS.chat}/${chat.conversationId}`);
+    return history.push(`${PATHS.chat}/${chat.conversationId}`, {
+      id: chat.conversationId,
+      conversationData: chat,
+    });
   }
 
-  return router.push(PATHS.newChat);
-  // return history.push(PATHS.newChat, {
-  //   conversationData: {
-  //     conversationAvatar: item.userAvatar,
-  //     conversationName: item.fullName,
-  //     conversationType: "dialog",
-  //   },
-  //   opponentId: item.id,
-  // });
+  return history.push(PATHS.newChat, {
+    conversationData: {
+      conversationAvatar: item.userAvatar,
+      conversationName: item.fullName,
+      conversationType: "dialog",
+    },
+    opponentId: item.id,
+  });
 };

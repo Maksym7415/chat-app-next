@@ -1,15 +1,13 @@
-"use client";
-
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import shallow from "zustand/shallow";
 import { Typography, TextField, Box } from "@mui/material";
 import UserAvatar from "../../../avatar/userAvatar";
 import { PATHS } from "@/core/constants/paths";
 import languages from "@/core/translations";
-import { useAppStore } from "@/storeZustand/app/store";
-import { useConversationsStore } from "@/storeZustand/conversations/store";
-import { useSettingStore } from "@/storeZustand/setting/store";
+import { setDialogWindowClearConfigAction } from "../../redux/slice";
+import { shareMessageAction } from "@/store/app/slice";
 
 // rework
 
@@ -31,28 +29,12 @@ const SharedMessage = ({ data }) => {
   // HOOKS
   // const classes = useStyles();
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
-
-  const { conversationsList } = useConversationsStore(
-    (state) => ({
-      conversationsList: state.conversationsList.data,
-    }),
-    shallow
-  );
-
-  const { setDialogWindowClearConfigAction, shareMessageAction } = useAppStore(
-    (state) => ({
-      setDialogWindowClearConfigAction: state.setDialogWindowClearConfigAction,
-      shareMessageAction: state.shareMessageAction,
-    }),
-    shallow
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const conversationsList = useSelector(
+    ({ conversationsSlice }) => conversationsSlice.conversationsList.data
   );
 
   // STATES
@@ -69,8 +51,8 @@ const SharedMessage = ({ data }) => {
   };
 
   const handleShareMessageId = (conversationId) => {
-    console.log(data, "data");
-    shareMessageAction(data);
+    // console.log(data, "data");
+    dispatch(shareMessageAction(data));
     router.push(`${PATHS.chat}/${conversationId}`);
     // history.push({
     //   pathname: `${PATHS.chat}/${conversationId}`,
@@ -78,7 +60,7 @@ const SharedMessage = ({ data }) => {
     //     from: "shareMessage",
     //   },
     // });
-    setDialogWindowClearConfigAction();
+    dispatch(setDialogWindowClearConfigAction());
   };
 
   return (

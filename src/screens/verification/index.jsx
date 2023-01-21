@@ -1,32 +1,23 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import shallow from "zustand/shallow";
+import { useSelector } from "react-redux";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
 import languages from "@/core/translations";
-import { useAuthStore } from "@/storeZustand/auth/store";
-import { useSettingStore } from "@/storeZustand/setting/store";
-import { PostVerificationQuery } from "@/services/auth/service";
 import Meta from "@/core/seo/Meta";
+import { PATHS } from "@/core/constants/paths";
+import { PostVerificationQuery } from "@/services/auth/service";
 
 const VerificationClientPage = () => {
   // HOOKS
   const router = useRouter();
 
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
-  const { loginSingIn, verificationCode } = useAuthStore(
-    (state) => ({
-      loginSingIn: state.loginSingIn,
-      verificationCode: state.verificationCode,
-    }),
-    shallow
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const loginSingIn = useSelector(({ authSlice }) => authSlice.loginSingIn);
+  const verificationCode = useSelector(
+    ({ authSlice }) => authSlice.verificationCode
   );
 
   // STATES
@@ -44,7 +35,7 @@ const VerificationClientPage = () => {
 
   const { mutate, isLoading } = PostVerificationQuery({
     cb: () => {
-      router.push("/");
+      router.push(PATHS.main);
     },
     errorCb: (dataError) => {
       dataError?.message && setErrorBack(dataError?.message);

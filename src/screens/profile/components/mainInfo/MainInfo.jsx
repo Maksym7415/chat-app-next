@@ -1,11 +1,8 @@
-"use client";
-
 import { useState } from "react";
 import { Switch, Divider } from "@mui/material";
-import shallow from "zustand/shallow";
+import { useDispatch, useSelector } from "react-redux";
 import RITitleWithSubtitleAndRightComponent from "@/components/renders/rendersItem/RITitleWithSubtitleAndRightComponent";
 import { TYPES_CONVERSATIONS } from "@/core/constants/general";
-import { useSettingStore } from "@/storeZustand/setting/store";
 
 // STYLES
 const classes = {
@@ -26,24 +23,19 @@ const classes = {
   // list: "",
 };
 const MainInfo = ({ typeProfile }) => {
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
   // STATES
   const [isSwitchOn, setIsSwitchOn] = useState(false);
 
   // FUNCTIONS
   const onToggleSwitch = () => {
-    console.log("onToggleSwitch");
+    // console.log("onToggleSwitch");
     setIsSwitchOn(!isSwitchOn);
   };
 
-  console.log(isSwitchOn, "isSwitchOn");
+  // console.log(isSwitchOn, "isSwitchOn");
   return (
     <div className={classes.wrapperList}>
       {(() => {

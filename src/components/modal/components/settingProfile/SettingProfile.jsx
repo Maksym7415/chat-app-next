@@ -3,13 +3,11 @@
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useSnackbar } from "notistack";
-import shallow from "zustand/shallow";
+import { useDispatch, useSelector } from "react-redux";
 import * as config from "./config";
 import Avatars from "./components/avatars";
 import TextInputCustom from "../../../hookFormsComponents/textInput";
 import CustomButton from "../../../buttons/customButton";
-import { useUserStore } from "@/storeZustand/user/store";
-import { useSettingStore } from "@/storeZustand/setting/store";
 import { UserService } from "@/services/user/user.service";
 
 // STYLES
@@ -21,22 +19,12 @@ const classes = {
 
 const SettingProfile = ({ closeDrawer }) => {
   // HOOKS
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
   // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
-
-  const { userInfo } = useUserStore(
-    (state) => ({
-      userInfo: state.userInfo,
-    }),
-    shallow
-  );
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
   // STATES
   const [errorBack, setErrorBack] = useState("");

@@ -5,11 +5,12 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import shallow from "zustand/shallow";
+import { useDispatch, useSelector } from "react-redux";
+
 import CloseIcon from "@mui/icons-material/Close";
 import NewChat from "./components/newChat";
 import ShareMessage from "./components/shareMessage";
-import { useAppStore } from "@/storeZustand/app/store";
+import { setDialogWindowClearConfigAction } from "./redux/slice";
 
 // STYLES
 const classes = {
@@ -20,17 +21,16 @@ const classes = {
   dialogContent: "w-[400px] h-full relative p-[0px]",
 };
 const DialogComponent = () => {
-  // STORE
-  const { dialogConfig, setDialogWindowClearConfigAction } = useAppStore(
-    (state) => ({
-      dialogConfig: state.dialogConfig,
-      setDialogWindowClearConfigAction: state.setDialogWindowClearConfigAction,
-    }),
-    shallow
+  // HOOKS
+  const dispatch = useDispatch();
+
+  // SELECTORS
+  const dialogConfig = useSelector(
+    ({ dialogWindowSlice }) => dialogWindowSlice.dialogConfig
   );
 
   // FUNCTIONS
-  const handleClose = () => setDialogWindowClearConfigAction();
+  const handleClose = () => dispatch(setDialogWindowClearConfigAction());
 
   const Content = () => {
     switch (dialogConfig.typeContent) {

@@ -1,33 +1,21 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import shallow from "zustand/shallow";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
 import languages from "@/core/translations";
-import { useAuthStore } from "@/storeZustand/auth/store";
-import { useSettingStore } from "@/storeZustand/setting/store";
-import { PostLoginQuery } from "@/services/auth/service";
 import Meta from "@/core/seo/Meta";
+import { PostLoginQuery } from "@/services/auth/service";
+import { PATHS } from "@/core/constants/paths";
 
 export default function SignInClientPage() {
   // HOOKS
   const router = useRouter();
 
-  // STORE
-  const { loginSingIn } = useAuthStore(
-    (state) => ({
-      loginSingIn: state.loginSingIn,
-    }),
-    shallow
-  );
-
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const loginSingIn = useSelector(({ authSlice }) => authSlice.loginSingIn);
 
   // STATES
   const [errorBack, setErrorBack] = useState("");
@@ -43,7 +31,7 @@ export default function SignInClientPage() {
 
   const { mutate, isLoading } = PostLoginQuery({
     cb: () => {
-      router.push("verification");
+      router.push(PATHS.verification);
     },
     errorCb: (dataError) => {
       dataError?.message && setErrorBack(dataError?.message);
@@ -81,7 +69,10 @@ export default function SignInClientPage() {
         }}
         render={{
           text: (styles) => (
-            <p className={styles.text} onClick={() => router.push("sign-up")}>
+            <p
+              className={styles.text}
+              onClick={() => router.push(PATHS.signUp)}
+            >
               {languages[lang].authorization.haveNoAccount}{" "}
               {languages[lang].authorization.signUp} ?
             </p>

@@ -1,18 +1,12 @@
-"use client";
-
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import shallow from "zustand/shallow";
+import { useDispatch } from "react-redux";
 import Header from "./components/header";
 import SearchMain from "./components/searchMain";
 import { TYPES_FROM_TO_SEARCH_SCREEN } from "@/core/constants/general";
 import { actionCreateNewConversation } from "@/actions/conversations";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
-import { useAppStore } from "@/storeZustand/app/store";
-import {
-  SearchService,
-  getSearchContactFetcher,
-} from "@/services/search/search.service";
+import { setSideLeftConfigAction } from "@/store/app/slice";
 
 // STYLES
 const classes = {
@@ -21,15 +15,8 @@ const classes = {
 
 const Search = ({ params }) => {
   // HOOKS
+  const dispatch = useDispatch();
   const router = useRouter();
-
-  // STORE
-  const { setSideLeftConfigAction } = useAppStore(
-    (state) => ({
-      setSideLeftConfigAction: state.setSideLeftConfigAction,
-    }),
-    shallow
-  );
 
   // STATES
   const [settings, setSettings] = useState({
@@ -51,7 +38,7 @@ const Search = ({ params }) => {
         return setSettings(() => ({
           header: {
             placeholder: "Search",
-            getRequest: getSearchContactFetcher,
+            // getRequest: getSearchContactFetcher,
           },
         }));
       case TYPES_FROM_TO_SEARCH_SCREEN.profile:
@@ -94,9 +81,11 @@ const Search = ({ params }) => {
                 onClickContact={(item) => {
                   actionCreateNewConversation(router, item);
 
-                  setSideLeftConfigAction({
-                    page: SIDE_LEFT_TYPE_CONTENT.conversations,
-                  });
+                  dispatch(
+                    setSideLeftConfigAction({
+                      page: SIDE_LEFT_TYPE_CONTENT.conversations,
+                    })
+                  );
                 }}
               />
             );

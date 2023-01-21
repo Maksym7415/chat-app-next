@@ -1,22 +1,16 @@
-"use client";
-
 import { useRouter } from "next/router";
-import shallow from "zustand/shallow";
+import { useSelector } from "react-redux";
 import { useMemo, memo } from "react";
 import MessageInput from "./components/messageInput/MessageInput";
 import BottomToolbar from "./components/bottomToolbar";
-import { useAppStore } from "@/storeZustand/app/store";
 
 const ChatBottom = ({ firstName, userId, opponentId, conversationData }) => {
   // HOOKS
   const router = useRouter();
 
-  // STORE
-  const { selectedMessages } = useAppStore(
-    (state) => ({
-      selectedMessages: state.selectedMessages,
-    }),
-    shallow
+  // SELECTORS
+  const selectedMessages = useSelector(
+    ({ appSlice }) => appSlice.selectedMessages
   );
 
   // VARIABLES

@@ -1,10 +1,9 @@
 import { Menu, Item } from "react-contexify";
-import "react-contexify/dist/ReactContexify.css";
-import shallow from "zustand/shallow";
 import { makeStyles } from "@mui/styles";
+import "react-contexify/dist/ReactContexify.css";
+import { useSelector } from "react-redux";
 import SvgMaker from "../svgMaker";
 import { CONTEXT_MENU_ID } from "@/core/constants/general";
-import { useAppStore } from "@/storeZustand/app/store";
 
 // makeStyles
 const useStyles = makeStyles((theme) => ({
@@ -34,11 +33,8 @@ const ContextMenu = () => {
   // HOOKS
   const classes = useStyles();
 
-  const { contextMenuConfig } = useAppStore(
-    (state) => ({
-      contextMenuConfig: state.contextMenuConfig,
-    }),
-    shallow
+  const contextMenuConfig = useSelector(
+    ({ contextMenuSlice }) => contextMenuSlice.contextMenuConfig
   );
 
   return (

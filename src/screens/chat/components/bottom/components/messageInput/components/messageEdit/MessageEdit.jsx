@@ -1,11 +1,8 @@
-"use client";
-
-import shallow from "zustand/shallow";
+import { useSelector } from "react-redux";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SvgMaker from "@/components/svgMaker/index";
 import languages from "@/core/translations/index";
-import { useSettingStore } from "@/storeZustand/setting/store";
 
 // STYLES
 const classes = {
@@ -16,13 +13,8 @@ const classes = {
 };
 
 const MessageEdit = ({ data, onClose }) => {
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
   return (
     <div className={classes.root}>

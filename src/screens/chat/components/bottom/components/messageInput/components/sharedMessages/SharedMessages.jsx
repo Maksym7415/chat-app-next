@@ -1,12 +1,9 @@
-"use client";
-
-import shallow from "zustand/shallow";
+import { useDispatch, useSelector } from "react-redux";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import languages from "@/core/translations";
 import SvgMaker from "@/components/svgMaker";
-import { useSettingStore } from "@/storeZustand/setting/store";
-import { useAppStore } from "@/storeZustand/app/store";
+import { shareMessageAction } from "@/store/app/slice";
 
 // STYLES
 const classes = {
@@ -18,23 +15,13 @@ const classes = {
 };
 
 const SharedMessages = ({ forwardMessages }) => {
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
+  const dispatch = useDispatch();
 
-  const { shareMessageAction } = useAppStore(
-    (state) => ({
-      shareMessageAction: state.shareMessageAction,
-    }),
-    shallow
-  );
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
   const handleClose = () => {
-    shareMessageAction({});
+    dispatch(shareMessageAction({}));
   };
 
   return (

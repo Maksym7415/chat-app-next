@@ -1,13 +1,10 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { IconButton } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import shallow from "zustand/shallow";
 import CloseIcon from "@mui/icons-material/Close";
 import ImagesProfile from "@/components/carousel/imagesProfile";
 import DefaultAvatar from "@/components/avatar/defaultAvatar";
-import { useSettingStore } from "@/storeZustand/setting/store";
-import { useUserStore } from "@/storeZustand/user/store";
 
 // rework avatars
 
@@ -41,20 +38,12 @@ const imagesTest = [
 ];
 
 const Header = ({ setting, closeDrawer }) => {
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
+  // HOOKS
+  const dispatch = useDispatch();
 
-  const { userAvatars } = useUserStore(
-    (state) => ({
-      userAvatars: state.avatars,
-    }),
-    shallow
-  );
+  // SELECTORS
+  const userAvatars = useSelector(({ userSlice }) => userSlice.avatars);
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
   // STATES
   const [images, setImages] = useState([]);

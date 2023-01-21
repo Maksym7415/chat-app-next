@@ -1,18 +1,11 @@
-"use client";
-
-import { useCallback, useEffect, useState } from "react";
-import shallow from "zustand/shallow";
+import { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, OutlinedInput } from "@mui/material";
 import { useDebounce } from "@/hooks/useDebounce";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
-import { useAppStore } from "@/storeZustand/app/store";
-
-import {
-  SearchService,
-  getSearchContactFetcher,
-  useSearchContactFetcher,
-} from "@/services/search/search.service";
+import { GetSearchContactsQuery } from "@/services/search/service";
+import { setSideLeftConfigAction } from "@/store/app/slice";
 
 // STYLES
 const classes = {
@@ -20,12 +13,7 @@ const classes = {
 };
 function TopCenterComponent({ parentSettings }) {
   // STORE
-  const { sideLeftConfig } = useAppStore(
-    (state) => ({
-      sideLeftConfig: state.sideLeftConfig,
-    }),
-    shallow
-  );
+  const sideLeftConfig = useSelector(({ appSlice }) => appSlice.sideLeftConfig);
 
   // STATES
   const [search, setSearch] = useState("");
@@ -33,9 +21,9 @@ function TopCenterComponent({ parentSettings }) {
   // CUSTOM HOOKS
   const debouncedSearchValue = useDebounce(search, 300);
 
-  SearchService.useGetUserConversations({
+  const {} = GetSearchContactsQuery({
     params: {
-      search: debouncedSearchValue,
+      searchRequest: debouncedSearchValue,
     },
   });
 

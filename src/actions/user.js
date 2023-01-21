@@ -1,10 +1,10 @@
 import { removeTokenCook } from "@/core/cookiesStorage";
-import { useAuthStore } from "@/storeZustand/auth/store";
-import { useSettingStore } from "@/storeZustand/setting/store";
+import { setLangAction } from "@/store/setting/slice";
+import { authTokenAction, setAuthHeadersAction } from "@/store/auth/slice";
 
 export const actionLogOut = () => {
-  useSettingStore.getState().setLangAction("en");
-  useAuthStore.getState().authTokenAction(null);
-  useAuthStore.getState().setAuthHeadersAction({ accessToken: "" });
+  dispatch(setLangAction("en"));
+  dispatch(authTokenAction(null));
+  dispatch(setAuthHeadersAction({ accessToken: "" }));
   removeTokenCook();
 };

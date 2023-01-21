@@ -1,23 +1,13 @@
-"use client";
-
 import React, { useState } from "react";
 import { Button, Grid, Box } from "@mui/material";
-import shallow from "zustand/shallow";
 import UserAvatar from "../../../avatar/userAvatar";
 import languages from "@/core/translations";
 import SelectsAsyncPaginateSearch from "../../../SelectsAsyncPaginateSearch";
 import { fullDate } from "../../../../helpers";
 import Snackbar from "@/helpers/notistack";
 import { socketEmitChatCreation } from "@/core/socket/actions/socketEmit";
-import { useAuthStore } from "@/storeZustand/auth/store";
-import { useSettingStore } from "@/storeZustand/setting/store";
-import { useSearchStore } from "@/storeZustand/search/store";
-import { useAppStore } from "@/storeZustand/app/store";
 import CustomButton from "@/components/buttons/customButton/index";
-import {
-  SearchService,
-  getSearchContactFetcher,
-} from "@/services/search/search.service";
+import { setDialogWindowClearConfigAction } from "../../redux/slice";
 
 // STYLES
 const classes = {
@@ -34,29 +24,11 @@ const classes = {
 
 const NewChat = () => {
   // HOOKS
-  // const classes = useStyles();
+  const dispatch = useAppDispatch();
 
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
-
-  const { authToken } = useAuthStore(
-    (state) => ({
-      authToken: state.authToken,
-    }),
-    shallow
-  );
-
-  const { setDialogWindowClearConfigAction } = useAppStore(
-    (state) => ({
-      setDialogWindowClearConfigAction: state.setDialogWindowClearConfigAction,
-    }),
-    shallow
-  );
+  // SELECTORS
+  const lang = useAppSelector(({ settingSlice }) => settingSlice.lang);
+  const authToken = useAppSelector(({ authSlice }) => authSlice.authToken);
 
   // STATES
   const [selectedContacts, setSelectedContacts] = useState([]);
@@ -82,7 +54,7 @@ const NewChat = () => {
       imageData: {},
       imageFormat: "",
       cb: () => {
-        setDialogWindowClearConfigAction();
+        dispatch(setDialogWindowClearConfigAction());
         return Snackbar.success("Create new chat");
       },
     });
@@ -98,18 +70,19 @@ const NewChat = () => {
         settings={{
           isMulti: true,
           getSearchRequest: async (searchQuery, page) => {
-            const response = await getSearchContactFetcher({
-              params: {
-                search: searchQuery,
-                offset: page !== 1 ? (page - 1) * 10 : 0,
-              },
-            });
-
-            console.log(response, "response");
-            return {
-              options: response.response,
-              limit: response.limit,
-            };
+            // const response = await dispatch(
+            //   getSearchContactFetcher({
+            //     params: {
+            //       search: searchQuery,
+            //       offset: page !== 1 ? (page - 1) * 10 : 0,
+            //     },
+            //   })
+            // );
+            // // console.log(response, "response");
+            // return {
+            //   options: response.response,
+            //   limit: response.limit,
+            // };
           },
           getOptionValue: (option) => option.id,
           getOptionLabel: (option) => (

@@ -1,8 +1,12 @@
 import React from "react";
-import { Hydrate, QueryClient, QueryClientProvider, QueryCache } from "react-query";
+import {
+  Hydrate,
+  QueryClient,
+  QueryClientProvider,
+  QueryCache,
+} from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Providers from "@/providers/MainProvider";
-import { useCreateStore, Provider } from "@/storeZustand/store";
 
 import "../styles/globals.css";
 
@@ -10,7 +14,7 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      notifyOnChangeProps: 'tracked',
+      notifyOnChangeProps: "tracked",
     },
   },
   queryCache: new QueryCache({

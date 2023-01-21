@@ -1,9 +1,11 @@
-import { useAppStore, initialState } from "@/storeZustand/app/store";
+import { initialState, setSelectedMessagesAction } from "@/store/app/slice";
+import { store } from "@/store/store";
 
 export const actionsClearSelectedMessages = (force) => {
-  const selectedMessages = useAppStore.getState().selectedMessages;
+  const selectedMessages = store.getState().appSlice.selectedMessages;
+
   if (!Object.keys(selectedMessages.messages).length && !force) return;
-  return useAppStore
-    .getState()
-    .setSelectedMessagesAction(initialState.selectedMessages);
+  return store.dispatch(
+    setSelectedMessagesAction(initialState.selectedMessages)
+  );
 };

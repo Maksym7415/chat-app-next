@@ -1,8 +1,6 @@
-"use client";
-
 import { useMemo, useState, memo } from "react";
 import clsx from "clsx";
-import shallow from "zustand/shallow";
+import { useDispatch, useSelector } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -20,8 +18,8 @@ import {
   actionsTypeActionsChat,
   actionsTypeActionsConversation,
 } from "@/actions/index";
-import { useAppStore } from "@/storeZustand/app/store";
-import { useSettingStore } from "@/storeZustand/setting/store";
+import { setDrawerConfigAction } from "@/components/drawer/redux/slice";
+import { store } from "@/store/store";
 
 // STYLES
 const classes = {
@@ -44,21 +42,11 @@ const ChatHeader = ({
   typeConversation,
   messages,
 }) => {
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
+  // SELECTORS
+  const selectedMessages = useSelector(
+    ({ appSlice }) => appSlice.selectedMessages
   );
-
-  const { selectedMessages, setDrawerConfigAction } = useAppStore(
-    (state) => ({
-      selectedMessages: state.selectedMessages,
-      setDrawerConfigAction: state.setDrawerConfigAction,
-    }),
-    shallow
-  );
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
   // STATES
   const [anchorEl, setAnchorEl] = useState(null);
@@ -119,16 +107,18 @@ const ChatHeader = ({
     return (
       <div
         onClick={() => {
-          setDrawerConfigAction({
-            anchor: "right",
-            open: true,
-            width: "400px",
-            type: "profile",
-            configContent: {
-              typeProfile: conversationData.conversationType,
-              conversationData,
-            },
-          });
+          store.dispatch(
+            setDrawerConfigAction({
+              anchor: "right",
+              open: true,
+              width: "400px",
+              type: "profile",
+              configContent: {
+                typeProfile: conversationData.conversationType,
+                conversationData,
+              },
+            })
+          );
         }}
         className={classes.wrapperConversationData}
       >

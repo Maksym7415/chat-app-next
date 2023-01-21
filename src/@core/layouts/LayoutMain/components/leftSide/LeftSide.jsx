@@ -1,6 +1,5 @@
-"use client";
-
 import { useMemo, memo } from "react";
+import { useSelector } from "react-redux";
 import Conversations from "@/screens/conversations/index";
 import SearchPage from "@/screens/search";
 import Header from "./components/header";
@@ -8,8 +7,6 @@ import {
   TYPES_FROM_TO_SEARCH_SCREEN,
   SIDE_LEFT_TYPE_CONTENT,
 } from "@/core/constants/general";
-import { useAppStore } from "@/storeZustand/app/store";
-import shallow from "zustand/shallow";
 
 // STYLES
 const classes = {
@@ -17,13 +14,7 @@ const classes = {
 };
 
 const LeftSide = () => {
-  // STORE
-  const { sideLeftConfig } = useAppStore(
-    (state) => ({
-      sideLeftConfig: state.sideLeftConfig,
-    }),
-    shallow
-  );
+  const sideLeftConfig = useSelector(({ appSlice }) => appSlice.sideLeftConfig);
 
   // RENDERS
   const renderContent = useMemo(() => {

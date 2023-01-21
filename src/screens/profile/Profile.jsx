@@ -1,13 +1,9 @@
-"use client";
-
 import { useEffect, useState, memo } from "react";
-import shallow from "zustand/shallow";
+import { useSelector } from "react-redux";
 import Header from "./components/header";
 import MainInfo from "./components/mainInfo";
 import { TYPES_CONVERSATIONS } from "../../@core/constants/general";
 import { getNameShort } from "../../helpers";
-import { useSettingStore } from "@/storeZustand/setting/store";
-import { useUserStore } from "@/storeZustand/user/store";
 
 // STYLES
 const classes = {
@@ -16,20 +12,8 @@ const classes = {
 };
 
 const ProfilePage = ({ typeProfile, conversationData, closeDrawer }) => {
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
-
-  const { userInfo } = useUserStore(
-    (state) => ({
-      userAvatars: state.userInfo,
-    }),
-    shallow
-  );
+  // SELECTORS
+  const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
   // STATES
   const [setting, setSetting] = useState({

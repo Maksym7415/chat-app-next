@@ -1,10 +1,8 @@
 import { socket } from "../index";
 import { fullDate, handleGetBufferFile } from "../../../helpers";
-import { useAppStore } from "@/storeZustand/app/store";
-import { useAuthStore } from "@/storeZustand/auth/store";
+import { store } from "@/store/store";
 
 let filesCount = 0;
-
 
 export const socketEmitSendFiles = (
   data = {
@@ -104,12 +102,12 @@ export const socketEmitSendMessage = ({
   conversationId,
   setMessage,
 }) => {
-  const { userId } = useAuthStore.getState().authToken;
-  const messageEdit = useAppStore.getState().messageEdit;
+  const { userId } = store.getState().authSlice.authToken;
+  const messageEdit = store.getState().appSlice.messageEdit;
 
   console.log(userId, "userId");
   const body = {
-    conversationId: id,
+    conversationId: +id,
     message: messageSend,
     messageId: messageEdit.messageId,
     userId,

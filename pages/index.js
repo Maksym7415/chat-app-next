@@ -1,42 +1,22 @@
-import { useRouter } from "next/router";
+import { dehydrate } from "react-query";
 import LayoutMain from "@/core/layouts/LayoutMain";
-import {
-  getUserConversationsFetcher,
-  getSpaceXData,
-} from "@/services/conversations/conversations.fetchers";
-import usePAth from "@/core/constants/paths";
-import { pathBackConversations } from "@/core/constants/urlBack";
-import { dehydrate, QueryClient } from "react-query";
+import { checkIsToken } from "@/core/forSsr/checkIsToken";
+import { getDataServer } from "@/core/forSsr/getDataServer";
 
-const HomePage = ({}) => {
+const HomePage = () => {
   return <LayoutMain />;
 };
 
 HomePage.isPrivatePage = true;
 
 export const getServerSideProps = async (ctx) => {
-  const accessToken = ctx.req?.cookies?.["accessToken"];
+  const redirectToken = checkIsToken(ctx);
 
-  if (!accessToken) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/sign-in",
-      },
-    };
+  if (redirectToken) {
+    return redirectToken;
   }
 
-  // react qr
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(
-    [`get_${pathBackConversations.getUserConversations}`, {}],
-    async () =>
-      await getUserConversationsFetcher({
-        options: {},
-        cookies: ctx.req?.cookies,
-      })
-  );
-  //
+  const queryClient = await getDataServer(ctx);
 
   return {
     props: {

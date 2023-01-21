@@ -37,6 +37,9 @@ const authSlice = createSlice({
     setLoginSingInAction(state, { payload }) {
       state.loginSingIn = payload;
     },
+    setVerificationCodeAction: (state, { payload }) => {
+      state.verificationCode = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(requests.postLoginRequest.fulfilled, (state, action) => {
@@ -45,7 +48,11 @@ const authSlice = createSlice({
   },
 });
 
-export const { authTokenAction, setAuthHeadersAction, setLoginSingInAction } =
-  authSlice.actions;
+export const {
+  authTokenAction,
+  setAuthHeadersAction,
+  setLoginSingInAction,
+  setVerificationCodeAction,
+} = authSlice.actions;
 
 export default authSlice.reducer;

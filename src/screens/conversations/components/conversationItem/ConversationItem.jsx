@@ -3,8 +3,8 @@
 import { useMemo, memo } from "react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
 import { contextMenu } from "react-contexify";
-import shallow from "zustand/shallow";
 import { selectedConversationContext } from "./config";
 import UserAvatar from "@/components/avatar/userAvatar";
 import SvgMaker from "@/components/svgMaker";
@@ -16,9 +16,7 @@ import {
   actionsSelectedConversation,
   actionsTypeActionsConversation,
 } from "@/actions/index";
-import { useAuthStore } from "@/storeZustand/auth/store";
-import { useAppStore } from "@/storeZustand/app/store";
-import { useSettingStore } from "@/storeZustand/setting/store";
+import { setContextMenuConfigAction } from "@/components/contextMenu/redux/slice";
 
 // STYLES
 const classes = {
@@ -45,27 +43,12 @@ const classes = {
 
 const ConversationItem = ({ data, usersTyping, paramsId }) => {
   // HOOKS
+  const dispatch = useDispatch();
   const router = useRouter();
 
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
-  const { authToken } = useAuthStore(
-    (state) => ({
-      authToken: state.authToken,
-    }),
-    shallow
-  );
-  const { setContextMenuConfigAction } = useAppStore(
-    (state) => ({
-      setContextMenuConfigAction: state.setContextMenuConfigAction,
-    }),
-    shallow
-  );
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const authToken = useSelector(({ authSlice }) => authSlice.authToken);
 
   // FUNCTIONS
   const getString = (element) => {
@@ -116,12 +99,14 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
   return (
     <div
       onContextMenu={(event) => {
-        setContextMenuConfigAction({
-          isShowMenu: true,
-          messageId: 0,
-          config: contextMenuConfig,
-          callBackItem: handleClickContextChatItem,
-        });
+        dispatch(
+          setContextMenuConfigAction({
+            isShowMenu: true,
+            messageId: 0,
+            config: contextMenuConfig,
+            callBackItem: handleClickContextChatItem,
+          })
+        );
 
         contextMenu.show({
           id: CONTEXT_MENU_ID.main,

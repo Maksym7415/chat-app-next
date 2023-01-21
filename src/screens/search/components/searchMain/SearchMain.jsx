@@ -1,18 +1,10 @@
-"use client";
-
-import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Virtuoso } from "react-virtuoso";
-import shallow from "zustand/shallow";
 import UserAvatar from "@/components/avatar/userAvatar";
 import RenderConditionsList from "@/components/renders/renderConditionsList";
 import { setStateDirection } from "@/helpers/index";
-import { useSearchStore } from "@/storeZustand/search/store";
-import {
-  SearchService,
-  getSearchContactFetcher,
-  useSearchContactFetcher,
-} from "@/services/search/search.service";
+import { GetSearchContactsQuery } from "@/services/search/service";
 
 // STYLES
 const classes = {
@@ -27,25 +19,18 @@ const classes = {
 };
 
 const SearchMain = ({ onClickContact }) => {
-  // const { isLoading: loading, data } = useQuery(
-  //   "Most popular movie in sidebar",
-  //   () => getSearchContactFetcher()
-  // );
-
-  // SearchService.useGetUserConversations();
-  // useSearchContactFetcher();
-
-  // console.log(data, "data");
-  // STORE
-  const { isLoading, searchContacts } = useSearchStore(
-    (state) => ({
-      searchContacts: state.searchContacts,
-      isLoading: state.isLoading,
-    }),
-    shallow
+  // HOOKS
+  const dispatch = useDispatch();
+  // SELECTORS
+  const searchContacts = useSelector(
+    (state) => state.searchSlice.searchContacts
   );
 
-  // console.log(searchContacts, 'searchContacts')
+  const { isError, error, isLoading, data } = GetSearchContactsQuery({
+    params: {
+      searchRequest: searchContacts.search,
+    },
+  });
 
   // STATES
   const [contacts, setContacts] = useState([]);
@@ -69,18 +54,25 @@ const SearchMain = ({ onClickContact }) => {
     return false;
   }, []);
 
-  // USEEFFECTS
   useEffect(() => {
     setStateDirection({
-      direction: searchContacts.direction,
+      direction: searchContacts.direction || "",
       newData: searchContacts.response,
       setState: setContacts,
     });
-  }, [searchContacts.response]);
+  }, [searchContacts]);
 
+  console.log("render !!!");
   // RENDER CONDITIONAL
   if (!contacts.length || isLoading) {
-    return <RenderConditionsList list={contacts} isLoading={isLoading} />;
+    return (
+      <RenderConditionsList
+        list={contacts}
+        isLoading={isLoading}
+        isError={isError}
+        errorMessage={error?.data?.message}
+      />
+    );
   }
 
   return (

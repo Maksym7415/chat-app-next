@@ -1,31 +1,24 @@
-"use client";
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import shallow from "zustand/shallow";
+import { useSelector } from "react-redux";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
 import languages from "@/core/translations";
-import { useSettingStore } from "@/storeZustand/setting/store";
-import { PostSingUpQuery } from "@/services/auth/service";
 import Meta from "@/core/seo/Meta";
+import { PATHS } from "@/core/constants/paths";
+import { PostSingUpQuery } from "@/services/auth/service";
 
 const SignUpClientPage = () => {
   // HOOKS
   const router = useRouter();
 
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
   const { mutate, isLoading } = PostSingUpQuery({
     cb: () => {
-      router.push("verification");
+      router.push(PATHS.verification);
     },
     errorCb: (dataError) => {
       dataError?.message && setErrorBack(dataError?.message);
@@ -69,7 +62,10 @@ const SignUpClientPage = () => {
         }}
         render={{
           text: (styles) => (
-            <p className={styles.text} onClick={() => router.push("sign-in")}>
+            <p
+              className={styles.text}
+              onClick={() => router.push(PATHS.signIn)}
+            >
               {languages[lang].authorization.haveAnAccount}{" "}
               {languages[lang].authorization.signIn}?
             </p>

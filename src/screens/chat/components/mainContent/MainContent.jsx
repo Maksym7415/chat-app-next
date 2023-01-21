@@ -1,17 +1,13 @@
-"use client";
-
 import { useCallback, useState, memo, useEffect } from "react";
-import shallow from "zustand/shallow";
+import { useDispatch, useSelector } from "react-redux";
 import { Typography, Box } from "@mui/material";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
 import languages from "@/core/translations";
 import { setMessageDate, uuid, getMessagesWithSendDate } from "@/helpers/index";
 import Message from "./components/message";
 import { Virtuoso } from "react-virtuoso";
-import { useSettingStore } from "@/storeZustand/setting/store";
-import { useConversationsStore } from "@/storeZustand/conversations/store";
-import { useAppStore } from "@/storeZustand/app/store";
 import { ConversationsService } from "@/services/conversations/conversations.service";
+import { setAllMessagesAction, setMessagesChatAction } from "@/store/app/slice";
 
 const LOAD_MESSAGE_OFFSET = 15;
 
@@ -26,27 +22,14 @@ const classes = {
 };
 
 const MainContent = ({ userId, conversationId, typeConversation }) => {
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
+  const dispatch = useDispatch();
+
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const userHistoryConversations = useSelector(
+    ({ conversationsSlice }) => conversationsSlice.userHistoryConversations
   );
-  const { messages, setMessagesChatAction, setAllMessagesAction } = useAppStore(
-    (state) => ({
-      messages: state.messagesChat,
-      setMessagesChatAction: state.setMessagesChatAction,
-      setAllMessagesAction: state.setAllMessagesAction,
-    }),
-    shallow
-  );
-  const { userHistoryConversations } = useConversationsStore(
-    (state) => ({
-      userHistoryConversations: state.userHistoryConversations,
-    }),
-    shallow
-  );
+  const messages = useSelector(({ appSlice }) => appSlice.messagesChat);
 
   // VARIABLES
   const pagination =
@@ -68,9 +51,11 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
     ConversationsService.getConversationMessages({
       data,
       cb: (response) => {
-        setAllMessagesAction({
-          [conversationId]: [...response.data, ...messages],
-        });
+        dispatch(
+          setAllMessagesAction({
+            [conversationId]: [...response.data, ...messages],
+          })
+        );
 
         cb && cb(getMessagesWithSendDate(response.data).messages);
       },
@@ -84,7 +69,7 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
       loadMessages(true, (newMessages) => {
         const nextFirstItemIndex = firstItemIndex - newMessages.length;
         setFirstItemIndex(() => nextFirstItemIndex);
-        setMessagesChatAction([...newMessages, ...messages]);
+        dispatch(setMessagesChatAction([...newMessages, ...messages]));
       });
     }
 
@@ -133,6 +118,10 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
     );
   };
 
+  // console.log(prevChatId, "prevChatId");
+  // console.log(conversationId, "conversationId");
+  // console.log(userHistoryConversations, "userHistoryConversations");
+  // console.log(pagination, "pagination");
   if (prevChatId !== conversationId && conversationId !== null) {
     return <div className={classes.wrapperMessages}></div>;
   }
@@ -161,7 +150,7 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
             return (
               <Virtuoso
                 firstItemIndex={firstItemIndex}
-                initialTopMostItemIndex={messages.length - 1}
+                initialTopMostItemIndex={messages?.length - 1}
                 data={messages}
                 startReached={prependItems}
                 itemContent={rowItem}

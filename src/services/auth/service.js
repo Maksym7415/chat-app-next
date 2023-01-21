@@ -1,28 +1,37 @@
 import { useMutation } from "react-query";
-import { pathBackAuth } from "@/core/constants/urlBack";
-import { useAuthStore } from "@/storeZustand/auth/store";
 import { postFetcher } from "../fetchers";
+import { pathBackAuth } from "@/core/constants/urlBack";
 import { setTokenCook } from "@/core/cookiesStorage";
+import { store } from "@/store/store";
+import {
+  authTokenAction,
+  setLoginSingInAction,
+  setAuthHeadersAction,
+  setVerificationCodeAction,
+} from "@/store/auth/slice";
+import Snackbar from "@/helpers/notistack";
 
 export const PostLoginQuery = (options) => {
   const queryData = useMutation({
     mutationKey: [`post_${pathBackAuth.signIn}`],
     mutationFn: async ({ data }) => {
-      useAuthStore.getState().setLoginSingInAction(data.login);
+      store.dispatch(setLoginSingInAction(data.login));
 
       return await postFetcher({ url: pathBackAuth.signIn, data });
     },
     retry: 0,
     onSuccess(response) {
       if (response?.data) {
-        options.cb && options.cb(response?.data);
+        store.dispatch(
+          setVerificationCodeAction(response.data.verificationCode)
+        );
 
-        useAuthStore
-          .getState()
-          .setVerificationCodeAction(response.data.verificationCode);
+        options.cb && options.cb(response?.data);
       }
     },
     onError(error) {
+      error?.message && Snackbar.error(error?.message);
+
       options.errorCb && options.errorCb(error?.data);
     },
   });
@@ -40,10 +49,12 @@ export const PostVerificationQuery = (options) => {
       if (response?.data) {
         setTokenCook(response.data.accessToken);
 
-        useAuthStore.getState().setAuthHeadersAction(response.data);
-        useAuthStore.getState().authTokenAction({
-          token: response.data.accessToken,
-        });
+        store.dispatch(setAuthHeadersAction(response.data));
+        store.dispatch(
+          authTokenAction({
+            token: response.data.accessToken,
+          })
+        );
 
         options.cb && options.cb(response?.data);
       }
@@ -68,15 +79,11 @@ export const PostSingUpQuery = (options) => {
     retry: 0,
     onSuccess(response) {
       if (response?.data) {
-        console.log("sss");
-
         queryDataPostLogin.mutate({
           data: {
             login: response?.data?.email,
           },
         });
-
-        console.log("s-1");
       }
     },
     onError(error) {

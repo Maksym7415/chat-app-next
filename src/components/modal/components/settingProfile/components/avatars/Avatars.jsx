@@ -10,7 +10,7 @@ import {
   ListItem,
   List,
 } from "@mui/material";
-import shallow from "zustand/shallow";
+import { useDispatch, useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
@@ -20,8 +20,7 @@ import SwipeableViews from "react-swipeable-views";
 import DefaultAvatar from "../../../../../avatar/defaultAvatar";
 import * as config from "./config";
 import { getNameShort } from "../../../../../../helpers";
-import { useUserStore } from "@/storeZustand/user/store";
-import { useSettingStore } from "@/storeZustand/setting/store";
+
 import { UserService } from "@/services/user/user.service";
 
 const ITEM_HEIGHT = 30;
@@ -38,22 +37,12 @@ const classes = {
 const Avatars = () => {
   // HOOKS
   const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
 
-  // STORE
-  const { lang } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-    }),
-    shallow
-  );
-
-  const { userAvatars, userInfo } = useUserStore(
-    (state) => ({
-      userAvatars: state.avatars,
-      userInfo: state.userInfo,
-    }),
-    shallow
-  );
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const userAvatars = useSelector(({ userSlice }) => userSlice.avatars);
+  const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
   // STATES
   const [photoIndexSelected, setPhotoIndexSelected] = useState(0);

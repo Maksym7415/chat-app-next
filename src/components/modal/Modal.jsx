@@ -1,11 +1,9 @@
-"use client";
-
 import { Box, Typography, Backdrop, Modal, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import shallow from "zustand/shallow";
+import { useDispatch, useSelector } from "react-redux";
 import Fade from "../reactSpring/fade/Fade";
 import SettingProfile from "./components/settingProfile";
-import { useAppStore } from "@/storeZustand/app/store";
+import { setModalClearConfigAction } from "./redux/slice";
 
 // rework fade
 
@@ -16,17 +14,14 @@ const classes = {
 };
 
 const ModalComponent = () => {
-  // STORE
-  const { modalConfig, setModalClearConfigAction } = useAppStore(
-    (state) => ({
-      modalConfig: state.modalConfig,
-      setModalClearConfigAction: state.setModalClearConfigAction,
-    }),
-    shallow
-  );
+  // HOOKS
+  const dispatch = useDispatch();
+
+  // SELECTORS
+  const modalConfig = useSelector(({ modalSlice }) => modalSlice.modalConfig);
 
   // FUNCTIONS
-  const handleClose = () => setModalClearConfigAction();
+  const handleClose = () => dispatch(setModalClearConfigAction());
 
   return (
     <Modal

@@ -1,15 +1,13 @@
-"use client";
-
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
 import { ListItemIcon, ListItemText, List, ListItem } from "@mui/material";
-import shallow from "zustand/shallow";
 import * as config from "./config";
 import { PATHS } from "@/core/constants/paths";
 import { actionLogOut } from "@/actions/index";
 import BaseSelect from "../../../selects/BaseSelect";
-import { useAppStore } from "@/storeZustand/app/store";
-import { useUserStore } from "@/storeZustand/user/store";
-import { useSettingStore } from "@/storeZustand/setting/store";
+import { setDialogWindowConfigAction } from "../../../dialogWindow/redux/slice";
+import { setLangAction } from "@/store/setting/slice";
+import { setModalConfigAction } from "@/components/modal/redux/slice";
 import { UserService } from "@/services/user/user.service";
 
 // STYLES
@@ -22,29 +20,11 @@ const classes = {
 function MainDrawer({ closeDrawer }) {
   // HOOKS
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  const { lang, setLangAction } = useSettingStore(
-    (state) => ({
-      lang: state.lang,
-      setLangAction: state.setLangAction,
-    }),
-    shallow
-  );
-
-  const { userInfo } = useUserStore(
-    (state) => ({
-      userInfo: state.userInfo,
-    }),
-    shallow
-  );
-
-  const { setModalConfigAction, setDialogWindowConfigAction } = useAppStore(
-    (state) => ({
-      setModalConfigAction: state.setModalConfigAction,
-      setDialogWindowConfigAction: state.setDialogWindowConfigAction,
-    }),
-    shallow
-  );
+  // SELECTORS
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
   // FUNCTIONS
   const handleMenuAction = (value) => {
@@ -52,27 +32,31 @@ function MainDrawer({ closeDrawer }) {
 
     switch (value) {
       case "newChat":
-        setDialogWindowConfigAction({
-          open: true,
-          typeContent: "newChat",
-          title: "New Chat",
-          data: [],
-        });
+        dispatch(
+          setDialogWindowConfigAction({
+            open: true,
+            typeContent: "newChat",
+            title: "New Chat",
+            data: [],
+          })
+        );
 
         return;
       case "myProfile":
         const timerShowModal = setTimeout(() => {
-          setModalConfigAction({
-            open: true,
-            renderContent: "settingProfile",
-            styles: {},
-          });
+          dispatch(
+            setModalConfigAction({
+              open: true,
+              renderContent: "settingProfile",
+              styles: {},
+            })
+          );
 
           clearTimeout(timerShowModal);
         }, 100);
         return;
       case "logout":
-        actionLogOut();
+        dispatch(actionLogOut());
         router.push(PATHS.signIn);
         return;
       default:
