@@ -1,7 +1,9 @@
 import { dehydrate } from "react-query";
 import LayoutMain from "@/core/layouts/LayoutMain";
 import { checkIsToken } from "@/core/forSsr/checkIsToken";
-import { getDataServer } from "@/core/forSsr/getDataServer";
+import { getInitialData } from "@/core/forSsr/getData";
+import { wrapper, fetchSystem } from "@/store/store";
+import { setSystemTokenAction } from "@/store/system/slice";
 
 const HomePage = () => {
   return <LayoutMain />;
@@ -9,20 +11,62 @@ const HomePage = () => {
 
 HomePage.isPrivatePage = true;
 
-export const getServerSideProps = async (ctx) => {
-  const redirectToken = checkIsToken(ctx);
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (ctx) => {
+    // console.log(store.getState(), "store state on the server before dispatch");
+    // store.dispatch(setSystemTokenAction("ssss"));
+    // console.log(
+    //   store.getState().systemSlice,
+    //   "11 state on the server before dispatch"
+    // );
+    // const productData = "page data";
+    //  http://localhost:3000/product?data='some-data'
+    // await store.dispatch(fetchProduct());
+    // console.log("store state on the server after dispatch", store.getState());
 
-  if (redirectToken) {
-    return redirectToken;
+    // return {
+    //   props: {
+    //     // productData,
+    //     // dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+    //   },
+    // };
+
+    const redirectToken = checkIsToken(ctx);
+
+    if (redirectToken) {
+      return redirectToken;
+    }
+
+    const { queryClient } = await getInitialData(ctx, store);
+    // store.dispatch(setSystemTokenAction("ssss"));
+    return {
+      props: {
+        dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+      },
+    };
   }
+);
 
-  const queryClient = await getDataServer(ctx);
+// export const getStaticProps = wrapper.getStaticProps((store) => async (ctx) => {
+//   // console.log(store.getState(), "store state on the server before dispatch");
+//   // const productData = "page data";
+//   //  http://localhost:3000/product?data='some-data'
+//   // await store.dispatch(fetchProduct());
+//   // console.log("store state on the server after dispatch", store.getState());
 
-  return {
-    props: {
-      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
-    },
-  };
-};
+//   // return {
+//   //   props: {
+//   //     // productData,
+//   //     // dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+//   //   },
+//   // };
+//   const redirectToken = checkIsToken(ctx);
+
+//   console.log(ctx, "ctx");
+
+//   return {
+//     props: {},
+//   };
+// });
 
 export default HomePage;

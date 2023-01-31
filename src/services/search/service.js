@@ -26,16 +26,8 @@ export const GetSearchContactsQuery = (options) => {
       }),
     retry: 0,
     staleTime: Infinity,
-    keepPreviousData: true,
-    // onSuccess(response) {
-
-    //   return response;
-    // },
-
     onError(error) {
       options?.errorCb && options.errorCb(error.data);
-
-      console.log(error, "onError");
       console.dir(error, "onError dir");
       return error;
     },
@@ -61,7 +53,6 @@ export const GetSearchContactsQuery = (options) => {
     JSON.stringify(newData?.response) !==
     JSON.stringify(store.getState().searchSlice.searchContacts?.response)
   ) {
-    console.log("setting__________");
     store.dispatch(setSearchContactsAction(newData));
   }
 

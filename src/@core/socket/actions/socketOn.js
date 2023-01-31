@@ -1,16 +1,14 @@
 import { socket } from "../index";
 import { actionsConversationList } from "../../../actions";
 import { PATHS } from "@/core/constants/paths";
-import {
-  ConversationsService,
-  getUserConversationsFetcher,
-} from "@/services/conversations/conversations.service";
 import { setAllMessagesAction, setMessagesChatAction } from "@/store/app/slice";
 import {
   setConversationListAction,
   updateConversationTypeStateAction,
 } from "@/store/conversations/slice";
 import { store } from "@/store/store";
+import { queryClient } from "@/pages/_app";
+import { pathBackConversations } from "@/core/constants/urlBack";
 
 // User Id Chat
 export const socketOnUserIdChat = (chat) =>
@@ -189,21 +187,23 @@ export const socketOnDeleteMessage = () => {
 };
 
 export const socketOnUserIdNewChat = (userId, router) => {
-  return socket.on(`userIdNewChat${userId}`, (message, conversationId) => {
-    console.log(message, "message");
-    getUserConversationsFetcher({
-      options: {
-        cb: (data) => {
-          console.log(conversationId, "conversationId");
-          // ця перевірка потрібно для того щоб коли інший юзер створює чат зі мною щоб в мене не відкривалося зразу чат з цим юзером
-          if (message.User?.id !== userId) {
-            return;
-          }
+  return socket.on(
+    `userIdNewChat${userId}`,
+    async (message, conversationId) => {
+      const response = await queryClient.fetchQuery({
+        queryKey: [`get_${pathBackConversations.getUserConversations}`, {}],
+        type: "active",
+      });
+      if (response?.data?.data) {
+        // ця перевірка потрібно для того щоб коли інший юзер створює чат зі мною щоб в мене не відкривалося зразу чат з цим юзером
+        if (message.User?.id !== userId) {
+          return;
+        } else {
           router.push(`${PATHS.chat}/${conversationId}`);
-        },
-      },
-    });
-  });
+        }
+      }
+    }
+  );
 };
 
 export const socketOnDeleteConversation = ({ params, router }) => {

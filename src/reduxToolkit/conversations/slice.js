@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as requests from "./requests";
+import { HYDRATE } from "next-redux-wrapper";
 
 const initialState = {
   conversationMessages: {
@@ -52,7 +53,6 @@ const conversationsSlice = createSlice({
       };
     },
     setConversationListAction(state, { payload }) {
-      console.log(payload, "payload");
       state.conversationsList.data = {
         ...payload,
       };
@@ -66,23 +66,6 @@ const conversationsSlice = createSlice({
         },
       };
     },
-  },
-  extraReducers: (builder) => {
-    // builder.addCase(
-    //   requests.getUserConversationsRequest.fulfilled,
-    //   (state, action) => {
-    //     state.conversationsList.data = action.payload.data;
-    //   }
-    // );
-    builder.addCase(
-      requests.getConversationMessagesRequest.fulfilled,
-      (state, action) => {
-        state.conversationMessages = {
-          data: action.payload?.data,
-          pagination: action.payload?.pagination,
-        };
-      }
-    );
   },
 });
 

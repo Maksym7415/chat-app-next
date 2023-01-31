@@ -1,6 +1,7 @@
 import { useLayoutEffect } from "react";
 import create from "zustand";
 import createContext from "zustand/context";
+import { persist } from "zustand/middleware";
 
 let store;
 

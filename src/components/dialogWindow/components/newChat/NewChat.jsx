@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Grid, Box } from "@mui/material";
+import { Grid, Box } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import UserAvatar from "../../../avatar/userAvatar";
 import languages from "@/core/translations";
 import SelectsAsyncPaginateSearch from "../../../SelectsAsyncPaginateSearch";
@@ -8,6 +9,9 @@ import Snackbar from "@/helpers/notistack";
 import { socketEmitChatCreation } from "@/core/socket/actions/socketEmit";
 import CustomButton from "@/components/buttons/customButton/index";
 import { setDialogWindowClearConfigAction } from "../../redux/slice";
+import { queryClient } from "@/pages/_app";
+import { pathBackSearch } from "@/core/constants/urlBack";
+import { getFetcher } from "@/services/fetchers";
 
 // STYLES
 const classes = {
@@ -21,14 +25,15 @@ const classes = {
 };
 
 // rework style
+// fix глянути до запиту як правильно його відправляти, також чому не коректно показується модалка
 
 const NewChat = () => {
   // HOOKS
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   // SELECTORS
-  const lang = useAppSelector(({ settingSlice }) => settingSlice.lang);
-  const authToken = useAppSelector(({ authSlice }) => authSlice.authToken);
+  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+  const authToken = useSelector(({ authSlice }) => authSlice.authToken);
 
   // STATES
   const [selectedContacts, setSelectedContacts] = useState([]);
@@ -73,16 +78,38 @@ const NewChat = () => {
             // const response = await dispatch(
             //   getSearchContactFetcher({
             //     params: {
-            //       search: searchQuery,
+            //       searchRequest: searchQuery,
             //       offset: page !== 1 ? (page - 1) * 10 : 0,
             //     },
             //   })
             // );
-            // // console.log(response, "response");
-            // return {
-            //   options: response.response,
-            //   limit: response.limit,
-            // };
+            const params = {};
+
+            const searchParams = searchQuery || "";
+            const offsetParams = page !== 1 ? (page - 1) * 10 : 0;
+
+            if (searchParams) {
+              params.searchRequest = searchParams;
+            }
+            if (offsetParams) {
+              params.offset = offsetParams;
+            }
+
+            const response = await queryClient.fetchQuery({
+              queryKey: [`get_${pathBackSearch.searchContact}`, params],
+              type: "active",
+              queryFn: async () =>
+                await getFetcher({
+                  url: pathBackSearch.searchContact,
+                  options: { params },
+                }),
+            });
+
+            console.log(response, "response");
+            return {
+              options: response?.data?.response || [],
+              limit: response?.data?.limit || 0,
+            };
           },
           getOptionValue: (option) => option.id,
           getOptionLabel: (option) => (

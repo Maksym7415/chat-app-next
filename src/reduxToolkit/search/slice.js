@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as requests from "./requests";
+import { HYDRATE } from "next-redux-wrapper";
 
 const initialState = {
   searchContacts: {
@@ -18,19 +19,12 @@ const searchSlice = createSlice({
   initialState,
   reducers: {
     setLoadingSearchContacts(state, { payload }) {
+      console.log(payload, "setLoadingSearchContacts");
       state.isLoading = payload;
     },
     setSearchContactsAction(state, { payload }) {
       state.searchContacts = payload;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(
-      requests.getSearchContactRequest.fulfilled,
-      (state, action) => {
-        state.searchContacts = action.payload;
-      }
-    );
   },
 });
 

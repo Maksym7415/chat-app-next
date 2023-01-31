@@ -13,8 +13,10 @@ import {
   socketOnClearConversation,
 } from "@/core/socket/actions/socketOn";
 import Meta from "@/core/seo/Meta";
-import { UserService } from "@/services/user/user.service";
 import { GetUserConversationsQuery } from "@/services/conversations/service";
+import { GetUserProfileDataQuery } from "@/services/user/service";
+import { authTokenAction } from "@/store/auth/slice";
+import { getTokenCook } from "@/core/cookiesStorage/index";
 
 // STYLES
 const classes = {
@@ -31,6 +33,7 @@ const LayoutMain = ({ children, titlePage = "", params = {} }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   GetUserConversationsQuery({});
+  GetUserProfileDataQuery({});
 
   // SELECTORS
   const conversationsList = useSelector(
@@ -52,9 +55,8 @@ const LayoutMain = ({ children, titlePage = "", params = {} }) => {
     [params]
   );
 
-  console.log(params, "params");
-  console.log(conversationsList, "conversationsList");
-  console.log(conversationSelect, "conversationSelect");
+  // console.log(conversationsList, "conversationsList");
+  // console.log(conversationSelect, "conversationSelect");
 
   const getTitlePage = () => {
     if (titlePage) {
@@ -73,10 +75,17 @@ const LayoutMain = ({ children, titlePage = "", params = {} }) => {
 
   // USEEFFECTS
   useEffect(() => {
-    if (authToken.userId) {
-      UserService.getUserProfileData();
+    console.log(authToken, "authToken");
+    if (!authToken?.userId) {
+      console.log("authTokenAction!!!");
+      const token = getTokenCook();
+      dispatch(
+        authTokenAction({
+          token,
+        })
+      );
     }
-  }, [authToken]);
+  }, []);
 
   useEffect(() => {
     socket.removeAllListeners();

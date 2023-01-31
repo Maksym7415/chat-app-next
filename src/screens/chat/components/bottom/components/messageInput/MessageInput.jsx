@@ -12,6 +12,7 @@ import RightInputComponent from "./components/RightInputComponent";
 import LeftInputComponent from "./components/LeftInputComponent";
 import MessageEdit from "./components/messageEdit";
 import SharedMessages from "./components/sharedMessages";
+import { editMessageAction, shareMessageAction } from "@/store/app/slice";
 
 // STYLES
 const classes = {
@@ -20,7 +21,7 @@ const classes = {
   input: "flex flex-1 m-[0px] px-[10px] bg-white max-h-[100px]",
 };
 
-const MessageInput = ({ conversationId, userId, firstName, opponentId }) => {
+const MessageInput = ({ conversationId, opponentId }) => {
   // HOOKS
   const dispatch = useDispatch();
 
@@ -33,6 +34,14 @@ const MessageInput = ({ conversationId, userId, firstName, opponentId }) => {
   const forwardMessages = useSelector(
     ({ appSlice }) => appSlice.forwardMessages
   );
+  const authToken = useSelector(({ authSlice }) => authSlice.authToken);
+
+  const textPlaceholderInput = `${languages[lang].generals.typeMessage}...`;
+  const userId = authToken.userId;
+  const firstName = authToken.firstName;
+
+  // console.log(lang, "lang MessageInput");
+  // console.log(textPlaceholderInput, "languages[lang].generals.typeMessage");
 
   // STATES
   const [sheredMessages, setSharedMessages] = useState([]);
@@ -176,9 +185,10 @@ const MessageInput = ({ conversationId, userId, firstName, opponentId }) => {
             variant="standard"
             maxRows={4}
             onChange={handleChangeMessage}
-            placeholder={`${languages[lang].generals.typeMessage}...`}
+            placeholder={textPlaceholderInput}
             onKeyDown={onKeyPress}
           />
+          <input type="text" placeholder={textPlaceholderInput} />
           <RightInputComponent
             message={message[conversationId]}
             handleSendMessage={handleSendMessage}

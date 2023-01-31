@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { ListItemIcon, ListItemText, List, ListItem } from "@mui/material";
@@ -9,6 +10,10 @@ import { setDialogWindowConfigAction } from "../../../dialogWindow/redux/slice";
 import { setLangAction } from "@/store/setting/slice";
 import { setModalConfigAction } from "@/components/modal/redux/slice";
 import { UserService } from "@/services/user/user.service";
+import {
+  PutUpdateProfileDataQuery,
+  getFetchUserProfileDataQuery,
+} from "@/services/user/service";
 
 // STYLES
 const classes = {
@@ -25,6 +30,18 @@ function MainDrawer({ closeDrawer }) {
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
   const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
+
+  console.log(userInfo, "userInfo");
+  console.log(lang, "lang");
+
+  // STATES
+  const [selectedLang, setSelectedLang] = useState("");
+
+  const { mutate } = PutUpdateProfileDataQuery({
+    cb: async () => {
+      await getFetchUserProfileDataQuery();
+    },
+  });
 
   // FUNCTIONS
   const handleMenuAction = (value) => {
@@ -65,25 +82,31 @@ function MainDrawer({ closeDrawer }) {
   };
 
   const handleSetLanguage = (event) => {
-    const langUser = userInfo.lang;
     const selectLang = event.target.value;
 
-    if (selectLang === langUser) {
+    console.log(lang, "langUser");
+    console.log(selectLang, "selectLang");
+
+    if (selectLang === lang) {
       return;
     }
 
+    setSelectedLang(selectLang);
+
     const sendData = { lang: selectLang };
 
-    UserService.putUpdateProfile({
-      data: sendData,
-      cb: () => {
-        UserService.getUserProfileData({
-          cb: () => {
-            setLangAction(selectLang);
-          },
-        });
-      },
-    });
+    mutate({ data: sendData });
+
+    // UserService.putUpdateProfile({
+    //   data: sendData,
+    //   cb: () => {
+    //     UserService.getUserProfileData({
+    //       cb: () => {
+    //         setLangAction(selectLang);
+    //       },
+    //     });
+    //   },
+    // });
   };
 
   return (

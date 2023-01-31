@@ -3,9 +3,9 @@ import {
   socketEmitClearConversation,
 } from "../@core/socket/actions/socketEmit";
 import { PATHS } from "@/core/constants/paths";
-
 import { store } from "../reduxToolkit/store";
-import { updateConversationListAction } from "../reduxToolkit/conversations/slice";
+import { updateConversationListAction } from "@/store/conversations/slice";
+import { setNewChatDataAction } from "@/store/app/slice";
 
 export const actionsConversationList = (data) => (dispatch) => {
   switch (data.mode) {
@@ -33,7 +33,6 @@ export const actionsSelectedConversation = (props) => {
 
   const { typeAction, dataConversation = null } = props;
 
-  console.log(props);
   let _conversations = {};
 
   if (Object.keys(selectedChats).length) {
@@ -67,7 +66,7 @@ export const actionsSelectedConversation = (props) => {
   }
 };
 
-export const actionCreateNewConversation = (history, item) => {
+export const actionCreateNewConversation = async (router, item) => {
   const conversationsList =
     store.getState().conversationsSlice.conversationsList.data;
 
@@ -76,18 +75,19 @@ export const actionCreateNewConversation = (history, item) => {
   );
 
   if (chat) {
-    return history.push(`${PATHS.chat}/${chat.conversationId}`, {
-      id: chat.conversationId,
-      conversationData: chat,
-    });
+    return router.push(`${PATHS.chat}/${chat.conversationId}`);
   }
 
-  return history.push(PATHS.newChat, {
-    conversationData: {
-      conversationAvatar: item.userAvatar,
-      conversationName: item.fullName,
-      conversationType: "dialog",
-    },
-    opponentId: item.id,
-  });
+  store.dispatch(
+    setNewChatDataAction({
+      conversationData: {
+        conversationAvatar: item.userAvatar,
+        conversationName: item.fullName,
+        conversationType: "dialog",
+      },
+      newChatId: item.id,
+    })
+  );
+
+  router.push(PATHS.newChat);
 };

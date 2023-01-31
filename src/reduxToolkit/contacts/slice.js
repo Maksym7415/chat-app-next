@@ -10,14 +10,14 @@ const contactsSlice = createSlice({
   name: "contactsSlice",
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(
-      requests.postCheckEmailsRequest.fulfilled,
-      (state, action) => {
-        state.contacts = action.payload;
-      }
-    );
-  },
+  // extraReducers: (builder) => {
+  //   builder.addCase(
+  //     requests.postCheckEmailsRequest.fulfilled,
+  //     (state, action) => {
+  //       state.contacts = action.payload;
+  //     }
+  //   );
+  // },
 });
 
 export default contactsSlice.reducer;

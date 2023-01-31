@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Switch, Divider } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import RITitleWithSubtitleAndRightComponent from "@/components/renders/rendersItem/RITitleWithSubtitleAndRightComponent";
 import { TYPES_CONVERSATIONS } from "@/core/constants/general";
 
@@ -13,14 +13,6 @@ const classes = {
   wrapperList: "bg-[#ffffff] pl-[21px]",
   listTitle: "font-medium text-[15px] text-[#4094D0]",
   list: "mt-[9px]",
-
-  // wrapperNotification: "",
-  // switchNotification: "",
-  // dividerNotification: "",
-  // divider: "",
-  // wrapperList: "",
-  // listTitle: "",
-  // list: "",
 };
 const MainInfo = ({ typeProfile }) => {
   // SELECTORS
@@ -31,11 +23,9 @@ const MainInfo = ({ typeProfile }) => {
 
   // FUNCTIONS
   const onToggleSwitch = () => {
-    // console.log("onToggleSwitch");
     setIsSwitchOn(!isSwitchOn);
   };
 
-  // console.log(isSwitchOn, "isSwitchOn");
   return (
     <div className={classes.wrapperList}>
       {(() => {
