@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { IconButton } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import shallow from "zustand/shallow";
 import CloseIcon from "@mui/icons-material/Close";
 import ImagesProfile from "@/components/carousel/imagesProfile";
 import DefaultAvatar from "@/components/avatar/defaultAvatar";

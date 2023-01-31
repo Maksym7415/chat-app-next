@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, memo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TopCenterComponent from "./components/topCenterComponent";
@@ -22,6 +20,7 @@ const Header = ({ children }) => {
 
   // SELECTORS
   const sideLeftConfig = useSelector(({ appSlice }) => appSlice.sideLeftConfig);
+  const appSlice = useSelector(({ appSlice }) => appSlice);
 
   // STATES
   const [settings, setSettings] = useState({

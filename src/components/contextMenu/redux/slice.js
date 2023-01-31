@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { HYDRATE } from "next-redux-wrapper";
 
 export const initialState = {
   contextMenuConfig: {
@@ -6,7 +7,7 @@ export const initialState = {
     isShowMenu: false,
     messageId: 0,
     config: [],
-    callBackItem: () => {},
+    callBackItem: null,
   },
 };
 

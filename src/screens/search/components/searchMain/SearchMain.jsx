@@ -18,6 +18,8 @@ const classes = {
   avatarView: "",
 };
 
+// fix load more data
+
 const SearchMain = ({ onClickContact }) => {
   // HOOKS
   const dispatch = useDispatch();
@@ -62,7 +64,6 @@ const SearchMain = ({ onClickContact }) => {
     });
   }, [searchContacts]);
 
-  console.log("render !!!");
   // RENDER CONDITIONAL
   if (!contacts.length || isLoading) {
     return (

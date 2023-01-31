@@ -47,7 +47,7 @@ const ChatHeader = ({
     ({ appSlice }) => appSlice.selectedMessages
   );
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-
+  const newChatData = useSelector(({ appSlice }) => appSlice.newChatData);
   // STATES
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -190,7 +190,7 @@ const ChatHeader = ({
       <div className={classes.containerTop}>
         {/* {renderTopLeftComponent()} */}
         {renderTopCenterComponent()}
-        {renderTopRightComponent()}
+        {newChatData.newChatId ? null : renderTopRightComponent()}
       </div>
     </div>
   );

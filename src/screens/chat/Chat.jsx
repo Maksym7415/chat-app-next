@@ -1,7 +1,4 @@
-"use client";
-
-import { useRouter } from "next/router";
-import { useEffect, useState, useMemo, memo } from "react";
+import { useEffect, useState, useMemo, memo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Typography, Box, CircularProgress } from "@mui/material";
 import ChatHeader from "./components/header";
@@ -18,7 +15,9 @@ import {
   setAllMessagesAction,
   setMessagesChatAction,
   setOpenConversationIdAction,
+  setNewChatDataClearAction,
 } from "@/store/app/slice";
+import { store } from "@/store/store";
 
 // STYLES
 const classes = {
@@ -26,69 +25,95 @@ const classes = {
   errorBackText: "text-[28px] font-medium ",
 };
 
+const isServerSide = typeof window === "undefined";
+
+// в консолі вискакує помилка якась якщо забрати у функції cbInitialMessages  dispatch то посмилки немає
+const checkOpenConversationId = (conversationId) => {
+  const openConversationId = store.getState().appSlice.openConversationId;
+
+  if (conversationId !== openConversationId) {
+    store.dispatch(setOpenConversationIdAction(conversationId));
+  }
+};
+
+const LOAD_MESSAGE_OFFSET = 15;
+let isLoadMessages = false;
+
 const Chat = ({ params }) => {
   // HOOKS
   const dispatch = useDispatch();
-  const router = useRouter();
 
   // SELECTORS
-  const authToken = useSelector(({ authSlice }) => authSlice.authToken);
   const allMessages = useSelector(({ appSlice }) => appSlice.allMessages);
-  const openConversationId = useSelector(
-    ({ appSlice }) => appSlice.openConversationId
-  );
   const conversationsList = useSelector(
     ({ conversationsSlice }) => conversationsSlice.conversationsList.data
   );
+  const newChatData = useSelector(({ appSlice }) => appSlice.newChatData);
+
+  const cbInitialMessages = (response, conversationId) => {
+    const messages = getMessagesWithSendDate(response?.data)?.messages || [];
+    dispatch(
+      setAllMessagesAction({
+        [conversationId]: messages,
+      })
+    );
+    dispatch(setMessagesChatAction(messages));
+    // store.dispatch(
+    //   setAllMessagesAction({
+    //     [conversationId]: messages,
+    //   })
+    // );
+    // store.dispatch(setMessagesChatAction(messages));
+  };
+
+  const initialOptionsMessages = {
+    params: {
+      offset: 0,
+    },
+    cb: cbInitialMessages,
+  };
 
   // STATES
   const [errorBack, setErrorBack] = useState("");
   const [isFetching, setIsFetching] = useState(false);
+  const [optionsMessages, setOptionsMessages] = useState(
+    initialOptionsMessages
+  );
 
   // VARIABLES
-  const conversationId = useMemo(
-    () => router.query.id || null,
-    [router.query.id]
-  );
-  const opponentId = 4;
+  const conversationId = useMemo(() => {
+    isLoadMessages = false;
+    newChatData.newChatId &&
+      params?.id &&
+      dispatch(setNewChatDataClearAction());
+    setOptionsMessages(initialOptionsMessages);
+    return params?.id || null;
+  }, [params]);
+
+  const opponentId = newChatData?.newChatId || null;
   const conversationData = useMemo(
-    () => conversationsList?.[conversationId] || {},
-    [conversationsList, conversationId]
+    () =>
+      conversationsList?.[conversationId] ||
+      newChatData?.conversationData ||
+      {},
+    [conversationsList, conversationId, newChatData]
   );
   const typeConversation =
     conversationData?.conversationType?.toLowerCase() || "";
 
   const {} = GetConversationMessagesQuery({
-    params: {
-      // id: conversationId,
-      offset: 0,
-    },
-    additionalUrl: `${conversationId}`,
+    params: optionsMessages.params,
+    conversationId,
+    additionalUrl: conversationId ? `${conversationId}` : null,
     cb: (response) => {
-      console.log(response, "response");
+      // if (!isServerSide) {
+      //   if (isLoadMessages) {
+      //   } else {
+      //     cbInitialMessages(response, conversationId);
+      //   }
+      // }
 
-      //
-      // useConversationsStore.getState().updateUserHistoryConversation({
-      //   conversationId,
-      //   data: { pagination: response?.pagination },
-      // });
-
-      const data = {
-        data: response?.data,
-        pagination: response?.pagination,
-      };
-
-      // useConversationsStore.getState().setConversationMessagesAction(data);
-      //
-      const messages = getMessagesWithSendDate(response.data)?.messages;
-
-      dispatch(
-        setAllMessagesAction({
-          [conversationId]: messages,
-        })
-      );
-      console.log(messages, "messages");
-      dispatch(setMessagesChatAction(messages));
+      optionsMessages.cb && optionsMessages.cb(response, conversationId);
       errorBack && setErrorBack("");
     },
     errorCb: (error) => {
@@ -96,43 +121,41 @@ const Chat = ({ params }) => {
     },
   });
 
+  const loadMessages = useCallback((isOffset, cb, pagination, messages) => {
+    isLoadMessages = true;
+    const params = { offset: 0 };
+    if (isOffset) {
+      params.offset = pagination.currentPage + LOAD_MESSAGE_OFFSET;
+    }
+    setOptionsMessages({
+      params,
+      cb: (response) => {
+        dispatch(
+          setAllMessagesAction({
+            [conversationId]: [...response?.data, ...messages],
+          })
+        );
+        cb && cb(getMessagesWithSendDate(response.data).messages);
+      },
+    });
+  }, []);
+
   // console.log(queryData, "queryData");
   // console.log(allMessages?.[conversationId], "allMessages?.[conversationId]");
   // console.log(allMessages, "allMessages");
+
   // USEEFFECTS
   useEffect(() => {
-    // console.log(allMessages, "allMessages");
-    if (!allMessages[conversationId] && conversationId) {
-      // setIsFetching(true);
-      // ConversationsService.getConversationMessages({
-      //   data: {
-      //     id: conversationId,
-      //     offset: 0,
-      //   },
-      //   cb: (response) => {
-      //     const messages = getMessagesWithSendDate(response?.data)?.messages;
-      //     setAllMessagesAction({
-      //       [conversationId]: messages,
-      //     });
-      //     setMessagesChatAction(messages);
-      //     errorBack && setErrorBack("");
-      //     setIsFetching(false);
-      //   },
-      //   errorCb: (error) => {
-      //     setErrorBack(error?.message);
-      //     setIsFetching(false);
-      //   },
-      // });
-    } else {
+    if (allMessages[conversationId] && conversationId) {
       const messages = allMessages[conversationId] || [];
-      setMessagesChatAction(messages);
+      dispatch(setMessagesChatAction(messages));
     }
 
-    conversationId !== openConversationId &&
-      setOpenConversationIdAction(conversationId);
+    checkOpenConversationId(conversationId);
 
     return () => {
       console.log("!---return---!");
+
       // setMessagesChatAction([]);
       // actionsClearSelectedMessages(false);
     };
@@ -153,6 +176,7 @@ const Chat = ({ params }) => {
       </RenderInfoCenterBox>
     );
   }
+
   console.log("!---reder---!");
 
   return (
@@ -167,11 +191,9 @@ const Chat = ({ params }) => {
         <ChatContent
           typeConversation={typeConversation}
           conversationId={conversationId}
-          userId={authToken.userId}
+          loadMessages={loadMessages}
         />
         <ChatBottom
-          firstName={authToken.firstName}
-          userId={authToken.userId}
           opponentId={opponentId}
           conversationData={conversationData}
         />

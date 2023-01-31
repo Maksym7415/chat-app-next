@@ -16,6 +16,7 @@ import {
 import { TYPES_CONVERSATIONS } from "@/core/constants/general";
 import { CONTEXT_MENU_ID } from "@/core/constants/general";
 import { setContextMenuConfigAction } from "@/components/contextMenu/redux/slice";
+import { store } from "@/store/store";
 
 const stylePaper = {
   padding: "15px",
@@ -32,7 +33,8 @@ const classes = {
   wrapper: "box-border",
   wrapperUp: "flex relative",
   paperSharedMessage: "bg-[#d6f6e3]",
-  wrapperTextMessageShared: "relative px-[0px] py-[10px] pl-[10px]",
+  // wrapperTextMessageShared: "relative px-[0px] py-[10px] pl-[10px]",
+  wrapperTextMessageShared: "relative ",
   edited: "text-right text-[9px]",
   paperSenderMessage: "paper-message bg-green-500",
   paperFriendMessage: "paper-message bg-white",
@@ -50,6 +52,7 @@ const classes = {
   messageSelected: "bg-[#00C73E] p-[2px]",
   messageSelectedIcon: "w-[18px] h-[18px] text-white",
 };
+// ask - цікаво мигає коли є Divider
 
 const Message = ({
   messageData,
@@ -227,9 +230,9 @@ const Message = ({
                 </div>
               )}
             <div className={settings.classNames.wrapperMessage}>
-              {messageData.forwardedUser && (
+              {/* {messageData.forwardedUser && (
                 <Divider className={classes.divider} />
-              )}
+              )} */}
               <div>
                 {messageData.forwardedUser && (
                   <p className={classes.wrapperMessageUserName}>

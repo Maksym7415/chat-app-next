@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import shallow from "zustand/shallow";
 import { Typography, TextField, Box } from "@mui/material";
 import UserAvatar from "../../../avatar/userAvatar";
 import { PATHS } from "@/core/constants/paths";
@@ -42,7 +41,7 @@ const SharedMessage = ({ data }) => {
 
   // VARIABLES
   const conversationsFiltered = Object.values(conversationsList).filter(
-    (conversation) => conversation.conversationName.includes(searchNameChat)
+    (conversation) => conversation.conversationName.toLocaleLowerCase().includes(searchNameChat.toLocaleLowerCase())
   );
 
   // FUNCTIONS

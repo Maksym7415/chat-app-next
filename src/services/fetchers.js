@@ -18,11 +18,9 @@ const catchHandle = (error) => {
   throw new Error(error);
 };
 
-export const getFetcher = async ({ url, options, cookies }) => {
+export const getFetcher = async ({ url, options, cookies, additionalUrl }) => {
   const params = options?.params || {};
-  const additionalUrl = options?.additionalUrl
-    ? `/${options?.additionalUrl}`
-    : "";
+  const additionalUrlLoc = additionalUrl ? `/${additionalUrl}` : "";
 
   // console.log(additionalUrl, "additionalUrl");
   // console.log(params, "params");
@@ -30,7 +28,7 @@ export const getFetcher = async ({ url, options, cookies }) => {
     const accessToken = getTokenCook() || cookies?.accessToken;
     let headers = getHeaders({ token: accessToken });
 
-    const response = await API.get(url + additionalUrl, {
+    const response = await API.get(url + additionalUrlLoc, {
       params,
       headers,
     });
@@ -47,6 +45,19 @@ export const postFetcher = async ({ url, data, cookies }) => {
     let headers = getHeaders({ token: accessToken });
 
     const response = await API.post(url, data, { headers });
+
+    return response;
+  } catch (error) {
+    return catchHandle(error);
+  }
+};
+
+export const putFetcher = async ({ url, data, cookies }) => {
+  try {
+    const accessToken = getTokenCook() || cookies?.accessToken;
+    let headers = getHeaders({ token: accessToken });
+
+    const response = await API.put(url, data, { headers });
 
     return response;
   } catch (error) {

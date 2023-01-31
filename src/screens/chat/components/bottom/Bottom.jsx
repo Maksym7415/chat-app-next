@@ -4,7 +4,7 @@ import { useMemo, memo } from "react";
 import MessageInput from "./components/messageInput/MessageInput";
 import BottomToolbar from "./components/bottomToolbar";
 
-const ChatBottom = ({ firstName, userId, opponentId, conversationData }) => {
+const ChatBottom = ({ opponentId, conversationData }) => {
   // HOOKS
   const router = useRouter();
 
@@ -28,12 +28,7 @@ const ChatBottom = ({ firstName, userId, opponentId, conversationData }) => {
       );
     } else {
       return (
-        <MessageInput
-          conversationId={conversationId}
-          userId={userId}
-          firstName={firstName}
-          opponentId={opponentId}
-        />
+        <MessageInput conversationId={conversationId} opponentId={opponentId} />
       );
     }
   };

@@ -78,8 +78,11 @@ export const actionsMessagesChat = (props) => {
   const selectedMessages = store.getState().appSlice.selectedMessages;
   const openConversationId = store.getState().appSlice.openConversationId;
 
-  const { conversationId, typeAction, messageData = null } = props;
 
+  const { conversationId, typeAction, messageData = null } = props;
+  console.log(openConversationId, 'openConversationId')
+  console.log(props, 'props')
+  
   let _messages = {};
 
   let messagesMass = [];

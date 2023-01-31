@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as requests from "./requests";
 import { jwtdecode } from "../../helpers";
+import { HYDRATE } from "next-redux-wrapper";
 
 const initialAuthToken = {
   role: "",
@@ -41,10 +42,15 @@ const authSlice = createSlice({
       state.verificationCode = payload;
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(requests.postLoginRequest.fulfilled, (state, action) => {
-      state.verificationCode = action.payload.verificationCode;
-    });
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      // console.log(state, 'state')
+      // console.log(action.payload, 'action.payload.authSlice')
+      return {
+        ...state,
+        ...action.payload.authSlice,
+      };
+    },
   },
 });
 

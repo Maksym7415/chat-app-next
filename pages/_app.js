@@ -7,8 +7,11 @@ import {
 } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Providers from "@/providers/MainProvider";
-
+import { wrapper } from "@/store/store";
+import { useStore } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 import "../styles/globals.css";
+import { Provider } from "react-redux";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,19 +31,14 @@ export const queryClient = new QueryClient({
   }),
 });
 
-export default function App({ Component, pageProps }) {
-  // const queryClient = React.useRef(
-  //   new QueryClient({
-  //     defaultOptions: {
-  //       queries: {
-  //         refetchOnWindowFocus: false,
-  //       },
-  //     },
-  //   })
-  // );
+function App({ Component, ...rest }) {
+  // const store = useStore((state) => state);
+
+  // const { store, props } = wrapper.useWrappedStore(rest);
+  const { pageProps } = rest;
 
   return (
-    // <Provider createStore={createStore}>
+    // <Provider createStore={store}>
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
         <Providers Component={Component}>
@@ -52,3 +50,5 @@ export default function App({ Component, pageProps }) {
     // </Provider>
   );
 }
+// export default App;
+export default wrapper.withRedux(App);

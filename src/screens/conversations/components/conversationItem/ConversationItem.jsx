@@ -1,5 +1,3 @@
-"use client";
-
 import { useMemo, memo } from "react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
@@ -10,13 +8,15 @@ import UserAvatar from "@/components/avatar/userAvatar";
 import SvgMaker from "@/components/svgMaker";
 import { PATHS } from "@/core/constants/paths";
 import { CONTEXT_MENU_ID } from "@/core/constants/general";
-import { getCurrentDay } from "@/helpers/index";
 import languages from "@/core/translations";
+import { getCurrentDay } from "@/helpers/index";
 import {
   actionsSelectedConversation,
   actionsTypeActionsConversation,
 } from "@/actions/index";
 import { setContextMenuConfigAction } from "@/components/contextMenu/redux/slice";
+import { setOpenChatDataAction } from "@/store/app/slice";
+import { setLoadingSearchContacts } from "@/store/search/slice";
 
 // STYLES
 const classes = {
@@ -62,6 +62,8 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
 
   const handleClickChatItem = (id) => {
     if (+paramsId === id) return;
+
+    // dispatch(setLoadingSearchContacts(true));
     router.push(`${PATHS.chat}/${id}`);
   };
 

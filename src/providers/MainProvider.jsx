@@ -13,6 +13,7 @@ import { SnackbarUtilsConfigurator } from "@/helpers/notistack";
 import HeadProvider from "./HeadProvider/HeadProvider";
 import { store } from "@/store/store";
 import { Provider } from "react-redux";
+import { wrapper, fetchSystem } from "@/store/store";
 
 const cache = createCache({
   key: "css",
@@ -26,23 +27,23 @@ const MainProvider = ({ children, Component }) => {
     // <Theme>
 
     <HeadProvider>
-      <Provider store={store}>
-        <AuthProvider Component={Component}>
-          <SnackbarProvider maxSnack={3}>
-            <SnackbarUtilsConfigurator />
-            <DrawerCustom />
-            <ContextMenu />
-            <ModalCustom />
-            <DialogCustom />
-            <CssBaseline />
-            {children}
-          </SnackbarProvider>
-        </AuthProvider>
-      </Provider>
+      {/* <Provider store={store}> */}
+      <AuthProvider Component={Component}>
+        <SnackbarProvider maxSnack={3}>
+          <SnackbarUtilsConfigurator />
+          <DrawerCustom />
+          <ContextMenu />
+          <ModalCustom />
+          <DialogCustom />
+          <CssBaseline />
+          {children}
+        </SnackbarProvider>
+      </AuthProvider>
+      {/* </Provider> */}
     </HeadProvider>
 
     // </Theme>
   );
 };
 
-export default MainProvider;
+export default wrapper.withRedux(MainProvider);

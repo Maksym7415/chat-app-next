@@ -1,5 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import appSlice from "./app/slice";
+import systemSlice from "./system/slice";
 import authSlice from "./auth/slice";
 import settingSlice from "./setting/slice";
 import conversationsSlice from "./conversations/slice";
@@ -12,6 +13,7 @@ import contextMenuSlice from "../components/contextMenu/redux/slice";
 import dialogWindowSlice from "../components/dialogWindow/redux/slice";
 
 export const reducers = {
+  systemSlice,
   appSlice,
   authSlice,
   settingSlice,
@@ -25,4 +27,7 @@ export const reducers = {
   contextMenuSlice,
   dialogWindowSlice,
   //
+  systemSlice,
 };
+
+

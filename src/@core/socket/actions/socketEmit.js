@@ -105,7 +105,6 @@ export const socketEmitSendMessage = ({
   const { userId } = store.getState().authSlice.authToken;
   const messageEdit = store.getState().appSlice.messageEdit;
 
-  console.log(userId, "userId");
   const body = {
     conversationId: +id,
     message: messageSend,

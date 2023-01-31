@@ -23,18 +23,13 @@ const initialState = {
 const userSlice = createSlice({
   name: "userSlice",
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(
-      requests.getUserProfileDataRequest.fulfilled,
-      (state, action) => {
-        state.userInfo = action.payload;
-      }
-    );
-    builder.addCase(requests.getUserAvatars.fulfilled, (state, action) => {
-      state.avatars = action.payload;
-    });
+  reducers: {
+    setUserInfoAction(state, { payload }) {
+      state.userInfo = payload;
+    },
   },
 });
+
+export const { setUserInfoAction } = userSlice.actions;
 
 export default userSlice.reducer;

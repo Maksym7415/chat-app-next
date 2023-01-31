@@ -6,10 +6,7 @@ import languages from "@/core/translations";
 import { setMessageDate, uuid, getMessagesWithSendDate } from "@/helpers/index";
 import Message from "./components/message";
 import { Virtuoso } from "react-virtuoso";
-import { ConversationsService } from "@/services/conversations/conversations.service";
-import { setAllMessagesAction, setMessagesChatAction } from "@/store/app/slice";
-
-const LOAD_MESSAGE_OFFSET = 15;
+import { setMessagesChatAction } from "@/store/app/slice";
 
 let prevChatId = -1;
 
@@ -21,7 +18,7 @@ const classes = {
     "max-w-[125px] w-full flex justify-center px-[7px] py-[1px] text-[#fffefeb5] rounded-[10px] overflow-hidden bg-[rgba(0, 0, 0, 0.4)]",
 };
 
-const MainContent = ({ userId, conversationId, typeConversation }) => {
+const MainContent = ({ conversationId, typeConversation, loadMessages }) => {
   const dispatch = useDispatch();
 
   // SELECTORS
@@ -30,6 +27,8 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
     ({ conversationsSlice }) => conversationsSlice.userHistoryConversations
   );
   const messages = useSelector(({ appSlice }) => appSlice.messagesChat);
+  const authToken = useSelector(({ authSlice }) => authSlice.authToken);
+  const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
   // VARIABLES
   const pagination =
@@ -38,49 +37,33 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
   // STATES
   const [firstItemIndex, setFirstItemIndex] = useState(0);
 
-  // FUNCTIONS
-  const loadMessages = (isOffset, cb) => {
-    const data = {
-      id: conversationId,
-    };
-
-    if (isOffset) {
-      data.offset = pagination.currentPage + LOAD_MESSAGE_OFFSET;
-    }
-
-    ConversationsService.getConversationMessages({
-      data,
-      cb: (response) => {
-        dispatch(
-          setAllMessagesAction({
-            [conversationId]: [...response.data, ...messages],
-          })
-        );
-
-        cb && cb(getMessagesWithSendDate(response.data).messages);
-      },
-    });
-  };
+  console.log(messages, "messages MainContent");
+  console.log(lang, "lang MainContent");
 
   const prependItems = useCallback(() => {
     if (
       pagination.allItems > messages.filter((item) => !item?.component).length
     ) {
-      loadMessages(true, (newMessages) => {
-        const nextFirstItemIndex = firstItemIndex - newMessages.length;
-        setFirstItemIndex(() => nextFirstItemIndex);
-        dispatch(setMessagesChatAction([...newMessages, ...messages]));
-      });
+      loadMessages(
+        true,
+        (newMessages) => {
+          const nextFirstItemIndex = firstItemIndex - newMessages.length;
+          setFirstItemIndex(() => nextFirstItemIndex);
+          dispatch(setMessagesChatAction([...newMessages, ...messages]));
+        },
+        pagination,
+        messages
+      );
     }
 
     return false;
   }, [firstItemIndex, messages, pagination]);
 
-  // USEEFFECTS
+  // USEEFFECTS;
   useEffect(() => {
     if (
       prevChatId !== conversationId &&
-      messages?.length &&
+      // messages?.length &&
       pagination.allItems
     ) {
       setFirstItemIndex(pagination.allItems);
@@ -89,39 +72,38 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
     }
   }, [pagination]);
 
-  // RENDER
-  const rowItem = (index, messageData) => {
-    let isShowAvatar = false;
-    if (messageData?.fkSenderId !== userId) {
-      isShowAvatar = true;
-    }
-    if (messageData?.component) {
+  // RENDER;
+  const rowItem = useCallback(
+    (index, messageData) => {
+      let isShowAvatar = false;
+      if (messageData?.fkSenderId !== authToken.userId) {
+        isShowAvatar = true;
+      }
+      if (messageData?.component) {
+        return (
+          <div className={classes.wrapperSendData} key={uuid()}>
+            <p className={classes.sendDataText}>
+              {setMessageDate(new Date(messageData.sendDate))}
+            </p>
+          </div>
+        );
+      }
+
       return (
-        <div className={classes.wrapperSendData} key={uuid()}>
-          <p className={classes.sendDataText}>
-            {setMessageDate(new Date(messageData.sendDate))}
-          </p>
-        </div>
+        <Message
+          key={uuid()}
+          conversationId={conversationId}
+          isShowAvatar={isShowAvatar}
+          messageData={messageData}
+          userId={authToken.userId}
+          typeConversation={typeConversation}
+          index={index}
+        />
       );
-    }
+    },
+    [conversationId, authToken]
+  );
 
-    return (
-      <Message
-        key={uuid()}
-        conversationId={conversationId}
-        isShowAvatar={isShowAvatar}
-        messageData={messageData}
-        userId={userId}
-        typeConversation={typeConversation}
-        index={index}
-      />
-    );
-  };
-
-  // console.log(prevChatId, "prevChatId");
-  // console.log(conversationId, "conversationId");
-  // console.log(userHistoryConversations, "userHistoryConversations");
-  // console.log(pagination, "pagination");
   if (prevChatId !== conversationId && conversationId !== null) {
     return <div className={classes.wrapperMessages}></div>;
   }
@@ -164,3 +146,21 @@ const MainContent = ({ userId, conversationId, typeConversation }) => {
 };
 
 export default memo(MainContent);
+
+{
+  /* return (
+  <Virtuoso
+    firstItemIndex={firstItemIndex}
+    initialTopMostItemIndex={messages?.length - 1}
+    data={messages}
+    startReached={prependItems}
+    itemContent={rowItem}
+  />
+); */
+}
+
+{
+  /* return messages.map((item, index) => {
+  return rowItem(index, item);
+}); */
+}
