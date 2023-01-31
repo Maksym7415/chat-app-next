@@ -7,7 +7,8 @@ import { IS_CLIENT } from "@/core/constants/general";
 
 const parseErrorCode = (error) => {
   console.log(error, "error");
-  if (error.response) {
+  if (error?.response) {
+    console.log(error, "error.response");
     // console.log(error.response, "error.response");
     if (error.response?._response) {
       alert(error.response?._response);
@@ -32,14 +33,19 @@ const parseErrorCode = (error) => {
     // error something
   }
 
-  if (error.response) {
+  console.log(error, "error---!!");
+
+  if (error?.response) {
     return Promise.reject(error.response);
   }
 
-  consol.log(error, "error");
-
   if (IS_CLIENT) {
     Snackbar.error(error.message);
+    return Promise.reject({
+      data: {
+        message: error.message,
+      },
+    });
   } else {
     return Promise.reject({
       data: {

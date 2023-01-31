@@ -75,14 +75,6 @@ const NewChat = () => {
         settings={{
           isMulti: true,
           getSearchRequest: async (searchQuery, page) => {
-            // const response = await dispatch(
-            //   getSearchContactFetcher({
-            //     params: {
-            //       searchRequest: searchQuery,
-            //       offset: page !== 1 ? (page - 1) * 10 : 0,
-            //     },
-            //   })
-            // );
             const params = {};
 
             const searchParams = searchQuery || "";
@@ -95,17 +87,26 @@ const NewChat = () => {
               params.offset = offsetParams;
             }
 
-            const response = await queryClient.fetchQuery({
-              queryKey: [`get_${pathBackSearch.searchContact}`, params],
-              type: "active",
-              queryFn: async () =>
-                await getFetcher({
-                  url: pathBackSearch.searchContact,
-                  options: { params },
-                }),
-            });
+            let response = {
+              data: {
+                response: [],
+                limit: 0,
+              },
+            };
 
-            console.log(response, "response");
+            try {
+              response = await queryClient.fetchQuery({
+                queryKey: [`get_${pathBackSearch.searchContact}`, params],
+                type: "active",
+                queryFn: async () =>
+                  await getFetcher({
+                    url: pathBackSearch.searchContact,
+                    options: { params },
+                  }),
+                retry: 0,
+              });
+            } catch (error) {}
+
             return {
               options: response?.data?.response || [],
               limit: response?.data?.limit || 0,

@@ -1,5 +1,3 @@
-"use client";
-
 import { AsyncPaginate } from "react-select-async-paginate";
 
 const customStylesSelect = (styles) => ({
@@ -23,14 +21,6 @@ const customStylesSelect = (styles) => ({
   },
 });
 
-// getSearchRequest = async (searchQuery, page) => {
-//   const response = await getSearchRequest(searchQuery, page);
-//     return {
-//       options: response.payload.results,
-//       count: response.payload.count,
-//     }
-// }
-
 function SelectsAsyncPaginateSearch({
   setSelected,
   selected,
@@ -40,26 +30,41 @@ function SelectsAsyncPaginateSearch({
 }) {
   // FUNCTIONS
   const loadOptions = async (searchQuery, loadedOptions, { page }) => {
-    const payload = await settings.getSearchRequest(searchQuery, page);
-    const count = payload?.count || payload?.limit;
-
-    if (!payload?.options || !count) return;
-
-    let hasMore = false;
-
-    if (payload?.limit) {
-      hasMore = loadedOptions.length + payload.options.length >= payload.limit;
-    } else {
-      hasMore = loadedOptions.length + payload.options.length < payload?.count;
-    }
-
-    return {
-      options: payload.options || [],
-      hasMore,
+    const returnData = {
+      options: [],
+      hasMore: false,
       additional: {
-        page: page + 1,
+        page,
       },
     };
+
+    try {
+      const payload = await settings.getSearchRequest(searchQuery, page);
+      const count = payload?.count || payload?.limit;
+
+      if (!payload?.options || !count) return returnData;
+
+      let hasMore = false;
+
+      if (payload?.limit) {
+        hasMore =
+          loadedOptions.length + payload.options.length >= payload.limit;
+      } else {
+        hasMore =
+          loadedOptions.length + payload.options.length < payload?.count;
+      }
+
+      return {
+        ...returnData,
+        options: payload.options || [],
+        hasMore,
+        additional: {
+          page: page + 1,
+        },
+      };
+    } catch (error) {
+      return returnData;
+    }
   };
 
   let settingsAsyncPaginate = {};

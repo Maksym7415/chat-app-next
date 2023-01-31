@@ -18,7 +18,7 @@ const classes = {
   closeIconButton: "w-[30px] h-[30px]",
   titleContainer: "w-full flex justify-between",
   title: "text-[1.3rem] block",
-  dialogContent: "w-[400px] h-full relative p-[0px]",
+  dialogContent: "w-[400px] h-full relative p-[0px] overflow-visible",
 };
 const DialogComponent = () => {
   // HOOKS
