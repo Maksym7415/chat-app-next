@@ -20,3 +20,4 @@ export { getMessagesWithSendDate } from "./getMessagesWithSendDate";
 export { setStateDirection } from "./setStateDirection";
 // string
 export { onlyText } from "./string/clearText";
+export { parseStringJSON } from "./string/parseStringJSON";

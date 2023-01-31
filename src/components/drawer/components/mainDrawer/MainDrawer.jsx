@@ -19,7 +19,7 @@ import {
 const classes = {
   list: "",
   wrapperLangs: "p-[15px]",
-  listItem: "w-full",
+  listItem: "w-full cursor-pointer",
 };
 
 function MainDrawer({ closeDrawer }) {
@@ -73,7 +73,7 @@ function MainDrawer({ closeDrawer }) {
         }, 100);
         return;
       case "logout":
-        dispatch(actionLogOut());
+        actionLogOut();
         router.push(PATHS.signIn);
         return;
       default:

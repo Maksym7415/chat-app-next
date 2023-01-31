@@ -34,6 +34,7 @@ export default function SignInClientPage() {
       router.push(PATHS.verification);
     },
     errorCb: (dataError) => {
+      console.log(dataError, "dataError");
       dataError?.message && setErrorBack(dataError?.message);
     },
   });

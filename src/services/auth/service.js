@@ -10,6 +10,7 @@ import {
   setVerificationCodeAction,
 } from "@/store/auth/slice";
 import Snackbar from "@/helpers/notistack";
+import { parseStringJSON } from "@/helpers/index";
 
 export const PostLoginQuery = (options) => {
   const queryData = useMutation({
@@ -29,7 +30,9 @@ export const PostLoginQuery = (options) => {
         options.cb && options.cb(response?.data);
       }
     },
-    onError(error) {
+    onError(errorRes) {
+      const error = parseStringJSON(errorRes?.message);
+
       error?.message && Snackbar.error(error?.message);
 
       options.errorCb && options.errorCb(error?.data);
@@ -59,7 +62,9 @@ export const PostVerificationQuery = (options) => {
         options.cb && options.cb(response?.data);
       }
     },
-    onError(error) {
+    onError(errorRes) {
+      const error = parseStringJSON(errorRes?.message);
+
       options.errorCb && options.errorCb(error?.data);
     },
   });
@@ -86,7 +91,9 @@ export const PostSingUpQuery = (options) => {
         });
       }
     },
-    onError(error) {
+    onError(errorRes) {
+      const error = parseStringJSON(errorRes?.message);
+
       options.errorCb && options.errorCb(error?.data);
     },
   });

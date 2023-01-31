@@ -27,6 +27,7 @@ export const queryClient = new QueryClient({
       if (query.state.data !== undefined) {
         // toast.error(`Something went wrong: ${error.message}`)
       }
+      console.dir(error, "queryClient");
     },
   }),
 });

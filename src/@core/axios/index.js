@@ -36,6 +36,8 @@ const parseErrorCode = (error) => {
     return Promise.reject(error.response);
   }
 
+  consol.log(error, "error");
+
   if (IS_CLIENT) {
     Snackbar.error(error.message);
   } else {

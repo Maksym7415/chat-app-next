@@ -1,10 +1,11 @@
 import { removeTokenCook } from "@/core/cookiesStorage";
 import { setLangAction } from "@/store/setting/slice";
 import { authTokenAction, setAuthHeadersAction } from "@/store/auth/slice";
+import { store } from "@/store/store";
 
 export const actionLogOut = () => {
-  dispatch(setLangAction("en"));
-  dispatch(authTokenAction(null));
-  dispatch(setAuthHeadersAction({ accessToken: "" }));
   removeTokenCook();
+  store.dispatch(setLangAction("en"));
+  store.dispatch(authTokenAction(null));
+  store.dispatch(setAuthHeadersAction({ accessToken: "" }));
 };
