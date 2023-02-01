@@ -7,10 +7,7 @@ import ChatContent from "./components/mainContent";
 import RenderInfoCenterBox from "../../components/renders/renderInfoCenterBox";
 import { getMessagesWithSendDate } from "@/helpers/index";
 import { actionsClearSelectedMessages } from "@/actions/index";
-import Meta from "@/core/seo/Meta";
-import { ConversationsService } from "@/services/conversations/conversations.service";
 import { GetConversationMessagesQuery } from "@/services/conversations/service";
-import { getConversationMessagesRequest } from "@/store/conversations/requests";
 import {
   setAllMessagesAction,
   setMessagesChatAction,
@@ -24,8 +21,6 @@ const classes = {
   container: "flex flex-col h-screen w-full relative ",
   errorBackText: "text-[28px] font-medium ",
 };
-
-const isServerSide = typeof window === "undefined";
 
 // в консолі вискакує помилка якась якщо забрати у функції cbInitialMessages  dispatch то посмилки немає
 const checkOpenConversationId = (conversationId) => {
@@ -112,6 +107,8 @@ const Chat = ({ params }) => {
       //     cbInitialMessages(response, conversationId);
       //   }
       // }
+
+      console.log(response, "response");
 
       optionsMessages.cb && optionsMessages.cb(response, conversationId);
       errorBack && setErrorBack("");

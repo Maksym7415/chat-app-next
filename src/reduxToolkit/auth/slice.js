@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import * as requests from "./requests";
 import { jwtdecode } from "../../helpers";
 import { HYDRATE } from "next-redux-wrapper";
 

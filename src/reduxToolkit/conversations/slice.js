@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import * as requests from "./requests";
-import { HYDRATE } from "next-redux-wrapper";
 
 const initialState = {
   conversationMessages: {

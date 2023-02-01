@@ -11,7 +11,7 @@ export const actionsPhoto = [
   },
   {
     id: 2,
-    title: "set main Photo",
+    title: "Set main Photo",
     icon: <CheckCircleIcon />,
     value: "setMainPhoto",
   },

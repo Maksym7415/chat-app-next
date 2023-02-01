@@ -8,7 +8,10 @@ import * as config from "./config";
 import Avatars from "./components/avatars";
 import TextInputCustom from "../../../hookFormsComponents/textInput";
 import CustomButton from "../../../buttons/customButton";
-import { UserService } from "@/services/user/user.service";
+import {
+  PutUpdateProfileDataQuery,
+  getFetchUserProfileDataQuery,
+} from "@/services/user/service";
 
 // STYLES
 const classes = {
@@ -38,6 +41,17 @@ const SettingProfile = ({ closeDrawer }) => {
     defaultValues: {},
   });
 
+  const { mutate, isLoading } = PutUpdateProfileDataQuery({
+    cb: async () => {
+      await getFetchUserProfileDataQuery();
+      enqueueSnackbar("Success update info", { variant: "success" });
+      errorBack && setErrorBack("");
+    },
+    errorCb: (error) => {
+      enqueueSnackbar(error.message, { variant: "error" });
+    },
+  });
+
   // FUNCTIONS
   const onSubmit = (data) => {
     const sendData = {};
@@ -49,18 +63,7 @@ const SettingProfile = ({ closeDrawer }) => {
       sendData.lastName = data.lastName;
     }
 
-    UserService.putUpdateProfile({
-      data: sendData,
-      cb: () => {
-        enqueueSnackbar("Success update info", { variant: "success" });
-        UserService.getUserProfileData();
-      },
-      errorCb: (error) => {
-        enqueueSnackbar(error.message, { variant: "error" });
-      },
-    });
-
-    errorBack && setErrorBack("");
+    Object.keys(sendData).length && mutate({ data: sendData });
   };
 
   // USEEFFECTS
@@ -78,35 +81,38 @@ const SettingProfile = ({ closeDrawer }) => {
     <div className={classes.container}>
       <h1 className={classes.title}>Profile</h1>
       <Avatars />
-      {config.fieldsEditName.map((el, key) => (
-        <Controller
-          key={key}
-          control={control}
-          rules={el.validate}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInputCustom
-              onChangeText={onChange}
-              value={value}
-              error={errors[el.fieldName]}
-              placeholder={el.placeholder}
-              secureTextEntry={false}
-              styles={el.styles}
-            />
-          )}
-          name={el.fieldName}
-        />
-      ))}
-      <div className={classes.wrapperBtn}>
-        <CustomButton
-          onClick={handleSubmit(onSubmit)}
-          style={{
-            width: "100%",
-            maxWidth: "200px",
-          }}
-        >
-          {"Submit"}
-        </CustomButton>
-      </div>
+      <form>
+        {config.fieldsEditName.map((el, key) => (
+          <Controller
+            key={key}
+            control={control}
+            rules={el.validate}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInputCustom
+                onChangeText={onChange}
+                value={value}
+                error={errors[el.fieldName]}
+                placeholder={el.placeholder}
+                secureTextEntry={false}
+                styles={el.styles}
+              />
+            )}
+            name={el.fieldName}
+          />
+        ))}
+        <div className={classes.wrapperBtn}>
+          <CustomButton
+            onClick={handleSubmit(onSubmit)}
+            style={{
+              width: "100%",
+              maxWidth: "200px",
+            }}
+            disabled={isLoading}
+          >
+            {"Submit"}
+          </CustomButton>
+        </div>
+      </form>
     </div>
   );
 };

@@ -11,6 +11,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import NewChat from "./components/newChat";
 import ShareMessage from "./components/shareMessage";
 import { setDialogWindowClearConfigAction } from "./redux/slice";
+import { useState } from "react";
+import { useEffect } from "react";
 
 // STYLES
 const classes = {
@@ -20,6 +22,9 @@ const classes = {
   title: "text-[1.3rem] block",
   dialogContent: "w-[400px] h-full relative p-[0px] overflow-visible",
 };
+
+const transitionDuration = 700;
+
 const DialogComponent = () => {
   // HOOKS
   const dispatch = useDispatch();
@@ -29,8 +34,17 @@ const DialogComponent = () => {
     ({ dialogWindowSlice }) => dialogWindowSlice.dialogConfig
   );
 
+  const [open, setOpen] = useState(false)
+
   // FUNCTIONS
-  const handleClose = () => dispatch(setDialogWindowClearConfigAction());
+  const handleClose = () => {
+    setOpen(false)
+
+    const closeDialogTime = setTimeout(() => {
+      dispatch(setDialogWindowClearConfigAction());
+      clearTimeout(closeDialogTime)
+    }, transitionDuration);
+  }
 
   const Content = () => {
     switch (dialogConfig.typeContent) {
@@ -43,15 +57,23 @@ const DialogComponent = () => {
     }
   };
 
+  useEffect(()=> {
+    if(dialogConfig.open !== open) {
+      setOpen(dialogConfig.open)
+    }
+  }, [dialogConfig.open])
+
+
   return (
     <Dialog
       onClose={handleClose}
-      open={dialogConfig.open}
+      open={open}
       PaperProps={{
         style: {
           overflow: "unset",
         },
       }}
+      transitionDuration={transitionDuration}
     >
       <DialogTitle className={classes.titleContainer}>
         <Typography className={classes.title}>{dialogConfig.title}</Typography>

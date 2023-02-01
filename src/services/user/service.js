@@ -1,31 +1,33 @@
 import { useQuery, useMutation } from "react-query";
 import { pathBackUser } from "@/core/constants/urlBack";
-import { getFetcher, putFetcher } from "../fetchers";
 import { store } from "@/store/store";
-import { setUserInfoAction } from "@/store/user/slice";
+import { setUserInfoAction, seUserAvatarsAction } from "@/store/user/slice";
 import { setLangAction } from "@/store/setting/slice";
 import { queryClient } from "@/pages/_app";
+import { standardOnError, standardOnSuccess } from "@/services/helpers";
+import { userKeysQuery } from "@/services/keysQuery";
+import { fetchers } from "@/services/fetchers";
 
 export const GetUserProfileDataQuery = (options) => {
+  const onSuccessSetData = (response) => {
+    response.data?.lang && store.dispatch(setLangAction(response.data?.lang));
+    store.dispatch(setUserInfoAction(response.data));
+  };
+
   const queryData = useQuery({
-    queryKey: [`get_${pathBackUser.getUserProfileData}`],
+    queryKey: [userKeysQuery.getUserProfileData],
     queryFn: async () =>
-      await getFetcher({
+      await fetchers({
+        method: "get",
         url: pathBackUser.getUserProfileData,
       }),
-    retry: 0,
     staleTime: Infinity,
     onSuccess(response) {
-      console.log(response, "response");
-      response.data?.lang && store.dispatch(setLangAction(response.data?.lang));
-      store.dispatch(setUserInfoAction(response.data));
+      onSuccessSetData(response);
+      standardOnSuccess({ response, options });
     },
-    onError(error) {
-      options?.errorCb && options.errorCb(error.data);
-
-      console.dir(error, "onError dir");
-
-      return error;
+    onError(errorRes) {
+      standardOnError({ error: errorRes, options });
     },
   });
 
@@ -33,45 +35,119 @@ export const GetUserProfileDataQuery = (options) => {
     queryData.data &&
     JSON.stringify(store.getState().userSlice.userInfo?.id) === "0"
   ) {
-    queryData.data?.lang && store.dispatch(setLangAction(queryData.data?.lang));
-
-    store.dispatch(setUserInfoAction(queryData.data));
+    onSuccessSetData(queryData);
   }
 
   return queryData;
 };
 
+export const GetUserAvatarsQuery = (options) => {
+  const queryData = useQuery({
+    queryKey: [userKeysQuery.getAvatars],
+    queryFn: async () => {
+      return await fetchers({
+        method: "get",
+        url: pathBackUser.getAvatars,
+      });
+    },
+    staleTime: Infinity,
+    onSuccess(response) {
+      store.dispatch(seUserAvatarsAction(response.data));
+
+      standardOnSuccess({ response, options });
+    },
+    onError(errorRes) {
+      standardOnError({ error: errorRes, options });
+    },
+  });
+
+  return queryData;
+};
+
+export const PutUpdateProfileDataQuery = (options) => {
+  const queryData = useMutation({
+    mutationKey: [userKeysQuery.updateProfile],
+    mutationFn: async ({ data }) =>
+      await fetchers({
+        method: "put",
+        url: pathBackUser.updateProfile,
+        data,
+      }),
+    onSuccess(response) {
+      standardOnSuccess({ response, options });
+    },
+    onError(errorRes) {
+      standardOnError({ error: errorRes, options });
+    },
+  });
+
+  return queryData;
+};
+
+export const PutMainPhotoQuery = (options) => {
+  const queryData = useMutation({
+    mutationKey: [userKeysQuery.setMainPhoto, options.params],
+    mutationFn: async () => {
+      return await fetchers({
+        method: "put",
+        url: pathBackUser.setMainPhoto,
+        additionalUrl: options?.additionalUrl,
+      });
+    },
+    onSuccess(response) {
+      standardOnSuccess({ response, options });
+    },
+    onError(errorRes) {
+      standardOnError({ error: errorRes, options });
+    },
+  });
+
+  return queryData;
+};
+
+export const DeleteAvatarQuery = (options) => {
+  const params = options.params || {};
+  const queryData = useMutation({
+    mutationKey: [userKeysQuery.deleteAvatar, params],
+    mutationFn: async () => {
+      return await fetchers({
+        method: "delete",
+        url: pathBackUser.deleteAvatar,
+        params,
+      });
+    },
+    onSuccess(response) {
+      standardOnSuccess({ response, options });
+    },
+    onError(errorRes) {
+      standardOnError({ error: errorRes, options });
+    },
+  });
+
+  return queryData;
+};
+
+// fetchQuery
 export const getFetchUserProfileDataQuery = async () => {
   return await queryClient.fetchQuery({
-    queryKey: [`get_${pathBackUser.getUserProfileData}`],
+    queryKey: [userKeysQuery.getUserProfileData],
     queryFn: async () =>
-      await getFetcher({
+      await fetchers({
+        method: "get",
         url: pathBackUser.getUserProfileData,
       }),
     type: "active",
   });
 };
 
-export const PutUpdateProfileDataQuery = (options) => {
-  const queryData = useMutation({
-    mutationKey: [`get_${pathBackUser.updateProfile}`],
-    mutationFn: async ({ data }) => {
-      // store.dispatch(setLoginSingInAction(data.login));
-
-      return await putFetcher({ url: pathBackUser.updateProfile, data });
-    },
-    retry: 0,
-    onSuccess(response) {
-      options.cb && options.cb(response?.data);
-    },
-    onError(error) {
-      options?.errorCb && options.errorCb(error.data);
-
-      console.dir(error, "onError dir");
-
-      return error;
-    },
+export const getUserAvatarsQuery = async () => {
+  return await queryClient.fetchQuery({
+    queryKey: [userKeysQuery.getAvatars],
+    queryFn: async () =>
+      await fetchers({
+        method: "get",
+        url: pathBackUser.getAvatars,
+      }),
+    type: "active",
   });
-
-  return queryData;
 };

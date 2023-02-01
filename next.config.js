@@ -9,6 +9,7 @@ const nextConfig = {
         pathname: "/demos/images/**",
       },
     ],
+    domains: ["localhost"],
   },
   // experimental: {
   //   appDir: true,

@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import { postFetcher } from "../fetchers";
+import { fetchers } from "../fetchers";
 import { pathBackAuth } from "@/core/constants/urlBack";
 import { setTokenCook } from "@/core/cookiesStorage";
 import { store } from "@/store/store";
@@ -9,33 +9,32 @@ import {
   setAuthHeadersAction,
   setVerificationCodeAction,
 } from "@/store/auth/slice";
-import Snackbar from "@/helpers/notistack";
-import { parseStringJSON } from "@/helpers/index";
+import { standardOnError, standardOnSuccess } from "@/services/helpers";
+import { authKeysQuery } from "@/services/keysQuery";
 
 export const PostLoginQuery = (options) => {
   const queryData = useMutation({
-    mutationKey: [`post_${pathBackAuth.signIn}`],
+    mutationKey: [authKeysQuery.signIn],
     mutationFn: async ({ data }) => {
       store.dispatch(setLoginSingInAction(data.login));
 
-      return await postFetcher({ url: pathBackAuth.signIn, data });
+      return await fetchers({
+        method: "post",
+        url: pathBackAuth.signIn,
+        data,
+      });
     },
-    retry: 0,
     onSuccess(response) {
+      standardOnSuccess({ response, options });
+
       if (response?.data) {
         store.dispatch(
           setVerificationCodeAction(response.data.verificationCode)
         );
-
-        options.cb && options.cb(response?.data);
       }
     },
     onError(errorRes) {
-      const error = parseStringJSON(errorRes?.message);
-
-      error?.message && Snackbar.error(error?.message);
-
-      options.errorCb && options.errorCb(error?.data);
+      standardOnError({ error: errorRes, options });
     },
   });
 
@@ -44,11 +43,16 @@ export const PostLoginQuery = (options) => {
 
 export const PostVerificationQuery = (options) => {
   const queryData = useMutation({
-    mutationKey: [`post_${pathBackAuth.checkVerificationCode}`],
+    mutationKey: [authKeysQuery.checkVerificationCode],
     mutationFn: async ({ data }) =>
-      await postFetcher({ url: pathBackAuth.checkVerificationCode, data }),
-    retry: 0,
+      await fetchers({
+        method: "post",
+        url: pathBackAuth.checkVerificationCode,
+        data,
+      }),
     onSuccess(response) {
+      standardOnSuccess({ response, options });
+
       if (response?.data) {
         setTokenCook(response.data.accessToken);
 
@@ -58,14 +62,10 @@ export const PostVerificationQuery = (options) => {
             token: response.data.accessToken,
           })
         );
-
-        options.cb && options.cb(response?.data);
       }
     },
     onError(errorRes) {
-      const error = parseStringJSON(errorRes?.message);
-
-      options.errorCb && options.errorCb(error?.data);
+      standardOnError({ error: errorRes, options });
     },
   });
 
@@ -78,10 +78,9 @@ export const PostSingUpQuery = (options) => {
   });
 
   const queryData = useMutation({
-    mutationKey: [`post_${pathBackAuth.signUp}`],
+    mutationKey: [authKeysQuery.signUp],
     mutationFn: async ({ data }) =>
-      await postFetcher({ url: pathBackAuth.signUp, data }),
-    retry: 0,
+      await fetchers({ method: "post", url: pathBackAuth.signUp, data }),
     onSuccess(response) {
       if (response?.data) {
         queryDataPostLogin.mutate({
@@ -92,9 +91,7 @@ export const PostSingUpQuery = (options) => {
       }
     },
     onError(errorRes) {
-      const error = parseStringJSON(errorRes?.message);
-
-      options.errorCb && options.errorCb(error?.data);
+      standardOnError({ error: errorRes, options });
     },
   });
 

@@ -1,6 +1,18 @@
 import { getTokenCook } from "@/core/cookiesStorage/index";
 import API from "@/core/axios/index";
 import { IS_CLIENT } from "@/core/constants/general";
+import Snackbar from "@/helpers/notistack";
+import { delay } from "@/helpers/tests/";
+
+const methodsRequestWithData = [
+  "post",
+  "put",
+  "patch",
+  "postForm",
+  "putForm",
+  "patchForm",
+];
+const methodsRequestWithoutData = ["options", "head", "delete", "get"];
 
 const getHeaders = ({ token }) => {
   let headers = {};
@@ -18,46 +30,53 @@ const catchHandle = (error) => {
   throw new Error(error);
 };
 
-export const getFetcher = async ({ url, options, cookies, additionalUrl }) => {
-  const params = options?.params || {};
-  const additionalUrlLoc = additionalUrl ? `/${additionalUrl}` : "";
-
-  // console.log(additionalUrl, "additionalUrl");
-  // console.log(params, "params");
-  try {
-    const accessToken = getTokenCook() || cookies?.accessToken;
-    let headers = getHeaders({ token: accessToken });
-
-    const response = await API.get(url + additionalUrlLoc, {
-      params,
-      headers,
-    });
-    // console.log(response, "response");
-    return response;
-  } catch (error) {
-    return catchHandle(error);
+export const fetchers = async ({
+  url,
+  data = {},
+  cookies,
+  method = "",
+  additionalUrl,
+  params = {},
+}) => {
+  if (
+    ![...methodsRequestWithData, ...methodsRequestWithoutData].includes(
+      method?.toLocaleLowerCase()
+    ) &&
+    IS_CLIENT
+  ) {
+    !method
+      ? Snackbar.error("Невказано method запиту")
+      : Snackbar.error("Невірно вказано method запиту");
+    return null;
   }
-};
 
-export const postFetcher = async ({ url, data, cookies }) => {
   try {
     const accessToken = getTokenCook() || cookies?.accessToken;
+
     let headers = getHeaders({ token: accessToken });
 
-    const response = await API.post(url, data, { headers });
+    const additionalUrlLoc = additionalUrl ? `/${additionalUrl}` : "";
 
-    return response;
-  } catch (error) {
-    return catchHandle(error);
-  }
-};
+    const requestOptions = {
+      url: url + additionalUrlLoc,
+      data: data,
+      config: {
+        headers,
+        params,
+      },
+    };
 
-export const putFetcher = async ({ url, data, cookies }) => {
-  try {
-    const accessToken = getTokenCook() || cookies?.accessToken;
-    let headers = getHeaders({ token: accessToken });
+    let response = null;
 
-    const response = await API.put(url, data, { headers });
+    if (methodsRequestWithoutData.includes(method.toLocaleLowerCase())) {
+      response = await API[method](requestOptions.url, {
+        ...requestOptions.config,
+      });
+    } else {
+      response = await API[method](requestOptions.url, requestOptions.data, {
+        ...requestOptions.config,
+      });
+    }
 
     return response;
   } catch (error) {

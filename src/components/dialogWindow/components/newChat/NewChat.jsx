@@ -11,7 +11,8 @@ import CustomButton from "@/components/buttons/customButton/index";
 import { setDialogWindowClearConfigAction } from "../../redux/slice";
 import { queryClient } from "@/pages/_app";
 import { pathBackSearch } from "@/core/constants/urlBack";
-import { getFetcher } from "@/services/fetchers";
+import { fetchers } from "@/services/fetchers";
+import { getSearchContactsQuery } from "@/services/search/service";
 
 // STYLES
 const classes = {
@@ -25,7 +26,6 @@ const classes = {
 };
 
 // rework style
-// fix глянути до запиту як правильно його відправляти, також чому не коректно показується модалка
 
 const NewChat = () => {
   // HOOKS
@@ -95,16 +95,7 @@ const NewChat = () => {
             };
 
             try {
-              response = await queryClient.fetchQuery({
-                queryKey: [`get_${pathBackSearch.searchContact}`, params],
-                type: "active",
-                queryFn: async () =>
-                  await getFetcher({
-                    url: pathBackSearch.searchContact,
-                    options: { params },
-                  }),
-                retry: 0,
-              });
+              response = await getSearchContactsQuery(params);
             } catch (error) {}
 
             return {

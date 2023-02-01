@@ -1,9 +1,19 @@
 import Head from "next/head";
+import NextProgressBar from "nextjs-progressbar";
+
 import Favicons from "./Favicons";
+
+const accentColor = "#48b7db";
 
 const HeadProvider = ({ children }) => {
   return (
     <>
+      <NextProgressBar
+        color={accentColor}
+        startPosition={0.1}
+        stopDelayMs={200}
+        height={3}
+      />
       <Head>
         <meta charSet="UTF-8" />
         <meta

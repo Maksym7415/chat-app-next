@@ -9,7 +9,6 @@ import BaseSelect from "../../../selects/BaseSelect";
 import { setDialogWindowConfigAction } from "../../../dialogWindow/redux/slice";
 import { setLangAction } from "@/store/setting/slice";
 import { setModalConfigAction } from "@/components/modal/redux/slice";
-import { UserService } from "@/services/user/user.service";
 import {
   PutUpdateProfileDataQuery,
   getFetchUserProfileDataQuery,
@@ -96,17 +95,6 @@ function MainDrawer({ closeDrawer }) {
     const sendData = { lang: selectLang };
 
     mutate({ data: sendData });
-
-    // UserService.putUpdateProfile({
-    //   data: sendData,
-    //   cb: () => {
-    //     UserService.getUserProfileData({
-    //       cb: () => {
-    //         setLangAction(selectLang);
-    //       },
-    //     });
-    //   },
-    // });
   };
 
   return (

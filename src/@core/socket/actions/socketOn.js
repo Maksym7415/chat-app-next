@@ -7,8 +7,7 @@ import {
   updateConversationTypeStateAction,
 } from "@/store/conversations/slice";
 import { store } from "@/store/store";
-import { queryClient } from "@/pages/_app";
-import { pathBackConversations } from "@/core/constants/urlBack";
+import { getUserConversationsQuery } from "@/services/conversations/service";
 
 // User Id Chat
 export const socketOnUserIdChat = (chat) =>
@@ -190,11 +189,8 @@ export const socketOnUserIdNewChat = (userId, router) => {
   return socket.on(
     `userIdNewChat${userId}`,
     async (message, conversationId) => {
-      const response = await queryClient.fetchQuery({
-        queryKey: [`get_${pathBackConversations.getUserConversations}`, {}],
-        type: "active",
-      });
-      if (response?.data?.data) {
+      const response = await getUserConversationsQuery();
+      if (response?.data) {
         // ця перевірка потрібно для того щоб коли інший юзер створює чат зі мною щоб в мене не відкривалося зразу чат з цим юзером
         if (message.User?.id !== userId) {
           return;

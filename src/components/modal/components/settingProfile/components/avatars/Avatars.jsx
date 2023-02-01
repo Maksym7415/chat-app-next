@@ -1,6 +1,6 @@
-"use client";
-
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
 import {
   Avatar,
   IconButton,
@@ -10,18 +10,32 @@ import {
   ListItem,
   List,
 } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { useSnackbar } from "notistack";
-import SwipeableViews from "react-swipeable-views";
 import DefaultAvatar from "../../../../../avatar/defaultAvatar";
 import * as config from "./config";
 import { getNameShort } from "../../../../../../helpers";
+import { REACT_APP_BASE_URL } from "@/core/constants/url";
+import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
+import {
+  GetUserAvatarsQuery,
+  getUserAvatarsQuery,
+  PutMainPhotoQuery,
+  DeleteAvatarQuery,
+} from "@/services/user/service";
 
-import { UserService } from "@/services/user/user.service";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+// import required modules
+import { Navigation, Pagination } from "swiper";
 
 const ITEM_HEIGHT = 30;
 
@@ -30,7 +44,7 @@ const classes = {
   container: "relative",
   wrapperAvatar: "p-[2px]",
   wrapperlangs: "p-[15px]",
-  listItem: "w-full",
+  listItem: "w-full cursor-pointer",
   itemIcon: "mr-[15px]",
 };
 
@@ -38,6 +52,7 @@ const Avatars = () => {
   // HOOKS
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
+  const { isLoading: isLoadingAvatars } = GetUserAvatarsQuery({});
 
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
@@ -45,27 +60,37 @@ const Avatars = () => {
   const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
   // STATES
+  const [activeIndex, setActiveIndex] = useState(0);
   const [photoIndexSelected, setPhotoIndexSelected] = useState(0);
   const [anchorEl, setAnchorEl] = useState();
   const [avatars, setAvatars] = useState([]);
   const [mainAvatar, setMainAvatar] = useState({});
   const open = Boolean(anchorEl);
 
-  // FUNCTIONS
-  const handleChangeIndex = (indexSelected, direction) => {
-    let index = indexSelected;
-    if (direction === "left") {
-      indexSelected > 0 ? (index = indexSelected - 1) : null;
-    }
-    if (direction === "right") {
-      indexSelected < avatars.length - 1 ? (index = indexSelected + 1) : null;
-    }
-    setPhotoIndexSelected(index);
-  };
+  const { mutate: mutatePutMainPhoto } = PutMainPhotoQuery({
+    additionalUrl: avatars[photoIndexSelected]?.id || "",
+    params: {
+      url: avatars[photoIndexSelected]?.fileName,
+    },
+    cb: async () => {
+      await getUserAvatarsQuery();
+      enqueueSnackbar("Success set main photo", { variant: "success" });
+    },
+  });
+  const { mutate: mutateDeleteAvatar } = DeleteAvatarQuery({
+    params: {
+      id: avatars[photoIndexSelected]?.id,
+    },
+    cb: async () => {
+      await getUserAvatarsQuery();
+      enqueueSnackbar("Success delete photo", { variant: "success" });
+    },
+  });
 
+  // FUNCTIONS
   const handleMenuAction = (value) => {
     handleClose();
-    const photoSelected = avatars[photoIndexSelected];
+
     switch (value) {
       case "addAPhoto":
         // const file: FileList | null = event.target.files;
@@ -76,24 +101,10 @@ const Avatars = () => {
         // }
         return;
       case "setMainPhoto":
-        UserService.putMainPhoto({
-          photoId: photoSelected.id,
-          params: {
-            url: photoSelected.fileName,
-          },
-          cb: () => {
-            enqueueSnackbar("Success set main photo", { variant: "success" });
-            setMainAvatar(photoSelected);
-          },
-        });
+        mutatePutMainPhoto();
         return;
       case "deletePhoto":
-        UserService.deleteAvatar({
-          params: {
-            id: photoSelected.id,
-          },
-          cb: () => UserService.getUserAvatars(),
-        });
+        mutateDeleteAvatar();
         return;
       default:
         return null;
@@ -119,11 +130,13 @@ const Avatars = () => {
     }
   }, [userAvatars]);
 
-  useEffect(() => {
-    if (!userAvatars.length) {
-      UserService.getUserAvatars();
-    }
-  }, []);
+  if (isLoadingAvatars) {
+    return (
+      <RenderInfoCenterBox styles={{ height: "300px", width: "300px" }}>
+        <CircularProgress size={100} />
+      </RenderInfoCenterBox>
+    );
+  }
 
   if (!userAvatars.length) {
     const sizeAvatar = "300";
@@ -148,27 +161,41 @@ const Avatars = () => {
   return (
     <>
       <div className={classes.container}>
-        <SwipeableViews
-          index={photoIndexSelected}
-          onChangeIndex={handleChangeIndex}
+        <Swiper
+          navigation={true}
+          modules={[Navigation, Pagination]}
+          spaceBetween={10}
           style={{
-            width: "100%",
-            height: "100%",
+            width: "300px",
+            height: "300px",
             maxWidth: "300px",
-            borderRadius: "50%",
+            maxHeight: "300px",
           }}
+          onRealIndexChange={(element) =>
+            setPhotoIndexSelected(element.activeIndex)
+          }
         >
-          {avatars.map((item, index) => {
-            return (
-              <div key={index} className={classes.wrapperAvatar}>
-                <Avatar
-                  src={`${process.env.REACT_APP_BASE_URL}/${item.fileName}`}
-                  style={{ width: "100%", height: "100%" }}
-                />
-              </div>
-            );
-          })}
-        </SwipeableViews>
+          {avatars?.length ? (
+            avatars?.map((item) => {
+              return (
+                <SwiperSlide key={item.id} style={{ display: "flex" }}>
+                  <Image
+                    src={`${REACT_APP_BASE_URL}/${item.fileName}`}
+                    width={1000}
+                    height={300}
+                    alt="Picture of the author"
+                    style={{
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </SwiperSlide>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </Swiper>
         <IconButton
           aria-label="more"
           id="long-button"
@@ -180,6 +207,7 @@ const Avatars = () => {
             position: "absolute",
             right: "0",
             top: "0",
+            zIndex: 2,
           }}
         >
           <MoreVertIcon />
@@ -192,43 +220,12 @@ const Avatars = () => {
               position: "absolute",
               left: "0",
               top: "0",
+              zIndex: 2,
             }}
           >
             <CheckCircleIcon fontSize="medium" />
           </IconButton>
         )}
-        <>
-          <IconButton
-            color="primary"
-            component="button"
-            style={{
-              position: "absolute",
-              left: "0",
-              top: "50%",
-              transform: "translateY(-50%)",
-            }}
-            onClick={() => {
-              handleChangeIndex(photoIndexSelected, "left");
-            }}
-          >
-            <ArrowLeftIcon fontSize="large" />
-          </IconButton>
-          <IconButton
-            color="primary"
-            component="button"
-            style={{
-              position: "absolute",
-              right: "0",
-              top: "50%",
-              transform: "translateY(-50%)",
-            }}
-            onClick={() => {
-              handleChangeIndex(photoIndexSelected, "right");
-            }}
-          >
-            <ArrowRightIcon fontSize="large" />
-          </IconButton>
-        </>
       </div>
       <Menu
         id="long-menu"
@@ -238,17 +235,11 @@ const Avatars = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        PaperProps={{
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            width: "20ch",
-          },
-        }}
       >
         <List className={classes.list}>
           {config.actionsPhoto.map(({ icon, id, title, value }) => {
             if (
-              mainAvatar?.id === avatars[photoIndexSelected]?.id &&
+              avatars[photoIndexSelected]?.id === mainAvatar?.id &&
               value === "setMainPhoto"
             )
               return;

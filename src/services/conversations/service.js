@@ -1,22 +1,30 @@
 import { useQuery } from "react-query";
 import { pathBackConversations } from "@/core/constants/urlBack";
-import { getFetcher } from "../fetchers";
+import { fetchers } from "../fetchers";
 import { store } from "@/store/store";
 import {
   setConversationListAction,
   updateUserHistoryConversation,
 } from "@/store/conversations/slice";
+import { queryClient } from "@/pages/_app";
+import { standardOnError, standardOnSuccess } from "@/services/helpers";
+import { conversationsKeysQuery } from "@/services/keysQuery";
+import { IS_CLIENT } from "@/core/constants/general";
 
 export const GetUserConversationsQuery = (options) => {
+  const params = options?.params || {};
+
+  const onSuccessSetData = (data) => {
+    store.dispatch(setConversationListAction(data));
+  };
+
   const queryData = useQuery({
-    queryKey: [
-      `get_${pathBackConversations.getUserConversations}`,
-      options?.params || {},
-    ],
+    queryKey: [conversationsKeysQuery.getUserConversations, params],
     queryFn: async () =>
-      await getFetcher({
+      await fetchers({
+        method: "get",
         url: pathBackConversations.getUserConversations,
-        options,
+        params,
       }),
     retry: 1,
     staleTime: Infinity,
@@ -29,12 +37,11 @@ export const GetUserConversationsQuery = (options) => {
       return newData;
     },
     onSuccess(data) {
-      store.dispatch(setConversationListAction(data));
-      options.cb && options.cb();
-      console.log(data, "onSuccess");
+      onSuccessSetData(data);
+      standardOnSuccess({ data, options });
     },
-    onError(error) {
-      console.dir(error, "onError dir");
+    onError(errorRes) {
+      standardOnError({ error: errorRes, options });
     },
   });
 
@@ -44,7 +51,7 @@ export const GetUserConversationsQuery = (options) => {
       store.getState().conversationsSlice.conversationsList?.data
     ) === "{}"
   ) {
-    store.dispatch(setConversationListAction(queryData.data));
+    onSuccessSetData(queryData.data);
   }
 
   return queryData;
@@ -53,67 +60,108 @@ export const GetUserConversationsQuery = (options) => {
 export const GetConversationMessagesQuery = (options) => {
   const additionalUrl = options?.additionalUrl;
   const conversationId = options.conversationId;
+  const params = options?.params || {};
+
+  const onSuccessSetData = (response) => {
+    store.dispatch(
+      updateUserHistoryConversation({
+        conversationId: options.conversationId,
+        data: { pagination: response.data.pagination },
+      })
+    );
+  };
 
   const queryData = useQuery({
     queryKey: [
-      `get_${pathBackConversations.conversationHistory}`,
-      options.params,
+      conversationsKeysQuery.conversationHistory,
+      params,
       additionalUrl,
     ],
     queryFn: async () =>
-      await getFetcher({
+      await fetchers({
+        method: "get",
         url: pathBackConversations.conversationHistory,
-        options,
+        params,
         additionalUrl,
       }),
     retry: 1,
     staleTime: Infinity,
     enabled: !!additionalUrl,
     onSuccess(response) {
-      // console.log(response, "onSuccess");
-
+      console.log(response, "response!!!");
+      // standardOnSuccess(response?.data);
       options?.cb && options.cb(response?.data);
 
-      // useConversationsStore.getState().updateUserHistoryConversation({
-      //   conversationId: options.data.id,
-      //   data: { pagination: response?.data?.pagination },
-      // });
-
-      store.dispatch(
-        updateUserHistoryConversation({
-          conversationId: options.conversationId,
-          data: { pagination: response.data.pagination },
-        })
-      );
-
-      // const data = {
-      //   data: response?.data?.data,
-      //   pagination: response?.data?.pagination,
-      // };
-      // useConversationsStore.getState().setConversationMessagesAction(data);
+      onSuccessSetData(response);
     },
-    onError(error) {
-      options?.errorCb && options.errorCb(error.data);
-
-      console.log(error, "onError");
-      console.dir(error, "onError dir");
+    onError(errorRes) {
+      standardOnError({ error: errorRes, options });
     },
   });
 
+  console.log(queryData, "queryData");
+
   if (
-    queryData?.data?.data &&
+    queryData?.data?.data?.data &&
     !store.getState().appSlice.allMessages[conversationId] &&
     conversationId
   ) {
-    store.dispatch(
-      updateUserHistoryConversation({
-        conversationId: conversationId,
-        data: { pagination: queryData?.data?.pagination },
-      })
-    );
-
-    options?.cb && options.cb(queryData?.data);
+    standardOnSuccess(queryData?.data);
+    onSuccessSetData(queryData?.data);
   }
 
   return queryData;
+};
+
+// fetchQuery
+export const getUserConversationsQuery = async ({ params = {}, cookies }) => {
+  return await queryClient.fetchQuery({
+    queryKey: [conversationsKeysQuery.getUserConversations, params],
+    queryFn: async () => {
+      const fetch = async () =>
+        await fetchers({
+          method: "get",
+          url: pathBackConversations.getUserConversations,
+          cookies,
+        });
+      if (IS_CLIENT) {
+        return await fetch();
+      } else {
+        const response = await fetch();
+        return response?.data;
+      }
+    },
+    type: "active",
+  });
+};
+
+export const getConversationMessagesQuery = async ({
+  params = {},
+  cookies,
+  additionalUrl,
+}) => {
+  return await queryClient.fetchQuery({
+    queryKey: [
+      conversationsKeysQuery.conversationHistory,
+      params,
+      additionalUrl,
+    ],
+    queryFn: async () => {
+      const fetch = async () =>
+        await fetchers({
+          method: "get",
+          url: pathBackConversations.conversationHistory,
+          cookies,
+          params,
+          additionalUrl,
+        });
+      if (IS_CLIENT) {
+        return await fetch();
+      } else {
+        const response = await fetch();
+        return response?.data;
+      }
+    },
+    type: "active",
+  });
 };

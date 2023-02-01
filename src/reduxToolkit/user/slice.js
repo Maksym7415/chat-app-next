@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import * as requests from "./requests";
 
 const initialState = {
   userInfo: {
@@ -27,9 +26,12 @@ const userSlice = createSlice({
     setUserInfoAction(state, { payload }) {
       state.userInfo = payload;
     },
+    seUserAvatarsAction(state, { payload }) {
+      state.avatars = payload;
+    },
   },
 });
 
-export const { setUserInfoAction } = userSlice.actions;
+export const { setUserInfoAction, seUserAvatarsAction } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -18,9 +18,11 @@ export const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       notifyOnChangeProps: "tracked",
+      retry: 0,
     },
   },
   queryCache: new QueryCache({
+  
     // onError: (error, query) => {
     //   // 🎉 only show error toasts if we already have data in the cache
     //   // which indicates a failed background update

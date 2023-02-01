@@ -23,6 +23,8 @@ const ModalComponent = () => {
   // FUNCTIONS
   const handleClose = () => dispatch(setModalClearConfigAction());
 
+  
+  // const { mounted } = useMount({ opened });
   return (
     <Modal
       open={modalConfig.open}

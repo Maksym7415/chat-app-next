@@ -1,8 +1,11 @@
 import { useQuery } from "react-query";
 import { pathBackSearch } from "@/core/constants/urlBack";
-import { getFetcher } from "../fetchers";
+import { fetchers } from "../fetchers";
+import { queryClient } from "@/pages/_app";
 import { store } from "@/store/store";
 import { setSearchContactsAction } from "@/store/search/slice";
+import { searchKeysQuery } from "@/services/keysQuery";
+import { standardOnError } from "@/services/helpers";
 
 export const GetSearchContactsQuery = (options) => {
   const params = {};
@@ -18,18 +21,16 @@ export const GetSearchContactsQuery = (options) => {
   }
 
   const queryData = useQuery({
-    queryKey: [`get_${pathBackSearch.searchContact}`, params],
+    queryKey: [searchKeysQuery.searchContact, params],
     queryFn: async () =>
-      await getFetcher({
+      await fetchers({
+        method: "get",
         url: pathBackSearch.searchContact,
-        options: { params },
+        params,
       }),
-    retry: 0,
     staleTime: Infinity,
-    onError(error) {
-      options?.errorCb && options.errorCb(error.data);
-      console.dir(error, "onError dir");
-      return error;
+    onError(errorRes) {
+      standardOnError({ error: errorRes, options });
     },
   });
 
@@ -53,8 +54,23 @@ export const GetSearchContactsQuery = (options) => {
     JSON.stringify(newData?.response) !==
     JSON.stringify(store.getState().searchSlice.searchContacts?.response)
   ) {
+    console.log("sss");
     store.dispatch(setSearchContactsAction(newData));
   }
 
   return queryData;
+};
+
+// fetchQuery
+export const getSearchContactsQuery = async (params) => {
+  return await queryClient.fetchQuery({
+    queryKey: [searchKeysQuery.searchContact, params],
+    queryFn: async () =>
+      await fetchers({
+        method: "get",
+        url: pathBackSearch.searchContact,
+        params,
+      }),
+    type: "active",
+  });
 };
