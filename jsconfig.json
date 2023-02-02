@@ -12,7 +12,6 @@
       "@/core/*": ["src/@core/*"],
       "@/actions/*": ["src/actions/*"],
       "@/screens/*": ["src/screens/*"],
-      "@/ui/*": ["src/ui/*"],
       "@/services/*": ["src/services/*"],
       "@/pages/*": ["pages/*"]
     }

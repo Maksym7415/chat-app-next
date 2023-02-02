@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 import Header from "./components/header";
 import SearchMain from "./components/searchMain";
 import { TYPES_FROM_TO_SEARCH_SCREEN } from "@/core/constants/general";
-import { actionCreateNewConversation } from "@/actions/conversations";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
+import { actionCreateNewConversation } from "@/actions/conversations";
 import { setSideLeftConfigAction } from "@/store/app/slice";
 
 // STYLES

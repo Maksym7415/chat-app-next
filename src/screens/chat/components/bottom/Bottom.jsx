@@ -4,7 +4,7 @@ import { useMemo, memo } from "react";
 import MessageInput from "./components/messageInput/MessageInput";
 import BottomToolbar from "./components/bottomToolbar";
 
-const ChatBottom = ({ opponentId, conversationData }) => {
+const ChatBottom = ({ opponentId }) => {
   // HOOKS
   const router = useRouter();
 

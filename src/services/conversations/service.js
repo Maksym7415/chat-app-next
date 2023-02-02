@@ -1,15 +1,15 @@
 import { useQuery } from "react-query";
 import { pathBackConversations } from "@/core/constants/urlBack";
 import { fetchers } from "../fetchers";
+import { queryClient } from "@/pages/_app";
+import { standardOnError, standardOnSuccess } from "@/services/helpers";
+import { conversationsKeysQuery } from "@/services/keysQuery";
+import { IS_CLIENT } from "@/core/constants/general";
 import { store } from "@/store/store";
 import {
   setConversationListAction,
   updateUserHistoryConversation,
 } from "@/store/conversations/slice";
-import { queryClient } from "@/pages/_app";
-import { standardOnError, standardOnSuccess } from "@/services/helpers";
-import { conversationsKeysQuery } from "@/services/keysQuery";
-import { IS_CLIENT } from "@/core/constants/general";
 
 export const GetUserConversationsQuery = (options) => {
   const params = options?.params || {};
@@ -88,8 +88,6 @@ export const GetConversationMessagesQuery = (options) => {
     staleTime: Infinity,
     enabled: !!additionalUrl,
     onSuccess(response) {
-      console.log(response, "response!!!");
-      // standardOnSuccess(response?.data);
       options?.cb && options.cb(response?.data);
 
       onSuccessSetData(response);
@@ -99,15 +97,13 @@ export const GetConversationMessagesQuery = (options) => {
     },
   });
 
-  console.log(queryData, "queryData");
-
   if (
-    queryData?.data?.data?.data &&
+    queryData?.data &&
     !store.getState().appSlice.allMessages[conversationId] &&
     conversationId
   ) {
-    standardOnSuccess(queryData?.data);
-    onSuccessSetData(queryData?.data);
+    standardOnSuccess({ response: queryData, options });
+    onSuccessSetData(queryData);
   }
 
   return queryData;

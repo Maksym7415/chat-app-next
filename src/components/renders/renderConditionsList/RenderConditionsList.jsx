@@ -1,4 +1,3 @@
-import React from "react";
 import { CircularProgress } from "@mui/material";
 
 // STYLES
@@ -19,7 +18,6 @@ const RenderConditionsList = ({
   },
 }) => {
   // RENDER CONDITIONS
-  console.log("RenderConditionsList");
   if (isError) {
     return (
       <div className={classes.boxCenter} style={styles?.boxCenter}>

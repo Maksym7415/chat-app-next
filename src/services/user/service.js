@@ -1,12 +1,12 @@
 import { useQuery, useMutation } from "react-query";
 import { pathBackUser } from "@/core/constants/urlBack";
-import { store } from "@/store/store";
-import { setUserInfoAction, seUserAvatarsAction } from "@/store/user/slice";
-import { setLangAction } from "@/store/setting/slice";
 import { queryClient } from "@/pages/_app";
 import { standardOnError, standardOnSuccess } from "@/services/helpers";
 import { userKeysQuery } from "@/services/keysQuery";
 import { fetchers } from "@/services/fetchers";
+import { store } from "@/store/store";
+import { setUserInfoAction, seUserAvatarsAction } from "@/store/user/slice";
+import { setLangAction } from "@/store/setting/slice";
 
 export const GetUserProfileDataQuery = (options) => {
   const onSuccessSetData = (response) => {

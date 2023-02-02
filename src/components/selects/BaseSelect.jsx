@@ -1,5 +1,3 @@
-"use client";
-
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 export default function BaseSelect({ selectSetting }) {

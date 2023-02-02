@@ -6,6 +6,7 @@ import { contextMenu } from "react-contexify";
 import { selectedConversationContext } from "./config";
 import UserAvatar from "@/components/avatar/userAvatar";
 import SvgMaker from "@/components/svgMaker";
+import { setContextMenuConfigAction } from "@/components/contextMenu/redux/slice";
 import { PATHS } from "@/core/constants/paths";
 import { CONTEXT_MENU_ID } from "@/core/constants/general";
 import languages from "@/core/translations";
@@ -14,9 +15,6 @@ import {
   actionsSelectedConversation,
   actionsTypeActionsConversation,
 } from "@/actions/index";
-import { setContextMenuConfigAction } from "@/components/contextMenu/redux/slice";
-import { setOpenChatDataAction } from "@/store/app/slice";
-import { setLoadingSearchContacts } from "@/store/search/slice";
 
 // STYLES
 const classes = {

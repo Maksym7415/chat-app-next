@@ -1,21 +1,21 @@
-import { useEffect, useState, useMemo, memo } from "react";
+import { useEffect, useState, useMemo, memo, useLayoutEffect } from "react";
 import clsx from "clsx";
 import { contextMenu } from "react-contexify";
 import { useDispatch, useSelector } from "react-redux";
-import { Divider, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import * as config from "./config";
 import languages from "@/core/translations";
+import { TYPES_CONVERSATIONS } from "@/core/constants/general";
+import { CONTEXT_MENU_ID } from "@/core/constants/general";
 import { getCurrentDay } from "@/helpers/index";
 import UserAvatar from "@/components/avatar/userAvatar";
+import { setContextMenuConfigAction } from "@/components/contextMenu/redux/slice";
 import {
   actionsTypeObjectSelected,
   actionsSelectedMessages,
   actionsMessagesChat,
 } from "@/actions/index";
-import { TYPES_CONVERSATIONS } from "@/core/constants/general";
-import { CONTEXT_MENU_ID } from "@/core/constants/general";
-import { setContextMenuConfigAction } from "@/components/contextMenu/redux/slice";
 import { store } from "@/store/store";
 
 const stylePaper = {
@@ -52,7 +52,8 @@ const classes = {
   messageSelected: "bg-[#00C73E] p-[2px]",
   messageSelectedIcon: "w-[18px] h-[18px] text-white",
 };
-// ask - цікаво мигає коли є Divider
+
+// fix - цікаво мигає коли є Divider
 
 const Message = ({
   messageData,
@@ -110,14 +111,13 @@ const Message = ({
   };
 
   // USEEFFECTS
-  useEffect(() => {
+  useLayoutEffect(() => {
     // shared message
     if (messageData.forwardedUser) {
       return setSettings((prev) => ({
         ...prev,
         typeMessage: "shared",
         classNames: {
-          rootPaper: classes.paperSharedMessage,
           wrapperMessage: classes.wrapperTextMessageShared,
         },
       }));
@@ -127,18 +127,12 @@ const Message = ({
       return setSettings((prev) => ({
         ...prev,
         typeMessage: "myMessage",
-        classNames: {
-          rootPaper: classes.paperSenderMessage,
-        },
       }));
     }
     // otherUser message
     return setSettings((prev) => ({
       ...prev,
       typeMessage: "otherUser",
-      classNames: {
-        rootPaper: classes.paperFriendMessage,
-      },
     }));
   }, []);
 
@@ -207,6 +201,7 @@ const Message = ({
               source={messageData.User.userAvatar}
               name={`${messageData.User.firstName} ${messageData.User.lastName}`}
               sizeAvatar={38}
+              styles={{ marginRight: "10px" }}
             />
           )}
         <div className={classes.wrapper}>

@@ -12,6 +12,7 @@ const ConversationsPage = () => {
   // HOOKS
   const router = useRouter();
 
+  // SELECTORS
   const conversationsList = useSelector(
     ({ conversationsSlice }) => conversationsSlice.conversationsList.data
   );

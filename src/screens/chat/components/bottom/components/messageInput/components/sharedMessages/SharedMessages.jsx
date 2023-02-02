@@ -15,11 +15,13 @@ const classes = {
 };
 
 const SharedMessages = ({ forwardMessages }) => {
+  // HOOKS
   const dispatch = useDispatch();
 
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
+  // FUNCTIONS
   const handleClose = () => {
     dispatch(shareMessageAction({}));
   };

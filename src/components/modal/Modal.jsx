@@ -23,7 +23,6 @@ const ModalComponent = () => {
   // FUNCTIONS
   const handleClose = () => dispatch(setModalClearConfigAction());
 
-  
   // const { mounted } = useMount({ opened });
   return (
     <Modal
@@ -38,6 +37,7 @@ const ModalComponent = () => {
       {/* <Fade in={modalConfig.open}> */}
       <Box className={classes.container} style={modalConfig?.styles?.container}>
         <IconButton
+          aria-label="close"
           onClick={handleClose}
           style={{ position: "absolute", right: "0", top: "0" }}
         >

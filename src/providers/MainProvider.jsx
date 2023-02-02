@@ -1,33 +1,19 @@
 import { SnackbarProvider } from "notistack";
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
 import CssBaseline from "@mui/material/CssBaseline";
-import Theme from "@/core/theme";
 import ContextMenu from "@/components/contextMenu";
 import ModalCustom from "@/components/modal";
 import DrawerCustom from "@/components/drawer";
 import DialogCustom from "@/components/dialogWindow/Dialog";
 import AuthProvider from "./AuthProvider";
-
 import { SnackbarUtilsConfigurator } from "@/helpers/notistack";
 import HeadProvider from "./HeadProvider/HeadProvider";
-import { store } from "@/store/store";
-import { Provider } from "react-redux";
-import { wrapper, fetchSystem } from "@/store/store";
-
-const cache = createCache({
-  key: "css",
-  prepend: true,
-});
+import { wrapper } from "@/store/store";
+import { IS_CLIENT } from "@/core/constants/general";
 
 const MainProvider = ({ children, Component }) => {
-  // console.log(Component, "Component");
-  // console.log(Component?.isPrivatePage, "omponent?.isPrivatePage");
+  console.log(IS_CLIENT, "IS_CLIENT");
   return (
-    // <Theme>
-
     <HeadProvider>
-      {/* <Provider store={store}> */}
       <AuthProvider Component={Component}>
         <SnackbarProvider maxSnack={3}>
           <SnackbarUtilsConfigurator />
@@ -39,10 +25,7 @@ const MainProvider = ({ children, Component }) => {
           {children}
         </SnackbarProvider>
       </AuthProvider>
-      {/* </Provider> */}
     </HeadProvider>
-
-    // </Theme>
   );
 };
 

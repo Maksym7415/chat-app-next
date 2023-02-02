@@ -12,15 +12,14 @@ const classes = {
   wrapperTopCenterComponent: "flex",
 };
 
-// rework
+// fix getRequest
 
 const Header = ({ children }) => {
+  // HOOKS
   const dispatch = useDispatch();
-  // const {} = SearchService.useGetUserConversations();
 
   // SELECTORS
   const sideLeftConfig = useSelector(({ appSlice }) => appSlice.sideLeftConfig);
-  const appSlice = useSelector(({ appSlice }) => appSlice);
 
   // STATES
   const [settings, setSettings] = useState({
@@ -67,6 +66,7 @@ const Header = ({ children }) => {
         return null;
     }
   };
+
   // USEEFFECTS
   useEffect(() => {
     // set setting options from screen

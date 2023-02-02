@@ -1,9 +1,8 @@
 import React from "react";
 import { Controller } from "react-hook-form";
 import CircularProgress from "@mui/material/CircularProgress";
-
-import TextInputCustom from "../hookFormsComponents/textInput";
-import CustomButton from "../buttons/customButton";
+import TextInputCustom from "@/components/hookFormsComponents/textInput";
+import CustomButton from "@/components/buttons/customButton";
 
 // STYLES
 const classes = {

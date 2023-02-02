@@ -1,10 +1,7 @@
-"use client";
-
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Typography,
   Toolbar,
-  Button,
   Paper,
   IconButton,
   Tooltip,

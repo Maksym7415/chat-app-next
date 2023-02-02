@@ -36,12 +36,10 @@ const MessageInput = ({ conversationId, opponentId }) => {
   );
   const authToken = useSelector(({ authSlice }) => authSlice.authToken);
 
+  // VARIABLES
   const textPlaceholderInput = `${languages[lang].generals.typeMessage}...`;
   const userId = authToken.userId;
   const firstName = authToken.firstName;
-
-  // console.log(lang, "lang MessageInput");
-  // console.log(textPlaceholderInput, "languages[lang].generals.typeMessage");
 
   // STATES
   const [sheredMessages, setSharedMessages] = useState([]);
@@ -178,7 +176,6 @@ const MessageInput = ({ conversationId, opponentId }) => {
         >
           <LeftInputComponent />
           <TextField
-            // inputRef={ref}
             className={classes.input}
             value={message[conversationId] || ""}
             multiline={true}

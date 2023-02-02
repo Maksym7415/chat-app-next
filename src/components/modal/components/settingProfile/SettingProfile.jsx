@@ -1,13 +1,11 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
 import * as config from "./config";
 import Avatars from "./components/avatars";
-import TextInputCustom from "../../../hookFormsComponents/textInput";
-import CustomButton from "../../../buttons/customButton";
+import TextInputCustom from "@/components/hookFormsComponents/textInput";
+import CustomButton from "@/components/buttons/customButton";
 import {
   PutUpdateProfileDataQuery,
   getFetchUserProfileDataQuery,
@@ -20,7 +18,7 @@ const classes = {
   title: "text-center",
 };
 
-const SettingProfile = ({ closeDrawer }) => {
+const SettingProfile = () => {
   // HOOKS
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -87,7 +85,7 @@ const SettingProfile = ({ closeDrawer }) => {
             key={key}
             control={control}
             rules={el.validate}
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({ field: { onChange, value } }) => (
               <TextInputCustom
                 onChangeText={onChange}
                 value={value}

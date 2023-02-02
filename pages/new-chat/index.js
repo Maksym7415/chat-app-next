@@ -21,19 +21,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       return redirectToken;
     }
 
-    // const newChatId = store.getState().appSlice.openChatData.newChatId;
-
-    // console.log(store.getState().appSlice, "newChatId");
-    // if (!newChatId) {
-    //   return {
-    //     redirect: {
-    //       dehydratedState: null,
-    //       permanent: false,
-    //       destination: "/",
-    //     },
-    //   };
-    // }
-
     const { queryClient } = await getInitialData(ctx, store);
 
     return {

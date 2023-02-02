@@ -8,10 +8,7 @@ import {
 import { ReactQueryDevtools } from "react-query/devtools";
 import Providers from "@/providers/MainProvider";
 import { wrapper } from "@/store/store";
-import { useStore } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
 import "../styles/globals.css";
-import { Provider } from "react-redux";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +19,6 @@ export const queryClient = new QueryClient({
     },
   },
   queryCache: new QueryCache({
-  
     // onError: (error, query) => {
     //   // 🎉 only show error toasts if we already have data in the cache
     //   // which indicates a failed background update
@@ -36,9 +32,6 @@ export const queryClient = new QueryClient({
 });
 
 function App({ Component, ...rest }) {
-  // const store = useStore((state) => state);
-
-  // const { store, props } = wrapper.useWrappedStore(rest);
   const { pageProps } = rest;
 
   return (

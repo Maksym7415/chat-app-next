@@ -1,6 +1,5 @@
 import Head from "next/head";
 import NextProgressBar from "nextjs-progressbar";
-
 import Favicons from "./Favicons";
 
 const accentColor = "#48b7db";
@@ -18,7 +17,7 @@ const HeadProvider = ({ children }) => {
         <meta charSet="UTF-8" />
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1.0"
+          content="width=device-width, initial-scale=1, maximum-scale=5.0"
         />
 
         <Favicons />

@@ -1,14 +1,15 @@
-import { useCallback, useState, memo, useEffect } from "react";
+import { useCallback, useState, memo, useEffect, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Typography, Box } from "@mui/material";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
 import languages from "@/core/translations";
-import { setMessageDate, uuid, getMessagesWithSendDate } from "@/helpers/index";
+import { setMessageDate, uuid } from "@/helpers/index";
 import Message from "./components/message";
 import { Virtuoso } from "react-virtuoso";
 import { setMessagesChatAction } from "@/store/app/slice";
 
 let prevChatId = -1;
+let firstIndexItem = 0;
 
 // STYLES
 const classes = {
@@ -28,7 +29,6 @@ const MainContent = ({ conversationId, typeConversation, loadMessages }) => {
   );
   const messages = useSelector(({ appSlice }) => appSlice.messagesChat);
   const authToken = useSelector(({ authSlice }) => authSlice.authToken);
-  const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
   // VARIABLES
   const pagination =
@@ -37,9 +37,7 @@ const MainContent = ({ conversationId, typeConversation, loadMessages }) => {
   // STATES
   const [firstItemIndex, setFirstItemIndex] = useState(0);
 
-  console.log(messages, "messages MainContent");
-  console.log(lang, "lang MainContent");
-
+  // FUNCTIONS
   const prependItems = useCallback(() => {
     if (
       pagination.allItems > messages.filter((item) => !item?.component).length
@@ -49,6 +47,7 @@ const MainContent = ({ conversationId, typeConversation, loadMessages }) => {
         (newMessages) => {
           const nextFirstItemIndex = firstItemIndex - newMessages.length;
           setFirstItemIndex(() => nextFirstItemIndex);
+          firstIndexItem = nextFirstItemIndex;
           dispatch(setMessagesChatAction([...newMessages, ...messages]));
         },
         pagination,
@@ -60,14 +59,14 @@ const MainContent = ({ conversationId, typeConversation, loadMessages }) => {
   }, [firstItemIndex, messages, pagination]);
 
   // USEEFFECTS;
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (
       prevChatId !== conversationId &&
-      // messages?.length &&
+      messages?.length &&
       pagination.allItems
     ) {
       setFirstItemIndex(pagination.allItems);
-
+      firstIndexItem = pagination.allItems;
       prevChatId = conversationId;
     }
   }, [pagination]);
@@ -107,6 +106,23 @@ const MainContent = ({ conversationId, typeConversation, loadMessages }) => {
   if (prevChatId !== conversationId && conversationId !== null) {
     return <div className={classes.wrapperMessages}></div>;
   }
+
+  console.log("--------------");
+  // console.log(prevChatId, "prevChatId");
+  // console.log(conversationId, "conversationId");
+  // console.log(pagination, "pagination");
+  console.log(messages, "messages");
+  // console.log(lang, "lang");
+  // console.log(authToken, "authToken");
+  // console.log(typeConversation, "typeConversation");
+  // console.log(firstIndexItem, "firstIndexItem");
+  // console.log(firstItemIndex, "firstItemIndex");
+  // console.log(
+  //   prevChatId !== conversationId &&
+  //     conversationId !== null &&
+  //     firstIndexItem === firstItemIndex,
+  //   "logg"
+  // );
 
   return (
     <div className={classes.wrapperMessages}>

@@ -1,5 +1,3 @@
-import * as React from "react";
-
 // STYLES
 const classes = {
   wrapperInfoCenter: "flex-center-center text-center w-full h-full ",

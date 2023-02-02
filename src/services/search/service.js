@@ -2,10 +2,10 @@ import { useQuery } from "react-query";
 import { pathBackSearch } from "@/core/constants/urlBack";
 import { fetchers } from "../fetchers";
 import { queryClient } from "@/pages/_app";
-import { store } from "@/store/store";
-import { setSearchContactsAction } from "@/store/search/slice";
 import { searchKeysQuery } from "@/services/keysQuery";
 import { standardOnError } from "@/services/helpers";
+import { store } from "@/store/store";
+import { setSearchContactsAction } from "@/store/search/slice";
 
 export const GetSearchContactsQuery = (options) => {
   const params = {};
@@ -54,7 +54,6 @@ export const GetSearchContactsQuery = (options) => {
     JSON.stringify(newData?.response) !==
     JSON.stringify(store.getState().searchSlice.searchContacts?.response)
   ) {
-    console.log("sss");
     store.dispatch(setSearchContactsAction(newData));
   }
 

@@ -16,6 +16,7 @@ const SignUpClientPage = () => {
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
+  // SERVICES
   const { mutate, isLoading } = PostSingUpQuery({
     cb: () => {
       router.push(PATHS.verification);

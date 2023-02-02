@@ -33,6 +33,7 @@ const VerificationClientPage = () => {
     },
   });
 
+  // SERVICES
   const { mutate, isLoading } = PostVerificationQuery({
     cb: () => {
       router.push(PATHS.main);

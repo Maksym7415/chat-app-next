@@ -6,8 +6,8 @@ import * as config from "./config";
 import AuthForm from "@/components/authForm";
 import languages from "@/core/translations";
 import Meta from "@/core/seo/Meta";
-import { PostLoginQuery } from "@/services/auth/service";
 import { PATHS } from "@/core/constants/paths";
+import { PostLoginQuery } from "@/services/auth/service";
 
 export default function SignInClientPage() {
   // HOOKS
@@ -29,6 +29,7 @@ export default function SignInClientPage() {
     },
   });
 
+  // SERVICES
   const { mutate, isLoading } = PostLoginQuery({
     cb: () => {
       router.push(PATHS.verification);

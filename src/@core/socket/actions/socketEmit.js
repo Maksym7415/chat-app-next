@@ -1,5 +1,5 @@
 import { socket } from "../index";
-import { fullDate, handleGetBufferFile } from "../../../helpers";
+import { fullDate } from "../../../helpers";
 import { store } from "@/store/store";
 
 let filesCount = 0;

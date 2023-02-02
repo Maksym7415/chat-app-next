@@ -28,13 +28,6 @@ function MainDrawer({ closeDrawer }) {
 
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-  const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
-
-  console.log(userInfo, "userInfo");
-  console.log(lang, "lang");
-
-  // STATES
-  const [selectedLang, setSelectedLang] = useState("");
 
   const { mutate } = PutUpdateProfileDataQuery({
     cb: async () => {
@@ -83,14 +76,9 @@ function MainDrawer({ closeDrawer }) {
   const handleSetLanguage = (event) => {
     const selectLang = event.target.value;
 
-    console.log(lang, "langUser");
-    console.log(selectLang, "selectLang");
-
     if (selectLang === lang) {
       return;
     }
-
-    setSelectedLang(selectLang);
 
     const sendData = { lang: selectLang };
 

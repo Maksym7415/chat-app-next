@@ -1,5 +1,3 @@
-"use client";
-
 import Cookies from "js-cookie";
 import { namesCookies } from "@/core/constants/general";
 

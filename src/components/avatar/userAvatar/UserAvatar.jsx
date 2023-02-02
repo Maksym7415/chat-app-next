@@ -1,7 +1,7 @@
 import { Avatar } from "@mui/material";
 import { getNameShort } from "@/helpers/index";
 import DefaultAvatar from "../defaultAvatar";
-import BadgeUserAvatar from "../../badges/badgeUserAvatar";
+import BadgeUserAvatar from "@/components/badges/badgeUserAvatar";
 import { REACT_APP_BASE_URL } from "@/core/constants/url";
 
 const UserAvatar = ({
@@ -10,12 +10,13 @@ const UserAvatar = ({
   status = "",
   sizeBadge = 18,
   name = "",
+  styles = {},
 }) => {
   // VARIABLES
   const nameShort = name ? getNameShort(name) : "";
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", ...styles }}>
       <BadgeUserAvatar typeBadge={status} sizeBadge={sizeBadge}>
         {source ? (
           <Avatar

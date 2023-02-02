@@ -1,6 +1,6 @@
 import { useMemo, useState, memo } from "react";
 import clsx from "clsx";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -12,13 +12,13 @@ import {
 import { TYPES_CONVERSATIONS } from "@/core/constants/general";
 import UserAvatar from "@/components/avatar/userAvatar";
 import SvgMaker from "@/components/svgMaker";
+import { setDrawerConfigAction } from "@/components/drawer/redux/slice";
 import {
   actionsMessagesChat,
   actionsSelectedConversation,
   actionsTypeActionsChat,
   actionsTypeActionsConversation,
 } from "@/actions/index";
-import { setDrawerConfigAction } from "@/components/drawer/redux/slice";
 import { store } from "@/store/store";
 
 // STYLES
@@ -48,6 +48,7 @@ const ChatHeader = ({
   );
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
   const newChatData = useSelector(({ appSlice }) => appSlice.newChatData);
+
   // STATES
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -99,10 +100,6 @@ const ChatHeader = ({
   }, [typeConversation, messages]);
 
   // RENDERS
-  const renderTopLeftComponent = () => {
-    return <></>;
-  };
-
   const renderTopCenterComponent = () => {
     return (
       <div
@@ -188,7 +185,6 @@ const ChatHeader = ({
   return (
     <div className={classes.container}>
       <div className={classes.containerTop}>
-        {/* {renderTopLeftComponent()} */}
         {renderTopCenterComponent()}
         {newChatData.newChatId ? null : renderTopRightComponent()}
       </div>

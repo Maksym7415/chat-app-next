@@ -8,14 +8,7 @@ const initialState = {
       currentPage: 0,
     },
   },
-  userHistoryConversations: {
-    // [0]: {
-    //   pagination: {
-    //     allItems: 0,
-    //     currentPage: 0,
-    //   },
-    // },
-  },
+  userHistoryConversations: {},
   conversationsList: {
     data: {},
   },

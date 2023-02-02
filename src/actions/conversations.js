@@ -3,7 +3,7 @@ import {
   socketEmitClearConversation,
 } from "../@core/socket/actions/socketEmit";
 import { PATHS } from "@/core/constants/paths";
-import { store } from "../reduxToolkit/store";
+import { store } from "@/store/store";
 import { updateConversationListAction } from "@/store/conversations/slice";
 import { setNewChatDataAction } from "@/store/app/slice";
 

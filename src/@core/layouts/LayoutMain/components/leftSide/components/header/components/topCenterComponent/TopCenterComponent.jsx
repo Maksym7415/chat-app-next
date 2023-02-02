@@ -1,11 +1,10 @@
 import { useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, OutlinedInput } from "@mui/material";
 import { useDebounce } from "@/hooks/useDebounce";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { GetSearchContactsQuery } from "@/services/search/service";
-import { setSideLeftConfigAction } from "@/store/app/slice";
 
 // STYLES
 const classes = {
@@ -21,6 +20,7 @@ function TopCenterComponent({ parentSettings }) {
   // CUSTOM HOOKS
   const debouncedSearchValue = useDebounce(search, 300);
 
+  // SERVICES
   const {} = GetSearchContactsQuery({
     params: {
       searchRequest: debouncedSearchValue,
@@ -31,24 +31,6 @@ function TopCenterComponent({ parentSettings }) {
   const onChangeText = useCallback((e) => {
     setSearch(e.target.value);
   }, []);
-
-  const getRequest = () => {
-    // parentSettings.getRequest &&
-    //   parentSettings.getRequest({
-    //     params: {
-    //       search: debouncedSearchValue,
-    //     },
-    //   });
-  };
-
-  // USEEFFECTS
-  // useEffect(() => {
-  //   getRequest();
-  // }, [debouncedSearchValue]);
-
-  // useEffect(() => {
-  //   getRequest();
-  // }, [parentSettings]);
 
   return (
     <>

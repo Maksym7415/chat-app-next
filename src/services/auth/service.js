@@ -2,6 +2,8 @@ import { useMutation } from "react-query";
 import { fetchers } from "../fetchers";
 import { pathBackAuth } from "@/core/constants/urlBack";
 import { setTokenCook } from "@/core/cookiesStorage";
+import { standardOnError, standardOnSuccess } from "@/services/helpers";
+import { authKeysQuery } from "@/services/keysQuery";
 import { store } from "@/store/store";
 import {
   authTokenAction,
@@ -9,8 +11,6 @@ import {
   setAuthHeadersAction,
   setVerificationCodeAction,
 } from "@/store/auth/slice";
-import { standardOnError, standardOnSuccess } from "@/services/helpers";
-import { authKeysQuery } from "@/services/keysQuery";
 
 export const PostLoginQuery = (options) => {
   const queryData = useMutation({

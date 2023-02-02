@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -6,13 +7,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-
 import CloseIcon from "@mui/icons-material/Close";
 import NewChat from "./components/newChat";
 import ShareMessage from "./components/shareMessage";
 import { setDialogWindowClearConfigAction } from "./redux/slice";
-import { useState } from "react";
-import { useEffect } from "react";
 
 // STYLES
 const classes = {
@@ -34,17 +32,17 @@ const DialogComponent = () => {
     ({ dialogWindowSlice }) => dialogWindowSlice.dialogConfig
   );
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   // FUNCTIONS
   const handleClose = () => {
-    setOpen(false)
+    setOpen(false);
 
     const closeDialogTime = setTimeout(() => {
       dispatch(setDialogWindowClearConfigAction());
-      clearTimeout(closeDialogTime)
+      clearTimeout(closeDialogTime);
     }, transitionDuration);
-  }
+  };
 
   const Content = () => {
     switch (dialogConfig.typeContent) {
@@ -57,12 +55,11 @@ const DialogComponent = () => {
     }
   };
 
-  useEffect(()=> {
-    if(dialogConfig.open !== open) {
-      setOpen(dialogConfig.open)
+  useEffect(() => {
+    if (dialogConfig.open !== open) {
+      setOpen(dialogConfig.open);
     }
-  }, [dialogConfig.open])
-
+  }, [dialogConfig.open]);
 
   return (
     <Dialog

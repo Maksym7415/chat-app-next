@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { Grid, Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import UserAvatar from "../../../avatar/userAvatar";
+import UserAvatar from "@/components/avatar/userAvatar/index";
 import languages from "@/core/translations";
-import SelectsAsyncPaginateSearch from "../../../SelectsAsyncPaginateSearch";
-import { fullDate } from "../../../../helpers";
+import SelectsAsyncPaginateSearch from "@/components/SelectsAsyncPaginateSearch";
+import { fullDate } from "@/helpers/index";
 import Snackbar from "@/helpers/notistack";
 import { socketEmitChatCreation } from "@/core/socket/actions/socketEmit";
 import CustomButton from "@/components/buttons/customButton/index";
 import { setDialogWindowClearConfigAction } from "../../redux/slice";
-import { queryClient } from "@/pages/_app";
-import { pathBackSearch } from "@/core/constants/urlBack";
-import { fetchers } from "@/services/fetchers";
 import { getSearchContactsQuery } from "@/services/search/service";
 
 // STYLES

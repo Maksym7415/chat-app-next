@@ -1,12 +1,18 @@
-import { useEffect, useState, useMemo, memo, useCallback } from "react";
+import {
+  useEffect,
+  useState,
+  useMemo,
+  memo,
+  useCallback,
+  useLayoutEffect,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Typography, Box, CircularProgress } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import ChatHeader from "./components/header";
 import ChatBottom from "./components/bottom";
 import ChatContent from "./components/mainContent";
 import RenderInfoCenterBox from "../../components/renders/renderInfoCenterBox";
 import { getMessagesWithSendDate } from "@/helpers/index";
-import { actionsClearSelectedMessages } from "@/actions/index";
 import { GetConversationMessagesQuery } from "@/services/conversations/service";
 import {
   setAllMessagesAction,
@@ -22,7 +28,8 @@ const classes = {
   errorBackText: "text-[28px] font-medium ",
 };
 
-// в консолі вискакує помилка якась якщо забрати у функції cbInitialMessages  dispatch то посмилки немає
+// fix в консолі вискакує помилка якась якщо забрати у функції cbInitialMessages  dispatch то посмилки немає
+
 const checkOpenConversationId = (conversationId) => {
   const openConversationId = store.getState().appSlice.openConversationId;
 
@@ -46,19 +53,14 @@ const Chat = ({ params }) => {
   const newChatData = useSelector(({ appSlice }) => appSlice.newChatData);
 
   const cbInitialMessages = (response, conversationId) => {
-    const messages = getMessagesWithSendDate(response?.data)?.messages || [];
+    const messagesResult =
+      getMessagesWithSendDate(response?.data)?.messages || [];
     dispatch(
       setAllMessagesAction({
-        [conversationId]: messages,
+        [conversationId]: messagesResult,
       })
     );
-    dispatch(setMessagesChatAction(messages));
-    // store.dispatch(
-    //   setAllMessagesAction({
-    //     [conversationId]: messages,
-    //   })
-    // );
-    // store.dispatch(setMessagesChatAction(messages));
+    dispatch(setMessagesChatAction(messagesResult));
   };
 
   const initialOptionsMessages = {
@@ -70,7 +72,6 @@ const Chat = ({ params }) => {
 
   // STATES
   const [errorBack, setErrorBack] = useState("");
-  const [isFetching, setIsFetching] = useState(false);
   const [optionsMessages, setOptionsMessages] = useState(
     initialOptionsMessages
   );
@@ -81,7 +82,7 @@ const Chat = ({ params }) => {
     newChatData.newChatId &&
       params?.id &&
       dispatch(setNewChatDataClearAction());
-    setOptionsMessages(initialOptionsMessages);
+    // setOptionsMessages(initialOptionsMessages);
     return params?.id || null;
   }, [params]);
 
@@ -101,15 +102,6 @@ const Chat = ({ params }) => {
     conversationId,
     additionalUrl: conversationId ? `${conversationId}` : null,
     cb: (response) => {
-      // if (!isServerSide) {
-      //   if (isLoadMessages) {
-      //   } else {
-      //     cbInitialMessages(response, conversationId);
-      //   }
-      // }
-
-      console.log(response, "response");
-
       optionsMessages.cb && optionsMessages.cb(response, conversationId);
       errorBack && setErrorBack("");
     },
@@ -137,34 +129,15 @@ const Chat = ({ params }) => {
     });
   }, []);
 
-  // console.log(queryData, "queryData");
-  // console.log(allMessages?.[conversationId], "allMessages?.[conversationId]");
-  // console.log(allMessages, "allMessages");
-
   // USEEFFECTS
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (allMessages[conversationId] && conversationId) {
       const messages = allMessages[conversationId] || [];
       dispatch(setMessagesChatAction(messages));
     }
 
     checkOpenConversationId(conversationId);
-
-    return () => {
-      console.log("!---return---!");
-
-      // setMessagesChatAction([]);
-      // actionsClearSelectedMessages(false);
-    };
   }, [conversationId]);
-
-  if (isFetching) {
-    return (
-      <RenderInfoCenterBox>
-        <CircularProgress size={60} />
-      </RenderInfoCenterBox>
-    );
-  }
 
   if (errorBack) {
     return (
@@ -174,7 +147,16 @@ const Chat = ({ params }) => {
     );
   }
 
-  console.log("!---reder---!");
+  console.log(params?.id, "!---reder---!");
+  // console.log(allMessages, "allMessages");
+  // console.log(conversationsList, "conversationsList");
+  // console.log(newChatData, "newChatData");
+  // console.log(optionsMessages, "optionsMessages");
+  // console.log(errorBack, "errorBack");
+
+  if (!conversationId && !opponentId) {
+    return <></>;
+  }
 
   return (
     <>

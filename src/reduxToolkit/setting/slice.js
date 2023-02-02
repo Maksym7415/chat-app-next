@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import { setLanguageLS } from "../../@core/localStorage";
 
 const settingSlice = createSlice({
   name: "settingSlice",
@@ -13,7 +12,6 @@ const settingSlice = createSlice({
   },
   reducers: {
     setLangAction(state, { payload }) {
-      // setLanguageLS(payload);
       state.lang = payload;
       state.isLangSet = true;
     },

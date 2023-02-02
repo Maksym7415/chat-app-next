@@ -1,5 +1,5 @@
 import { socket } from "../index";
-import { actionsConversationList } from "../../../actions";
+import { actionsConversationList } from "@/actions/index";
 import { PATHS } from "@/core/constants/paths";
 import { setAllMessagesAction, setMessagesChatAction } from "@/store/app/slice";
 import {
@@ -169,7 +169,6 @@ export const socketOnDeleteMessage = () => {
         actionsConversationList({
           mode: "updateMessageConversation",
           conversationId,
-          // messages: [lastMessage || findLastMessage],
           messages: [lastMessage],
           conversationsList,
         })
@@ -189,7 +188,7 @@ export const socketOnUserIdNewChat = (userId, router) => {
   return socket.on(
     `userIdNewChat${userId}`,
     async (message, conversationId) => {
-      const response = await getUserConversationsQuery();
+      const response = await getUserConversationsQuery({});
       if (response?.data) {
         // ця перевірка потрібно для того щоб коли інший юзер створює чат зі мною щоб в мене не відкривалося зразу чат з цим юзером
         if (message.User?.id !== userId) {

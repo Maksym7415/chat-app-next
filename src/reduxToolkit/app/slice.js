@@ -1,14 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
-import { HYDRATE } from "next-redux-wrapper";
 
 export const initialState = {
-  app: "init",
-  page: "init",
-  server: {
-    allMessages: {},
-    openChatData: {},
-  },
   isLoading: false,
   openConversationId: null,
   sideLeftConfig: {
@@ -43,12 +36,15 @@ const appSlice = createSlice({
       state.sideLeftConfig = payload;
     },
     setAllMessagesAction(state, { payload }) {
+      if (
+        Object.keys(payload)?.includes(state.openConversationId) &&
+        JSON.stringify(payload[state.openConversationId]) !==
+          JSON.stringify(state.messagesChat)
+      ) {
+        state.messagesChat = payload[state.openConversationId];
+      }
       state.allMessages = {
         ...state.allMessages,
-        ...payload,
-      };
-      state.server.allMessages = {
-        ...state.server.allMessages,
         ...payload,
       };
     },
@@ -86,40 +82,9 @@ const appSlice = createSlice({
       state.newChatData = payload;
     },
     setNewChatDataClearAction(state) {
-      console.log("---setOpenChatDataClearAction");
       state.newChatData = initialState.newChatData;
-      // state.server.openChatData = {};
     },
   },
-  // extraReducers: {
-  //   [HYDRATE]: (state, action) => {
-  //     console.log(state.openChatData, "state");
-  //     console.log(action.payload, "action.payload.appSlice");
-
-  //     return {
-  //       ...state,
-  //       // ...action.payload.appSlice,
-  //     };
-  //   },
-  // },
-  // extraReducers(builder) {
-  //   builder.addCase(HYDRATE, (state, action) => {
-  //     // console.log(action.payload, "HYDRATE");
-  //     // console.log(action.payload, " -- HYDRATE appSlice");
-  //     return {
-  //       ...state,
-  //       // allMessages: {
-  //       //   ...state.allMessages,
-  //       //   ...action.payload.appSlice.allMessages,
-  //       // },
-  //       // ...action.payload.appSlice,
-
-  //       // server: {
-  //       //   ...action.payload.appSlice.server,
-  //       // },
-  //     };
-  //   });
-  // },
 });
 
 export default appSlice.reducer;

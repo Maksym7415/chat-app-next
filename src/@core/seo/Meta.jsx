@@ -1,16 +1,15 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-
 import { siteName, titleMerge } from "./config";
 import { onlyText } from "@/helpers/index";
 import { MetaNoIndex } from "./MetaNoIndex";
+import { REACT_APP_BASE_URL } from "@/core/constants/url";
 
-// import logoImage from "./images/logo.svg";
+// fix currentUrl
 
 const Meta = ({ title, description, image = null, children }) => {
   const { asPath } = useRouter();
-  //   const currentUrl = `${process.env.APP_URL}${asPath}`;
-  const currentUrl = `${asPath}`;
+  const currentUrl = `${REACT_APP_BASE_URL}${asPath}`;
 
   return (
     <>

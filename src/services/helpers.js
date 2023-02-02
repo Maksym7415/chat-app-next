@@ -14,5 +14,7 @@ export const standardOnError = ({ error, options }) => {
 };
 
 export const standardOnSuccess = ({ response, options }) => {
-  options?.cb && response?.data && options.cb(response?.data);
+  options?.cb &&
+    typeof response?.data !== "undefined" &&
+    options.cb(response?.data);
 };

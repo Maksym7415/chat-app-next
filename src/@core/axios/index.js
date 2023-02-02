@@ -1,25 +1,19 @@
 import axios from "axios";
-import { BASE_URL } from "../constants/url";
-import { getHeaders } from "../../helpers";
-import { actionLogOut } from "../../actions";
-import Snackbar from "@/helpers/notistack";
+import { BASE_URL } from "@/core/constants/url";
 import { IS_CLIENT } from "@/core/constants/general";
+import { getHeaders } from "@/helpers/index";
+import Snackbar from "@/helpers/notistack";
+import { actionLogOut } from "@/actions/index";
 
 const parseErrorCode = (error) => {
   console.log(error, "error");
   if (error?.response) {
     console.log(error, "error.response");
-    // console.log(error.response, "error.response");
     if (error.response?._response) {
       alert(error.response?._response);
     }
     if (error.response.status === 401) {
       actionLogOut();
-      // if (typeof window === "undefined") {
-      //   throw new CustomError("actionLogOut"); //Throw custom error here
-      // } else {
-      //   window.location.href = "/sign-in";
-      // }
     } else if (error.response.status === 404) {
       const { message } = error.response.data;
 

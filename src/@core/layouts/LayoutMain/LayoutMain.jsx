@@ -15,8 +15,6 @@ import {
 import Meta from "@/core/seo/Meta";
 import { GetUserConversationsQuery } from "@/services/conversations/service";
 import { GetUserProfileDataQuery } from "@/services/user/service";
-import { authTokenAction } from "@/store/auth/slice";
-import { getTokenCook } from "@/core/cookiesStorage/index";
 
 // STYLES
 const classes = {
@@ -30,8 +28,9 @@ const styleRnd = {
 
 const LayoutMain = ({ children, titlePage = "", params = {} }) => {
   // HOOKS
-  const dispatch = useDispatch();
   const router = useRouter();
+
+  // SERVICES
   GetUserConversationsQuery({});
   GetUserProfileDataQuery({});
 
@@ -55,9 +54,6 @@ const LayoutMain = ({ children, titlePage = "", params = {} }) => {
     [params]
   );
 
-  // console.log(conversationsList, "conversationsList");
-  // console.log(conversationSelect, "conversationSelect");
-
   const getTitlePage = () => {
     if (titlePage) {
       return titlePage;
@@ -73,19 +69,13 @@ const LayoutMain = ({ children, titlePage = "", params = {} }) => {
     return "";
   };
 
-  // USEEFFECTS
-  useEffect(() => {
-    console.log(authToken, "authToken");
-    if (!authToken?.userId) {
-      console.log("authTokenAction!!!");
-      const token = getTokenCook();
-      dispatch(
-        authTokenAction({
-          token,
-        })
-      );
+  const getDescriptionPage = () => {
+    if (params?.id) {
+      return "Chat with me";
     }
-  }, []);
+
+    return "";
+  };
 
   useEffect(() => {
     socket.removeAllListeners();
@@ -106,10 +96,8 @@ const LayoutMain = ({ children, titlePage = "", params = {} }) => {
     socketOnClearConversation();
   }, [conversationsListMass]);
 
-  // console.log(queryConversations.data, "queryConversations");
-  // console.log(conversationsList, "conversationsList");
   return (
-    <Meta title={getTitlePage()}>
+    <Meta title={getTitlePage()} description={getDescriptionPage()}>
       <main className={classes.container}>
         <Rnd
           style={styleRnd}

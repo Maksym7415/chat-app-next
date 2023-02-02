@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
-  Avatar,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -11,11 +10,9 @@ import {
   List,
 } from "@mui/material";
 import { CircularProgress } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { useSnackbar } from "notistack";
 import DefaultAvatar from "../../../../../avatar/defaultAvatar";
 import * as config from "./config";
@@ -29,6 +26,8 @@ import {
   DeleteAvatarQuery,
 } from "@/services/user/service";
 
+// style
+
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
@@ -36,8 +35,6 @@ import "swiper/css/pagination";
 
 // import required modules
 import { Navigation, Pagination } from "swiper";
-
-const ITEM_HEIGHT = 30;
 
 // STYLES
 const classes = {
@@ -51,7 +48,6 @@ const classes = {
 const Avatars = () => {
   // HOOKS
   const { enqueueSnackbar } = useSnackbar();
-  const dispatch = useDispatch();
   const { isLoading: isLoadingAvatars } = GetUserAvatarsQuery({});
 
   // SELECTORS
@@ -60,7 +56,6 @@ const Avatars = () => {
   const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
   // STATES
-  const [activeIndex, setActiveIndex] = useState(0);
   const [photoIndexSelected, setPhotoIndexSelected] = useState(0);
   const [anchorEl, setAnchorEl] = useState();
   const [avatars, setAvatars] = useState([]);
