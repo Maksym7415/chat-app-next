@@ -1,6 +1,7 @@
 import { socket } from "../index";
 import { fullDate } from "../../../helpers";
 import { store } from "@/store/store";
+import Snackbar from "@/helpers/notistack";
 
 let filesCount = 0;
 
@@ -139,6 +140,8 @@ export const socketEmitChatCreation = ({
     (success) => {
       if (success) {
         cb && cb();
+      } else {
+        Snackbar.error("Щось пішло не так");
       }
     }
   );

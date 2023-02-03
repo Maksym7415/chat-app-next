@@ -89,5 +89,5 @@ export const actionCreateNewConversation = async (router, item) => {
     })
   );
 
-  router.push(PATHS.newChat);
+  router.push(`${PATHS.newChat}/${item.id}`);
 };

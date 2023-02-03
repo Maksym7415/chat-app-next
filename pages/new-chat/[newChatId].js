@@ -2,10 +2,15 @@ import { dehydrate } from "react-query";
 import LayoutMain from "@/core/layouts/LayoutMain";
 import { checkIsToken } from "@/core/forSsr/checkIsToken";
 import { getInitialData } from "@/core/forSsr/getData";
+import Chat from "@/screens/chat/index";
 import { wrapper } from "@/store/store";
 
-const NewChatPage = () => {
-  return <LayoutMain />;
+const NewChatPage = ({ params }) => {
+  return (
+    <LayoutMain>
+      <Chat params={params} />
+    </LayoutMain>
+  );
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(
