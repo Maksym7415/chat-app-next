@@ -31,6 +31,8 @@ export const queryClient = new QueryClient({
   }),
 });
 
+if (!process.browser) React.useLayoutEffect = React.useEffect;
+
 function App({ Component, ...rest }) {
   const { pageProps } = rest;
 

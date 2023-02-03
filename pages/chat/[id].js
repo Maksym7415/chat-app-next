@@ -5,7 +5,6 @@ import { getInitialData } from "@/core/forSsr/getData";
 import Chat from "@/screens/chat/index";
 import { getConversationMessagesQuery } from "@/services/conversations/service";
 import { wrapper } from "@/store/store";
-
 import { queryClient } from "@/pages/_app";
 
 const ChatIdPage = (props) => {
@@ -26,8 +25,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     const { queryClient } = await getInitialData(ctx, store);
 
-    console.time(ctx.params?.id, "Time this"); // при старті може бути 70ms  при переході на інший чат до 47ms без запиту 0.004 ms, більше
-
     const additionalUrl = ctx.params?.id ? `${ctx.params?.id}` : null;
     const params = { offset: 0 };
 
@@ -37,8 +34,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       additionalUrl,
     });
 
-    console.timeEnd(ctx.params?.id, "Time this END");
-
     return {
       props: {
         dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
@@ -47,6 +42,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     };
   }
 );
+
+// TEST
 
 // export const getStaticPaths = async (context) => {
 //   console.log(context, "context");

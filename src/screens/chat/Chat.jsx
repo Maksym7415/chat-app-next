@@ -5,6 +5,7 @@ import {
   memo,
   useCallback,
   useLayoutEffect,
+  useRef,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Typography, Box } from "@mui/material";
@@ -41,9 +42,12 @@ const checkOpenConversationId = (conversationId) => {
 const LOAD_MESSAGE_OFFSET = 15;
 let isLoadMessages = false;
 
+let scroll = 0;
 const Chat = ({ params }) => {
   // HOOKS
   const dispatch = useDispatch();
+
+  const scrollRef = useRef(0);
 
   // SELECTORS
   const allMessages = useSelector(({ appSlice }) => appSlice.allMessages);
@@ -53,8 +57,19 @@ const Chat = ({ params }) => {
   const newChatData = useSelector(({ appSlice }) => appSlice.newChatData);
 
   const cbInitialMessages = (response, conversationId) => {
+    const messagesInStore = allMessages[conversationId] || [];
+    let messages = response?.data;
+    // console.log(messagesInStore, "messagesInStore");
+    // if (messagesInStore.length && messages?.length) {
+    //   messages = messages.slice(messagesInStore.length - messages?.length);
+
+    //   console.log(messages, "messages");
+    // }
+
     const messagesResult =
       getMessagesWithSendDate(response?.data)?.messages || [];
+
+    console.log(messagesResult, "messagesResult");
     dispatch(
       setAllMessagesAction({
         [conversationId]: messagesResult,
@@ -82,7 +97,7 @@ const Chat = ({ params }) => {
     newChatData.newChatId &&
       params?.id &&
       dispatch(setNewChatDataClearAction());
-    // setOptionsMessages(initialOptionsMessages);
+    setOptionsMessages(initialOptionsMessages);
     return params?.id || null;
   }, [params]);
 
@@ -102,6 +117,7 @@ const Chat = ({ params }) => {
     conversationId,
     additionalUrl: conversationId ? `${conversationId}` : null,
     cb: (response) => {
+      console.log(optionsMessages, "optionsMessages");
       optionsMessages.cb && optionsMessages.cb(response, conversationId);
       errorBack && setErrorBack("");
     },
@@ -110,24 +126,27 @@ const Chat = ({ params }) => {
     },
   });
 
-  const loadMessages = useCallback((isOffset, cb, pagination, messages) => {
-    isLoadMessages = true;
-    const params = { offset: 0 };
-    if (isOffset) {
-      params.offset = pagination.currentPage + LOAD_MESSAGE_OFFSET;
-    }
-    setOptionsMessages({
-      params,
-      cb: (response) => {
-        dispatch(
-          setAllMessagesAction({
-            [conversationId]: [...response?.data, ...messages],
-          })
-        );
-        cb && cb(getMessagesWithSendDate(response.data).messages);
-      },
-    });
-  }, []);
+  const loadMessages = useCallback(
+    (isOffset, cb, pagination, messages) => {
+      isLoadMessages = true;
+      const params = { offset: 0 };
+      if (isOffset) {
+        params.offset = pagination.currentPage + LOAD_MESSAGE_OFFSET;
+      }
+      setOptionsMessages({
+        params,
+        cb: (response) => {
+          dispatch(
+            setAllMessagesAction({
+              [conversationId]: [...response?.data, ...messages],
+            })
+          );
+          cb && cb(getMessagesWithSendDate(response.data).messages);
+        },
+      });
+    },
+    [conversationId]
+  );
 
   // USEEFFECTS
   useLayoutEffect(() => {
@@ -137,6 +156,12 @@ const Chat = ({ params }) => {
     }
 
     checkOpenConversationId(conversationId);
+  }, [conversationId]);
+
+  useEffect(() => {
+    return () => {
+      console.log(scrollRef.current, "return");
+    };
   }, [conversationId]);
 
   if (errorBack) {
@@ -171,6 +196,7 @@ const Chat = ({ params }) => {
           typeConversation={typeConversation}
           conversationId={conversationId}
           loadMessages={loadMessages}
+          ref={scrollRef}
         />
         <ChatBottom
           opponentId={opponentId}

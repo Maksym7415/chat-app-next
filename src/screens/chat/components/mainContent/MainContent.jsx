@@ -111,7 +111,7 @@ const MainContent = ({ conversationId, typeConversation, loadMessages }) => {
   // console.log(prevChatId, "prevChatId");
   // console.log(conversationId, "conversationId");
   // console.log(pagination, "pagination");
-  console.log(messages, "messages");
+  // console.log(messages, "messages");
   // console.log(lang, "lang");
   // console.log(authToken, "authToken");
   // console.log(typeConversation, "typeConversation");
