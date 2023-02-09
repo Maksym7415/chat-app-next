@@ -16,7 +16,7 @@ export const store = configureStore({
       conversationsApi.middleware,
       authApi.middleware,
       userApi.middleware,
-      searchApi.middleware,
+      searchApi.middleware
     ),
 });
 

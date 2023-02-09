@@ -1,3 +1,4 @@
+
 import appSlice from "./app/slice";
 import authSlice from "./auth/slice";
 import settingSlice from "./setting/slice";
@@ -15,6 +16,11 @@ import { userApi } from "@/services/user/serviceRedux";
 import { searchApi } from "@/services/search/serviceRedux";
 
 export const reducers = {
+  [conversationsApi.reducerPath]: conversationsApi.reducer,
+  [authApi.reducerPath]: authApi.reducer,
+  [userApi.reducerPath]: userApi.reducer,
+  [searchApi.reducerPath]: searchApi.reducer,
+
   appSlice,
   authSlice,
   settingSlice,
@@ -26,9 +32,4 @@ export const reducers = {
   drawerSlice,
   contextMenuSlice,
   dialogWindowSlice,
-
-  [conversationsApi.reducerPath]: conversationsApi.reducer,
-  [authApi.reducerPath]: authApi.reducer,
-  [userApi.reducerPath]: userApi.reducer,
-  [searchApi.reducerPath]: searchApi.reducer,
 };

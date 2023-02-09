@@ -21,11 +21,7 @@ import { getNameShort } from "../../../../../../helpers";
 import { REACT_APP_BASE_URL } from "@/core/constants/url";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
 
-// BUG
-import {} from "@/services/user/service";
-
 // style
-
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";

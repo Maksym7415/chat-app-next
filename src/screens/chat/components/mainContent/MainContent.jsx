@@ -19,7 +19,12 @@ const classes = {
     "max-w-[125px] w-full flex justify-center px-[7px] py-[1px] text-[#fffefeb5] rounded-[10px] overflow-hidden bg-[rgba(0, 0, 0, 0.4)]",
 };
 
-const MainContent = ({ conversationId, typeConversation, loadMessages }) => {
+const MainContent = ({
+  conversationId,
+  typeConversation,
+  loadMessages,
+  messages,
+}) => {
   const dispatch = useDispatch();
 
   // SELECTORS
@@ -27,7 +32,7 @@ const MainContent = ({ conversationId, typeConversation, loadMessages }) => {
   const userHistoryConversations = useSelector(
     ({ conversationsSlice }) => conversationsSlice.userHistoryConversations
   );
-  const messages = useSelector(({ appSlice }) => appSlice.messagesChat);
+  // const messages = useSelector(({ appSlice }) => appSlice.messagesChat);
   const authToken = useSelector(({ authSlice }) => authSlice.authToken);
 
   // VARIABLES

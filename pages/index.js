@@ -1,4 +1,3 @@
-
 import LayoutMain from "@/core/layouts/LayoutMain";
 import { checkIsToken } from "@/core/forSsr/checkIsToken";
 import { getInitialData } from "@/core/forSsr/getData";
@@ -21,9 +20,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const {} = await getInitialData(ctx, store);
 
     return {
-      props: {
-   
-      },
+      props: {},
     };
   }
 );

@@ -1,5 +1,5 @@
-import API from "./index";
 import Axios from "axios";
+import API from "./index";
 
 const getRequestConfig = (args) => {
   if (typeof args === "string") {
@@ -9,7 +9,7 @@ const getRequestConfig = (args) => {
   return args;
 };
 
-const axiosBaseQuery = ({ prepareHeaders, meta, transformResponse }) => {
+export const axiosBaseQuery = ({ prepareHeaders, meta, transformResponse }) => {
   return async (args, api, extraOptions) => {
     try {
       const requestConfig = getRequestConfig(args);
@@ -54,4 +54,3 @@ const axiosBaseQuery = ({ prepareHeaders, meta, transformResponse }) => {
   };
 };
 
-export default axiosBaseQuery;

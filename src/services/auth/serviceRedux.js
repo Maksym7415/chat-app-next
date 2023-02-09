@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { HYDRATE } from "next-redux-wrapper";
-import axiosBaseQuery from "@/core/axios/axiosBaseQuery";
+import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
 import { pathBackAuth } from "@/core/constants/urlBack";
 import {
   authTokenAction,

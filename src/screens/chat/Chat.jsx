@@ -109,7 +109,6 @@ const Chat = ({ params }) => {
     conversationId,
     additionalUrl: conversationId ? `${conversationId}` : "",
     cb(response) {
-      console.log(optionsMessages, "optionsMessages");
       optionsMessages.cb && optionsMessages.cb(response, conversationId);
       errorBack && setErrorBack("");
     },
@@ -188,6 +187,7 @@ const Chat = ({ params }) => {
           typeConversation={typeConversation}
           conversationId={conversationId}
           loadMessages={loadMessages}
+          messages={allMessages?.[conversationId] || []}
         />
         <ChatBottom
           opponentId={opponentId}
