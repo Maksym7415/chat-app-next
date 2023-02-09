@@ -3,7 +3,6 @@
     "baseUrl": ".",
     "paths": {
       "@/store/*": ["src/reduxToolkit/*"],
-      "@/storeZustand/*": ["src/zustand/*"],
       "@/providers/*": ["src/providers/*"],
       "@/styles/*": ["styles/*"],
       "@/components/*": ["src/components/*"],
