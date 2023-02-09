@@ -1,6 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import { reducers } from "./rootReducer";
+import { conversationsApi } from "@/services/conversations/serviceRedux";
+import { authApi } from "@/services/auth/serviceRedux";
+import { userApi } from "@/services/user/serviceRedux";
 
 export const store = configureStore({
   reducer: reducers,
@@ -8,7 +11,11 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }),
+    }).concat(
+      conversationsApi.middleware,
+      authApi.middleware,
+      userApi.middleware
+    ),
 });
 
 export const makeStore = () => store;

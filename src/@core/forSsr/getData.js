@@ -1,20 +1,18 @@
 import { queryClient } from "@/pages/_app";
+import { conversationsApi } from "@/services/conversations/serviceRedux";
 import { getTokenCook } from "@/core/cookiesStorage/index";
-import { authTokenAction } from "@/store/auth/slice";
-import { getUserConversationsQuery } from "@/services/conversations/service";
+import { authTokenAction, setAuthHeadersAction } from "@/store/auth/slice";
 
-export const getDataInitialServer = async (ctx) => {
-  await getUserConversationsQuery({
-    cookies: ctx.req?.cookies,
-  });
-
-  return queryClient;
+export const getDataInitialServer = async (ctx, store) => {
+  await store.dispatch(
+    conversationsApi.endpoints.getUserConversations.initiate({})
+  );
 };
 
 export const getInitialData = async (ctx, store) => {
   const token = getTokenCook() || ctx.req?.cookies?.accessToken;
 
-  const queryClientResponse = await getDataInitialServer(ctx);
+  store.dispatch(setAuthHeadersAction({ accessToken: token }));
 
   if (token) {
     store.dispatch(
@@ -24,7 +22,9 @@ export const getInitialData = async (ctx, store) => {
     );
   }
 
+  await getDataInitialServer(ctx, store);
+
   return {
-    queryClient: queryClientResponse,
+    queryClient,
   };
 };

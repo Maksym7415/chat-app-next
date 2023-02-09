@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
@@ -7,7 +6,8 @@ import AuthForm from "@/components/authForm";
 import languages from "@/core/translations";
 import Meta from "@/core/seo/Meta";
 import { PATHS } from "@/core/constants/paths";
-import { PostSingUpQuery } from "@/services/auth/service";
+import { authApi } from "@/services/auth/serviceRedux";
+import { parseErrorResToType } from "@/services/helpers";
 
 const SignUpClientPage = () => {
   // HOOKS
@@ -17,17 +17,10 @@ const SignUpClientPage = () => {
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
   // SERVICES
-  const { mutate, isLoading } = PostSingUpQuery({
-    cb: () => {
-      router.push(PATHS.verification);
-    },
-    errorCb: (dataError) => {
-      dataError?.message && setErrorBack(dataError?.message);
-    },
-  });
+  const [postSingUp, { isLoading, error = {} }] =
+    authApi.usePostSingUpMutation();
 
   // STATES
-  const [errorBack, setErrorBack] = useState("");
   const {
     control,
     handleSubmit,
@@ -36,15 +29,17 @@ const SignUpClientPage = () => {
 
   // FUNCTIONS
   const onSubmit = (data) => {
-    mutate({
-      data: {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        login: data.email,
-      },
-    });
+    const sendData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      login: data.email,
+    };
 
-    errorBack && setErrorBack("");
+    postSingUp(sendData)
+      .unwrap()
+      .then(() => {
+        router.push(PATHS.verification);
+      });
   };
 
   return (
@@ -54,7 +49,7 @@ const SignUpClientPage = () => {
         submitBtnTitle={languages[lang].authorization.signUp}
         configFields={config.signUpPage}
         onSubmit={onSubmit}
-        errorBack={errorBack}
+        errorBack={parseErrorResToType({ error })}
         isLoading={isLoading}
         optionsForm={{
           control,

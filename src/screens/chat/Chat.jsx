@@ -12,9 +12,9 @@ import { Typography, Box } from "@mui/material";
 import ChatHeader from "./components/header";
 import ChatBottom from "./components/bottom";
 import ChatContent from "./components/mainContent";
+import { conversationsApi } from "@/services/conversations/serviceRedux";
 import RenderInfoCenterBox from "../../components/renders/renderInfoCenterBox";
 import { getMessagesWithSendDate } from "@/helpers/index";
-import { GetConversationMessagesQuery } from "@/services/conversations/service";
 import {
   setAllMessagesAction,
   setMessagesChatAction,
@@ -39,6 +39,27 @@ const checkOpenConversationId = (conversationId) => {
   }
 };
 
+export const cbInitialMessages = (response, conversationId, options) => {
+  const dispatch = options?.dispatch || store.dispatch;
+
+  const messagesResult =
+    getMessagesWithSendDate(response?.data)?.messages || [];
+
+  dispatch(
+    setAllMessagesAction({
+      [conversationId]: messagesResult,
+    })
+  );
+  dispatch(setMessagesChatAction(messagesResult));
+};
+
+const initialOptionsMessages = {
+  params: {
+    offset: 0,
+  },
+  cb: cbInitialMessages,
+};
+
 const LOAD_MESSAGE_OFFSET = 15;
 let isLoadMessages = false;
 
@@ -55,35 +76,6 @@ const Chat = ({ params }) => {
     ({ conversationsSlice }) => conversationsSlice.conversationsList.data
   );
   const newChatData = useSelector(({ appSlice }) => appSlice.newChatData);
-
-  const cbInitialMessages = (response, conversationId) => {
-    const messagesInStore = allMessages[conversationId] || [];
-    let messages = response?.data;
-    // console.log(messagesInStore, "messagesInStore");
-    // if (messagesInStore.length && messages?.length) {
-    //   messages = messages.slice(messagesInStore.length - messages?.length);
-
-    //   console.log(messages, "messages");
-    // }
-
-    const messagesResult =
-      getMessagesWithSendDate(response?.data)?.messages || [];
-
-    console.log(messagesResult, "messagesResult");
-    dispatch(
-      setAllMessagesAction({
-        [conversationId]: messagesResult,
-      })
-    );
-    dispatch(setMessagesChatAction(messagesResult));
-  };
-
-  const initialOptionsMessages = {
-    params: {
-      offset: 0,
-    },
-    cb: cbInitialMessages,
-  };
 
   // STATES
   const [errorBack, setErrorBack] = useState("");
@@ -112,11 +104,11 @@ const Chat = ({ params }) => {
   const typeConversation =
     conversationData?.conversationType?.toLowerCase() || "";
 
-  const {} = GetConversationMessagesQuery({
+  const {} = conversationsApi.useGetConversationMessagesQuery({
     params: optionsMessages.params,
     conversationId,
-    additionalUrl: conversationId ? `${conversationId}` : null,
-    cb: (response) => {
+    additionalUrl: conversationId ? `${conversationId}` : "",
+    cb(response) {
       console.log(optionsMessages, "optionsMessages");
       optionsMessages.cb && optionsMessages.cb(response, conversationId);
       errorBack && setErrorBack("");
@@ -196,7 +188,6 @@ const Chat = ({ params }) => {
           typeConversation={typeConversation}
           conversationId={conversationId}
           loadMessages={loadMessages}
-          ref={scrollRef}
         />
         <ChatBottom
           opponentId={opponentId}

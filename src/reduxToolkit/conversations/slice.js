@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { HYDRATE } from "next-redux-wrapper";
 
 const initialState = {
   conversationMessages: {
@@ -55,6 +56,14 @@ const conversationsSlice = createSlice({
           ...state.userHistoryConversations?.[payload.conversationId],
           ...payload.data,
         },
+      };
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.conversationsSlice,
       };
     },
   },

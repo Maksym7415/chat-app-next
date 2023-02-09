@@ -1,9 +1,11 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Rnd } from "react-rnd";
 import LeftSide from "./components/leftSide";
 import { socket } from "@/core/socket";
+import { conversationsApi } from "@/services/conversations/serviceRedux";
+import { userApi } from "@/services/user/serviceRedux";
 import {
   socketOnUserIdChat,
   socketOnTypingStateId,
@@ -13,8 +15,6 @@ import {
   socketOnClearConversation,
 } from "@/core/socket/actions/socketOn";
 import Meta from "@/core/seo/Meta";
-import { GetUserConversationsQuery } from "@/services/conversations/service";
-import { GetUserProfileDataQuery } from "@/services/user/service";
 
 // STYLES
 const classes = {
@@ -31,8 +31,8 @@ const LayoutMain = ({ children, titlePage = "", params = {} }) => {
   const router = useRouter();
 
   // SERVICES
-  GetUserConversationsQuery({});
-  GetUserProfileDataQuery({});
+  const { data } = conversationsApi.useGetUserConversationsQuery({});
+  const {} = userApi.useGetUserProfileDataQuery();
 
   // SELECTORS
   const conversationsList = useSelector(

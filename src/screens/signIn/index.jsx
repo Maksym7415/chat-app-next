@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import * as config from "./config";
@@ -7,7 +6,8 @@ import AuthForm from "@/components/authForm";
 import languages from "@/core/translations";
 import Meta from "@/core/seo/Meta";
 import { PATHS } from "@/core/constants/paths";
-import { PostLoginQuery } from "@/services/auth/service";
+import { authApi } from "@/services/auth/serviceRedux";
+import { parseErrorResToType } from "@/services/helpers";
 
 export default function SignInClientPage() {
   // HOOKS
@@ -18,7 +18,6 @@ export default function SignInClientPage() {
   const loginSingIn = useSelector(({ authSlice }) => authSlice.loginSingIn);
 
   // STATES
-  const [errorBack, setErrorBack] = useState("");
   const {
     control,
     handleSubmit,
@@ -30,29 +29,21 @@ export default function SignInClientPage() {
   });
 
   // SERVICES
-  const { mutate, isLoading } = PostLoginQuery({
-    cb: () => {
-      router.push(PATHS.verification);
-    },
-    errorCb: (dataError) => {
-      console.log(dataError, "dataError");
-      dataError?.message && setErrorBack(dataError?.message);
-    },
-  });
+  const [postLogin, { isLoading, error = {} }] = authApi.usePostLoginMutation();
 
   // FUNCTIONS
   const onSubmit = (data) => {
     const { login } = data;
 
-    const optionsSendData = {
-      data: {
-        login,
-      },
+    const sendData = {
+      login,
     };
 
-    mutate(optionsSendData);
-
-    errorBack && setErrorBack("");
+    postLogin(sendData)
+      .unwrap()
+      .then(() => {
+        router.push(PATHS.verification);
+      });
   };
 
   return (
@@ -62,7 +53,7 @@ export default function SignInClientPage() {
         submitBtnTitle={languages[lang].authorization.signIn}
         configFields={config.signInFields}
         onSubmit={onSubmit}
-        errorBack={errorBack}
+        errorBack={parseErrorResToType({ error })}
         isLoading={isLoading}
         optionsForm={{
           control,

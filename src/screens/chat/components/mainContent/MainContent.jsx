@@ -103,9 +103,9 @@ const MainContent = ({ conversationId, typeConversation, loadMessages }) => {
     [conversationId, authToken]
   );
 
-  if (prevChatId !== conversationId && conversationId !== null) {
-    return <div className={classes.wrapperMessages}></div>;
-  }
+  // if (prevChatId !== conversationId && conversationId !== null) {
+  //   return <div className={classes.wrapperMessages}></div>;
+  // }
 
   console.log("--------------");
   // console.log(prevChatId, "prevChatId");

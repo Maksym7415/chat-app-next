@@ -9,6 +9,10 @@ import drawerSlice from "../components/drawer/redux/slice";
 import contextMenuSlice from "../components/contextMenu/redux/slice";
 import dialogWindowSlice from "../components/dialogWindow/redux/slice";
 
+import { conversationsApi } from "@/services/conversations/serviceRedux";
+import { authApi } from "@/services/auth/serviceRedux";
+import { userApi } from "@/services/user/serviceRedux";
+
 export const reducers = {
   appSlice,
   authSlice,
@@ -21,4 +25,8 @@ export const reducers = {
   drawerSlice,
   contextMenuSlice,
   dialogWindowSlice,
+
+  [conversationsApi.reducerPath]: conversationsApi.reducer,
+  [authApi.reducerPath]: authApi.reducer,
+  [userApi.reducerPath]: userApi.reducer,
 };

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
+import { HYDRATE } from "next-redux-wrapper";
 
 export const initialState = {
   isLoading: false,
@@ -83,6 +84,14 @@ const appSlice = createSlice({
     },
     setNewChatDataClearAction(state) {
       state.newChatData = initialState.newChatData;
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.appSlice,
+      };
     },
   },
 });

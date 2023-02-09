@@ -67,12 +67,12 @@ const Message = ({
 
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-  const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
+  const authToken = useSelector(({ authSlice }) => authSlice.authToken);
   const selectedMessages = useSelector(
     ({ appSlice }) => appSlice.selectedMessages
   );
 
-  const selfMessage = userInfo?.id === messageData.User?.id;
+  const selfMessage = authToken?.userId === messageData.User?.id;
 
   // STATES
   const [settings, setSettings] = useState({

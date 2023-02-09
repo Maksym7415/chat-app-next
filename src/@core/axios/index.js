@@ -74,9 +74,9 @@ API.interceptors.request.use(
 );
 
 // Response parsing interceptor
-API.interceptors.response.use(
-  (response) => response,
-  (error) => parseErrorCode(error)
-);
+// API.interceptors.response.use(
+//   (response) => response,
+//   (error) => parseErrorCode(error)
+// );
 
 export default API;

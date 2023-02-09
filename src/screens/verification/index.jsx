@@ -7,7 +7,8 @@ import AuthForm from "@/components/authForm";
 import languages from "@/core/translations";
 import Meta from "@/core/seo/Meta";
 import { PATHS } from "@/core/constants/paths";
-import { PostVerificationQuery } from "@/services/auth/service";
+import { authApi } from "@/services/auth/serviceRedux";
+import { parseErrorResToType } from "@/services/helpers";
 
 const VerificationClientPage = () => {
   // HOOKS
@@ -21,7 +22,6 @@ const VerificationClientPage = () => {
   );
 
   // STATES
-  const [errorBack, setErrorBack] = useState("");
   const {
     control,
     handleSubmit,
@@ -34,27 +34,21 @@ const VerificationClientPage = () => {
   });
 
   // SERVICES
-  const { mutate, isLoading } = PostVerificationQuery({
-    cb: () => {
-      router.push(PATHS.main);
-    },
-    errorCb: (dataError) => {
-      dataError?.message && setErrorBack(dataError?.message);
-    },
-  });
+  const [postVerification, { isLoading, error = {} }] =
+    authApi.usePostVerificationMutation();
 
   // FUNCTIONS
   const onSubmit = (data) => {
-    const optionsSendData = {
-      data: {
-        verificationCode: data.verificationCode,
-        login: loginSingIn,
-      },
+    const sendData = {
+      verificationCode: data.verificationCode,
+      login: loginSingIn,
     };
 
-    mutate(optionsSendData);
-
-    errorBack && setErrorBack("");
+    postVerification(sendData)
+      .unwrap()
+      .then(() => {
+        router.push(PATHS.main);
+      });
   };
 
   // USEEFFECTS
@@ -73,7 +67,7 @@ const VerificationClientPage = () => {
         configFields={config.verificationFields}
         isLoading={isLoading}
         onSubmit={onSubmit}
-        errorBack={errorBack}
+        errorBack={parseErrorResToType({ error })}
         optionsForm={{
           control,
           handleSubmit,

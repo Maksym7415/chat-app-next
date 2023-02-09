@@ -9,6 +9,7 @@ import {
 } from "@/store/app/slice";
 import { setDialogWindowConfigAction } from "@/components/dialogWindow/redux/slice";
 import { store } from "@/store/store";
+import { getMessagesWithSendDate } from "@/helpers/index";
 
 export const actionsTypeObject = {
   add: "add",
@@ -78,11 +79,8 @@ export const actionsMessagesChat = (props) => {
   const selectedMessages = store.getState().appSlice.selectedMessages;
   const openConversationId = store.getState().appSlice.openConversationId;
 
-
   const { conversationId, typeAction, messageData = null } = props;
-  console.log(openConversationId, 'openConversationId')
-  console.log(props, 'props')
-  
+
   let _messages = {};
 
   let messagesMass = [];
@@ -233,4 +231,19 @@ export const actionsMessagesChat = (props) => {
     default:
       return Snackbar.error("An unknown action in chat is selected");
   }
+};
+
+export const cbInitialMessages = (response, conversationId, options) => {
+  const storeRedux = options || store;
+
+  const messagesResult =
+    getMessagesWithSendDate(response?.data)?.messages || [];
+
+  console.log(messagesResult, "messagesResult");
+  storeRedux.dispatch(
+    setAllMessagesAction({
+      [conversationId]: messagesResult,
+    })
+  );
+  storeRedux.dispatch(setMessagesChatAction(messagesResult));
 };
