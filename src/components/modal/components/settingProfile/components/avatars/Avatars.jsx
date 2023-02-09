@@ -10,6 +10,7 @@ import {
   List,
 } from "@mui/material";
 import { CircularProgress } from "@mui/material";
+import { Navigation, Pagination } from "swiper";
 import { useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -19,12 +20,9 @@ import * as config from "./config";
 import { getNameShort } from "../../../../../../helpers";
 import { REACT_APP_BASE_URL } from "@/core/constants/url";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
-import {
-  GetUserAvatarsQuery,
-  getUserAvatarsQuery,
-  PutMainPhotoQuery,
-  DeleteAvatarQuery,
-} from "@/services/user/service";
+
+// BUG
+import {} from "@/services/user/service";
 
 // style
 
@@ -34,7 +32,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 // import required modules
-import { Navigation, Pagination } from "swiper";
+import { userApi } from "@/services/user/serviceRedux";
 
 // STYLES
 const classes = {
@@ -48,7 +46,10 @@ const classes = {
 const Avatars = () => {
   // HOOKS
   const { enqueueSnackbar } = useSnackbar();
-  const { isLoading: isLoadingAvatars } = GetUserAvatarsQuery({});
+
+  const { isLoading: isLoadingAvatars } = userApi.useGetUserAvatarsQuery({});
+  const [putMainPhoto] = userApi.usePutMainPhotoMutation({});
+  const [deleteAvatar] = userApi.useDeleteAvatarMutation({});
 
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
@@ -61,26 +62,6 @@ const Avatars = () => {
   const [avatars, setAvatars] = useState([]);
   const [mainAvatar, setMainAvatar] = useState({});
   const open = Boolean(anchorEl);
-
-  const { mutate: mutatePutMainPhoto } = PutMainPhotoQuery({
-    additionalUrl: avatars[photoIndexSelected]?.id || "",
-    params: {
-      url: avatars[photoIndexSelected]?.fileName,
-    },
-    cb: async () => {
-      await getUserAvatarsQuery();
-      enqueueSnackbar("Success set main photo", { variant: "success" });
-    },
-  });
-  const { mutate: mutateDeleteAvatar } = DeleteAvatarQuery({
-    params: {
-      id: avatars[photoIndexSelected]?.id,
-    },
-    cb: async () => {
-      await getUserAvatarsQuery();
-      enqueueSnackbar("Success delete photo", { variant: "success" });
-    },
-  });
 
   // FUNCTIONS
   const handleMenuAction = (value) => {
@@ -96,10 +77,29 @@ const Avatars = () => {
         // }
         return;
       case "setMainPhoto":
-        mutatePutMainPhoto();
+        putMainPhoto({
+          id: avatars[photoIndexSelected]?.id,
+          additionalUrl: avatars[photoIndexSelected]?.id || "",
+          params: {
+            url: avatars[photoIndexSelected]?.fileName,
+          },
+        })
+          .unwrap()
+          .then(async () => {
+            enqueueSnackbar("Success set main photo", { variant: "success" });
+          });
         return;
       case "deletePhoto":
-        mutateDeleteAvatar();
+        deleteAvatar({
+          id: avatars[photoIndexSelected]?.id,
+          params: {
+            id: avatars[photoIndexSelected]?.id,
+          },
+        })
+          .unwrap()
+          .then(async () => {
+            enqueueSnackbar("Success delete photo", { variant: "success" });
+          });
         return;
       default:
         return null;

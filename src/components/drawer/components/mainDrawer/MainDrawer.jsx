@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
 import { ListItemIcon, ListItemText, List, ListItem } from "@mui/material";
 import * as config from "./config";
@@ -7,12 +7,8 @@ import { PATHS } from "@/core/constants/paths";
 import { actionLogOut } from "@/actions/index";
 import BaseSelect from "../../../selects/BaseSelect";
 import { setDialogWindowConfigAction } from "../../../dialogWindow/redux/slice";
-import { setLangAction } from "@/store/setting/slice";
 import { setModalConfigAction } from "@/components/modal/redux/slice";
-import {
-  PutUpdateProfileDataQuery,
-  getFetchUserProfileDataQuery,
-} from "@/services/user/service";
+import { userApi } from "@/services/user/serviceRedux";
 
 // STYLES
 const classes = {
@@ -25,15 +21,12 @@ function MainDrawer({ closeDrawer }) {
   // HOOKS
   const router = useRouter();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
-  const { mutate } = PutUpdateProfileDataQuery({
-    cb: async () => {
-      await getFetchUserProfileDataQuery();
-    },
-  });
+  const [putUpdateProfileData] = userApi.usePutUpdateProfileDataMutation();
 
   // FUNCTIONS
   const handleMenuAction = (value) => {
@@ -82,7 +75,11 @@ function MainDrawer({ closeDrawer }) {
 
     const sendData = { lang: selectLang };
 
-    mutate({ data: sendData });
+    putUpdateProfileData(sendData)
+      .unwrap()
+      .then(() => {
+        enqueueSnackbar("Success change language", { variant: "success" });
+      });
   };
 
   return (

@@ -1,4 +1,3 @@
-import { queryClient } from "@/pages/_app";
 import { conversationsApi } from "@/services/conversations/serviceRedux";
 import { getTokenCook } from "@/core/cookiesStorage/index";
 import { authTokenAction, setAuthHeadersAction } from "@/store/auth/slice";
@@ -25,6 +24,6 @@ export const getInitialData = async (ctx, store) => {
   await getDataInitialServer(ctx, store);
 
   return {
-    queryClient,
+    
   };
 };

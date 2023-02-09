@@ -9,7 +9,7 @@ import Snackbar from "@/helpers/notistack";
 import { socketEmitChatCreation } from "@/core/socket/actions/socketEmit";
 import CustomButton from "@/components/buttons/customButton/index";
 import { setDialogWindowClearConfigAction } from "../../redux/slice";
-import { getSearchContactsQuery } from "@/services/search/service";
+import { searchApi } from "@/services/search/serviceRedux";
 
 // STYLES
 const classes = {
@@ -92,9 +92,12 @@ const NewChat = () => {
             };
 
             try {
-              response = await getSearchContactsQuery(params);
+              response = await dispatch(
+                searchApi.endpoints.getSearchContacts.initiate({ params })
+              );
             } catch (error) {}
-
+            console.log(params, "params");
+            console.log(response, "response");
             return {
               options: response?.data?.response || [],
               limit: response?.data?.limit || 0,

@@ -1,4 +1,3 @@
-import { dehydrate } from "react-query";
 import LayoutMain from "@/core/layouts/LayoutMain";
 import { checkIsToken } from "@/core/forSsr/checkIsToken";
 import { getInitialData } from "@/core/forSsr/getData";
@@ -24,7 +23,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     console.time(ctx.params?.id, "Time this"); // при старті може бути 70ms  при переході на інший чат до 47ms без запиту 0.004 ms, більше
 
-    const { queryClient } = await getInitialData(ctx, store);
+    const {} = await getInitialData(ctx, store);
 
     const additionalUrl = ctx.params?.id ? `${ctx.params?.id}` : "";
     const params = { offset: 0 };
@@ -45,7 +44,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     return {
       props: {
-        dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
         params: ctx.params,
       },
     };
@@ -61,7 +59,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 //     fallback: "blocking",
 
 //     // props: {
-//     //   dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
 //     //   params: { id: 0 },
 //     // },
 //   };
@@ -75,7 +72,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 //   //   return redirectToken;
 //   // }
 
-//   // const { queryClient } = await getInitialData(ctx, store);
+//   // const {  } = await getInitialData(ctx, store);
 
 //   // console.time(ctx.params?.id, "Time this"); // при старті може бути 70ms  при переході на інший чат до 47ms без запиту 0.004 ms, більше
 
@@ -92,7 +89,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
 //   return {
 //     props: {
-//       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
 //       params: { id: 0 },
 //     },
 //   };

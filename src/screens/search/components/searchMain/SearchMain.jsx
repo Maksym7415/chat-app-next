@@ -1,10 +1,22 @@
-import { useCallback, useEffect, useState } from "react";
+import {
+  useCallback,
+  useLayoutEffect,
+  useState,
+  useMemo,
+  useEffect,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Virtuoso } from "react-virtuoso";
+import { CircularProgress } from "@mui/material";
 import UserAvatar from "@/components/avatar/userAvatar";
 import RenderConditionsList from "@/components/renders/renderConditionsList";
 import { setStateDirection } from "@/helpers/index";
-import { GetSearchContactsQuery } from "@/services/search/service";
+import { searchApi } from "@/services/search/serviceRedux";
+import {
+  setSearchContactsAction,
+  resetSearchContactsAction,
+} from "@/store/search/slice";
+import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
 
 // STYLES
 const classes = {
@@ -21,48 +33,74 @@ const classes = {
 // fix load more data
 
 const SearchMain = ({ onClickContact }) => {
-  // HOOKS
   const dispatch = useDispatch();
-  // SELECTORS
-  const searchContacts = useSelector(
-    (state) => state.searchSlice.searchContacts
-  );
 
-  const { isError, error, isLoading, data } = GetSearchContactsQuery({
-    params: {
-      searchRequest: searchContacts.search,
-    },
-  });
+  // SELECTORS
+  const searchContactsParams = useSelector(
+    (state) => state.searchSlice.searchContactsParams
+  );
 
   // STATES
   const [contacts, setContacts] = useState([]);
 
+  // VARIABLES
+  const params = useMemo(() => {
+    const paramsLoc = {};
+    const searchRequest = searchContactsParams.search;
+    const offset = searchContactsParams.offset;
+
+    if (searchRequest) {
+      paramsLoc.searchRequest = searchRequest;
+    }
+    if (offset) {
+      paramsLoc.offset = offset;
+    }
+
+    return paramsLoc;
+  }, [searchContactsParams]);
+
+  // SERVICES
+  const { currentData, isError, error, isLoading } =
+    searchApi.useGetSearchContactsQuery({
+      params,
+    });
+
   // FUNCTIONS
   const loadMore = useCallback(() => {
     if (
-      searchContacts.limit &&
-      searchContacts.response.length >= searchContacts.limit
+      currentData?.response?.length >= searchContactsParams.limit &&
+      !isLoading &&
+      !isError
     ) {
-      const params = {
-        search: searchContacts.search,
-        offset: searchContacts.offset + searchContacts.limit,
-      };
-
-      // getSearchContactFetcher({
-      //   params,
-      //   direction: "down",
-      // });
+      dispatch(
+        setSearchContactsAction({
+          offset: searchContactsParams.offset + searchContactsParams.limit,
+          direction: "down",
+        })
+      );
     }
     return false;
-  }, []);
+  }, [searchContactsParams, currentData]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setStateDirection({
-      direction: searchContacts.direction || "",
-      newData: searchContacts.response,
+      direction: searchContactsParams.direction || "",
+      newData: currentData?.response || [],
       setState: setContacts,
     });
-  }, [searchContacts]);
+
+    dispatch(
+      setSearchContactsAction({
+        limit: currentData?.limit || 0,
+      })
+    );
+  }, [currentData]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetSearchContactsAction());
+    };
+  }, []);
 
   // RENDER CONDITIONAL
   if (!contacts.length || isLoading) {
@@ -84,7 +122,17 @@ const SearchMain = ({ onClickContact }) => {
             style={{ height: "100%" }}
             data={contacts}
             endReached={loadMore}
-            overscan={10}
+            overscan={2}
+            components={{
+              Footer: () =>
+                isLoading ? (
+                  <RenderInfoCenterBox styles={{ padding: "5px 0" }}>
+                    <CircularProgress size={30} />
+                  </RenderInfoCenterBox>
+                ) : (
+                  <></>
+                ),
+            }}
             itemContent={(index, item) => {
               return (
                 <div

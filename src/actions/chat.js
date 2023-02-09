@@ -239,7 +239,7 @@ export const cbInitialMessages = (response, conversationId, options) => {
   const messagesResult =
     getMessagesWithSendDate(response?.data)?.messages || [];
 
-  console.log(messagesResult, "messagesResult");
+  // console.log(messagesResult, "messagesResult");
   storeRedux.dispatch(
     setAllMessagesAction({
       [conversationId]: messagesResult,

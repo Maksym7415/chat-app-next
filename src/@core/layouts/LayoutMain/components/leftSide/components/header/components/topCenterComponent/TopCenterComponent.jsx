@@ -1,31 +1,55 @@
-import { useCallback, useState } from "react";
-import { useSelector } from "react-redux";
+import { useCallback, useLayoutEffect, useState, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, OutlinedInput } from "@mui/material";
 import { useDebounce } from "@/hooks/useDebounce";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
-import { GetSearchContactsQuery } from "@/services/search/service";
+import { searchApi } from "@/services/search/serviceRedux";
+import { setSearchContactsAction } from "@/store/search/slice";
 
 // STYLES
 const classes = {
   inputSearch: "w-full max-w-[240px] p-[0] pl-[5px] rounded-[20px] h-[40px]",
 };
 function TopCenterComponent({ parentSettings }) {
+  const dispatch = useDispatch();
+
   // STORE
   const sideLeftConfig = useSelector(({ appSlice }) => appSlice.sideLeftConfig);
 
-  // STATES
+  // SELECTORS
   const [search, setSearch] = useState("");
 
   // CUSTOM HOOKS
   const debouncedSearchValue = useDebounce(search, 300);
 
+  // VARIABLES
+  const params = useMemo(() => {
+    const paramsLoc = {};
+    const searchRequest = debouncedSearchValue;
+
+    if (searchRequest) {
+      paramsLoc.searchRequest = searchRequest;
+    }
+
+    return paramsLoc;
+  }, [debouncedSearchValue]);
+
   // SERVICES
-  const {} = GetSearchContactsQuery({
-    params: {
-      searchRequest: debouncedSearchValue,
-    },
+  const {} = searchApi.useGetSearchContactsQuery({
+    params,
   });
+
+  useLayoutEffect(() => {
+    dispatch(
+      setSearchContactsAction({
+        search: debouncedSearchValue,
+        offset: 0,
+        direction: "",
+        limit: 0,
+      })
+    );
+  }, [debouncedSearchValue]);
 
   // FUNCTIONS
   const onChangeText = useCallback((e) => {

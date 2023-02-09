@@ -7,7 +7,7 @@ import {
   updateConversationTypeStateAction,
 } from "@/store/conversations/slice";
 import { store } from "@/store/store";
-import { getUserConversationsQuery } from "@/services/conversations/service";
+import { conversationsApi } from "@/services/conversations/serviceRedux";
 
 // User Id Chat
 export const socketOnUserIdChat = (chat) =>
@@ -188,7 +188,9 @@ export const socketOnUserIdNewChat = (userId, router) => {
   return socket.on(
     `userIdNewChat${userId}`,
     async (message, conversationId) => {
-      const response = await getUserConversationsQuery({});
+      const response = await store.dispatch(
+        conversationsApi.endpoints.getUserConversations.initiate({})
+      );
       if (response?.data) {
         // ця перевірка потрібно для того щоб коли інший юзер створює чат зі мною щоб в мене не відкривалося зразу чат з цим юзером
         if (message.User?.id !== userId) {

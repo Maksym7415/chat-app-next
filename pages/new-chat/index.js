@@ -1,4 +1,3 @@
-import { dehydrate } from "react-query";
 import LayoutMain from "@/core/layouts/LayoutMain";
 import { checkIsToken } from "@/core/forSsr/checkIsToken";
 import { getInitialData } from "@/core/forSsr/getData";
@@ -16,12 +15,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
       return redirectToken;
     }
 
-    const { queryClient } = await getInitialData(ctx, store);
+    const {} = await getInitialData(ctx, store);
 
     return {
-      props: {
-        dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
-      },
+      props: {},
     };
   }
 );

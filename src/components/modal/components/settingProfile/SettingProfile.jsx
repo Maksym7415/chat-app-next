@@ -1,15 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useSnackbar } from "notistack";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import * as config from "./config";
 import Avatars from "./components/avatars";
 import TextInputCustom from "@/components/hookFormsComponents/textInput";
 import CustomButton from "@/components/buttons/customButton";
-import {
-  PutUpdateProfileDataQuery,
-  getFetchUserProfileDataQuery,
-} from "@/services/user/service";
+import { userApi } from "@/services/user/serviceRedux";
 
 // STYLES
 const classes = {
@@ -20,7 +17,6 @@ const classes = {
 
 const SettingProfile = () => {
   // HOOKS
-  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
   // STORE
@@ -28,7 +24,6 @@ const SettingProfile = () => {
   const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
   // STATES
-  const [errorBack, setErrorBack] = useState("");
   const {
     control,
     handleSubmit,
@@ -39,16 +34,8 @@ const SettingProfile = () => {
     defaultValues: {},
   });
 
-  const { mutate, isLoading } = PutUpdateProfileDataQuery({
-    cb: async () => {
-      await getFetchUserProfileDataQuery();
-      enqueueSnackbar("Success update info", { variant: "success" });
-      errorBack && setErrorBack("");
-    },
-    errorCb: (error) => {
-      enqueueSnackbar(error.message, { variant: "error" });
-    },
-  });
+  const [putUpdateProfileData, { isLoading }] =
+    userApi.usePutUpdateProfileDataMutation();
 
   // FUNCTIONS
   const onSubmit = (data) => {
@@ -61,7 +48,17 @@ const SettingProfile = () => {
       sendData.lastName = data.lastName;
     }
 
-    Object.keys(sendData).length && mutate({ data: sendData });
+    Object.keys(sendData).length
+      ? putUpdateProfileData(sendData)
+          .unwrap()
+          .then(() => {
+            enqueueSnackbar("Success change language", { variant: "success" });
+          })
+          .catch((err) => {
+            console.log(err, "err");
+            enqueueSnackbar(error.message, { variant: "error" });
+          })
+      : enqueueSnackbar("Немає змін щоб оновити дані", { variant: "info" });
   };
 
   // USEEFFECTS
