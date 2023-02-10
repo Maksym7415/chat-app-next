@@ -2,7 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { HYDRATE } from "next-redux-wrapper";
 import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
 import { pathBackSearch } from "@/core/constants/urlBack";
-import { fErrorResponse } from "@/services/helpers";
+import { fErrorResponse } from "@/rtkQuery/helpers";
 
 export const searchApi = createApi({
   reducerPath: "searchApi",

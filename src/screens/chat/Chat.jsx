@@ -12,7 +12,7 @@ import { Typography, Box } from "@mui/material";
 import ChatHeader from "./components/header";
 import ChatBottom from "./components/bottom";
 import ChatContent from "./components/mainContent";
-import { conversationsApi } from "@/services/conversations/serviceRedux";
+import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
 import RenderInfoCenterBox from "../../components/renders/renderInfoCenterBox";
 import { getMessagesWithSendDate } from "@/helpers/index";
 import {
@@ -104,7 +104,7 @@ const Chat = ({ params }) => {
   const typeConversation =
     conversationData?.conversationType?.toLowerCase() || "";
 
-  const {} = conversationsApi.useGetConversationMessagesQuery({
+  const { data } = conversationsApi.useGetConversationMessagesQuery({
     params: optionsMessages.params,
     conversationId,
     additionalUrl: conversationId ? `${conversationId}` : "",
@@ -116,6 +116,8 @@ const Chat = ({ params }) => {
       setErrorBack(error?.message);
     },
   });
+
+  // console.log(data, "data");
 
   const loadMessages = useCallback(
     (isOffset, cb, pagination, messages) => {

@@ -6,7 +6,7 @@ import {
   fErrorResponse,
   onQueryStartedFulfilled,
   onQueryStartedFulfilledCb,
-} from "@/services/helpers";
+} from "@/rtkQuery/helpers";
 import { setUserInfoAction, seUserAvatarsAction } from "@/store/user/slice";
 import { setLangAction } from "@/store/setting/slice";
 

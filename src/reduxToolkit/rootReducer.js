@@ -1,4 +1,3 @@
-
 import appSlice from "./app/slice";
 import authSlice from "./auth/slice";
 import settingSlice from "./setting/slice";
@@ -10,10 +9,10 @@ import drawerSlice from "../components/drawer/redux/slice";
 import contextMenuSlice from "../components/contextMenu/redux/slice";
 import dialogWindowSlice from "../components/dialogWindow/redux/slice";
 
-import { conversationsApi } from "@/services/conversations/serviceRedux";
-import { authApi } from "@/services/auth/serviceRedux";
-import { userApi } from "@/services/user/serviceRedux";
-import { searchApi } from "@/services/search/serviceRedux";
+import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
+import { authApi } from "@/rtkQuery/auth/serviceRedux";
+import { userApi } from "@/rtkQuery/user/serviceRedux";
+import { searchApi } from "@/rtkQuery/search/serviceRedux";
 
 export const reducers = {
   [conversationsApi.reducerPath]: conversationsApi.reducer,

@@ -7,7 +7,7 @@ import {
   updateConversationTypeStateAction,
 } from "@/store/conversations/slice";
 import { store } from "@/store/store";
-import { conversationsApi } from "@/services/conversations/serviceRedux";
+import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
 
 // User Id Chat
 export const socketOnUserIdChat = (chat) =>

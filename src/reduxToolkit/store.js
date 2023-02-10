@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import { reducers } from "./rootReducer";
-import { conversationsApi } from "@/services/conversations/serviceRedux";
-import { authApi } from "@/services/auth/serviceRedux";
-import { userApi } from "@/services/user/serviceRedux";
-import { searchApi } from "@/services/search/serviceRedux";
+import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
+import { authApi } from "@/rtkQuery/auth/serviceRedux";
+import { userApi } from "@/rtkQuery/user/serviceRedux";
+import { searchApi } from "@/rtkQuery/search/serviceRedux";
 
 export const store = configureStore({
   reducer: reducers,

@@ -4,7 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, OutlinedInput } from "@mui/material";
 import { useDebounce } from "@/hooks/useDebounce";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
-import { searchApi } from "@/services/search/serviceRedux";
+import { searchApi } from "@/rtkQuery/search/serviceRedux";
 import { setSearchContactsAction } from "@/store/search/slice";
 
 // STYLES

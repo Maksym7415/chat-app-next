@@ -2,7 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { HYDRATE } from "next-redux-wrapper";
 import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
 import { pathBackConversations } from "@/core/constants/urlBack";
-import { fErrorResponse, onQueryStartedFulfilled } from "@/services/helpers";
+import { fErrorResponse, onQueryStartedFulfilled } from "@/rtkQuery/helpers";
 import {
   setConversationListAction,
   updateUserHistoryConversation,
@@ -38,8 +38,6 @@ export const conversationsApi = createApi({
           acc[item.conversationId] = item;
           return acc;
         }, {});
-
-        console.log(arg, "arg getUserConversations");
 
         arg?.cb && window !== "undefined" && arg.cb(transformData);
 
@@ -78,6 +76,7 @@ export const conversationsApi = createApi({
 
             sendData?.cb && IS_CLIENT && sendData.cb(data);
 
+            //
             if (IS_SERVER) {
               cbInitialMessages(data, sendData?.conversationId, options);
             }

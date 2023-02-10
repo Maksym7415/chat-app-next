@@ -9,7 +9,7 @@ import Snackbar from "@/helpers/notistack";
 import { socketEmitChatCreation } from "@/core/socket/actions/socketEmit";
 import CustomButton from "@/components/buttons/customButton/index";
 import { setDialogWindowClearConfigAction } from "../../redux/slice";
-import { searchApi } from "@/services/search/serviceRedux";
+import { searchApi } from "@/rtkQuery/search/serviceRedux";
 
 // STYLES
 const classes = {

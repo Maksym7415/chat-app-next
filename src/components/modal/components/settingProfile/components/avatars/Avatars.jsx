@@ -28,7 +28,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 // import required modules
-import { userApi } from "@/services/user/serviceRedux";
+import { userApi } from "@/rtkQuery/user/serviceRedux";
 
 // STYLES
 const classes = {

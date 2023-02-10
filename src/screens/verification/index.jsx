@@ -7,8 +7,8 @@ import AuthForm from "@/components/authForm";
 import languages from "@/core/translations";
 import Meta from "@/core/seo/Meta";
 import { PATHS } from "@/core/constants/paths";
-import { authApi } from "@/services/auth/serviceRedux";
-import { parseErrorResToType } from "@/services/helpers";
+import { authApi } from "@/rtkQuery/auth/serviceRedux";
+import { parseErrorResToType } from "@/rtkQuery/helpers";
 
 const VerificationClientPage = () => {
   // HOOKS

@@ -8,7 +8,7 @@ import {
   setAuthHeadersAction,
   setVerificationCodeAction,
 } from "@/store/auth/slice";
-import { fErrorResponse, onQueryStartedFulfilled } from "@/services/helpers";
+import { fErrorResponse, onQueryStartedFulfilled } from "@/rtkQuery/helpers";
 import { setTokenCook } from "@/core/cookiesStorage";
 
 export const authApi = createApi({

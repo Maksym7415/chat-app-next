@@ -1,11 +1,13 @@
-
-import { conversationsApi } from "@/services/conversations/serviceRedux";
+import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
 import { getTokenCook } from "@/core/cookiesStorage/index";
 import { authTokenAction, setAuthHeadersAction } from "@/store/auth/slice";
 
 export const getDataInitialServer = async (ctx, store) => {
   await store.dispatch(
-    conversationsApi.endpoints.getUserConversations.initiate({})
+    conversationsApi.endpoints.getUserConversations.initiate(
+      {},
+      { forceRefetch: true }
+    )
   );
 };
 

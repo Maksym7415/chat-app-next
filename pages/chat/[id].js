@@ -2,7 +2,7 @@ import LayoutMain from "@/core/layouts/LayoutMain";
 import { checkIsToken } from "@/core/forSsr/checkIsToken";
 import { getInitialData } from "@/core/forSsr/getData";
 import Chat from "@/screens/chat/index";
-import { conversationsApi } from "@/services/conversations/serviceRedux";
+import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
 import { wrapper } from "@/store/store";
 
 const ChatIdPage = (props) => {
@@ -21,7 +21,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       return redirectToken;
     }
 
-    console.log(store.getState().appSlice.allMessages, "----allMessages----");
+    // console.log(store.getState().appSlice.allMessages, "----allMessages----");
 
     console.time(ctx.params?.id, "Time this"); // при старті може бути 70ms  при переході на інший чат до 47ms без запиту 0.004 ms, більше
 
@@ -31,11 +31,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const params = { offset: 0 };
 
     await store.dispatch(
-      conversationsApi.endpoints.getConversationMessages.initiate({
-        params,
-        additionalUrl,
-        conversationId: `${ctx.params?.id}`,
-      })
+      conversationsApi.endpoints.getConversationMessages.initiate(
+        {
+          params,
+          additionalUrl,
+          conversationId: `${ctx.params?.id}`,
+        },
+        {
+          forceRefetch: true,
+        }
+      )
     );
 
     await Promise.all(

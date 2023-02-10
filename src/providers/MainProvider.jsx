@@ -1,9 +1,5 @@
 import { SnackbarProvider } from "notistack";
 import CssBaseline from "@mui/material/CssBaseline";
-// import ContextMenu from "@/components/contextMenu";
-// import ModalCustom from "@/components/modal";
-// import DrawerCustom from "@/components/drawer";
-// import DialogCustom from "@/components/dialogWindow/Dialog";
 import AuthProvider from "./AuthProvider";
 import { SnackbarUtilsConfigurator } from "@/helpers/notistack";
 import HeadProvider from "./HeadProvider/HeadProvider";
@@ -17,10 +13,6 @@ const MainProvider = ({ children, Component }) => {
       <AuthProvider Component={Component}>
         <SnackbarProvider maxSnack={3}>
           <SnackbarUtilsConfigurator />
-          {/* <DrawerCustom />
-          <ContextMenu />
-          <ModalCustom />
-          <DialogCustom /> */}
           <CssBaseline />
           {children}
         </SnackbarProvider>
@@ -29,4 +21,4 @@ const MainProvider = ({ children, Component }) => {
   );
 };
 
-export default wrapper.withRedux(MainProvider);
+export default MainProvider;

@@ -11,7 +11,7 @@ import { CircularProgress } from "@mui/material";
 import UserAvatar from "@/components/avatar/userAvatar";
 import RenderConditionsList from "@/components/renders/renderConditionsList";
 import { setStateDirection } from "@/helpers/index";
-import { searchApi } from "@/services/search/serviceRedux";
+import { searchApi } from "@/rtkQuery/search/serviceRedux";
 import {
   setSearchContactsAction,
   resetSearchContactsAction,

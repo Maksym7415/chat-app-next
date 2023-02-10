@@ -8,7 +8,7 @@ import { actionLogOut } from "@/actions/index";
 import BaseSelect from "../../../selects/BaseSelect";
 import { setDialogWindowConfigAction } from "../../../dialogWindow/redux/slice";
 import { setModalConfigAction } from "@/components/modal/redux/slice";
-import { userApi } from "@/services/user/serviceRedux";
+import { userApi } from "@/rtkQuery/user/serviceRedux";
 
 // STYLES
 const classes = {
