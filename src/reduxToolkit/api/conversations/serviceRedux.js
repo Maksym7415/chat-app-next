@@ -61,6 +61,8 @@ export const conversationsApi = createApi({
       query: (args) => {
         const { additionalUrl, params } = args;
 
+        console.log(args, "args");
+
         return {
           url: `${pathBackConversations.conversationHistory}/${additionalUrl}`,
           params,

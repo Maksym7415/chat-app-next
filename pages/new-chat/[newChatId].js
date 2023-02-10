@@ -23,7 +23,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const {} = await getInitialData(ctx, store);
 
     return {
-      props: {},
+      props: {
+        params: ctx.params,
+      },
     };
   }
 );

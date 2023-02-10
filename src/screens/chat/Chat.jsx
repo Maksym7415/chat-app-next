@@ -99,23 +99,28 @@ const Chat = ({ params }) => {
       conversationsList?.[conversationId] ||
       newChatData?.conversationData ||
       {},
-    [conversationsList, conversationId, newChatData]
+    [conversationsList, conversationId, newChatData, params]
   );
   const typeConversation =
     conversationData?.conversationType?.toLowerCase() || "";
 
-  const { data } = conversationsApi.useGetConversationMessagesQuery({
-    params: optionsMessages.params,
-    conversationId,
-    additionalUrl: conversationId ? `${conversationId}` : "",
-    cb(response) {
-      optionsMessages.cb && optionsMessages.cb(response, conversationId);
-      errorBack && setErrorBack("");
-    },
-    errorCb: (error) => {
-      setErrorBack(error?.message);
-    },
-  });
+  const {} = conversationsApi.useGetConversationMessagesQuery(
+    {
+      params: optionsMessages.params,
+      additionalUrl: conversationId ? `${conversationId}` : "",
+      conversationId,
+      // cb(response) {
+      //   optionsMessages.cb && optionsMessages.cb(response, conversationId);
+      //   errorBack && setErrorBack("");
+      // },
+      // errorCb: (error) => {
+      //   setErrorBack(error?.message);
+      // },
+    }
+    // {
+    //   skip: params?.newChatId,
+    // }
+  );
 
   // console.log(data, "data");
 
@@ -172,7 +177,7 @@ const Chat = ({ params }) => {
   // console.log(optionsMessages, "optionsMessages");
   // console.log(errorBack, "errorBack");
 
-  if (!conversationId && !opponentId) {
+  if (!conversationId && !opponentId && !params?.newChatId) {
     return <></>;
   }
 
