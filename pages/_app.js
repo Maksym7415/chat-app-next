@@ -1,6 +1,5 @@
 import React from "react";
 import Providers from "@/providers/MainProvider";
-import { wrapper } from "@/store/store";
 import ContextMenu from "@/components/contextMenu";
 import ModalCustom from "@/components/modal";
 import DrawerCustom from "@/components/drawer";
@@ -22,4 +21,4 @@ function App({ Component, ...rest }) {
     </Providers>
   );
 }
-export default wrapper.withRedux(App);
+export default App;

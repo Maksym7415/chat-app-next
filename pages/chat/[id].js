@@ -3,7 +3,6 @@ import { checkIsToken } from "@/core/forSsr/checkIsToken";
 import { getInitialData } from "@/core/forSsr/getData";
 import Chat from "@/screens/chat/index";
 import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
-import { wrapper } from "@/store/store";
 
 const ChatIdPage = (props) => {
   return (
@@ -13,8 +12,7 @@ const ChatIdPage = (props) => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (ctx) => {
+export const getServerSideProps =  async (ctx) => {
     const redirectToken = checkIsToken(ctx);
 
     if (redirectToken) {
@@ -55,7 +53,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       },
     };
   }
-);
+
 
 // TEST
 

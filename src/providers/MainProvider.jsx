@@ -3,7 +3,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import AuthProvider from "./AuthProvider";
 import { SnackbarUtilsConfigurator } from "@/helpers/notistack";
 import HeadProvider from "./HeadProvider/HeadProvider";
-import { wrapper } from "@/store/store";
 import { IS_CLIENT } from "@/core/constants/general";
 
 const MainProvider = ({ children, Component }) => {
