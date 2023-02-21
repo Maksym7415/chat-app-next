@@ -2,6 +2,7 @@ import LayoutMain from "@/core/layouts/LayoutMain";
 import { checkIsToken } from "@/core/forSsr/checkIsToken";
 import { getInitialData } from "@/core/forSsr/getData";
 import Chat from "@/screens/chat/index";
+import { wrapper } from "@/store/store";
 
 const NewChatPage = ({ params }) => {
   return (
@@ -11,20 +12,22 @@ const NewChatPage = ({ params }) => {
   );
 };
 
-export const getServerSideProps = async (ctx) => {
-  const redirectToken = checkIsToken(ctx);
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (ctx) => {
+    const redirectToken = checkIsToken(ctx);
 
-  if (redirectToken) {
-    return redirectToken;
+    if (redirectToken) {
+      return redirectToken;
+    }
+
+    const {} = await getInitialData(ctx, store);
+
+    return {
+      props: {
+        params: ctx.params,
+      },
+    };
   }
-
-  const {} = await getInitialData(ctx, store);
-
-  return {
-    props: {
-      params: ctx.params,
-    },
-  };
-};
+);
 
 export default NewChatPage;

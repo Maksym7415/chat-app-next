@@ -1,5 +1,6 @@
 import React from "react";
 import Providers from "@/providers/MainProvider";
+import { wrapper } from "@/store/store";
 import ContextMenu from "@/components/contextMenu";
 import ModalCustom from "@/components/modal";
 import DrawerCustom from "@/components/drawer";
@@ -8,7 +9,7 @@ import "../styles/globals.css";
 
 if (!process.browser) React.useLayoutEffect = React.useEffect;
 
-function App({ Component, ...rest }) {
+const App = ({ Component, ...rest }) => {
   const { pageProps } = rest;
 
   return (
@@ -20,5 +21,6 @@ function App({ Component, ...rest }) {
       <Component {...pageProps} />
     </Providers>
   );
-}
-export default App;
+};
+
+export default wrapper.withRedux(App);
