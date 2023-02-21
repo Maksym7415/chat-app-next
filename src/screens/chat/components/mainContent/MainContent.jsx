@@ -1,5 +1,6 @@
 import { useCallback, useState, memo, useEffect, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import CircularProgress from "@mui/material/CircularProgress";
 import { Typography, Box } from "@mui/material";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
 import languages from "@/core/translations";
@@ -24,6 +25,7 @@ const MainContent = ({
   typeConversation,
   loadMessages,
   messages,
+  isFetchingFirst,
 }) => {
   const dispatch = useDispatch();
 
@@ -108,9 +110,12 @@ const MainContent = ({
     [conversationId, authToken]
   );
 
-  // if (prevChatId !== conversationId && conversationId !== null) {
-  //   return <div className={classes.wrapperMessages}></div>;
-  // }
+  if (
+    (prevChatId !== conversationId && conversationId !== null) ||
+    isFetchingFirst
+  ) {
+    return <div className={classes.wrapperMessages}></div>;
+  }
 
   console.log("--------------");
   // console.log(prevChatId, "prevChatId");

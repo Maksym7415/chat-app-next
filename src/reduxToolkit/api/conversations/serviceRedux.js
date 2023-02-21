@@ -24,11 +24,6 @@ export const conversationsApi = createApi({
       return headers;
     },
   }),
-  extractRehydrationInfo(action, { reducerPath }) {
-    if (action.type === HYDRATE) {
-      return action.payload?.[reducerPath];
-    }
-  },
   endpoints: (builder) => ({
     getUserConversations: builder.query({
       query: (_) => pathBackConversations.getUserConversations,
@@ -76,12 +71,7 @@ export const conversationsApi = createApi({
           cb: (res) => {
             const { data } = res;
 
-            sendData?.cb && IS_CLIENT && sendData.cb(data);
-
-            //
-            if (IS_SERVER) {
-              cbInitialMessages(data, sendData?.conversationId, options);
-            }
+            sendData?.cb &&  sendData.cb(data);
 
             options.dispatch(
               updateUserHistoryConversation({

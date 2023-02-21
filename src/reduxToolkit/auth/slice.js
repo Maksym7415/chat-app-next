@@ -41,14 +41,14 @@ const authSlice = createSlice({
       state.verificationCode = payload;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.authSlice,
-      };
-    },
-  },
+  // extraReducers: {
+  //   [HYDRATE]: (state, action) => {
+  //     return {
+  //       ...state,
+  //       ...action.payload.authSlice,
+  //     };
+  //   },
+  // },
 });
 
 export const {

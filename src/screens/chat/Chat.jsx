@@ -104,25 +104,8 @@ const Chat = ({ params }) => {
   const typeConversation =
     conversationData?.conversationType?.toLowerCase() || "";
 
-  const {} = conversationsApi.useGetConversationMessagesQuery(
-    {
-      params: optionsMessages.params,
-      additionalUrl: conversationId ? `${conversationId}` : "",
-      conversationId,
-      // cb(response) {
-      //   optionsMessages.cb && optionsMessages.cb(response, conversationId);
-      //   errorBack && setErrorBack("");
-      // },
-      // errorCb: (error) => {
-      //   setErrorBack(error?.message);
-      // },
-    }
-    // {
-    //   skip: params?.newChatId,
-    // }
-  );
-
-  // console.log(data, "data");
+  const [getConversationMessagesRequest, { isFetching }] =
+    conversationsApi.useLazyGetConversationMessagesQuery();
 
   const loadMessages = useCallback(
     (isOffset, cb, pagination, messages) => {
@@ -133,6 +116,7 @@ const Chat = ({ params }) => {
       }
       setOptionsMessages({
         params,
+
         cb: (response) => {
           dispatch(
             setAllMessagesAction({
@@ -148,7 +132,17 @@ const Chat = ({ params }) => {
 
   // USEEFFECTS
   useLayoutEffect(() => {
-    if (allMessages[conversationId] && conversationId) {
+    if (!allMessages[conversationId] && conversationId) {
+      getConversationMessagesRequest({
+        params: optionsMessages.params,
+        additionalUrl: conversationId ? `${conversationId}` : "",
+        conversationId,
+        cb: (response) =>
+          optionsMessages.cb(response, conversationId, {
+            dispatch,
+          }),
+      });
+    } else {
       const messages = allMessages[conversationId] || [];
       dispatch(setMessagesChatAction(messages));
     }
@@ -194,6 +188,7 @@ const Chat = ({ params }) => {
           typeConversation={typeConversation}
           conversationId={conversationId}
           loadMessages={loadMessages}
+          isFetchingFirst={isFetching}
           messages={allMessages?.[conversationId] || []}
         />
         <ChatBottom

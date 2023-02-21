@@ -17,6 +17,7 @@ export const SIDE_LEFT_TYPE_CONTENT = {
 export const namesCookies = {
   accessToken: "accessToken",
   lang: "@@lang",
+  isLoadChatListSer: "isLoadChatListSer",
 };
 
 export const CONTEXT_MENU_ID = {

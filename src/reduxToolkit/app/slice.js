@@ -37,13 +37,6 @@ const appSlice = createSlice({
       state.sideLeftConfig = payload;
     },
     setAllMessagesAction(state, { payload }) {
-      if (
-        Object.keys(payload)?.includes(state.openConversationId) &&
-        JSON.stringify(payload[state.openConversationId]) !==
-          JSON.stringify(state.messagesChat)
-      ) {
-        state.messagesChat = payload[state.openConversationId];
-      }
       state.allMessages = {
         ...state.allMessages,
         ...payload,
@@ -84,14 +77,6 @@ const appSlice = createSlice({
     },
     setNewChatDataClearAction(state) {
       state.newChatData = initialState.newChatData;
-    },
-  },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.appSlice,
-      };
     },
   },
 });

@@ -59,14 +59,6 @@ const conversationsSlice = createSlice({
       };
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.conversationsSlice,
-      };
-    },
-  },
 });
 
 export const {
