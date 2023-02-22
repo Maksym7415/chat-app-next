@@ -22,6 +22,8 @@ import {
   setNewChatDataClearAction,
 } from "@/store/app/slice";
 import { store } from "@/store/store";
+import MainContentWIndow from "./components/mainContent/MainContentWIndow";
+import MainContentWIndowReact from "./components/mainContent/MainContentWIndowReact";
 
 // STYLES
 const classes = {
@@ -71,7 +73,7 @@ const Chat = ({ params }) => {
   const scrollRef = useRef(0);
 
   // SELECTORS
-  const allMessages = useSelector(({ appSlice }) => appSlice.allMessages);
+
   const conversationsList = useSelector(
     ({ conversationsSlice }) => conversationsSlice.conversationsList.data
   );
@@ -101,8 +103,15 @@ const Chat = ({ params }) => {
       {},
     [conversationsList, conversationId, newChatData, params]
   );
-  const typeConversation =
-    conversationData?.conversationType?.toLowerCase() || "";
+
+  const typeConversation = useMemo(
+    () => conversationData?.conversationType?.toLowerCase() || "",
+    [conversationData]
+  );
+
+  const messagesChat = useSelector(
+    ({ appSlice }) => appSlice.allMessages?.[conversationId] || []
+  );
 
   const [getConversationMessagesRequest, { isFetching }] =
     conversationsApi.useLazyGetConversationMessagesQuery();
@@ -132,7 +141,7 @@ const Chat = ({ params }) => {
 
   // USEEFFECTS
   useLayoutEffect(() => {
-    if (!allMessages[conversationId] && conversationId) {
+    if (!messagesChat.length && conversationId) {
       getConversationMessagesRequest({
         params: optionsMessages.params,
         additionalUrl: conversationId ? `${conversationId}` : "",
@@ -142,9 +151,6 @@ const Chat = ({ params }) => {
             dispatch,
           }),
       });
-    } else {
-      const messages = allMessages[conversationId] || [];
-      dispatch(setMessagesChatAction(messages));
     }
 
     checkOpenConversationId(conversationId);
@@ -182,15 +188,24 @@ const Chat = ({ params }) => {
           conversationData={conversationData}
           conversationId={conversationId}
           typeConversation={typeConversation}
-          messages={allMessages?.[conversationId] || []}
+          messages={messagesChat}
         />
         <ChatContent
           typeConversation={typeConversation}
           conversationId={conversationId}
-          loadMessages={loadMessages}
-          isFetchingFirst={isFetching}
-          messages={allMessages?.[conversationId] || []}
+          // loadMessages={loadMessages}
+          // isFetchingFirst={isFetching}
+          // messages={!isFetching ? selectedMessagesChat || [] : []}
         />
+        {/* <MainContentWIndow
+          typeConversation={typeConversation}
+          conversationId={conversationId}
+        /> */}
+        {/* <MainContentWIndowReact
+          typeConversation={typeConversation}
+          conversationId={conversationId}
+        /> */}
+
         <ChatBottom
           opponentId={opponentId}
           conversationData={conversationData}

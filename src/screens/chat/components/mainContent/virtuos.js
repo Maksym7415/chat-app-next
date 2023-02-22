@@ -5,30 +5,29 @@ import {
   useEffect,
   useLayoutEffect,
   useRef,
-  useMemo,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessageDate, uuid } from "@/helpers/index";
 import Message from "./components/message";
 import { Virtuoso } from "react-virtuoso";
 import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
-import { setAllMessagesAction } from "@/store/app/slice";
+import { setMessagesChatAction, setAllMessagesAction } from "@/store/app/slice";
 import { getMessagesWithSendDate } from "@/helpers/index";
 
-let isScrollingToDown = false;
 let isLoadMessages = false;
 let prevChatId = -1;
-let addLocalMessages = true;
+let firstIndexItem = 0;
 const LOAD_MESSAGE_OFFSET = 15;
 
 // STYLES
 const classes = {
-  // wrapperMessages: "flex flex-1 flex-col overflow-y-auto overflow-x-hidden",
-  wrapperMessages: "flex flex-1 flex-col w-full h-full",
+  wrapperMessages: "flex flex-1 flex-col overflow-y-auto overflow-x-hidden",
   wrapperSendData: "px-[5px] w-full flex justify-center box-border",
   sendDataText:
     "max-w-[125px] w-full flex justify-center px-[7px] py-[1px] text-[#fffefeb5] rounded-[10px] overflow-hidden bg-[rgba(0, 0, 0, 0.4)]",
 };
+
+let isScrollingToDown = false;
 
 const MainContent = ({
   conversationId,
@@ -38,7 +37,7 @@ const MainContent = ({
 }) => {
   const dispatch = useDispatch();
   const virtuosoRef = useRef(null);
-  const [getConversationMessagesRequest, { isLoading }] =
+  const [getConversationMessagesRequest, { isFetching }] =
     conversationsApi.useLazyGetConversationMessagesQuery();
 
   // SELECTORS
@@ -47,73 +46,84 @@ const MainContent = ({
     ({ conversationsSlice }) => conversationsSlice.userHistoryConversations
   );
   const authToken = useSelector(({ authSlice }) => authSlice.authToken);
-  const messagesChat = useSelector(
-    ({ appSlice }) => appSlice.allMessages?.[conversationId] || []
-  );
 
-  // STATES
-  const [firstItemIndex, setFirstItemIndex] = useState(0);
-  const [messages, setMessages] = useState([]);
-
+  const messages = useSelector(({ appSlice }) => appSlice.messagesChat);
   // VARIABLES
-  const messagesOnly = useMemo(
-    () => messages.filter((item) => !item?.component) || [],
-    [messages]
-  );
-
   const pagination =
     userHistoryConversations?.[conversationId]?.pagination || {};
 
-  // FUNCTIONS
-  const loadMessages = useCallback(
-    ({ isOffset, direction }) => {
-      const params = {
-        // id: conversationId,
-      };
+  // STATES
+  const [firstItemIndex, setFirstItemIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-      if (isOffset) {
-        params.offset = pagination.currentPage + LOAD_MESSAGE_OFFSET;
-      }
-      console.log("loadMessages");
-      getConversationMessagesRequest({
-        params,
-        additionalUrl: conversationId ? `${conversationId}` : "",
-        conversationId,
-        cb: (response) => {
-          dispatch(
-            setAllMessagesAction({
-              [conversationId]: [...response.data, ...messages],
-            })
-          );
-          // const newMessages  = getMessagesWithSendDate(response.data).messages;
-          const newMessages = response.data;
-          const nextFirstItemIndex = firstItemIndex - newMessages.length;
-          isLoadMessages = true;
-          addLocalMessages = true;
-          setMessages((prev) => [...newMessages, ...prev]);
-          setFirstItemIndex(() => nextFirstItemIndex);
-        },
+  // FUNCTIONS
+  const loadMessages = (isOffset, cb) => {
+    const params = {
+      id: conversationId,
+    };
+
+    if (isOffset) {
+      params.offset = pagination.currentPage + LOAD_MESSAGE_OFFSET;
+    }
+    console.log("loadMessages");
+    getConversationMessagesRequest({
+      params,
+      additionalUrl: conversationId ? `${conversationId}` : "",
+      conversationId,
+      cb: (response) => {
+        // dispatch(
+        //   setAllMessagesAction({
+        //     [conversationId]: [...response.data, ...messages],
+        //   })
+        // );
+        cb && cb(getMessagesWithSendDate(response.data).messages);
+
+        setLoading(false);
+      },
+    });
+  };
+
+  const prependItems = useCallback(() => {
+    console.log("----prependItems----");
+    console.log(messages.length, "messages");
+    console.log(pagination.allItems, "pagination.allItems");
+
+    if (!isScrollingToDown) {
+      return false;
+    }
+    console.log("Loaaddd   prependItems");
+    if (
+      pagination.allItems > messages.filter((item) => !item?.component).length
+    ) {
+      isLoadMessages = true;
+      setLoading(true);
+      loadMessages(true, (newMessages) => {
+        const nextFirstItemIndex = firstItemIndex - newMessages.length;
+        setFirstItemIndex(() => nextFirstItemIndex);
+        dispatch(setMessagesChatAction([...newMessages, ...messages]));
       });
-    },
-    [pagination, messages, firstItemIndex]
-  );
+    }
+
+    return false;
+  }, [firstItemIndex, messages, pagination]);
 
   const scrollToBottom = () => {
     virtuosoRef.current?.scrollToIndex(messages.length - 1);
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     // Scroll to the last message when the component mounts or when new messages are added
     let timer = {};
 
-    if (!isLoadMessages && addLocalMessages) {
+    if (!isLoadMessages) {
       isScrollingToDown = false;
       timer = setTimeout(() => {
         scrollToBottom();
         isScrollingToDown = true;
       }, 10);
-    }
 
+      scrollToBottom();
+    }
     return () => clearTimeout(timer);
   }, [messages]);
 
@@ -121,27 +131,14 @@ const MainContent = ({
   useLayoutEffect(() => {
     if (
       prevChatId !== conversationId &&
-      messagesChat?.length &&
+      messages?.length &&
       pagination.allItems
     ) {
       setFirstItemIndex(0);
+      firstIndexItem = pagination.allItems;
       prevChatId = conversationId;
-      addLocalMessages = true;
-      setMessages(messagesChat);
     }
   }, [pagination]);
-
-  useLayoutEffect(() => {
-    if (
-      prevChatId === conversationId &&
-      messagesChat?.length &&
-      pagination.allItems &&
-      !isLoadMessages
-    ) {
-      setMessages(messagesChat);
-      addLocalMessages = false;
-    }
-  }, [messagesChat]);
 
   useLayoutEffect(() => {
     isLoadMessages = false;
@@ -150,9 +147,6 @@ const MainContent = ({
   // RENDER;
   const rowItem = useCallback(
     (index, messageData) => {
-      if (!messageData) {
-        return <></>;
-      }
       let isShowAvatar = false;
       if (messageData?.fkSenderId !== authToken.userId) {
         isShowAvatar = true;
@@ -182,13 +176,15 @@ const MainContent = ({
     [conversationId, authToken]
   );
 
+  // if (
+  //   (prevChatId !== conversationId && conversationId !== null) ||
+  //   isFetchingFirst
+  // ) {
+  //   return <div className={classes.wrapperMessages}></div>;
+  // }
+
   console.log("--------------");
 
-  if (prevChatId !== conversationId && conversationId !== null) {
-    return <div className={classes.wrapperMessages}></div>;
-  }
-
-  console.log(messages, "messages");
   return (
     <div className={classes.wrapperMessages}>
       <Virtuoso
@@ -196,33 +192,12 @@ const MainContent = ({
         firstItemIndex={firstItemIndex}
         initialTopMostItemIndex={messages?.length - 1}
         data={messages}
-        // initialItemCount={15}
         startReached={() => {
-          console.log("startReached");
+          if (!loading) {
+            prependItems();
+          }
         }}
-        totalCount={pagination.allItems || 0}
-        atTopThreshold={300}
-        atBottomThreshold={300}
-        defaultItemHeight={80}
         itemContent={rowItem}
-        followOutput={true}
-        atTopStateChange={(isReached) => {
-          if (isReached) {
-            if (pagination.allItems > messagesOnly.length) {
-              loadMessages({
-                isOffset: true,
-                direction: "up",
-              });
-            }
-          }
-        }}
-        atBottomStateChange={(isReached) => {
-          console.log(isReached, "atBottomStateChange");
-          if (isReached) {
-            // Fetch more data.
-            // Don't forget to debounce your request (fetch).
-          }
-        }}
       />
     </div>
   );

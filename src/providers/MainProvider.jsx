@@ -6,7 +6,7 @@ import HeadProvider from "./HeadProvider/HeadProvider";
 import { IS_CLIENT } from "@/core/constants/general";
 
 const MainProvider = ({ children, Component }) => {
-  console.log(IS_CLIENT, "IS_CLIENT");
+  // console.log(IS_CLIENT, "IS_CLIENT");
   return (
     <HeadProvider>
       <AuthProvider Component={Component}>

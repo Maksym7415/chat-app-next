@@ -2,7 +2,6 @@ import LayoutMain from "@/core/layouts/LayoutMain";
 import { checkIsToken } from "@/core/forSsr/checkIsToken";
 import Chat from "@/screens/chat/index";
 
-
 const ChatIdPage = (props) => {
   return (
     <LayoutMain params={props.params}>
@@ -11,25 +10,23 @@ const ChatIdPage = (props) => {
   );
 };
 
-export const getServerSideProps =  async (ctx) => {
-    console.time(ctx.params?.id, "Time this"); // при старті може бути 70ms  при переході на інший чат до 47ms без запиту 0.004 ms, більше
+export const getServerSideProps = async (ctx) => {
+  console.time(ctx.params?.id, "Time this"); // при старті може бути 70ms  при переході на інший чат до 47ms без запиту 0.004 ms, більше
 
-    const redirectToken = checkIsToken(ctx);
+  const redirectToken = checkIsToken(ctx);
 
-    if (redirectToken) {
-      return redirectToken;
-    }
-
-
-    console.timeEnd(ctx.params?.id, "Time this END");
-
-    return {
-      props: {
-        params: ctx.params,
-      },
-    };
+  if (redirectToken) {
+    return redirectToken;
   }
 
+  console.timeEnd(ctx.params?.id, "Time this END");
+
+  return {
+    props: {
+      params: ctx.params,
+    },
+  };
+};
 
 // TEST
 
