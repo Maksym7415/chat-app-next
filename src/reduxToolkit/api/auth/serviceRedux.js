@@ -8,6 +8,9 @@ import {
   setAuthHeadersAction,
   setVerificationCodeAction,
 } from "@/store/auth/slice";
+import {
+  setTokenAction
+} from "@/store/persist/slice";
 import { fErrorResponse, onQueryStartedFulfilled } from "@/rtkQuery/helpers";
 import { setTokenCook } from "@/core/cookiesStorage";
 
@@ -64,6 +67,9 @@ export const authApi = createApi({
               authTokenAction({
                 token: data.accessToken,
               })
+            );
+            options.dispatch(
+              setTokenAction(data.accessToken)
             );
           },
         });

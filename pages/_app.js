@@ -1,7 +1,9 @@
 import React from "react";
 import Providers from "@/providers/MainProvider";
-import { wrapper, store } from "@/store/store";
+import { wrapper, store as storeRedux, persistor } from "@/store/store";
+import { useStore } from "react-redux";
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 import ContextMenu from "@/components/contextMenu";
 import ModalCustom from "@/components/modal";
 import DrawerCustom from "@/components/drawer";
@@ -15,6 +17,8 @@ if (!process.browser) React.useLayoutEffect = React.useEffect;
 
 const App = ({ Component, ...rest }) => {
   const { pageProps } = rest;
+
+  const { store, props } = wrapper.useWrappedStore(rest);
 
   if (IS_CLIENT) {
     const token = getTokenCook();
@@ -34,14 +38,18 @@ const App = ({ Component, ...rest }) => {
   }
 
   return (
-    <Providers Component={Component}>
-      <DrawerCustom />
-      <ContextMenu />
-      <ModalCustom />
-      <DialogCustom />
-      <Component {...pageProps} />
-    </Providers>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={store.__persistor}>
+        <Providers Component={Component}>
+          <DrawerCustom />
+          <ContextMenu />
+          <ModalCustom />
+          <DialogCustom />
+          <Component {...pageProps} />
+        </Providers>
+      </PersistGate>
+    </Provider>
   );
 };
 
-export default wrapper.withRedux(App);
+export default App;

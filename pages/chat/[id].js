@@ -1,6 +1,7 @@
 import LayoutMain from "@/core/layouts/LayoutMain";
 import { checkIsToken } from "@/core/forSsr/checkIsToken";
 import Chat from "@/screens/chat/index";
+import { wrapper, persistor } from "@/store/store";
 
 const ChatIdPage = (props) => {
   return (
@@ -10,23 +11,27 @@ const ChatIdPage = (props) => {
   );
 };
 
-export const getServerSideProps = async (ctx) => {
-  console.time(ctx.params?.id, "Time this"); // при старті може бути 70ms  при переході на інший чат до 47ms без запиту 0.004 ms, більше
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (ctx) => {
+    console.time(ctx.params?.id, "Time this"); // при старті може бути 70ms  при переході на інший чат до 47ms без запиту 0.004 ms, більше
 
-  const redirectToken = checkIsToken(ctx);
+    const redirectToken = checkIsToken(ctx);
 
-  if (redirectToken) {
-    return redirectToken;
+    if (redirectToken) {
+      return redirectToken;
+    }
+
+    console.timeEnd(ctx.params?.id, "Time this END");
+    console.log(store.getState().persistSlice, "------------persistSlice");
+
+    return {
+      props: {
+        params: ctx.params,
+        initialReduxState: store.getState(),
+      },
+    };
   }
-
-  console.timeEnd(ctx.params?.id, "Time this END");
-
-  return {
-    props: {
-      params: ctx.params,
-    },
-  };
-};
+);
 
 // TEST
 
