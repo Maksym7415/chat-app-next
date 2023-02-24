@@ -3,14 +3,13 @@ import { socketEmitChatsDeleteMessage } from "../@core/socket/actions/socketEmit
 import { actionsConversationList } from "./conversations";
 import {
   setSelectedMessagesAction,
-  setAllMessagesAction,
   editMessageAction,
-  setMessagesChatAction,
 } from "@/store/app/slice";
 import { setDialogWindowConfigAction } from "@/components/dialogWindow/redux/slice";
 import { store } from "@/store/store";
 import { getMessagesWithSendDate } from "@/helpers/index";
-
+import { setMessagesDataInConversationsIdAction } from "@/store/historyConversationsId/slice";
+import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
 export const actionsTypeObject = {
   add: "add",
   remove: "remove",
@@ -102,14 +101,16 @@ export const actionsMessagesChat = (props) => {
     // DELETE MESSAGE
     case actionsTypeActionsChat.deleteMessages:
       const getRemoveMessages = (conversationId, messagesIds) => {
-        const allMessages = store.getState().appSlice.allMessages;
+        const allMessages =
+          store.getState().historyConversationsIdSlice?.[conversationId]
+            ?.messages;
         const conversationsList =
           store.getState().conversationsSlice.conversationsList.data;
 
         // deleting a message from the message array
-        let allMessagesWithoutDeleteMessage = allMessages[
-          conversationId
-        ]?.filter((message) => !messagesIds?.includes(message?.id));
+        let allMessagesWithoutDeleteMessage = allMessages?.filter(
+          (message) => !messagesIds?.includes(message?.id)
+        );
 
         // check for the last element in the message array, if it is a date object, then delete it as well
         const checkIsLastDateComponent = (array) => {
@@ -142,13 +143,13 @@ export const actionsMessagesChat = (props) => {
         }
 
         store.dispatch(
-          setAllMessagesAction({
-            [conversationId]: updateAllMessages,
+          setMessagesDataInConversationsIdAction({
+            conversationId: conversationId,
+            messages: updateAllMessages,
+            lastAction: LAST_ACTION_MESSAGES_STORE.remove,
+            // pagination: response.pagination,
           })
         );
-        openConversationId &&
-          conversationId &&
-          store.dispatch(setMessagesChatAction(updateAllMessages));
       };
 
       // sorting through the selected messages and sending them through the socket and, if successful, delete them locally through the function - getRemoveMessages
@@ -232,4 +233,3 @@ export const actionsMessagesChat = (props) => {
       return Snackbar.error("An unknown action in chat is selected");
   }
 };
-

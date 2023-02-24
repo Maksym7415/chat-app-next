@@ -49,12 +49,6 @@ const conversationsSlice = createSlice({
         ...payload,
       };
     },
-    setMessagesInChatIdAction(state, { payload }) {
-      state.userHistoryConversations[payload.chatId] = {
-        ...payload,
-      };
-    },
-
     updateUserHistoryConversation(state, { payload }) {
       state.userHistoryConversations = {
         ...state.userHistoryConversations,

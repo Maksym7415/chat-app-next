@@ -41,7 +41,10 @@ const SharedMessage = ({ data }) => {
 
   // VARIABLES
   const conversationsFiltered = Object.values(conversationsList).filter(
-    (conversation) => conversation.conversationName.toLocaleLowerCase().includes(searchNameChat.toLocaleLowerCase())
+    (conversation) =>
+      conversation.conversationName
+        .toLocaleLowerCase()
+        .includes(searchNameChat.toLocaleLowerCase())
   );
 
   // FUNCTIONS

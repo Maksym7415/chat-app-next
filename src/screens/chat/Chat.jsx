@@ -1,12 +1,4 @@
-import {
-  useEffect,
-  useState,
-  useMemo,
-  memo,
-  useCallback,
-  useLayoutEffect,
-  useRef,
-} from "react";
+import { useState, useMemo, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Typography, Box } from "@mui/material";
 import ChatHeader from "./components/header";
@@ -15,18 +7,16 @@ import ChatContent from "./components/mainContent";
 import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
 import RenderInfoCenterBox from "../../components/renders/renderInfoCenterBox";
 import { getMessagesWithSendDate } from "@/helpers/index";
-import {
-  setAllMessagesAction,
-  setMessagesChatAction,
-  setOpenConversationIdAction,
-  setNewChatDataClearAction,
-} from "@/store/app/slice";
+import { setOpenConversationIdAction } from "@/store/app/slice";
+import { setMessagesDataInConversationsIdAction } from "@/store/historyConversationsId/slice";
 import { store } from "@/store/store";
+import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
 
 // STYLES
 const classes = {
   container: "flex flex-col h-screen w-full relative ",
   errorBackText: "text-[28px] font-medium ",
+  wrapperMessages: "flex flex-1 flex-col w-full h-full",
 };
 
 // fix в консолі вискакує помилка якась якщо забрати у функції cbInitialMessages  dispatch то посмилки немає
@@ -39,19 +29,7 @@ const checkOpenConversationId = (conversationId) => {
   }
 };
 
-export const cbInitialMessages = (response, conversationId, options) => {
-  const dispatch = options?.dispatch || store.dispatch;
-
-  const messagesResult =
-    getMessagesWithSendDate(response?.data)?.messages || [];
-
-  dispatch(
-    setAllMessagesAction({
-      [conversationId]: messagesResult,
-    })
-  );
-  dispatch(setMessagesChatAction(messagesResult));
-};
+const scrollPositionChats = {};
 
 const Chat = ({ params }) => {
   // HOOKS
@@ -85,9 +63,11 @@ const Chat = ({ params }) => {
     [conversationData]
   );
 
-  const messagesChat = useSelector(
-    ({ appSlice }) => appSlice.allMessages?.[conversationId] || []
-  );
+  const messagesChat =
+    useSelector(
+      ({ historyConversationsIdSlice }) =>
+        historyConversationsIdSlice?.[conversationId]?.messages
+    ) || [];
 
   const [getConversationMessagesRequest] =
     conversationsApi.useLazyGetConversationMessagesQuery();
@@ -101,14 +81,21 @@ const Chat = ({ params }) => {
         },
         additionalUrl: conversationId ? `${conversationId}` : "",
         conversationId,
-        cb: (response) =>
-          cbInitialMessages(response, conversationId, {
-            dispatch,
-          }),
+        cb: (response) => {
+          const messagesResult =
+            getMessagesWithSendDate(response?.data)?.messages || [];
+
+          dispatch(
+            setMessagesDataInConversationsIdAction({
+              conversationId,
+              messages: messagesResult,
+              pagination: response.pagination,
+              lastAction: LAST_ACTION_MESSAGES_STORE.set,
+            })
+          );
+        },
       });
     }
-
-    // checkOpenConversationId(conversationId);
   }, [conversationId]);
 
   if (errorBack) {
@@ -134,10 +121,19 @@ const Chat = ({ params }) => {
           typeConversation={typeConversation}
           messages={messagesChat}
         />
-        <ChatContent
-          typeConversation={typeConversation}
-          conversationId={conversationId}
-        />
+        <div className={classes.wrapperMessages}>
+          {messagesChat.length ? (
+            <ChatContent
+              typeConversation={typeConversation}
+              conversationId={conversationId}
+              messagesChat={messagesChat || []}
+              scrollPositionChats={scrollPositionChats}
+              // setMessages={setMessages}
+              // messages={messages}
+            />
+          ) : null}
+        </div>
+
         <ChatBottom
           opponentId={opponentId}
           conversationData={conversationData}

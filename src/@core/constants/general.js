@@ -26,3 +26,12 @@ export const CONTEXT_MENU_ID = {
 
 export const IS_SERVER = typeof window === "undefined";
 export const IS_CLIENT = typeof window !== "undefined";
+
+export const LAST_ACTION_MESSAGES_STORE = {
+  add: "add",
+  remove: "add",
+  edit: "edit",
+  set: "set",
+  updateUP: "updateUP",
+  clear: "clear",
+};

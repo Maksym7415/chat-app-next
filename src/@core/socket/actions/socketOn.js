@@ -1,19 +1,30 @@
 import { socket } from "../index";
 import { actionsConversationList } from "@/actions/index";
 import { PATHS } from "@/core/constants/paths";
-import { setAllMessagesAction, setMessagesChatAction } from "@/store/app/slice";
+import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
 import {
   setConversationListAction,
   updateConversationTypeStateAction,
 } from "@/store/conversations/slice";
 import { store } from "@/store/store";
 import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
+import {
+  setMessagesDataInConversationsIdAction,
+  removeConversationsIdAction,
+  clearMessagesDataInConversationsIdAction,
+} from "@/store/historyConversationsId/slice";
 
 // User Id Chat
-export const socketOnUserIdChat = (chat) =>
+export const socketOnUserIdChat = (chat, options) =>
   socket.on(`userIdChat${chat.conversationId}`, (message) => {
-    const { allMessages, openConversationId } = store.getState().appSlice;
+    if (options?.onlyCb) {
+      return options.cb();
+    }
+    const allMessages =
+      store.getState().historyConversationsIdSlice?.[chat.conversationId]
+        ?.messages;
 
+    console.log(chat, "chat");
     const conversationsList =
       store.getState().conversationsSlice.conversationsList.data;
 
@@ -39,10 +50,8 @@ export const socketOnUserIdChat = (chat) =>
     };
     //
     let findComponentDate = null;
-    if (allMessages[chat.conversationId]) {
-      const reverseAllMessages = [
-        ...allMessages[chat.conversationId],
-      ].reverse();
+    if (allMessages) {
+      const reverseAllMessages = [...allMessages].reverse();
       for (
         let i = 0;
         !findComponentDate && i < reverseAllMessages.length;
@@ -63,7 +72,7 @@ export const socketOnUserIdChat = (chat) =>
     }
 
     //
-    const chatAllMessages = allMessages?.[chat.conversationId];
+    const chatAllMessages = allMessages;
     if (chatAllMessages) {
       const prevMessages = chatAllMessages || null;
       let updateMessages = [...prevMessages];
@@ -81,12 +90,13 @@ export const socketOnUserIdChat = (chat) =>
       }
 
       store.dispatch(
-        setAllMessagesAction({ [chat.conversationId]: updateMessages })
+        setMessagesDataInConversationsIdAction({
+          conversationId: chat.conversationId,
+          messages: updateMessages,
+          lastAction: LAST_ACTION_MESSAGES_STORE.add,
+          // pagination: response.pagination,
+        })
       );
-
-      openConversationId &&
-        chat.conversationId &&
-        store.dispatch(setMessagesChatAction(updateMessages));
     }
 
     if (chat.Messages?.[0]?.id == message?.id) {
@@ -148,19 +158,24 @@ export const socketOnTypingStateId = (chat) => {
 
 export const socketOnDeleteMessage = () => {
   const getRemoveMessages = (conversationId, messageId, lastMessage) => {
-    const allMessages = store.getState().appSlice.allMessages;
+    const allMessages =
+      store.getState().historyConversationsIdSlice?.[conversationId.toString()]
+        ?.messages;
     const conversationsList =
       store.getState().conversationsSlice.conversationsList.data;
 
     const conversationFindStore = conversationsList?.[conversationId];
 
-    const updateMessages = allMessages[conversationId.toString()]?.filter(
+    const updateMessages = allMessages?.filter(
       (message) => ![messageId?.toString()]?.includes(message?.id?.toString())
     );
 
     store.dispatch(
-      setAllMessagesAction({
-        [conversationId]: updateMessages,
+      setMessagesDataInConversationsIdAction({
+        conversationId,
+        messages: updateMessages,
+        lastAction: LAST_ACTION_MESSAGES_STORE.remove,
+        // pagination: response.pagination,
       })
     );
 
@@ -207,18 +222,22 @@ export const socketOnDeleteConversation = ({ params, router }) => {
   socket.on("deleteChat", ({ ids }) => {
     const conversationsList =
       store.getState().conversationsSlice.conversationsList.data;
-    const allMessages = store.getState().appSlice.allMessages;
 
     let copyConversationsList = { ...conversationsList };
-    let copyAllMessages = { ...allMessages };
+
     ids.map((id) => {
-      delete copyAllMessages[id];
       delete copyConversationsList[id];
     });
     if (ids.includes(params?.id)) {
       router.push(PATHS.main);
     }
-    store.dispatch(setAllMessagesAction({ ...copyAllMessages }));
+
+    store.dispatch(
+      removeConversationsIdAction({
+        ids,
+      })
+    );
+
     store.dispatch(setConversationListAction(copyConversationsList));
   });
 };
@@ -227,12 +246,9 @@ export const socketOnClearConversation = () => {
   socket.on("clearChat", ({ ids }) => {
     const conversationsList =
       store.getState().conversationsSlice.conversationsList.data;
-    const allMessages = store.getState().appSlice.allMessages;
 
     let copyConversationsList = { ...conversationsList };
-    let copyAllMessages = { ...allMessages };
     ids.map((id) => {
-      copyAllMessages[id] = [];
       copyConversationsList = {
         ...copyConversationsList,
         [id]: {
@@ -242,7 +258,13 @@ export const socketOnClearConversation = () => {
       };
     });
 
-    store.dispatch(setAllMessagesAction({ ...copyAllMessages }));
+    store.dispatch(
+      clearMessagesDataInConversationsIdAction({
+        ids,
+        lastAction: LAST_ACTION_MESSAGES_STORE.clear,
+      })
+    );
+
     store.dispatch(setConversationListAction(copyConversationsList));
   });
 };

@@ -10,36 +10,46 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Virtuoso } from "react-virtuoso";
 import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
-import { setAllMessagesAction } from "@/store/app/slice";
 import RowItemMessage from "./RowItemMessage";
+import { setMessagesDataInConversationsIdAction } from "@/store/historyConversationsId/slice";
+import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
 
-let isScrollingToDown = false;
-let isLoadMessages = false;
-let prevChatId = -1;
-let addLocalMessages = true;
-const LOAD_MESSAGE_OFFSET = 15;
-let countREnder = -1;
-
-// STYLES
-const classes = {
-  // wrapperMessages: "flex flex-1 flex-col overflow-y-auto overflow-x-hidden",
-  wrapperMessages: "flex flex-1 flex-col w-full h-full",
+let vDataChat = {
+  id: 0,
+  isScrollToDown: false,
 };
 
-const MainContent = ({ conversationId, typeConversation }) => {
+const LOAD_MESSAGE_OFFSET = 15;
+let countREnder = -1;
+let nextFirstItemIndex = 0;
+let timer = {};
+
+const vSetDataChat = (id, bool) => {
+  vDataChat = {
+    ...vDataChat,
+    id,
+    isScrollToDown: bool,
+  };
+};
+
+const MainContent = ({
+  conversationId,
+  typeConversation,
+  messagesChat,
+  scrollPositionChats,
+}) => {
   const dispatch = useDispatch();
   const virtuosoRef = useRef(null);
-  const [getConversationMessagesRequest, { isLoading }] =
+  const [getConversationMessagesRequest] =
     conversationsApi.useLazyGetConversationMessagesQuery();
 
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-  const userHistoryConversations = useSelector(
-    ({ conversationsSlice }) => conversationsSlice.userHistoryConversations
-  );
-  const messagesChat = useSelector(
-    ({ appSlice }) => appSlice.allMessages?.[conversationId] || []
-  );
+  const pagination =
+    useSelector(
+      ({ historyConversationsIdSlice }) =>
+        historyConversationsIdSlice?.[conversationId]?.pagination
+    ) || {};
 
   // STATES
   const [firstItemIndex, setFirstItemIndex] = useState(0);
@@ -51,37 +61,32 @@ const MainContent = ({ conversationId, typeConversation }) => {
     [messages]
   );
 
-  const pagination =
-    userHistoryConversations?.[conversationId]?.pagination || {};
-
   // FUNCTIONS
   const loadMessages = useCallback(
     ({ isOffset, direction }) => {
-      const params = {
-        // id: conversationId,
-      };
+      const params = {};
 
       if (isOffset) {
         params.offset = pagination.currentPage + LOAD_MESSAGE_OFFSET;
       }
-      console.log("loadMessages");
+
       getConversationMessagesRequest({
         params,
         additionalUrl: conversationId ? `${conversationId}` : "",
         conversationId,
         cb: (response) => {
           dispatch(
-            setAllMessagesAction({
-              [conversationId]: [...response.data, ...messages],
+            setMessagesDataInConversationsIdAction({
+              conversationId,
+              messages: [...response.data, ...messages],
+              pagination: response.pagination,
+              lastAction: LAST_ACTION_MESSAGES_STORE.updateUP,
             })
           );
+
           // const newMessages  = getMessagesWithSendDate(response.data).messages;
           const newMessages = response.data;
-          const nextFirstItemIndex = firstItemIndex - newMessages.length;
-          isLoadMessages = true;
-          addLocalMessages = true;
-          setMessages((prev) => [...newMessages, ...prev]);
-          setFirstItemIndex(() => nextFirstItemIndex);
+          nextFirstItemIndex = firstItemIndex - newMessages.length;
         },
       });
     },
@@ -92,102 +97,85 @@ const MainContent = ({ conversationId, typeConversation }) => {
     virtuosoRef.current?.scrollToIndex(messages.length - 1);
   };
 
-  useLayoutEffect(() => {
-    // Scroll to the last message when the component mounts or when new messages are added
-    let timer = {};
-
-    if (!isLoadMessages && addLocalMessages) {
-      isScrollingToDown = false;
-      timer = setTimeout(() => {
-        scrollToBottom();
-        isScrollingToDown = true;
-      }, 10);
-    }
-
-    return () => clearTimeout(timer);
-  }, [messages]);
+  const handleScroll = useCallback(
+    (event) => {
+      const { scrollTop } = event.target;
+      console.log("scrollTop:", scrollTop);
+      scrollPositionChats[conversationId] = scrollTop;
+    },
+    [conversationId]
+  );
 
   // USEEFFECTS;
   useLayoutEffect(() => {
-    if (
-      prevChatId !== conversationId &&
-      messagesChat?.length &&
-      pagination.allItems
-    ) {
-      setFirstItemIndex(0);
-      prevChatId = conversationId;
-      addLocalMessages = true;
-      setMessages(messagesChat);
-    }
-  }, [pagination]);
+    vSetDataChat(0, false);
+  }, [conversationId]);
 
   useLayoutEffect(() => {
-    if (
-      prevChatId === conversationId &&
-      messagesChat?.length &&
-      pagination.allItems &&
-      !isLoadMessages
-    ) {
-      setMessages(messagesChat);
-      addLocalMessages = false;
+    // Scroll to the last message when the component mounts or when new messages are added
+    if (!vDataChat.isScrollToDown && !vDataChat.id) {
+      const cacheScrollPosition = scrollPositionChats[conversationId];
+
+      console.log(conversationId, "-----scrollPositionChats");
+      timer = setTimeout(() => {
+        vSetDataChat(conversationId, true);
+        if (cacheScrollPosition) {
+          virtuosoRef.current.scrollTop = cacheScrollPosition;
+        } else {
+          scrollToBottom();
+        }
+      }, 10);
+    }
+    return () => clearTimeout(timer);
+  }, [messages]);
+
+  useLayoutEffect(() => {
+    setMessages(messagesChat);
+    setFirstItemIndex(() => nextFirstItemIndex);
+    if (!vDataChat.id) {
+      setFirstItemIndex(0);
     }
   }, [messagesChat]);
 
-  useLayoutEffect(() => {
-    isLoadMessages = false;
-  }, [conversationId]);
-
-  // console.log("--------------");
-
-  // if (prevChatId !== conversationId && conversationId !== null) {
-  //   return <div className={classes.wrapperMessages}></div>;
-  // }
-
   console.log(++countREnder, "-----render");
-  console.log(messages, "messages");
+
   return (
-    <div className={classes.wrapperMessages}>
-      <Virtuoso
-        ref={virtuosoRef}
-        firstItemIndex={firstItemIndex}
-        initialTopMostItemIndex={messages?.length - 1}
-        data={messages}
-        // initialItemCount={15}
-        startReached={() => {
-          console.log("startReached");
-        }}
-        totalCount={pagination.allItems || 0}
-        atTopThreshold={300}
-        atBottomThreshold={300}
-        defaultItemHeight={80}
-        itemContent={(i, data) => (
-          <RowItemMessage
-            index={i}
-            messageData={data}
-            conversationId={conversationId}
-            typeConversation={typeConversation}
-          />
-        )}
-        followOutput={true}
-        atTopStateChange={(isReached) => {
-          if (isReached) {
-            if (pagination.allItems > messagesOnly.length) {
-              loadMessages({
-                isOffset: true,
-                direction: "up",
-              });
-            }
+    <Virtuoso
+      ref={virtuosoRef}
+      firstItemIndex={firstItemIndex}
+      initialTopMostItemIndex={messages?.length - 1}
+      data={messages}
+      // followOutput={true} // якщо близько до низу контейнера і приходить знизу дані то скролить на низ
+      totalCount={pagination.allItems || 0}
+      atTopThreshold={300}
+      atBottomThreshold={300}
+      defaultItemHeight={80}
+      onScroll={handleScroll}
+      itemContent={(i, data) => (
+        <RowItemMessage
+          index={i}
+          messageData={data}
+          conversationId={conversationId}
+          typeConversation={typeConversation}
+        />
+      )}
+      atTopStateChange={(isReached) => {
+        if (isReached) {
+          if (pagination.allItems > messagesOnly.length) {
+            loadMessages({
+              isOffset: true,
+              direction: "up",
+            });
           }
-        }}
-        atBottomStateChange={(isReached) => {
-          console.log(isReached, "atBottomStateChange");
-          if (isReached) {
-            // Fetch more data.
-            // Don't forget to debounce your request (fetch).
-          }
-        }}
-      />
-    </div>
+        }
+      }}
+      atBottomStateChange={(isReached) => {
+        if (isReached) {
+          // Fetch more data.
+          // Don't forget to debounce your request (fetch).
+        }
+      }}
+    />
   );
 };
 

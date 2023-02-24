@@ -8,7 +8,6 @@ export const initialState = {
   sideLeftConfig: {
     page: SIDE_LEFT_TYPE_CONTENT.conversations,
   },
-  allMessages: {},
   messageEdit: {
     message: {},
     messageId: null,
@@ -19,7 +18,6 @@ export const initialState = {
     active: false,
     messages: {},
   },
-  messagesChat: [],
   newChatData: {
     conversationData: null,
     newChatId: null,
@@ -30,17 +28,8 @@ const appSlice = createSlice({
   name: "appSlice",
   initialState,
   reducers: {
-    setMessagesChatAction(state, { payload }) {
-      state.messagesChat = payload;
-    },
     setSideLeftConfigAction(state, { payload }) {
       state.sideLeftConfig = payload;
-    },
-    setAllMessagesAction(state, { payload }) {
-      state.allMessages = {
-        ...state.allMessages,
-        ...payload,
-      };
     },
     editMessageAction(state, { payload }) {
       state.messageEdit = {
@@ -91,8 +80,6 @@ export const {
   setIsLoading,
   setSelectedChatsAction,
   setSelectedMessagesAction,
-  setAllMessagesAction,
-  setMessagesChatAction,
   setOpenConversationIdAction,
   setNewChatDataAction,
   setNewChatDataClearAction,
