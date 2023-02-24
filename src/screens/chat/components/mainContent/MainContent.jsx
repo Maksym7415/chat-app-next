@@ -8,34 +8,25 @@ import {
   useMemo,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessageDate, uuid } from "@/helpers/index";
-import Message from "./components/message";
 import { Virtuoso } from "react-virtuoso";
 import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
 import { setAllMessagesAction } from "@/store/app/slice";
-import { getMessagesWithSendDate } from "@/helpers/index";
+import RowItemMessage from "./RowItemMessage";
 
 let isScrollingToDown = false;
 let isLoadMessages = false;
 let prevChatId = -1;
 let addLocalMessages = true;
 const LOAD_MESSAGE_OFFSET = 15;
+let countREnder = -1;
 
 // STYLES
 const classes = {
   // wrapperMessages: "flex flex-1 flex-col overflow-y-auto overflow-x-hidden",
   wrapperMessages: "flex flex-1 flex-col w-full h-full",
-  wrapperSendData: "px-[5px] w-full flex justify-center box-border",
-  sendDataText:
-    "max-w-[125px] w-full flex justify-center px-[7px] py-[1px] text-[#fffefeb5] rounded-[10px] overflow-hidden bg-[rgba(0, 0, 0, 0.4)]",
 };
 
-const MainContent = ({
-  conversationId,
-  typeConversation,
-  // messages,
-  isFetchingFirst,
-}) => {
+const MainContent = ({ conversationId, typeConversation }) => {
   const dispatch = useDispatch();
   const virtuosoRef = useRef(null);
   const [getConversationMessagesRequest, { isLoading }] =
@@ -46,7 +37,6 @@ const MainContent = ({
   const userHistoryConversations = useSelector(
     ({ conversationsSlice }) => conversationsSlice.userHistoryConversations
   );
-  const authToken = useSelector(({ authSlice }) => authSlice.authToken);
   const messagesChat = useSelector(
     ({ appSlice }) => appSlice.allMessages?.[conversationId] || []
   );
@@ -147,47 +137,13 @@ const MainContent = ({
     isLoadMessages = false;
   }, [conversationId]);
 
-  // RENDER;
-  const rowItem = useCallback(
-    (index, messageData) => {
-      if (!messageData) {
-        return <></>;
-      }
-      let isShowAvatar = false;
-      if (messageData?.fkSenderId !== authToken.userId) {
-        isShowAvatar = true;
-      }
-      if (messageData?.component) {
-        return (
-          <div className={classes.wrapperSendData} key={uuid()}>
-            <p className={classes.sendDataText}>
-              {setMessageDate(new Date(messageData.sendDate))}
-            </p>
-          </div>
-        );
-      }
+  // console.log("--------------");
 
-      return (
-        <Message
-          key={uuid()}
-          conversationId={conversationId}
-          isShowAvatar={isShowAvatar}
-          messageData={messageData}
-          userId={authToken.userId}
-          typeConversation={typeConversation}
-          index={index}
-        />
-      );
-    },
-    [conversationId, authToken]
-  );
+  // if (prevChatId !== conversationId && conversationId !== null) {
+  //   return <div className={classes.wrapperMessages}></div>;
+  // }
 
-  console.log("--------------");
-
-  if (prevChatId !== conversationId && conversationId !== null) {
-    return <div className={classes.wrapperMessages}></div>;
-  }
-
+  console.log(++countREnder, "-----render");
   console.log(messages, "messages");
   return (
     <div className={classes.wrapperMessages}>
@@ -204,7 +160,14 @@ const MainContent = ({
         atTopThreshold={300}
         atBottomThreshold={300}
         defaultItemHeight={80}
-        itemContent={rowItem}
+        itemContent={(i, data) => (
+          <RowItemMessage
+            index={i}
+            messageData={data}
+            conversationId={conversationId}
+            typeConversation={typeConversation}
+          />
+        )}
         followOutput={true}
         atTopStateChange={(isReached) => {
           if (isReached) {

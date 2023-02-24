@@ -233,17 +233,3 @@ export const actionsMessagesChat = (props) => {
   }
 };
 
-export const cbInitialMessages = (response, conversationId, options) => {
-  const storeRedux = options || store;
-
-  const messagesResult =
-    getMessagesWithSendDate(response?.data)?.messages || [];
-
-  // console.log(messagesResult, "messagesResult");
-  storeRedux.dispatch(
-    setAllMessagesAction({
-      [conversationId]: messagesResult,
-    })
-  );
-  storeRedux.dispatch(setMessagesChatAction(messagesResult));
-};

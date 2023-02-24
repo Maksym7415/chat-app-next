@@ -7,7 +7,6 @@ import {
   setConversationListAction,
   updateUserHistoryConversation,
 } from "@/store/conversations/slice";
-import { cbInitialMessages } from "@/actions/chat";
 import { IS_SERVER, IS_CLIENT } from "@/core/constants/general";
 
 export const conversationsApi = createApi({
@@ -71,7 +70,7 @@ export const conversationsApi = createApi({
           cb: (res) => {
             const { data } = res;
 
-            sendData?.cb &&  sendData.cb(data);
+            sendData?.cb && sendData.cb(data);
 
             options.dispatch(
               updateUserHistoryConversation({

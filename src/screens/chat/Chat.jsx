@@ -22,8 +22,6 @@ import {
   setNewChatDataClearAction,
 } from "@/store/app/slice";
 import { store } from "@/store/store";
-import MainContentWIndow from "./components/mainContent/MainContentWIndow";
-import MainContentWIndowReact from "./components/mainContent/MainContentWIndowReact";
 
 // STYLES
 const classes = {
@@ -55,25 +53,11 @@ export const cbInitialMessages = (response, conversationId, options) => {
   dispatch(setMessagesChatAction(messagesResult));
 };
 
-const initialOptionsMessages = {
-  params: {
-    offset: 0,
-  },
-  cb: cbInitialMessages,
-};
-
-const LOAD_MESSAGE_OFFSET = 15;
-let isLoadMessages = false;
-
-let scroll = 0;
 const Chat = ({ params }) => {
   // HOOKS
   const dispatch = useDispatch();
 
-  const scrollRef = useRef(0);
-
   // SELECTORS
-
   const conversationsList = useSelector(
     ({ conversationsSlice }) => conversationsSlice.conversationsList.data
   );
@@ -81,17 +65,9 @@ const Chat = ({ params }) => {
 
   // STATES
   const [errorBack, setErrorBack] = useState("");
-  const [optionsMessages, setOptionsMessages] = useState(
-    initialOptionsMessages
-  );
 
   // VARIABLES
   const conversationId = useMemo(() => {
-    isLoadMessages = false;
-    newChatData.newChatId &&
-      params?.id &&
-      dispatch(setNewChatDataClearAction());
-    setOptionsMessages(initialOptionsMessages);
     return params?.id || null;
   }, [params]);
 
@@ -113,53 +89,26 @@ const Chat = ({ params }) => {
     ({ appSlice }) => appSlice.allMessages?.[conversationId] || []
   );
 
-  const [getConversationMessagesRequest, { isFetching }] =
+  const [getConversationMessagesRequest] =
     conversationsApi.useLazyGetConversationMessagesQuery();
-
-  const loadMessages = useCallback(
-    (isOffset, cb, pagination, messages) => {
-      isLoadMessages = true;
-      const params = { offset: 0 };
-      if (isOffset) {
-        params.offset = pagination.currentPage + LOAD_MESSAGE_OFFSET;
-      }
-      setOptionsMessages({
-        params,
-
-        cb: (response) => {
-          dispatch(
-            setAllMessagesAction({
-              [conversationId]: [...response?.data, ...messages],
-            })
-          );
-          cb && cb(getMessagesWithSendDate(response.data).messages);
-        },
-      });
-    },
-    [conversationId]
-  );
 
   // USEEFFECTS
   useLayoutEffect(() => {
     if (!messagesChat.length && conversationId) {
       getConversationMessagesRequest({
-        params: optionsMessages.params,
+        params: {
+          offset: 0,
+        },
         additionalUrl: conversationId ? `${conversationId}` : "",
         conversationId,
         cb: (response) =>
-          optionsMessages.cb(response, conversationId, {
+          cbInitialMessages(response, conversationId, {
             dispatch,
           }),
       });
     }
 
-    checkOpenConversationId(conversationId);
-  }, [conversationId]);
-
-  useEffect(() => {
-    return () => {
-      console.log(scrollRef.current, "return");
-    };
+    // checkOpenConversationId(conversationId);
   }, [conversationId]);
 
   if (errorBack) {
@@ -171,11 +120,6 @@ const Chat = ({ params }) => {
   }
 
   console.log(params?.id, "!---reder---!");
-  // console.log(allMessages, "allMessages");
-  // console.log(conversationsList, "conversationsList");
-  // console.log(newChatData, "newChatData");
-  // console.log(optionsMessages, "optionsMessages");
-  // console.log(errorBack, "errorBack");
 
   if (!conversationId && !opponentId && !params?.newChatId) {
     return <></>;
@@ -193,19 +137,7 @@ const Chat = ({ params }) => {
         <ChatContent
           typeConversation={typeConversation}
           conversationId={conversationId}
-          // loadMessages={loadMessages}
-          // isFetchingFirst={isFetching}
-          // messages={!isFetching ? selectedMessagesChat || [] : []}
         />
-        {/* <MainContentWIndow
-          typeConversation={typeConversation}
-          conversationId={conversationId}
-        /> */}
-        {/* <MainContentWIndowReact
-          typeConversation={typeConversation}
-          conversationId={conversationId}
-        /> */}
-
         <ChatBottom
           opponentId={opponentId}
           conversationData={conversationData}
@@ -215,4 +147,4 @@ const Chat = ({ params }) => {
   );
 };
 
-export default memo(Chat);
+export default Chat;
