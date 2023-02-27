@@ -3,7 +3,7 @@ import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import languages from "@/core/translations";
 import SvgMaker from "@/components/svgMaker";
-import { shareMessageAction } from "@/store/app/slice";
+import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
@@ -23,7 +23,7 @@ const SharedMessages = ({ forwardMessages }) => {
 
   // FUNCTIONS
   const handleClose = () => {
-    dispatch(shareMessageAction({}));
+    dispatch(allActionsStore.shareMessageAction({}));
   };
 
   return (

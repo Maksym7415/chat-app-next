@@ -4,7 +4,7 @@ export const initialState = {
   token: "",
 };
 
-const persistSlice = createSlice({
+export const persistSlice = createSlice({
   name: "appSlice",
   initialState,
   reducers: {
@@ -15,4 +15,3 @@ const persistSlice = createSlice({
 });
 
 export default persistSlice.reducer;
-export const { setTokenAction } = persistSlice.actions;

@@ -1,15 +1,12 @@
 import Snackbar from "../helpers/notistack";
 import { socketEmitChatsDeleteMessage } from "../@core/socket/actions/socketEmit";
 import { actionsConversationList } from "./conversations";
-import {
-  setSelectedMessagesAction,
-  editMessageAction,
-} from "@/store/app/slice";
 import { setDialogWindowConfigAction } from "@/components/dialogWindow/redux/slice";
-import { store } from "@/store/store";
 import { getMessagesWithSendDate } from "@/helpers/index";
-import { setMessagesDataInConversationsIdAction } from "@/store/historyConversationsId/slice";
 import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
+import { allActionsStore } from "@/store/rootActions";
+import { store } from "@/store/store";
+
 export const actionsTypeObject = {
   add: "add",
   remove: "remove",
@@ -25,7 +22,7 @@ export const actionsSelectedMessages =
     switch (typeAction) {
       case actionsTypeObject.add:
         dispatch(
-          setSelectedMessagesAction({
+          allActionsStore.setSelectedMessagesAction({
             ...selectedMessages,
             messages: {
               ...copySelectedMessages,
@@ -39,7 +36,7 @@ export const actionsSelectedMessages =
 
         const active = Object.keys(copySelectedMessages).length ? true : false;
         dispatch(
-          setSelectedMessagesAction({
+          allActionsStore.setSelectedMessagesAction({
             ...selectedMessages,
             active,
             messages: {
@@ -61,7 +58,7 @@ export const actionsSelectedMessages =
       data,
       typeAction,
       dispatch: dispatch,
-      setAction: setSelectedMessagesAction,
+      // setAction: allActionsStore.setSelectedMessagesAction,
     });
   };
 
@@ -102,8 +99,9 @@ export const actionsMessagesChat = (props) => {
     case actionsTypeActionsChat.deleteMessages:
       const getRemoveMessages = (conversationId, messagesIds) => {
         const allMessages =
-          store.getState().historyConversationsIdSlice?.[conversationId]
-            ?.messages;
+          store.getState().conversationsSlice.historyConversationsId?.[
+            conversationId
+          ]?.messages;
         const conversationsList =
           store.getState().conversationsSlice.conversationsList.data;
 
@@ -133,7 +131,7 @@ export const actionsMessagesChat = (props) => {
           )
         ) {
           store.dispatch(
-            actionsConversationList({
+            allActionsStore.actionsConversationList({
               mode: "updateMessageConversation",
               conversationId,
               messages: [updateAllMessages[updateAllMessages.length - 1]],
@@ -143,7 +141,7 @@ export const actionsMessagesChat = (props) => {
         }
 
         store.dispatch(
-          setMessagesDataInConversationsIdAction({
+          allActionsStore.setMessagesDataInConversationsIdAction({
             conversationId: conversationId,
             messages: updateAllMessages,
             lastAction: LAST_ACTION_MESSAGES_STORE.remove,
@@ -171,7 +169,7 @@ export const actionsMessagesChat = (props) => {
     case actionsTypeActionsChat.editMessage:
       return Object.keys(_messages).map((messageId) =>
         store.dispatch(
-          editMessageAction({
+          allActionsStore.editMessageAction({
             message: _messages[messageId],
             messageId,
           })
@@ -198,7 +196,7 @@ export const actionsMessagesChat = (props) => {
     // SELECT MESSAGES
     case actionsTypeActionsChat.selectMessages:
       return store.dispatch(
-        setSelectedMessagesAction({
+        allActionsStore.setSelectedMessagesAction({
           active: true,
           messages: _messages,
         })

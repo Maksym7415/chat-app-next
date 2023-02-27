@@ -11,7 +11,7 @@ import DialogCustom from "@/components/dialogWindow/Dialog";
 import "../styles/globals.css";
 import { IS_CLIENT } from "@/core/constants/general";
 import { getTokenCook } from "@/core/cookiesStorage/index";
-import { authTokenAction, setAuthHeadersAction } from "@/store/auth/slice";
+import { allActionsStore } from "@/store/rootActions";
 
 if (!process.browser) React.useLayoutEffect = React.useEffect;
 
@@ -27,10 +27,12 @@ const App = ({ Component, ...rest }) => {
       const authSlice = store.getState().authSlice;
 
       !authSlice.headers.accessToken &&
-        store.dispatch(setAuthHeadersAction({ accessToken: token }));
+        store.dispatch(
+          allActionsStore.setAuthHeadersAction({ accessToken: token })
+        );
       !authSlice.authToken.userId &&
         store.dispatch(
-          authTokenAction({
+          allActionsStore.authTokenAction({
             token,
           })
         );

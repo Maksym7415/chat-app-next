@@ -7,8 +7,7 @@ import {
   onQueryStartedFulfilled,
   onQueryStartedFulfilledCb,
 } from "@/store/helpers";
-import { setUserInfoAction, seUserAvatarsAction } from "@/store/user/slice";
-import { setLangAction } from "@/store/setting/slice";
+import { allActionsStore } from "@/store/rootActions";
 
 export const userApi = createApi({
   reducerPath: "userApi",
@@ -31,8 +30,9 @@ export const userApi = createApi({
           cb: (res) => {
             const { data } = res;
 
-            data?.lang && options.dispatch(setLangAction(data?.lang));
-            options.dispatch(setUserInfoAction(data));
+            data?.lang &&
+              options.dispatch(allActionsStore.setLangAction(data?.lang));
+            options.dispatch(allActionsStore.setUserInfoAction(data));
 
             onQueryStartedFulfilledCb({ propsData, data });
           },
@@ -54,7 +54,7 @@ export const userApi = createApi({
           cb: (res) => {
             const { data } = res;
 
-            options.dispatch(seUserAvatarsAction(data));
+            options.dispatch(allActionsStore.seUserAvatarsAction(data));
 
             onQueryStartedFulfilledCb({ propsData, data });
           },

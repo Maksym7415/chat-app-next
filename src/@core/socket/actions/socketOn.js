@@ -2,17 +2,9 @@ import { socket } from "../index";
 import { actionsConversationList } from "@/actions/index";
 import { PATHS } from "@/core/constants/paths";
 import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
-import {
-  setConversationListAction,
-  updateConversationTypeStateAction,
-} from "@/store/conversations/slice";
 import { store } from "@/store/store";
 import { conversationsApi } from "@/store/conversations/api";
-import {
-  setMessagesDataInConversationsIdAction,
-  removeConversationsIdAction,
-  clearMessagesDataInConversationsIdAction,
-} from "@/store/historyConversationsId/slice";
+import { allActionsStore } from "@/store/rootActions";
 
 // User Id Chat
 export const socketOnUserIdChat = (chat, options) =>
@@ -21,8 +13,7 @@ export const socketOnUserIdChat = (chat, options) =>
       return options.cb();
     }
     const allMessages =
-      store.getState().historyConversationsIdSlice?.[chat.conversationId]
-        ?.messages;
+      store.getState().conversationsSlice?.[chat.conversationId]?.messages;
 
     console.log(chat, "chat");
     const conversationsList =
@@ -90,7 +81,7 @@ export const socketOnUserIdChat = (chat, options) =>
       }
 
       store.dispatch(
-        setMessagesDataInConversationsIdAction({
+        allActionsStore.setMessagesDataInConversationsIdAction({
           conversationId: chat.conversationId,
           messages: updateMessages,
           lastAction: LAST_ACTION_MESSAGES_STORE.add,
@@ -121,7 +112,7 @@ export const socketOnTypingStateId = (chat) => {
         [user.userId]: { ...user, isTyping },
       };
       store.dispatch(
-        updateConversationTypeStateAction({
+        allActionsStore.updateConversationTypeStateAction({
           conversationId: conversationId,
           data,
         })
@@ -159,7 +150,7 @@ export const socketOnTypingStateId = (chat) => {
 export const socketOnDeleteMessage = () => {
   const getRemoveMessages = (conversationId, messageId, lastMessage) => {
     const allMessages =
-      store.getState().historyConversationsIdSlice?.[conversationId.toString()]
+      store.getState().conversationsSlice?.[conversationId.toString()]
         ?.messages;
     const conversationsList =
       store.getState().conversationsSlice.conversationsList.data;
@@ -171,7 +162,7 @@ export const socketOnDeleteMessage = () => {
     );
 
     store.dispatch(
-      setMessagesDataInConversationsIdAction({
+      allActionsStore.setMessagesDataInConversationsIdAction({
         conversationId,
         messages: updateMessages,
         lastAction: LAST_ACTION_MESSAGES_STORE.remove,
@@ -233,12 +224,14 @@ export const socketOnDeleteConversation = ({ params, router }) => {
     }
 
     store.dispatch(
-      removeConversationsIdAction({
+      allActionsStore.removeConversationsIdAction({
         ids,
       })
     );
 
-    store.dispatch(setConversationListAction(copyConversationsList));
+    store.dispatch(
+      allActionsStore.setConversationListAction(copyConversationsList)
+    );
   });
 };
 
@@ -259,12 +252,14 @@ export const socketOnClearConversation = () => {
     });
 
     store.dispatch(
-      clearMessagesDataInConversationsIdAction({
+      allActionsStore.clearMessagesDataInConversationsIdAction({
         ids,
         lastAction: LAST_ACTION_MESSAGES_STORE.clear,
       })
     );
 
-    store.dispatch(setConversationListAction(copyConversationsList));
+    store.dispatch(
+      allActionsStore.setConversationListAction(copyConversationsList)
+    );
   });
 };

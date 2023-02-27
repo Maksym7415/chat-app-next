@@ -5,7 +5,6 @@ import conversationsSlice from "./conversations/slice";
 import userSlice from "./user/slice";
 import searchSlice from "./search/slice";
 import persistSlice from "./persist/slice";
-import historyConversationsIdSlice from "./historyConversationsId/slice";
 
 import modalSlice from "../components/modal/redux/slice";
 import drawerSlice from "../components/drawer/redux/slice";
@@ -31,8 +30,6 @@ export const reducers = {
   conversationsSlice,
   userSlice,
   searchSlice,
-
-  historyConversationsIdSlice,
 
   // in components
   modalSlice,

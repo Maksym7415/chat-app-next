@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const settingSlice = createSlice({
+export const settingSlice = createSlice({
   name: "settingSlice",
   initialState: {
     error: {},
@@ -21,5 +21,4 @@ const settingSlice = createSlice({
   },
 });
 
-export const { setLangAction, setThemeAction } = settingSlice.actions;
 export default settingSlice.reducer;

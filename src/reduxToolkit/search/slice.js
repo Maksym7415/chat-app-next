@@ -9,17 +9,12 @@ const initialState = {
   },
   searchContacts: "",
   searchSettingsQuestions: { response: [] },
-  isLoading: false,
 };
 
-const searchSlice = createSlice({
+export const searchSlice = createSlice({
   name: "searchSlice",
   initialState,
   reducers: {
-    setLoadingSearchContacts(state, { payload }) {
-      console.log(payload, "setLoadingSearchContacts");
-      state.isLoading = payload;
-    },
     setSearchContactsAction(state, { payload }) {
       state.searchContactsParams = {
         ...state.searchContactsParams,
@@ -31,11 +26,5 @@ const searchSlice = createSlice({
     },
   },
 });
-
-export const {
-  setLoadingSearchContacts,
-  setSearchContactsAction,
-  resetSearchContactsAction,
-} = searchSlice.actions;
 
 export default searchSlice.reducer;

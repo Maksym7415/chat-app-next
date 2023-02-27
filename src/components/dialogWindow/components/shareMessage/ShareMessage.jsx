@@ -6,7 +6,7 @@ import UserAvatar from "../../../avatar/userAvatar";
 import { PATHS } from "@/core/constants/paths";
 import languages from "@/core/translations";
 import { setDialogWindowClearConfigAction } from "../../redux/slice";
-import { shareMessageAction } from "@/store/app/slice";
+import { allActionsStore } from "@/store/rootActions";
 
 // rework
 
@@ -54,7 +54,7 @@ const SharedMessage = ({ data }) => {
 
   const handleShareMessageId = (conversationId) => {
     // console.log(data, "data");
-    dispatch(shareMessageAction(data));
+    dispatch(allActionsStore.shareMessageAction(data));
     router.push(`${PATHS.chat}/${conversationId}`);
     // history.push({
     //   pathname: `${PATHS.chat}/${conversationId}`,

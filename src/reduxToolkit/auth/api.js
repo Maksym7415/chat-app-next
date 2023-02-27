@@ -2,15 +2,9 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { HYDRATE } from "next-redux-wrapper";
 import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
 import { pathBackAuth } from "@/core/constants/urlBack";
-import {
-  authTokenAction,
-  setLoginSingInAction,
-  setAuthHeadersAction,
-  setVerificationCodeAction,
-} from "@/store/auth/slice";
-import { setTokenAction } from "@/store/persist/slice";
-import { fErrorResponse, onQueryStartedFulfilled } from "@/store/helpers";
 import { setTokenCook } from "@/core/cookiesStorage";
+import { allActionsStore } from "@/store/rootActions";
+import { fErrorResponse, onQueryStartedFulfilled } from "@/store/helpers";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -30,13 +24,15 @@ export const authApi = createApi({
       transformErrorResponse: (response, meta, args) =>
         fErrorResponse({ response, meta, args }),
       async onQueryStarted(dataSend, options) {
-        options.dispatch(setLoginSingInAction(dataSend.login));
+        options.dispatch(allActionsStore.setLoginSingInAction(dataSend.login));
 
         onQueryStartedFulfilled({
           options,
           cb: (res) => {
             const { data } = res;
-            options.dispatch(setVerificationCodeAction(data.verificationCode));
+            options.dispatch(
+              allActionsStore.setVerificationCodeAction(data.verificationCode)
+            );
           },
         });
       },
@@ -51,7 +47,7 @@ export const authApi = createApi({
       transformErrorResponse: (response, meta, args) =>
         fErrorResponse({ response, meta, args }),
       async onQueryStarted(dataSend, options) {
-        options.dispatch(setLoginSingInAction(dataSend.login));
+        options.dispatch(allActionsStore.setLoginSingInAction(dataSend.login));
 
         onQueryStartedFulfilled({
           options,
@@ -60,13 +56,13 @@ export const authApi = createApi({
 
             setTokenCook(data.accessToken);
 
-            options.dispatch(setAuthHeadersAction(data));
+            options.dispatch(allActionsStore.setAuthHeadersAction(data));
             options.dispatch(
-              authTokenAction({
+              allActionsStore.authTokenAction({
                 token: data.accessToken,
               })
             );
-            options.dispatch(setTokenAction(data.accessToken));
+            options.dispatch(allActionsStore.setTokenAction(data.accessToken));
           },
         });
       },

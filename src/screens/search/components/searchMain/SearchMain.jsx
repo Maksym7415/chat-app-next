@@ -12,11 +12,8 @@ import UserAvatar from "@/components/avatar/userAvatar";
 import RenderConditionsList from "@/components/renders/renderConditionsList";
 import { setStateDirection } from "@/helpers/index";
 import { searchApi } from "@/store/search/api";
-import {
-  setSearchContactsAction,
-  resetSearchContactsAction,
-} from "@/store/search/slice";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
+import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
@@ -73,7 +70,7 @@ const SearchMain = ({ onClickContact }) => {
       !isError
     ) {
       dispatch(
-        setSearchContactsAction({
+        allActionsStore.setSearchContactsAction({
           offset: searchContactsParams.offset + searchContactsParams.limit,
           direction: "down",
         })
@@ -90,7 +87,7 @@ const SearchMain = ({ onClickContact }) => {
     });
 
     dispatch(
-      setSearchContactsAction({
+      allActionsStore.setSearchContactsAction({
         limit: currentData?.limit || 0,
       })
     );
@@ -98,7 +95,7 @@ const SearchMain = ({ onClickContact }) => {
 
   useEffect(() => {
     return () => {
-      dispatch(resetSearchContactsAction());
+      dispatch(allActionsStore.resetSearchContactsAction());
     };
   }, []);
 

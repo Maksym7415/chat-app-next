@@ -4,14 +4,13 @@ import {
 } from "../@core/socket/actions/socketEmit";
 import { PATHS } from "@/core/constants/paths";
 import { store } from "@/store/store";
-import { updateConversationListAction } from "@/store/conversations/slice";
-import { setNewChatDataAction } from "@/store/app/slice";
+import { allActionsStore } from "@/store/rootActions";
 
 export const actionsConversationList = (data) => (dispatch) => {
   switch (data.mode) {
     case "updateMessageConversation":
       return dispatch(
-        updateConversationListAction({
+        allActionsStore.updateConversationListAction({
           [data.conversationId]: {
             ...data.conversationsList[data.conversationId],
             Messages: data.messages,
@@ -79,7 +78,7 @@ export const actionCreateNewConversation = async (router, item) => {
   }
 
   store.dispatch(
-    setNewChatDataAction({
+    allActionsStore.setNewChatDataAction({
       conversationData: {
         conversationAvatar: item.userAvatar,
         conversationName: item.fullName,

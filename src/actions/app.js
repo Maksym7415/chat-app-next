@@ -1,4 +1,5 @@
-import { initialState, setSelectedMessagesAction } from "@/store/app/slice";
+import { initialState } from "@/store/app/slice";
+import { allActionsStore } from "@/store/rootActions";
 import { store } from "@/store/store";
 
 export const actionsClearSelectedMessages = (force) => {
@@ -6,6 +7,6 @@ export const actionsClearSelectedMessages = (force) => {
 
   if (!Object.keys(selectedMessages.messages).length && !force) return;
   return store.dispatch(
-    setSelectedMessagesAction(initialState.selectedMessages)
+    allActionsStore.setSelectedMessagesAction(initialState.selectedMessages)
   );
 };

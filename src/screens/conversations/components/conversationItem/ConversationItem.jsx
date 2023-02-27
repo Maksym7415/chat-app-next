@@ -61,7 +61,6 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
   const handleClickChatItem = (id) => {
     if (+paramsId === id) return;
 
-    // dispatch(setLoadingSearchContacts(true));
     router.push(`${PATHS.chat}/${id}`);
   };
 

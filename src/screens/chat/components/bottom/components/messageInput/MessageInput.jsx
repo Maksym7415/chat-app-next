@@ -12,7 +12,7 @@ import RightInputComponent from "./components/RightInputComponent";
 import LeftInputComponent from "./components/LeftInputComponent";
 import MessageEdit from "./components/messageEdit";
 import SharedMessages from "./components/sharedMessages";
-import { editMessageAction, shareMessageAction } from "@/store/app/slice";
+import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
@@ -93,7 +93,7 @@ const MessageInput = ({ conversationId, opponentId }) => {
         sendMessage(conversationId, messageObj, message.User.id);
         return message;
       });
-      dispatch(shareMessageAction([]));
+      dispatch(allActionsStore.shareMessageAction([]));
     }
     if (message[conversationId]) {
       if (messageEdit.messageId) {
@@ -107,13 +107,13 @@ const MessageInput = ({ conversationId, opponentId }) => {
   };
 
   const handleClearSharedMessages = () => {
-    dispatch(shareMessageAction([]));
+    dispatch(allActionsStore.shareMessageAction([]));
     setSharedMessages([]);
   };
 
   const clearMessageEdit = () => {
     dispatch(
-      editMessageAction({
+      allActionsStore.editMessageAction({
         message: {},
         messageId: null,
       })

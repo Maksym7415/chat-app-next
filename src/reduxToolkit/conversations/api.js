@@ -1,13 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { HYDRATE } from "next-redux-wrapper";
 import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
 import { pathBackConversations } from "@/core/constants/urlBack";
 import { fErrorResponse, onQueryStartedFulfilled } from "@/store/helpers";
-import {
-  setConversationListAction,
-  updateUserHistoryConversation,
-} from "@/store/conversations/slice";
-import { IS_SERVER, IS_CLIENT } from "@/core/constants/general";
+import { allActionsStore } from "@/store/rootActions";
 
 export const conversationsApi = createApi({
   reducerPath: "conversationsApi",
@@ -45,7 +40,7 @@ export const conversationsApi = createApi({
           cb: (res) => {
             const { data } = res;
 
-            options.dispatch(setConversationListAction(data));
+            options.dispatch(allActionsStore.setConversationListAction(data));
           },
         });
       },
@@ -54,8 +49,6 @@ export const conversationsApi = createApi({
     getConversationMessages: builder.query({
       query: (args) => {
         const { additionalUrl, params } = args;
-
-        console.log(args, "args");
 
         return {
           url: `${pathBackConversations.conversationHistory}/${additionalUrl}`,
@@ -71,13 +64,6 @@ export const conversationsApi = createApi({
             const { data } = res;
 
             sendData?.cb && sendData.cb(data);
-
-            options.dispatch(
-              updateUserHistoryConversation({
-                conversationId: sendData?.conversationId,
-                data: { pagination: data.pagination },
-              })
-            );
           },
         });
       },

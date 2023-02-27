@@ -5,7 +5,7 @@ import { InputAdornment, OutlinedInput } from "@mui/material";
 import { useDebounce } from "@/hooks/useDebounce";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { searchApi } from "@/store/search/api";
-import { setSearchContactsAction } from "@/store/search/slice";
+import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
@@ -42,7 +42,7 @@ function TopCenterComponent({ parentSettings }) {
 
   useLayoutEffect(() => {
     dispatch(
-      setSearchContactsAction({
+      allActionsStore.setSearchContactsAction({
         search: debouncedSearchValue,
         offset: 0,
         direction: "",

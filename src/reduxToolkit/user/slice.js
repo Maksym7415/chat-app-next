@@ -19,7 +19,7 @@ const initialState = {
   avatars: [],
 };
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
   name: "userSlice",
   initialState,
   reducers: {
@@ -31,7 +31,5 @@ const userSlice = createSlice({
     },
   },
 });
-
-export const { setUserInfoAction, seUserAvatarsAction } = userSlice.actions;
 
 export default userSlice.reducer;

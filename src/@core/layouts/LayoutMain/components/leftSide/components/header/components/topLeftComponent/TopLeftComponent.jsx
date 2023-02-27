@@ -4,7 +4,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { IconButton } from "@mui/material";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { setDrawerConfigAction } from "@/components/drawer/redux/slice";
-import { setSideLeftConfigAction } from "@/store/app/slice";
+import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
@@ -52,7 +52,7 @@ const TopLeftComponent = () => {
               edge="end"
               onClick={() => {
                 dispatch(
-                  setSideLeftConfigAction({
+                  allActionsStore.setSideLeftConfigAction({
                     page: SIDE_LEFT_TYPE_CONTENT.conversations,
                   })
                 );

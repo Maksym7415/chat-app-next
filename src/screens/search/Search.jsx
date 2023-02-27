@@ -6,7 +6,7 @@ import SearchMain from "./components/searchMain";
 import { TYPES_FROM_TO_SEARCH_SCREEN } from "@/core/constants/general";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { actionCreateNewConversation } from "@/actions/conversations";
-import { setSideLeftConfigAction } from "@/store/app/slice";
+import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
@@ -82,7 +82,7 @@ const Search = ({ params }) => {
                   actionCreateNewConversation(router, item);
 
                   dispatch(
-                    setSideLeftConfigAction({
+                    allActionsStore.setSideLeftConfigAction({
                       page: SIDE_LEFT_TYPE_CONTENT.conversations,
                     })
                   );

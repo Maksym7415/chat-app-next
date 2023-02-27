@@ -4,13 +4,11 @@ import { Typography, Box } from "@mui/material";
 import ChatHeader from "./components/header";
 import ChatBottom from "./components/bottom";
 import ChatContent from "./components/mainContent";
-import { conversationsApi } from "@/store/conversations/api";
-import RenderInfoCenterBox from "../../components/renders/renderInfoCenterBox";
+import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
 import { getMessagesWithSendDate } from "@/helpers/index";
-import { setOpenConversationIdAction } from "@/store/app/slice";
-import { setMessagesDataInConversationsIdAction } from "@/store/historyConversationsId/slice";
-import { store } from "@/store/store";
 import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
+import { allActionsStore } from "@/store/rootActions";
+import { conversationsApi } from "@/store/conversations/api";
 
 // STYLES
 const classes = {
@@ -20,14 +18,6 @@ const classes = {
 };
 
 // fix в консолі вискакує помилка якась якщо забрати у функції cbInitialMessages  dispatch то посмилки немає
-
-const checkOpenConversationId = (conversationId) => {
-  const openConversationId = store.getState().appSlice.openConversationId;
-
-  if (conversationId !== openConversationId) {
-    store.dispatch(setOpenConversationIdAction(conversationId));
-  }
-};
 
 const scrollPositionChats = {};
 
@@ -65,8 +55,8 @@ const Chat = ({ params }) => {
 
   const messagesChat =
     useSelector(
-      ({ historyConversationsIdSlice }) =>
-        historyConversationsIdSlice?.[conversationId]?.messages
+      ({ conversationsSlice }) =>
+        conversationsSlice.historyConversationsId?.[conversationId]?.messages
     ) || [];
 
   const [getConversationMessagesRequest] =
@@ -86,7 +76,7 @@ const Chat = ({ params }) => {
             getMessagesWithSendDate(response?.data)?.messages || [];
 
           dispatch(
-            setMessagesDataInConversationsIdAction({
+            allActionsStore.setMessagesDataInConversationsIdAction({
               conversationId,
               messages: messagesResult,
               pagination: response.pagination,

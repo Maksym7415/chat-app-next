@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import TopCenterComponent from "./components/topCenterComponent";
 import TopLeftComponent from "./components/topLeftComponent";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
-import { setSideLeftConfigAction } from "@/store/app/slice";
+import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
@@ -42,7 +42,7 @@ const Header = ({ children }) => {
             placeholder: "Search",
             onFocus: () => {
               dispatch(
-                setSideLeftConfigAction({
+                allActionsStore.setSideLeftConfigAction({
                   page: SIDE_LEFT_TYPE_CONTENT.searchContacts,
                 })
               );

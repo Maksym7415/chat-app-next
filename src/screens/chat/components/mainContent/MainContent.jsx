@@ -8,10 +8,10 @@ import {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Virtuoso } from "react-virtuoso";
-import { conversationsApi } from "@/store/conversations/api";
 import RowItemMessage from "./RowItemMessage";
-import { setMessagesDataInConversationsIdAction } from "@/store/historyConversationsId/slice";
 import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
+import { conversationsApi } from "@/store/conversations/api";
+import { allActionsStore } from "@/store/rootActions";
 
 const LOAD_MESSAGE_OFFSET = 15;
 
@@ -50,8 +50,8 @@ const MainContent = ({
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
   const pagination =
     useSelector(
-      ({ historyConversationsIdSlice }) =>
-        historyConversationsIdSlice?.[conversationId]?.pagination
+      ({ conversationsSlice }) =>
+      conversationsSlice.historyConversationsId?.[conversationId]?.pagination
     ) || {};
 
   // STATES
@@ -80,7 +80,7 @@ const MainContent = ({
         conversationId,
         cb: (response) => {
           dispatch(
-            setMessagesDataInConversationsIdAction({
+            allActionsStore.setMessagesDataInConversationsIdAction({
               conversationId,
               messages: [...response.data, ...messages],
               pagination: response.pagination,

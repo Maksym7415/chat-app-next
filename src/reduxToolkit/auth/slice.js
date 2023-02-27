@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { jwtdecode } from "../../helpers";
-import { HYDRATE } from "next-redux-wrapper";
 
-const initialAuthToken = {
+export const initialAuthToken = {
   role: "",
   login: "",
   userAgent: "",
@@ -20,7 +19,7 @@ const initialState = {
   headers: { accessToken: "" },
 };
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
   name: "authSlice",
   initialState,
   reducers: {
@@ -50,12 +49,5 @@ const authSlice = createSlice({
   //   },
   // },
 });
-
-export const {
-  authTokenAction,
-  setAuthHeadersAction,
-  setLoginSingInAction,
-  setVerificationCodeAction,
-} = authSlice.actions;
 
 export default authSlice.reducer;
