@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import NewChat from "./components/newChat";
 import ShareMessage from "./components/shareMessage";
-import { setDialogWindowClearConfigAction } from "./redux/slice";
+import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
@@ -28,9 +28,7 @@ const DialogComponent = () => {
   const dispatch = useDispatch();
 
   // SELECTORS
-  const dialogConfig = useSelector(
-    ({ dialogWindowSlice }) => dialogWindowSlice.dialogConfig
-  );
+  const dialogConfig = useSelector(({ appSlice }) => appSlice.dialogConfig);
 
   const [open, setOpen] = useState(false);
 
@@ -39,7 +37,7 @@ const DialogComponent = () => {
     setOpen(false);
 
     const closeDialogTime = setTimeout(() => {
-      dispatch(setDialogWindowClearConfigAction());
+      dispatch(allActionsStore.setDialogWindowClearConfigAction());
       clearTimeout(closeDialogTime);
     }, transitionDuration);
   };

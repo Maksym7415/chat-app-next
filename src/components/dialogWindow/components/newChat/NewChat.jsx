@@ -8,8 +8,8 @@ import { fullDate } from "@/helpers/index";
 import Snackbar from "@/helpers/notistack";
 import { socketEmitChatCreation } from "@/core/socket/actions/socketEmit";
 import CustomButton from "@/components/buttons/customButton/index";
-import { setDialogWindowClearConfigAction } from "../../redux/slice";
 import { searchApi } from "@/store/search/api";
+import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
@@ -56,7 +56,7 @@ const NewChat = () => {
       imageData: {},
       imageFormat: "",
       cb: () => {
-        dispatch(setDialogWindowClearConfigAction());
+        dispatch(allActionsStore.setDialogWindowClearConfigAction());
         return Snackbar.success("Create new chat");
       },
     });

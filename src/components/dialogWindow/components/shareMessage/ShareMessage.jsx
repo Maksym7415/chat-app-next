@@ -5,7 +5,6 @@ import { Typography, TextField, Box } from "@mui/material";
 import UserAvatar from "../../../avatar/userAvatar";
 import { PATHS } from "@/core/constants/paths";
 import languages from "@/core/translations";
-import { setDialogWindowClearConfigAction } from "../../redux/slice";
 import { allActionsStore } from "@/store/rootActions";
 
 // rework
@@ -62,7 +61,7 @@ const SharedMessage = ({ data }) => {
     //     from: "shareMessage",
     //   },
     // });
-    dispatch(setDialogWindowClearConfigAction());
+    dispatch(allActionsStore.setDialogWindowClearConfigAction());
   };
 
   return (

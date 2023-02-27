@@ -12,13 +12,13 @@ import {
 import { TYPES_CONVERSATIONS } from "@/core/constants/general";
 import UserAvatar from "@/components/avatar/userAvatar";
 import SvgMaker from "@/components/svgMaker";
-import { setDrawerConfigAction } from "@/components/drawer/redux/slice";
 import {
   actionsMessagesChat,
   actionsSelectedConversation,
   actionsTypeActionsChat,
   actionsTypeActionsConversation,
 } from "@/actions/index";
+import { allActionsStore } from "@/store/rootActions";
 import { store } from "@/store/store";
 
 // STYLES
@@ -105,7 +105,7 @@ const ChatHeader = ({
       <div
         onClick={() => {
           store.dispatch(
-            setDrawerConfigAction({
+            allActionsStore.setDrawerConfigAction({
               anchor: "right",
               open: true,
               width: "400px",

@@ -34,7 +34,7 @@ const ContextMenu = () => {
   const classes = useStyles();
 
   const contextMenuConfig = useSelector(
-    ({ contextMenuSlice }) => contextMenuSlice.contextMenuConfig
+    ({ appSlice }) => appSlice.contextMenuConfig
   );
 
   return (

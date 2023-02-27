@@ -6,9 +6,8 @@ import * as config from "./config";
 import { PATHS } from "@/core/constants/paths";
 import { actionLogOut } from "@/actions/index";
 import BaseSelect from "../../../selects/BaseSelect";
-import { setDialogWindowConfigAction } from "../../../dialogWindow/redux/slice";
-import { setModalConfigAction } from "@/components/modal/redux/slice";
 import { userApi } from "@/store/user/api";
+import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
@@ -35,7 +34,7 @@ function MainDrawer({ closeDrawer }) {
     switch (value) {
       case "newChat":
         dispatch(
-          setDialogWindowConfigAction({
+          allActionsStore.setDialogWindowConfigAction({
             open: true,
             typeContent: "newChat",
             title: "New Chat",
@@ -47,7 +46,7 @@ function MainDrawer({ closeDrawer }) {
       case "myProfile":
         const timerShowModal = setTimeout(() => {
           dispatch(
-            setModalConfigAction({
+            allActionsStore.setModalConfigAction({
               open: true,
               renderContent: "settingProfile",
               styles: {},

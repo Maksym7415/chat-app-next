@@ -10,12 +10,12 @@ import { TYPES_CONVERSATIONS } from "@/core/constants/general";
 import { CONTEXT_MENU_ID } from "@/core/constants/general";
 import { getCurrentDay } from "@/helpers/index";
 import UserAvatar from "@/components/avatar/userAvatar";
-import { setContextMenuConfigAction } from "@/components/contextMenu/redux/slice";
 import {
   actionsTypeObjectSelected,
   actionsSelectedMessages,
   actionsMessagesChat,
 } from "@/actions/index";
+import { allActionsStore } from "@/store/rootActions";
 import { store } from "@/store/store";
 
 const stylePaper = {
@@ -176,7 +176,7 @@ const Message = ({
           if (selectedMessages.active) return;
 
           dispatch(
-            setContextMenuConfigAction({
+            allActionsStore.setContextMenuConfigAction({
               isShowMenu: true,
               messageId: 0,
               config: config.selectedMessageContext(lang).filter((item) => {

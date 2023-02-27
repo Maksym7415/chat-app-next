@@ -3,7 +3,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { IconButton } from "@mui/material";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
-import { setDrawerConfigAction } from "@/components/drawer/redux/slice";
 import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
@@ -32,7 +31,7 @@ const TopLeftComponent = () => {
                 edge="end"
                 onClick={() => {
                   dispatch(
-                    setDrawerConfigAction({
+                    allActionsStore.setDrawerConfigAction({
                       anchor: "left",
                       open: true,
                       type: "main",

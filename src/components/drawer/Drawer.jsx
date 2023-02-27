@@ -1,9 +1,9 @@
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { useDispatch, useSelector } from "react-redux";
-import { setDrawerConfigAction } from "./redux/slice";
 import MainDrawer from "./components/mainDrawer";
 import ProfilePage from "@/screens/profile/Profile";
+import { allActionsStore } from "@/store/rootActions";
 
 const SwipeableTemporaryDrawer = () => {
   // HOOKS
@@ -11,7 +11,7 @@ const SwipeableTemporaryDrawer = () => {
 
   // SELECTORS
   const drawerConfig = useSelector(
-    ({ drawerSlice }) => drawerSlice.drawerConfig
+    ({ appSlice }) => appSlice.drawerConfig
   );
 
   // FUNCTIONS
@@ -25,7 +25,7 @@ const SwipeableTemporaryDrawer = () => {
     }
 
     dispatch(
-      setDrawerConfigAction({
+      allActionsStore.setDrawerConfigAction({
         anchor,
         open,
       })

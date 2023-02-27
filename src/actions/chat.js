@@ -1,7 +1,6 @@
 import Snackbar from "../helpers/notistack";
 import { socketEmitChatsDeleteMessage } from "../@core/socket/actions/socketEmit";
 import { actionsConversationList } from "./conversations";
-import { setDialogWindowConfigAction } from "@/components/dialogWindow/redux/slice";
 import { getMessagesWithSendDate } from "@/helpers/index";
 import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
 import { allActionsStore } from "@/store/rootActions";
@@ -219,7 +218,7 @@ export const actionsMessagesChat = (props) => {
       }, []);
 
       return store.dispatch(
-        setDialogWindowConfigAction({
+        allActionsStore.setDialogWindowConfigAction({
           open: true,
           typeContent: "shareMessage",
           title: "Share Message",

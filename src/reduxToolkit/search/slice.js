@@ -7,8 +7,6 @@ const initialState = {
     direction: "",
     limit: 0,
   },
-  searchContacts: "",
-  searchSettingsQuestions: { response: [] },
 };
 
 export const searchSlice = createSlice({
