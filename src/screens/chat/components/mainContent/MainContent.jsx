@@ -2,7 +2,6 @@ import {
   useCallback,
   useState,
   memo,
-  useEffect,
   useLayoutEffect,
   useRef,
   useMemo,
@@ -14,15 +13,19 @@ import RowItemMessage from "./RowItemMessage";
 import { setMessagesDataInConversationsIdAction } from "@/store/historyConversationsId/slice";
 import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
 
+const LOAD_MESSAGE_OFFSET = 15;
+
 let vDataChat = {
   id: 0,
   isScrollToDown: false,
 };
-
-const LOAD_MESSAGE_OFFSET = 15;
-let countREnder = -1;
+let prevChatId = -1;
 let nextFirstItemIndex = 0;
 let timer = {};
+let scrollTopLocal = 0;
+
+// test
+let countREnder = -1;
 
 const vSetDataChat = (id, bool) => {
   vDataChat = {
@@ -60,6 +63,7 @@ const MainContent = ({
     () => messages.filter((item) => !item?.component) || [],
     [messages]
   );
+  const cacheScrollPosition = scrollPositionChats[conversationId];
 
   // FUNCTIONS
   const loadMessages = useCallback(
@@ -100,8 +104,7 @@ const MainContent = ({
   const handleScroll = useCallback(
     (event) => {
       const { scrollTop } = event.target;
-      console.log("scrollTop:", scrollTop);
-      scrollPositionChats[conversationId] = scrollTop;
+      scrollTopLocal = scrollTop;
     },
     [conversationId]
   );
@@ -109,33 +112,33 @@ const MainContent = ({
   // USEEFFECTS;
   useLayoutEffect(() => {
     vSetDataChat(0, false);
+    prevChatId = conversationId;
+    scrollTopLocal = 0;
+    return () => {
+      scrollPositionChats[conversationId] = scrollTopLocal;
+    };
   }, [conversationId]);
 
   useLayoutEffect(() => {
-    // Scroll to the last message when the component mounts or when new messages are added
-    if (!vDataChat.isScrollToDown && !vDataChat.id) {
-      const cacheScrollPosition = scrollPositionChats[conversationId];
-
-      console.log(conversationId, "-----scrollPositionChats");
-      timer = setTimeout(() => {
-        vSetDataChat(conversationId, true);
-        if (cacheScrollPosition) {
-          virtuosoRef.current.scrollTop = cacheScrollPosition;
-        } else {
-          scrollToBottom();
-        }
-      }, 10);
-    }
-    return () => clearTimeout(timer);
-  }, [messages]);
-
-  useLayoutEffect(() => {
     setMessages(messagesChat);
-    setFirstItemIndex(() => nextFirstItemIndex);
+
     if (!vDataChat.id) {
-      setFirstItemIndex(0);
+      setFirstItemIndex(pagination.allItems);
+    } else {
+      setFirstItemIndex(() => nextFirstItemIndex);
     }
   }, [messagesChat]);
+
+  if (prevChatId !== conversationId && conversationId !== null) {
+    return <></>;
+  }
+
+  const scrollToPosition = () => {
+    timer = setTimeout(() => {
+      virtuosoRef.current.scrollTo({ top: cacheScrollPosition });
+      clearTimeout(timer);
+    }, 20);
+  };
 
   console.log(++countREnder, "-----render");
 
@@ -145,6 +148,33 @@ const MainContent = ({
       firstItemIndex={firstItemIndex}
       initialTopMostItemIndex={messages?.length - 1}
       data={messages}
+      initialScrollTop={cacheScrollPosition || 0}
+      itemsRendered={(items) => {
+        if (!vDataChat.isScrollToDown && !vDataChat.id && items?.length) {
+          if (cacheScrollPosition) {
+            scrollToPosition();
+          } else {
+            // scrollToBottom();
+          }
+          vSetDataChat(conversationId, true);
+        }
+
+        // if (!vDataChat.isScrollToDown && !vDataChat.id && items?.length) {
+        //   const cacheScrollPosition = scrollPositionChats[conversationId];
+
+        //   console.log(conversationId, "-----scrollPositionChats");
+        //   if (cacheScrollPosition) {
+        //     timer = setTimeout(() => {
+        //       virtuosoRef.current.scrollTo({ top: cacheScrollPosition });
+        //     }, 20);
+        //   } else {
+        //     // timer = setTimeout(() => {
+        //     //   scrollToBottom();
+        //     // }, 100);
+        //   }
+        // }
+        return items;
+      }}
       // followOutput={true} // якщо близько до низу контейнера і приходить знизу дані то скролить на низ
       totalCount={pagination.allItems || 0}
       atTopThreshold={300}

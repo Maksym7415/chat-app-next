@@ -21,8 +21,6 @@ const historyConversationsIdSlice = createSlice({
         messages: payload.messages,
       };
 
-      console.log(payload, "payload");
-
       if (payload?.pagination) {
         sDataConversationId.pagination = payload.pagination;
       }

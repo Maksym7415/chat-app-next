@@ -128,8 +128,6 @@ const Chat = ({ params }) => {
               conversationId={conversationId}
               messagesChat={messagesChat || []}
               scrollPositionChats={scrollPositionChats}
-              // setMessages={setMessages}
-              // messages={messages}
             />
           ) : null}
         </div>
