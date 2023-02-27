@@ -12,8 +12,7 @@
       "@/actions/*": ["src/actions/*"],
       "@/screens/*": ["src/screens/*"],
       "@/services/*": ["src/services/*"],
-      "@/pages/*": ["pages/*"],
-      "@/rtkQuery/*": ["src/reduxToolkit/api/*"]
+      "@/pages/*": ["pages/*"]
     }
   }
 }
