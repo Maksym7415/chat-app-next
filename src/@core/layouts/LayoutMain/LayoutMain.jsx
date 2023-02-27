@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { Rnd } from "react-rnd";
 import LeftSide from "./components/leftSide";
 import { socket } from "@/core/socket";
-import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
-import { userApi } from "@/rtkQuery/user/serviceRedux";
+import { conversationsApi } from "@/store/conversations/api";
+import { userApi } from "@/store/user/api";
 import {
   socketOnUserIdChat,
   socketOnTypingStateId,

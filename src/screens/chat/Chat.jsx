@@ -4,7 +4,7 @@ import { Typography, Box } from "@mui/material";
 import ChatHeader from "./components/header";
 import ChatBottom from "./components/bottom";
 import ChatContent from "./components/mainContent";
-import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
+import { conversationsApi } from "@/store/conversations/api";
 import RenderInfoCenterBox from "../../components/renders/renderInfoCenterBox";
 import { getMessagesWithSendDate } from "@/helpers/index";
 import { setOpenConversationIdAction } from "@/store/app/slice";

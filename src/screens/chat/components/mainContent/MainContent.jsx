@@ -8,7 +8,7 @@ import {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Virtuoso } from "react-virtuoso";
-import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
+import { conversationsApi } from "@/store/conversations/api";
 import RowItemMessage from "./RowItemMessage";
 import { setMessagesDataInConversationsIdAction } from "@/store/historyConversationsId/slice";
 import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";

@@ -6,7 +6,7 @@ import * as config from "./config";
 import Avatars from "./components/avatars";
 import TextInputCustom from "@/components/hookFormsComponents/textInput";
 import CustomButton from "@/components/buttons/customButton";
-import { userApi } from "@/rtkQuery/user/serviceRedux";
+import { userApi } from "@/store/user/api";
 
 // STYLES
 const classes = {

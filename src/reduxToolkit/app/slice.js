@@ -1,9 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
-import { HYDRATE } from "next-redux-wrapper";
 
 export const initialState = {
-  isLoading: false,
   openConversationId: null,
   sideLeftConfig: {
     page: SIDE_LEFT_TYPE_CONTENT.conversations,
@@ -21,7 +19,7 @@ export const initialState = {
   newChatData: {
     conversationData: null,
     newChatId: null,
-  },
+  }, // need fix - коли зробитися роут newChatId перевірити чи потрібно цого обєкту
 };
 
 const appSlice = createSlice({
@@ -49,9 +47,6 @@ const appSlice = createSlice({
     shareMessageAction(state, { payload }) {
       state.forwardMessages = payload;
     },
-    setIsLoading(state, { payload }) {
-      state.isLoading = payload;
-    },
     setSelectedChatsAction(state, { payload }) {
       state.selectedChats = payload;
     },
@@ -77,7 +72,6 @@ export const {
   setLanguageAction,
   deleteMessageAction,
   shareMessageAction,
-  setIsLoading,
   setSelectedChatsAction,
   setSelectedMessagesAction,
   setOpenConversationIdAction,

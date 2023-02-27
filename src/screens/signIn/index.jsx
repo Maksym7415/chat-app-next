@@ -6,8 +6,8 @@ import AuthForm from "@/components/authForm";
 import languages from "@/core/translations";
 import Meta from "@/core/seo/Meta";
 import { PATHS } from "@/core/constants/paths";
-import { authApi } from "@/rtkQuery/auth/serviceRedux";
-import { parseErrorResToType } from "@/rtkQuery/helpers";
+import { authApi } from "@/store/auth/api";
+import { parseErrorResToType } from "@/store/helpers";
 
 export default function SignInClientPage() {
   // HOOKS

@@ -7,7 +7,7 @@ import {
   updateConversationTypeStateAction,
 } from "@/store/conversations/slice";
 import { store } from "@/store/store";
-import { conversationsApi } from "@/rtkQuery/conversations/serviceRedux";
+import { conversationsApi } from "@/store/conversations/api";
 import {
   setMessagesDataInConversationsIdAction,
   removeConversationsIdAction,

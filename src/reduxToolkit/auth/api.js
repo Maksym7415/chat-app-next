@@ -8,10 +8,8 @@ import {
   setAuthHeadersAction,
   setVerificationCodeAction,
 } from "@/store/auth/slice";
-import {
-  setTokenAction
-} from "@/store/persist/slice";
-import { fErrorResponse, onQueryStartedFulfilled } from "@/rtkQuery/helpers";
+import { setTokenAction } from "@/store/persist/slice";
+import { fErrorResponse, onQueryStartedFulfilled } from "@/store/helpers";
 import { setTokenCook } from "@/core/cookiesStorage";
 
 export const authApi = createApi({
@@ -68,9 +66,7 @@ export const authApi = createApi({
                 token: data.accessToken,
               })
             );
-            options.dispatch(
-              setTokenAction(data.accessToken)
-            );
+            options.dispatch(setTokenAction(data.accessToken));
           },
         });
       },
