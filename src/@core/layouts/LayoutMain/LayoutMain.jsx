@@ -4,8 +4,7 @@ import { useSelector } from "react-redux";
 import { Rnd } from "react-rnd";
 import LeftSide from "./components/leftSide";
 import { socket } from "@/core/socket";
-import { conversationsApi } from "@/store/conversations/api";
-import { userApi } from "@/store/user/api";
+import Meta from "@/core/seo/Meta";
 import {
   socketOnUserIdChat,
   socketOnTypingStateId,
@@ -14,7 +13,8 @@ import {
   socketOnDeleteConversation,
   socketOnClearConversation,
 } from "@/core/socket/actions/socketOn";
-import Meta from "@/core/seo/Meta";
+import { conversationsApi } from "@/store/conversations/api";
+import { userApi } from "@/store/user/api";
 
 // STYLES
 const classes = {

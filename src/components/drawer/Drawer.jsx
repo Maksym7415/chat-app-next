@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { useDispatch, useSelector } from "react-redux";
@@ -5,14 +6,17 @@ import MainDrawer from "./components/mainDrawer";
 import ProfilePage from "@/screens/profile/Profile";
 import { allActionsStore } from "@/store/rootActions";
 
+const transitionDuration = 300;
+
 const SwipeableTemporaryDrawer = () => {
   // HOOKS
   const dispatch = useDispatch();
 
   // SELECTORS
-  const drawerConfig = useSelector(
-    ({ appSlice }) => appSlice.drawerConfig
-  );
+  const drawerConfig = useSelector(({ appSlice }) => appSlice.drawerConfig);
+
+  // STATES
+  const [open, setOpen] = useState(false);
 
   // FUNCTIONS
   const toggleDrawer = (anchor, open) => (event) => {
@@ -24,13 +28,32 @@ const SwipeableTemporaryDrawer = () => {
       return;
     }
 
-    dispatch(
-      allActionsStore.setDrawerConfigAction({
-        anchor,
-        open,
-      })
-    );
+    const setDrawerConfigAction = () => {
+      dispatch(
+        allActionsStore.setDrawerConfigAction({
+          anchor,
+          open,
+        })
+      );
+    };
+
+    if (open) {
+      return setDrawerConfigAction();
+    } else {
+      setOpen(false);
+
+      const closeDialogTime = setTimeout(() => {
+        setDrawerConfigAction();
+        clearTimeout(closeDialogTime);
+      }, transitionDuration);
+    }
   };
+
+  useEffect(() => {
+    if (drawerConfig.open !== open) {
+      setOpen(drawerConfig.open);
+    }
+  }, [drawerConfig.open]);
 
   const renderContent = (anchor) => (
     <Box sx={{ width: drawerConfig?.width || 300 }}>
@@ -57,9 +80,10 @@ const SwipeableTemporaryDrawer = () => {
   return (
     <SwipeableDrawer
       anchor={drawerConfig.anchor}
-      open={drawerConfig.open}
+      open={open}
       onClose={toggleDrawer(drawerConfig.anchor, false)}
       onOpen={toggleDrawer(drawerConfig.anchor, true)}
+      disableBackdropTransition={true}
     >
       {renderContent(drawerConfig.anchor)}
     </SwipeableDrawer>

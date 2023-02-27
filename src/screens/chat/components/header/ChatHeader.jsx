@@ -27,6 +27,7 @@ const classes = {
   containerTop: "flex w-full",
   back: "mr-[30px]",
   wrapperConversationData: "flex flex-1",
+  innerConversationData: "flex cursor-pointer",
   wrapperAvatar: "mr-[10px] cursor-pointer",
   title: "text-[17px] font-bold",
   subtitle: "text-[14px] font-normal",
@@ -102,33 +103,37 @@ const ChatHeader = ({
   // RENDERS
   const renderTopCenterComponent = () => {
     return (
-      <div
-        onClick={() => {
-          store.dispatch(
-            allActionsStore.setDrawerConfigAction({
-              anchor: "right",
-              open: true,
-              width: "400px",
-              type: "profile",
-              configContent: {
-                typeProfile: conversationData.conversationType,
-                conversationData,
-              },
-            })
-          );
-        }}
-        className={classes.wrapperConversationData}
-      >
-        <div className={classes.wrapperAvatar}>
-          <UserAvatar
-            source={conversationData?.conversationAvatar}
-            name={conversationData?.conversationName || "Test Test"}
-            sizeAvatar={38}
-          />
-        </div>
-        <div className={classes.wrapperAvatar}>
-          <p className={classes.title}>{conversationData?.conversationName}</p>
-          <span className={classes.subtitle}>{"Online*"}</span>
+      <div className={classes.wrapperConversationData}>
+        <div
+          className={classes.innerConversationData}
+          onClick={() => {
+            store.dispatch(
+              allActionsStore.setDrawerConfigAction({
+                anchor: "right",
+                open: true,
+                width: "400px",
+                type: "profile",
+                configContent: {
+                  typeProfile: conversationData.conversationType,
+                  conversationData,
+                },
+              })
+            );
+          }}
+        >
+          <div className={classes.wrapperAvatar}>
+            <UserAvatar
+              source={conversationData?.conversationAvatar}
+              name={conversationData?.conversationName || "Test Test"}
+              sizeAvatar={50}
+            />
+          </div>
+          <div className={classes.wrapperAvatar}>
+            <p className={classes.title}>
+              {conversationData?.conversationName}
+            </p>
+            <span className={classes.subtitle}>{"Online*"}</span>
+          </div>
         </div>
       </div>
     );

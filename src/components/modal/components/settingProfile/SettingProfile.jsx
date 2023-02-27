@@ -31,7 +31,10 @@ const SettingProfile = () => {
     setValue,
     formState: { errors },
   } = useForm({
-    defaultValues: {},
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+    },
   });
 
   const [putUpdateProfileData, { isLoading }] =
