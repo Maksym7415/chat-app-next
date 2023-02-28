@@ -8,16 +8,15 @@ const HomePage = () => {
 HomePage.isPrivatePage = true;
 
 export const getServerSideProps = async (ctx) => {
-    const redirectToken = checkIsToken(ctx);
+  const redirectToken = await checkIsToken(ctx);
 
-    if (redirectToken) {
-      return redirectToken;
-    }
-
-    return {
-      props: {},
-    };
+  if (redirectToken) {
+    return redirectToken;
   }
 
+  return {
+    props: {},
+  };
+};
 
 export default HomePage;

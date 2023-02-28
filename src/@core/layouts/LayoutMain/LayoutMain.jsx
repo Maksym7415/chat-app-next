@@ -15,6 +15,7 @@ import {
 } from "@/core/socket/actions/socketOn";
 import { conversationsApi } from "@/store/conversations/api";
 import { userApi } from "@/store/user/api";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 // STYLES
 const classes = {
@@ -29,7 +30,8 @@ const styleRnd = {
 const LayoutMain = ({ children, titlePage = "", params = {} }) => {
   // HOOKS
   const router = useRouter();
-
+  const { data: session } = useSession();
+  console.log(session, "session");
   // SERVICES
   const { data } = conversationsApi.useGetUserConversationsQuery({});
   const {} = userApi.useGetUserProfileDataQuery();

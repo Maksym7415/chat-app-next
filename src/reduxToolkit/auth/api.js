@@ -5,6 +5,8 @@ import { pathBackAuth } from "@/core/constants/urlBack";
 import { setTokenCook } from "@/core/cookiesStorage";
 import { allActionsStore } from "@/store/rootActions";
 import { fErrorResponse, onQueryStartedFulfilled } from "@/store/helpers";
+import { signIn, signOut } from "next-auth/react";
+// import Session from "next-auth/client";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -51,7 +53,7 @@ export const authApi = createApi({
 
         onQueryStartedFulfilled({
           options,
-          cb: (res) => {
+          cb: async (res) => {
             const { data } = res;
 
             setTokenCook(data.accessToken);
@@ -63,6 +65,10 @@ export const authApi = createApi({
               })
             );
             options.dispatch(allActionsStore.setTokenAction(data.accessToken));
+
+            signIn("credentials", { ...data, callbackUrl: "/" });
+
+            // console.log(Session, "Session");
           },
         });
       },

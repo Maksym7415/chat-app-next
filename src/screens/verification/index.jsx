@@ -47,7 +47,7 @@ const VerificationClientPage = () => {
     postVerification(sendData)
       .unwrap()
       .then(() => {
-        router.push(PATHS.main);
+        // router.push(PATHS.main);
       });
   };
 

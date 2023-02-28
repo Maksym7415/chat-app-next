@@ -12,17 +12,26 @@ import "../styles/globals.css";
 import { IS_CLIENT } from "@/core/constants/general";
 import { getTokenCook } from "@/core/cookiesStorage/index";
 import { allActionsStore } from "@/store/rootActions";
+import { SessionProvider } from "next-auth/react";
+import { useState } from "react";
+import RefreshTokenHandler from "./components/refreshTokenHandler";
+import { getSession } from "next-auth/react";
 
 if (!process.browser) React.useLayoutEffect = React.useEffect;
 
 const App = ({ Component, ...rest }) => {
-  const { pageProps } = rest;
+  const { pageProps, session } = rest;
 
   const { store, props } = wrapper.useWrappedStore(rest);
+  const [interval, setInterval] = useState(0);
 
+  console.log(session, IS_CLIENT, "IS_CLIENT");
+  const getSessionToken = async () => {
+    return await getSession()?.accessToken;
+  };
+  console.log(getSessionToken(), IS_CLIENT, "getSessionToken");
   if (IS_CLIENT) {
-    const token = getTokenCook();
-
+    const token = session?.accessToken;
     if (token) {
       const authSlice = store.getState().authSlice;
 
@@ -38,19 +47,23 @@ const App = ({ Component, ...rest }) => {
         );
     }
   }
+  console.log(session, "--1---session");
 
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={store.__persistor}>
-        <Providers Component={Component}>
-          <DrawerCustom />
-          <ContextMenu />
-          <ModalCustom />
-          <DialogCustom />
-          <Component {...pageProps} />
-        </Providers>
-      </PersistGate>
-    </Provider>
+    <SessionProvider session={session} refetchInterval={interval}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={store.__persistor}>
+          <Providers Component={Component}>
+            <DrawerCustom />
+            <ContextMenu />
+            <ModalCustom />
+            <DialogCustom />
+            <Component {...pageProps} />
+          </Providers>
+        </PersistGate>
+      </Provider>
+      <RefreshTokenHandler setInterval={setInterval} />
+    </SessionProvider>
   );
 };
 

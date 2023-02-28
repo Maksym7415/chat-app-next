@@ -8,10 +8,17 @@ import Meta from "@/core/seo/Meta";
 import { PATHS } from "@/core/constants/paths";
 import { authApi } from "@/store/auth/api";
 import { parseErrorResToType } from "@/store/helpers";
+import { useSession, getSession } from "next-auth/react";
 
 export default function SignInClientPage() {
   // HOOKS
   const router = useRouter();
+
+  const { data: sessiond } = useSession();
+  console.log(sessiond, "session");
+  getSession().then((res) => {
+    console.log(res, "getSession");
+  });
 
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);

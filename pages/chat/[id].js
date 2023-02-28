@@ -15,7 +15,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx) => {
     console.time(ctx.params?.id, "Time this"); // при старті може бути 70ms  при переході на інший чат до 47ms без запиту 0.004 ms, більше
 
-    const redirectToken = checkIsToken(ctx);
+    const redirectToken = await checkIsToken(ctx);
 
     if (redirectToken) {
       return redirectToken;
