@@ -2,7 +2,6 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { HYDRATE } from "next-redux-wrapper";
 import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
 import { pathBackAuth } from "@/core/constants/urlBack";
-import { setTokenCook } from "@/core/cookiesStorage";
 import { allActionsStore } from "@/store/rootActions";
 import { fErrorResponse, onQueryStartedFulfilled } from "@/store/helpers";
 import { signIn, signOut } from "next-auth/react";
@@ -55,8 +54,6 @@ export const authApi = createApi({
           options,
           cb: async (res) => {
             const { data } = res;
-
-            setTokenCook(data.accessToken);
 
             options.dispatch(allActionsStore.setAuthHeadersAction(data));
             options.dispatch(
