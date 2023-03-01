@@ -85,6 +85,10 @@ const callbacks = {
 
     return Promise.resolve(session);
   },
+  pages: {
+    signIn: '/',
+    signOut: '/sign-in',
+  }
 };
 
 export const options = {

@@ -31,7 +31,7 @@ const LayoutMain = ({ children, titlePage = "", params = {} }) => {
   // HOOKS
   const router = useRouter();
   const { data: session } = useSession();
-  console.log(session, "session");
+  // console.log(session, "session");
   // SERVICES
   const { data } = conversationsApi.useGetUserConversationsQuery({});
   const {} = userApi.useGetUserProfileDataQuery();

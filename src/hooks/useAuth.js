@@ -8,24 +8,24 @@ export default function useAuth(shouldRedirect) {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    console.log(session, "---useAuth");
-    if (session?.error === "RefreshAccessTokenError") {
-      signOut({ callbackUrl: PATHS.signIn, redirect: shouldRedirect });
-    }
+  // useEffect(() => {
+  //   console.log(session, "---useAuth");
+  //   if (session?.error === "RefreshAccessTokenError") {
+  //     signOut({ callbackUrl: PATHS.signIn, redirect: shouldRedirect });
+  //   }
 
-    if (session === null) {
-      if (router.route !== PATHS.signIn) {
-        router.replace(PATHS.signIn);
-      }
-      setIsAuthenticated(false);
-    } else if (session !== undefined) {
-      if (router.route === PATHS.signIn) {
-        router.replace(PATHS.main);
-      }
-      setIsAuthenticated(true);
-    }
-  }, [session]);
+  //   if (session === null) {
+  //     if (router.route !== PATHS.signIn) {
+  //       router.replace(PATHS.signIn);
+  //     }
+  //     setIsAuthenticated(false);
+  //   } else if (session !== undefined) {
+  //     if (router.route === PATHS.signIn) {
+  //       router.replace(PATHS.main);
+  //     }
+  //     setIsAuthenticated(true);
+  //   }
+  // }, [session]);
 
   return isAuthenticated;
 }

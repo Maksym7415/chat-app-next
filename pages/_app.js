@@ -1,4 +1,5 @@
 import React from "react";
+import App from "next/app";
 import Providers from "@/providers/MainProvider";
 import { wrapper, store as storeRedux, persistor } from "@/store/store";
 import { useStore } from "react-redux";
@@ -9,45 +10,23 @@ import ModalCustom from "@/components/modal";
 import DrawerCustom from "@/components/drawer";
 import DialogCustom from "@/components/dialogWindow/Dialog";
 import "../styles/globals.css";
-import { IS_CLIENT } from "@/core/constants/general";
-import { getTokenCook } from "@/core/cookiesStorage/index";
-import { allActionsStore } from "@/store/rootActions";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, getSession } from "next-auth/react";
 import { useState } from "react";
 import RefreshTokenHandler from "./components/refreshTokenHandler";
-import { getSession } from "next-auth/react";
+import { IS_CLIENT } from "@/core/constants/general";
+import Router, { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
+import { PATHS } from "@/core/constants/paths";
 
 if (!process.browser) React.useLayoutEffect = React.useEffect;
 
-const App = ({ Component, ...rest }) => {
+const MyApp = ({ Component, ...rest }) => {
   const { pageProps, session } = rest;
 
   const { store, props } = wrapper.useWrappedStore(rest);
   const [interval, setInterval] = useState(0);
-
-  console.log(session, IS_CLIENT, "IS_CLIENT");
-  const getSessionToken = async () => {
-    return await getSession()?.accessToken;
-  };
-  console.log(getSessionToken(), IS_CLIENT, "getSessionToken");
-  if (IS_CLIENT) {
-    const token = session?.accessToken;
-    if (token) {
-      const authSlice = store.getState().authSlice;
-
-      !authSlice.headers.accessToken &&
-        store.dispatch(
-          allActionsStore.setAuthHeadersAction({ accessToken: token })
-        );
-      !authSlice.authToken.userId &&
-        store.dispatch(
-          allActionsStore.authTokenAction({
-            token,
-          })
-        );
-    }
-  }
-  console.log(session, "--1---session");
+  console.log(IS_CLIENT, " App IS_CLIENT");
+  // console.log(session, " App session");
 
   return (
     <SessionProvider session={session} refetchInterval={interval}>
@@ -67,4 +46,35 @@ const App = ({ Component, ...rest }) => {
   );
 };
 
-export default App;
+MyApp.getInitialProps = async ({ Component, ctx }) => {
+  const session = await getSession(ctx);
+
+  if (!session) {
+    if (
+      ![PATHS.signIn, PATHS.signUp, PATHS.verification].includes(ctx.asPath)
+    ) {
+      ctx.res.writeHead(302, { Location: PATHS.signIn });
+      ctx.res.end();
+      return {};
+    }
+  }
+
+  let pageProps = {};
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+
+  if (
+    [PATHS.signIn, PATHS.verification, PATHS.signUp].includes(ctx.asPath) &&
+    session
+  ) {
+    ctx.res.writeHead(302, { Location: PATHS.main });
+    ctx.res.end();
+
+    return { pageProps, session };
+  }
+
+  return { pageProps, session };
+};
+
+export default MyApp;

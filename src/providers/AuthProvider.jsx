@@ -1,15 +1,13 @@
 import { allActionsStore } from "@/store/rootActions";
 import { IS_CLIENT } from "@/core/constants/general";
 import { store } from "@/store/store";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 
 const AuthProvider = ({ children, Component: { isPrivatePage } }) => {
-  const getSessionToken = async () => {
-    return await getSession()?.accessToken;
-  };
+  const session = useSession();
 
   if (IS_CLIENT) {
-    const token = session?.accessToken;
+    const token = session?.data?.accessToken;
     if (token) {
       const authSlice = store.getState().authSlice;
 

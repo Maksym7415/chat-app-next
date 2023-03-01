@@ -1,9 +1,8 @@
 import LayoutMain from "@/core/layouts/LayoutMain";
-import { checkIsToken } from "@/core/forSsr/checkIsToken";
 import Chat from "@/screens/chat/index";
-import { wrapper, persistor } from "@/store/store";
 
 const ChatIdPage = (props) => {
+  console.log(props, "props");
   return (
     <LayoutMain params={props.params}>
       <Chat params={props.params} />
@@ -11,27 +10,13 @@ const ChatIdPage = (props) => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (ctx) => {
-    console.time(ctx.params?.id, "Time this"); // при старті може бути 70ms  при переході на інший чат до 47ms без запиту 0.004 ms, більше
-
-    const redirectToken = await checkIsToken(ctx);
-
-    if (redirectToken) {
-      return redirectToken;
-    }
-
-    console.timeEnd(ctx.params?.id, "Time this END");
-    console.log(store.getState().persistSlice, "------------persistSlice");
-
-    return {
-      props: {
-        params: ctx.params,
-        initialReduxState: store.getState(),
-      },
-    };
-  }
-);
+export const getServerSideProps = async (ctx) => {
+  return {
+    props: {
+      params: ctx.params,
+    },
+  };
+};
 
 // TEST
 
@@ -49,7 +34,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
 // export const getStaticProps = async (ctx) => {
 //   console.log(ctx, "ctx");
-//   // const redirectToken = checkIsToken(ctx);
 
 //   // if (redirectToken) {
 //   //   return redirectToken;
