@@ -9,7 +9,8 @@ import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
-  inputSearch: "w-full max-w-[240px] p-[0] pl-[5px] rounded-[20px] h-[40px]",
+  inputSearch:
+    "w-full max-w-[240px] p-[0] pl-[5px] rounded-[20px] h-[40px]",
 };
 function TopCenterComponent({ parentSettings }) {
   const dispatch = useDispatch();

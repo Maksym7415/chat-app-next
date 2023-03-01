@@ -4,6 +4,4 @@ const HomePage = () => {
   return <LayoutMain />;
 };
 
-HomePage.isPrivatePage = true;
-
 export default HomePage;

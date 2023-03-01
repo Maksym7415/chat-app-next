@@ -54,7 +54,6 @@ const MyApp = ({ Component, ...rest }) => {
               <ContextMenu />
               <ModalCustom />
               <DialogCustom />
-
               <Component {...pageProps} />
             </Providers>
           </PersistGate>

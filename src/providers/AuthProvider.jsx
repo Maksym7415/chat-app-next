@@ -1,9 +1,9 @@
 import { allActionsStore } from "@/store/rootActions";
 import { IS_CLIENT } from "@/core/constants/general";
 import { store } from "@/store/store";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
-const AuthProvider = ({ children, Component: { isPrivatePage } }) => {
+const AuthProvider = ({ children }) => {
   const session = useSession();
 
   if (IS_CLIENT) {
