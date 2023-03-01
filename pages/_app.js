@@ -1,7 +1,6 @@
 import React from "react";
-import App from "next/app";
 import Providers from "@/providers/MainProvider";
-import { wrapper, store as storeRedux, persistor } from "@/store/store";
+import { wrapper } from "@/store/store";
 import { useStore } from "react-redux";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
@@ -14,40 +13,65 @@ import { SessionProvider, getSession } from "next-auth/react";
 import { useState } from "react";
 import RefreshTokenHandler from "./components/refreshTokenHandler";
 import { IS_CLIENT } from "@/core/constants/general";
-import Router, { useRouter } from "next/router";
-import { signOut } from "next-auth/react";
 import { PATHS } from "@/core/constants/paths";
+import Spinner from "@/core/spinner";
+import PageLoader from "./components/PageLoader";
+// import Router, { useRouter } from "next/router";
 
 if (!process.browser) React.useLayoutEffect = React.useEffect;
 
 const MyApp = ({ Component, ...rest }) => {
   const { pageProps, session } = rest;
 
-  const { store, props } = wrapper.useWrappedStore(rest);
+  const { store } = wrapper.useWrappedStore(rest);
   const [interval, setInterval] = useState(0);
   console.log(IS_CLIENT, " App IS_CLIENT");
-  // console.log(session, " App session");
+
+  // const [loading, setLoading] = useState(false);
+  // const handleStart = () => {
+  //   setLoading(true);
+  // };
+  // const handleComplete = () => {
+  //   setLoading(false);
+  // };
+
+  // Router.events.on("routeChangeStart", handleStart);
+  // Router.events.on("routeChangeComplete", handleComplete);
+  // Router.events.on("routeChangeError", handleComplete);
 
   return (
-    <SessionProvider session={session} refetchInterval={interval}>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={store.__persistor}>
-          <Providers Component={Component}>
-            <DrawerCustom />
-            <ContextMenu />
-            <ModalCustom />
-            <DialogCustom />
-            <Component {...pageProps} />
-          </Providers>
-        </PersistGate>
-      </Provider>
-      <RefreshTokenHandler setInterval={setInterval} />
-    </SessionProvider>
+    <>
+      {/* <PageLoader /> */}
+      <SessionProvider
+        session={session}
+        refetchInterval={interval}
+        refetchOnWindowFocus={false}
+      >
+        <Provider store={store}>
+          <PersistGate loading={<Spinner />} persistor={store.__persistor}>
+            <Providers Component={Component}>
+              <DrawerCustom />
+              <ContextMenu />
+              <ModalCustom />
+              <DialogCustom />
+
+              <Component {...pageProps} />
+            </Providers>
+          </PersistGate>
+        </Provider>
+        <RefreshTokenHandler setInterval={setInterval} />
+      </SessionProvider>
+    </>
   );
 };
 
 MyApp.getInitialProps = async ({ Component, ctx }) => {
+  console.time("----time");
   const session = await getSession(ctx);
+  let pageProps = {};
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
 
   if (!session) {
     if (
@@ -57,22 +81,18 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
       ctx.res.end();
       return {};
     }
+  } else {
+    if (
+      [PATHS.signIn, PATHS.verification, PATHS.signUp].includes(ctx.asPath) &&
+      session
+    ) {
+      ctx.res.writeHead(302, { Location: PATHS.main });
+      ctx.res.end();
+      return { pageProps, session };
+    }
   }
 
-  let pageProps = {};
-  if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps(ctx);
-  }
-
-  if (
-    [PATHS.signIn, PATHS.verification, PATHS.signUp].includes(ctx.asPath) &&
-    session
-  ) {
-    ctx.res.writeHead(302, { Location: PATHS.main });
-    ctx.res.end();
-
-    return { pageProps, session };
-  }
+  console.timeEnd("----time");
 
   return { pageProps, session };
 };
