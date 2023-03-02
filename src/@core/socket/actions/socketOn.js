@@ -14,11 +14,8 @@ export const socketOnUserIdChat = (chat, options) =>
     }
     const allMessages =
       store.getState().conversationsSlice?.[chat.conversationId]?.messages;
-
-    console.log(chat, "chat");
     const conversationsList =
       store.getState().conversationsSlice.conversationsList.data;
-
     const conversationFindStore = conversationsList?.[chat.conversationId];
 
     const updateMessageConversation = () => {
@@ -39,7 +36,7 @@ export const socketOnUserIdChat = (chat, options) =>
         })
       );
     };
-    //
+
     let findComponentDate = null;
     if (allMessages) {
       const reverseAllMessages = [...allMessages].reverse();
@@ -62,7 +59,6 @@ export const socketOnUserIdChat = (chat, options) =>
       componentDateNew = { component: "div", sendDate: message.sendDate };
     }
 
-    //
     const chatAllMessages = allMessages;
     if (chatAllMessages) {
       const prevMessages = chatAllMessages || null;

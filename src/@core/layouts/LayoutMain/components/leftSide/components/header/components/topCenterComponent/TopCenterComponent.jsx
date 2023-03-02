@@ -1,20 +1,16 @@
 import { useCallback, useLayoutEffect, useState, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, OutlinedInput } from "@mui/material";
 import { useDebounce } from "@/hooks/useDebounce";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { searchApi } from "@/store/search/api";
-import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
-  inputSearch:
-    "w-full max-w-[240px] p-[0] pl-[5px] rounded-[20px] h-[40px]",
+  inputSearch: "w-full max-w-[240px] p-[0] pl-[5px] rounded-[20px] h-[40px]",
 };
 function TopCenterComponent({ parentSettings }) {
-  const dispatch = useDispatch();
-
   // STORE
   const sideLeftConfig = useSelector(({ appSlice }) => appSlice.sideLeftConfig);
 
@@ -27,35 +23,43 @@ function TopCenterComponent({ parentSettings }) {
   // VARIABLES
   const params = useMemo(() => {
     const paramsLoc = {};
-    const searchRequest = debouncedSearchValue;
+    const search = debouncedSearchValue;
 
-    if (searchRequest) {
-      paramsLoc.searchRequest = searchRequest;
+    if (search) {
+      paramsLoc.search = search;
     }
 
     return paramsLoc;
   }, [debouncedSearchValue]);
 
   // SERVICES
-  const {} = searchApi.useGetSearchContactsQuery({
-    params,
-  });
-
-  useLayoutEffect(() => {
-    dispatch(
-      allActionsStore.setSearchContactsAction({
-        search: debouncedSearchValue,
-        offset: 0,
-        direction: "",
-        limit: 0,
-      })
-    );
-  }, [debouncedSearchValue]);
+  searchApi.useGetSearchContactsQuery(
+    {
+      params: {
+        searchRequest: params.search,
+      },
+    },
+    {
+      skip: parentSettings.type !== "searchContacts",
+    }
+  );
 
   // FUNCTIONS
   const onChangeText = useCallback((e) => {
     setSearch(e.target.value);
   }, []);
+
+  const getRequest = () => {
+    parentSettings.getRequest &&
+      parentSettings.getRequest({
+        params,
+      });
+  };
+
+  // USEEFFECTS
+  useLayoutEffect(() => {
+    getRequest();
+  }, [debouncedSearchValue]);
 
   return (
     <>

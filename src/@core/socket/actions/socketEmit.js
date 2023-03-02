@@ -1,5 +1,5 @@
 import { socket } from "../index";
-import { fullDate } from "../../../helpers";
+import { fullDate } from "@/helpers/index";
 import { store } from "@/store/store";
 import Snackbar from "@/helpers/notistack";
 

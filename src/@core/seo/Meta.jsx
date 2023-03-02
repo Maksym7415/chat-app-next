@@ -5,8 +5,6 @@ import { onlyText } from "@/helpers/index";
 import { MetaNoIndex } from "./MetaNoIndex";
 import { REACT_APP_BASE_URL } from "@/core/constants/url";
 
-// fix currentUrl
-
 const Meta = ({ title, description, image = null, children }) => {
   const { asPath } = useRouter();
   const currentUrl = `${REACT_APP_BASE_URL}${asPath}`;

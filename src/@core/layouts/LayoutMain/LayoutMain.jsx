@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { Rnd } from "react-rnd";
 import LeftSide from "./components/leftSide";
@@ -26,9 +26,14 @@ const styleRnd = {
   borderRight: "1px solid rgba(0, 0, 0, 0.2)",
 };
 
-const LayoutMain = ({ children, titlePage = "", params = {} }) => {
+const LayoutMain = ({
+  children,
+  titlePage: titlePageProps = "",
+  params = {},
+}) => {
   // HOOKS
   const router = useRouter();
+
   // SERVICES
   conversationsApi.useGetUserConversationsQuery({});
   userApi.useGetUserProfileDataQuery();
@@ -47,15 +52,13 @@ const LayoutMain = ({ children, titlePage = "", params = {} }) => {
     () => Object.values(conversationsList),
     [conversationsList]
   );
-
   const conversationSelect = useMemo(
     () => (params?.id ? conversationsList[params?.id] || null : null),
     [params]
   );
-
-  const getTitlePage = () => {
-    if (titlePage) {
-      return titlePage;
+  const titlePage = useMemo(() => {
+    if (titlePageProps) {
+      return titlePageProps;
     }
 
     if (params?.id) {
@@ -66,16 +69,16 @@ const LayoutMain = ({ children, titlePage = "", params = {} }) => {
     }
 
     return "";
-  };
-
-  const getDescriptionPage = () => {
+  }, [params, titlePageProps, conversationSelect]);
+  const descriptionPage = useMemo(() => {
     if (params?.id) {
       return "Chat with me";
     }
 
     return "";
-  };
+  }, [params]);
 
+  // USEEFFECTS
   useEffect(() => {
     socket.removeAllListeners();
     if (conversationsListMass?.length) {
@@ -96,7 +99,7 @@ const LayoutMain = ({ children, titlePage = "", params = {} }) => {
   }, [conversationsListMass]);
 
   return (
-    <Meta title={getTitlePage()} description={getDescriptionPage()}>
+    <Meta title={titlePage} description={descriptionPage}>
       <main className={classes.container}>
         <Rnd
           style={styleRnd}

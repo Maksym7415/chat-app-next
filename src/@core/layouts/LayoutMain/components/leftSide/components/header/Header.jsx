@@ -4,6 +4,7 @@ import TopCenterComponent from "./components/topCenterComponent";
 import TopLeftComponent from "./components/topLeftComponent";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { allActionsStore } from "@/store/rootActions";
+import { searchApi } from "@/store/search/api";
 
 // STYLES
 const classes = {
@@ -11,8 +12,6 @@ const classes = {
   containerTop: "flex",
   wrapperTopCenterComponent: "flex",
 };
-
-// fix getRequest
 
 const Header = ({ children }) => {
   // HOOKS
@@ -25,8 +24,9 @@ const Header = ({ children }) => {
   const [settings, setSettings] = useState({
     noSettings: true,
     topCenterComponent: {
+      type: "searchContacts",
       placeholder: "Search",
-      getRequest: "",
+      getRequest: () => {},
       styles: {
         headerLayout: {},
       },
@@ -54,10 +54,16 @@ const Header = ({ children }) => {
         setSettings(() => ({
           topCenterComponent: {
             placeholder: "Search",
+            type: "searchContacts",
             getRequest: (options) => {
-              // getSearchContactFetcher({
-              //   options,
-              // });
+              dispatch(
+                allActionsStore.setSearchContactsAction({
+                  search: options.params.search,
+                  offset: 0,
+                  direction: "",
+                  limit: 0,
+                })
+              );
             },
           },
         }));
