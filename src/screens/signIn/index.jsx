@@ -15,11 +15,11 @@ export default function SignInClientPage() {
   const router = useRouter();
 
   // remove
-  const { data: sessiond } = useSession();
-  console.log(sessiond, "session");
-  getSession().then((res) => {
-    console.log(res, "getSession");
-  });
+  // const { data: sessiond } = useSession();
+  // console.log(sessiond, "session");
+  // getSession().then((res) => {
+  //   console.log(res, "getSession");
+  // });
 
   // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);

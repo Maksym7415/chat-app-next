@@ -1,7 +1,6 @@
 import React from "react";
 import Providers from "@/providers/MainProvider";
 import { wrapper } from "@/store/store";
-import { useStore } from "react-redux";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import ContextMenu from "@/components/contextMenu";
@@ -32,6 +31,7 @@ const MyApp = ({ Component, ...rest }) => {
   const { store } = wrapper.useWrappedStore(rest);
   const [interval, setInterval] = useState(0);
   console.log(IS_CLIENT, " App IS_CLIENT");
+  console.log(rest, " App rest");
 
   // const [loading, setLoading] = useState(false);
   // const handleStart = () => {
@@ -77,13 +77,14 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx);
   }
+  console.log(ctx.res, 'ctx.res')
 
   if (!session) {
     if (
       ![PATHS.signIn, PATHS.signUp, PATHS.verification].includes(ctx.asPath)
     ) {
-      ctx.res.writeHead(302, { Location: PATHS.signIn });
-      ctx.res.end();
+      ctx.res?.writeHead(302, { Location: PATHS.signIn });
+      ctx.res?.end();
       return {};
     }
   } else {
@@ -91,8 +92,8 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
       [PATHS.signIn, PATHS.verification, PATHS.signUp].includes(ctx.asPath) &&
       session
     ) {
-      ctx.res.writeHead(302, { Location: PATHS.main });
-      ctx.res.end();
+      ctx.res?.writeHead(302, { Location: PATHS.main });
+      ctx.res?.end();
       return { pageProps, session };
     }
   }
@@ -101,5 +102,14 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
 
   return { pageProps, session };
 };
+
+// export const getServerSideProps = async (ctx) => {
+//   console.log(ctx, '--getServerSideProps')
+//   return {
+   
+//   };
+// };
+
+
 
 export default MyApp;

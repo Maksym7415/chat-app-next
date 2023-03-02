@@ -115,8 +115,6 @@ export const socketEmitSendMessage = ({
     forwardedFromId: forwardedFromId || null,
   };
 
-  console.log(body, "body");
-
   socket.emit("chats", body, (success) => {
     if (success) setMessage((prev) => ({ ...prev, [conversationId]: "" }));
   });

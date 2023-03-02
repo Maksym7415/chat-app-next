@@ -11,7 +11,6 @@ export const fErrorResponse = ({ response, meta, args }) => {
     Snackbar.error(response.data);
     return null;
   }
-  console.log(response, "fErrorResponse");
   // Snackbar.error(response.data);
 
   return response;

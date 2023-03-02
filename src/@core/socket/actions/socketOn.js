@@ -13,7 +13,7 @@ export const socketOnUserIdChat = (chat, options) =>
       return options.cb();
     }
     const allMessages =
-      store.getState().conversationsSlice?.[chat.conversationId]?.messages;
+      store.getState().conversationsSlice?.historyConversationsId?.[chat.conversationId]?.messages;
     const conversationsList =
       store.getState().conversationsSlice.conversationsList.data;
     const conversationFindStore = conversationsList?.[chat.conversationId];
@@ -60,6 +60,7 @@ export const socketOnUserIdChat = (chat, options) =>
     }
 
     const chatAllMessages = allMessages;
+
     if (chatAllMessages) {
       const prevMessages = chatAllMessages || null;
       let updateMessages = [...prevMessages];
@@ -75,7 +76,7 @@ export const socketOnUserIdChat = (chat, options) =>
           return item;
         });
       }
-
+      
       store.dispatch(
         allActionsStore.setMessagesDataInConversationsIdAction({
           conversationId: chat.conversationId,
@@ -146,7 +147,7 @@ export const socketOnTypingStateId = (chat) => {
 export const socketOnDeleteMessage = () => {
   const getRemoveMessages = (conversationId, messageId, lastMessage) => {
     const allMessages =
-      store.getState().conversationsSlice?.[conversationId.toString()]
+      store.getState().conversationsSlice?.historyConversationsId?.[conversationId.toString()]
         ?.messages;
     const conversationsList =
       store.getState().conversationsSlice.conversationsList.data;

@@ -58,7 +58,7 @@ function MainDrawer({ closeDrawer }) {
         return;
       case "logout":
         actionLogOut();
-        // router.push(PATHS.signIn);
+        router.push(PATHS.signIn);
         return;
       default:
         return null;

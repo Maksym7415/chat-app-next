@@ -9,7 +9,6 @@ export default function useAuth(shouldRedirect) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // useEffect(() => {
-  //   console.log(session, "---useAuth");
   //   if (session?.error === "RefreshAccessTokenError") {
   //     signOut({ callbackUrl: PATHS.signIn, redirect: shouldRedirect });
   //   }

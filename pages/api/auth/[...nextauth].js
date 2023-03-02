@@ -40,7 +40,10 @@ const providers = [
 
         // console.log(credentials, "----credentials");
         if (credentials.accessToken) {
-          return credentials;
+          return {
+            ...credentials,
+            accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsImxvZ2luIjoicG9wb3ZtYWtzaW03NDE1QGdtYWlsLmNvbSIsInVzZXJBZ2VudCI6ImNyb21lIiwidXNlcklkIjoxLCJmaXJzdE5hbWUiOiJNYWtzaW0iLCJ0eXBlIjoiYWNjZXNzIiwiaWF0IjoxNjc3NzU4NjYwLCJleHAiOjE2Nzc3NjAwMDN9.CbU7c5qeWq7diNQgqBDOjTbxYN8AM-ot3euOKJLga9w",
+          };
         }
 
         return null;
@@ -53,8 +56,6 @@ const providers = [
 
 const callbacks = {
   jwt: async ({ token, user }) => {
-    // console.log(token, "---token");
-    // console.log(user, "---user");
 
     if (user) {
       // This will only be executed at login. Each next invocation will skip this part.
@@ -85,10 +86,6 @@ const callbacks = {
 
     return Promise.resolve(session);
   },
-  pages: {
-    signIn: '/',
-    signOut: '/sign-in',
-  }
 };
 
 export const options = {

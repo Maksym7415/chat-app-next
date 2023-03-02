@@ -8,12 +8,11 @@ import { actionLogOut } from "@/actions/index";
 const parseErrorCode = (error) => {
   console.log(error, "error");
   if (error?.response) {
-    console.log(error, "error.response");
     if (error.response?._response) {
       alert(error.response?._response);
     }
     if (error.response.status === 401) {
-      actionLogOut();
+      actionLogOut(true);
     } else if (error.response.status === 404) {
       const { message } = error.response.data;
 

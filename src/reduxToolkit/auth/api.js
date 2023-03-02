@@ -62,7 +62,7 @@ export const authApi = createApi({
             );
             options.dispatch(allActionsStore.setTokenAction(data.accessToken));
 
-            signIn("credentials", { ...data, callbackUrl: "/" });
+            // signIn("credentials", { ...data,  redirect: false });
 
             // console.log(Session, "Session");
           },
