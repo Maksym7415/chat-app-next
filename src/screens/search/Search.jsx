@@ -38,7 +38,6 @@ const Search = ({ params }) => {
         return setSettings(() => ({
           header: {
             placeholder: "Search",
-            // getRequest: getSearchContactFetcher,
           },
         }));
       case TYPES_FROM_TO_SEARCH_SCREEN.profile:

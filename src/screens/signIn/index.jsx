@@ -14,6 +14,7 @@ export default function SignInClientPage() {
   // HOOKS
   const router = useRouter();
 
+  // remove
   const { data: sessiond } = useSession();
   console.log(sessiond, "session");
   getSession().then((res) => {

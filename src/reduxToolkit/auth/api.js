@@ -4,8 +4,7 @@ import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
 import { pathBackAuth } from "@/core/constants/urlBack";
 import { allActionsStore } from "@/store/rootActions";
 import { fErrorResponse, onQueryStartedFulfilled } from "@/store/helpers";
-import { signIn, signOut } from "next-auth/react";
-// import Session from "next-auth/client";
+import { signIn } from "next-auth/react";
 
 export const authApi = createApi({
   reducerPath: "authApi",

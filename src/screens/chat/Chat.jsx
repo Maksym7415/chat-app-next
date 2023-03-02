@@ -17,8 +17,6 @@ const classes = {
   wrapperMessages: "flex flex-1 flex-col w-full h-full",
 };
 
-// fix в консолі вискакує помилка якась якщо забрати у функції cbInitialMessages  dispatch то посмилки немає
-
 const scrollPositionChats = {};
 
 const Chat = ({ params }) => {
