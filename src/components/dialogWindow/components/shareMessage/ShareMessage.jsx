@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Typography, TextField, Box } from "@mui/material";
-import UserAvatar from "../../../avatar/userAvatar";
+import UserAvatar from "@/components/avatar/userAvatar/index";
 import { PATHS } from "@/core/constants/paths";
 import languages from "@/core/translations";
 import { allActionsStore } from "@/store/rootActions";
@@ -25,7 +25,6 @@ const classes = {
 
 const SharedMessage = ({ data }) => {
   // HOOKS
-  // const classes = useStyles();
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -52,7 +51,6 @@ const SharedMessage = ({ data }) => {
   };
 
   const handleShareMessageId = (conversationId) => {
-    // console.log(data, "data");
     dispatch(allActionsStore.shareMessageAction(data));
     router.push(`${PATHS.chat}/${conversationId}`);
     // history.push({

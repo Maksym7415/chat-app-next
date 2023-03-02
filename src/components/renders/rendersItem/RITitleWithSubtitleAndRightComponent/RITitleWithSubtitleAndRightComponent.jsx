@@ -1,6 +1,10 @@
-"use client";
-
-import useStyles from "./styles";
+// STYLES
+const classes = {
+  title: "font-normal text-[15px] text-[#202020] m-0",
+  subTitle: "font-normal text-[12px] text-[#83868B] mt-[6px]",
+  wrapperItem: "py-[12px] px-[10px] pointer-events-none flex items-center",
+  wrapperItemLeft: "",
+};
 
 const RITitleWithSubtitleAndRightComponent = ({
   title = "",
@@ -14,12 +18,9 @@ const RITitleWithSubtitleAndRightComponent = ({
     subTitle: {},
   },
 }) => {
-  // HOOKS
-  const classesRoot = useStyles();
-
   return (
     <div
-      className={classesRoot.wrapperItem}
+      className={classes.wrapperItem}
       style={{
         justifyContent: renderRightComponent ? "space-between" : null,
         ...styles.wrapperItem,
@@ -27,13 +28,13 @@ const RITitleWithSubtitleAndRightComponent = ({
     >
       <div
         onClick={onPressWrapperItemLeft}
-        className={classesRoot.wrapperItemLeft}
+        className={classes.wrapperItemLeft}
         style={{
           ...styles.wrapperItemLeft,
         }}
       >
         <p
-          className={classesRoot.title}
+          className={classes.title}
           style={{
             ...styles.title,
           }}
@@ -42,7 +43,7 @@ const RITitleWithSubtitleAndRightComponent = ({
         </p>
         {subTitle ? (
           <p
-            className={classesRoot.subTitle}
+            className={classes.subTitle}
             style={{
               ...styles.subTitle,
             }}

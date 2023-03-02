@@ -19,7 +19,7 @@ const SettingProfile = () => {
   // HOOKS
   const { enqueueSnackbar } = useSnackbar();
 
-  // STORE
+  // SELECTORS
   const lang = useSelector(({ settingSlice }) => settingSlice.lang);
   const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 

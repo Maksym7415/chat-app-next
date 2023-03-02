@@ -18,6 +18,12 @@ import Spinner from "@/core/spinner";
 import PageLoader from "./components/PageLoader";
 // import Router, { useRouter } from "next/router";
 
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
 if (!process.browser) React.useLayoutEffect = React.useEffect;
 
 const MyApp = ({ Component, ...rest }) => {

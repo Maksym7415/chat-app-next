@@ -8,33 +8,24 @@ import {
   Menu,
   ListItem,
   List,
+  CircularProgress,
 } from "@mui/material";
-import { CircularProgress } from "@mui/material";
 import { Navigation, Pagination } from "swiper";
 import { useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useSnackbar } from "notistack";
-import DefaultAvatar from "../../../../../avatar/defaultAvatar";
 import * as config from "./config";
-import { getNameShort } from "../../../../../../helpers";
-import { REACT_APP_BASE_URL } from "@/core/constants/url";
+import DefaultAvatar from "@/components/avatar/defaultAvatar";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
-
-// style
-import "swiper/css";
-import "swiper/css/effect-fade";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-
-// import required modules
+import { getNameShort } from "@/helpers/index";
+import { REACT_APP_BASE_URL } from "@/core/constants/url";
 import { userApi } from "@/store/user/api";
 
 // STYLES
 const classes = {
   container: "relative",
   wrapperAvatar: "p-[2px]",
-  wrapperlangs: "p-[15px]",
   listItem: "w-full cursor-pointer",
   itemIcon: "mr-[15px]",
 };

@@ -1,7 +1,7 @@
 import { Avatar } from "@mui/material";
-import { getNameShort } from "@/helpers/index";
 import DefaultAvatar from "../defaultAvatar";
 import BadgeUserAvatar from "@/components/badges/badgeUserAvatar";
+import { getNameShort } from "@/helpers/index";
 import { REACT_APP_BASE_URL } from "@/core/constants/url";
 
 const UserAvatar = ({

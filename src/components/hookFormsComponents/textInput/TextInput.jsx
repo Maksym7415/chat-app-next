@@ -15,9 +15,7 @@ const classes = {
 const TextInputField = ({
   onChangeText,
   error,
-  secureTextEntry,
   label,
-  keyboardType,
   value,
   styles,
   placeholder,

@@ -1,7 +1,7 @@
 import { Box, Typography, Backdrop, Modal, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
-import Fade from "../reactSpring/fade/Fade";
+import Fade from "@/components/reactSpring/fade/Fade";
 import SettingProfile from "./components/settingProfile";
 import { allActionsStore } from "@/store/rootActions";
 
@@ -24,7 +24,6 @@ const ModalComponent = () => {
   const handleClose = () =>
     dispatch(allActionsStore.setModalClearConfigAction());
 
-  // const { mounted } = useMount({ opened });
   return (
     <Modal
       open={modalConfig.open}
