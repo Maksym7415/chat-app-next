@@ -71,3 +71,14 @@ export const setMessageDate = (date) => {
     .map((d) => (d.length < 2 ? `0${d}` : d))
     .join(" ");
 };
+
+export  const getDateFromToday = ({
+  days = 0,
+  hours = 24,
+  minutes = 60,
+  seconds = 60,
+}) => {
+  var d = new Date();
+  d.setTime(d.getTime() + (days * hours * minutes * seconds * 1000));
+  return d;
+}

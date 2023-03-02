@@ -4,7 +4,8 @@ import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
 import { pathBackAuth } from "@/core/constants/urlBack";
 import { allActionsStore } from "@/store/rootActions";
 import { fErrorResponse, onQueryStartedFulfilled } from "@/store/helpers";
-import { signIn } from "next-auth/react";
+import { setTokenCook, setUserInfoTokenCook } from "@/core/cookiesStorage/index";
+import { getDateFromToday, jwtdecode } from "@/helpers/index";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -54,17 +55,21 @@ export const authApi = createApi({
           cb: async (res) => {
             const { data } = res;
 
-            options.dispatch(allActionsStore.setAuthHeadersAction(data));
+            const jwtDecode = data.accessToken ? await jwtdecode(data.accessToken) : null
+
+            const optionsCook = {
+              expires: getDateFromToday({
+                days: 365,
+              }),
+              secure: true,
+            }
+
+            setTokenCook(data.accessToken, optionsCook)
+            setUserInfoTokenCook(jwtDecode, optionsCook)
+
             options.dispatch(
-              allActionsStore.authTokenAction({
-                token: data.accessToken,
-              })
+              allActionsStore.authTokenAction(jwtDecode)
             );
-            options.dispatch(allActionsStore.setTokenAction(data.accessToken));
-
-            // signIn("credentials", { ...data,  redirect: false });
-
-            // console.log(Session, "Session");
           },
         });
       },

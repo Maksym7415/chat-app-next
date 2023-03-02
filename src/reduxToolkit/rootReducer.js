@@ -4,7 +4,7 @@ import settingSlice from "./setting/slice";
 import conversationsSlice from "./conversations/slice";
 import userSlice from "./user/slice";
 import searchSlice from "./search/slice";
-import persistSlice from "./persist/slice";
+
 
 import { conversationsApi } from "@/store/conversations/api";
 import { authApi } from "@/store/auth/api";
@@ -16,8 +16,6 @@ export const reducers = {
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [searchApi.reducerPath]: searchApi.reducer,
-
-  persistSlice,
 
   appSlice,
   authSlice,

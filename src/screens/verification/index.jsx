@@ -9,7 +9,6 @@ import Meta from "@/core/seo/Meta";
 import { PATHS } from "@/core/constants/paths";
 import { authApi } from "@/store/auth/api";
 import { parseErrorResToType } from "@/store/helpers";
-import { signIn } from "next-auth/react";
 
 const VerificationClientPage = () => {
   // HOOKS
@@ -47,9 +46,7 @@ const VerificationClientPage = () => {
 
     postVerification(sendData)
       .unwrap()
-      .then(async (data) => {
-          await signIn("credentials", { ...data,  redirect: false });
-
+      .then(async () => {
         router.push(PATHS.main);
       });
   };

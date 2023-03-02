@@ -1,25 +1,21 @@
 import { allActionsStore } from "@/store/rootActions";
 import { IS_CLIENT } from "@/core/constants/general";
 import { store } from "@/store/store";
-import { useSession } from "next-auth/react";
+import { getTokenCook, getUserInfoTokenCook } from "@/core/cookiesStorage/index";
 
 const AuthProvider = ({ children }) => {
-  const session = useSession();
+
 
   if (IS_CLIENT) {
-    const token = session?.data?.accessToken;
+    const token = getTokenCook();
+    const userInfoTokenCook = getUserInfoTokenCook();
+
     if (token) {
       const authSlice = store.getState().authSlice;
-
-      !authSlice.headers.accessToken &&
-        store.dispatch(
-          allActionsStore.setAuthHeadersAction({ accessToken: token })
-        );
+      
       !authSlice.authToken.userId &&
         store.dispatch(
-          allActionsStore.authTokenAction({
-            token,
-          })
+          allActionsStore.authTokenAction(userInfoTokenCook)
         );
     }
   }

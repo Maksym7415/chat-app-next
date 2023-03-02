@@ -1,7 +1,5 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 import { reducers } from "./rootReducer";
 import { conversationsApi } from "@/store/conversations/api";
 import { authApi } from "@/store/auth/api";
@@ -23,16 +21,9 @@ const logoutReducer = (state, action) => {
   return rootReducer(state, action);
 };
 
-const persistConfig = {
-  key: "root",
-  storage,
-  whitelist: ["persistSlice"],
-};
-
-const persistedReducer = persistReducer(persistConfig, logoutReducer);
 
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: logoutReducer,
   devTools: true,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -41,12 +32,9 @@ export const store = configureStore({
       conversationsApi.middleware,
       authApi.middleware,
       userApi.middleware,
-      searchApi.middleware
+      searchApi.middleware,
     ),
 });
-export const persistor = persistStore(store);
-export const makeStore = () => {
-  store.__persistor = persistor;
-  return store;
-};
+
+export const makeStore = () => store
 export const wrapper = createWrapper(makeStore);

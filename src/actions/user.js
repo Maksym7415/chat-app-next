@@ -1,9 +1,8 @@
 import { logOutAction, store } from "@/store/store";
-import { signOut } from "next-auth/react";
+import { removeTokenCook, removeUserInfoTokenCook } from "@/core/cookiesStorage/index";
 
-export const actionLogOut = (redirect) => {
-  signOut({ 
-    callbackUrl: "/sign-in", 
-    redirect: redirect || false  });
+export const actionLogOut = () => {
+  removeTokenCook()
+  removeUserInfoTokenCook()
   store.dispatch(logOutAction());
 };

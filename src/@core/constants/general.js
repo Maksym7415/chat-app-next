@@ -29,3 +29,10 @@ export const LAST_ACTION_MESSAGES_STORE = {
   updateUP: "updateUP",
   clear: "clear",
 };
+
+export const namesCookies = {
+  accessToken: "accessToken",
+  userInfoToken: "userInfoToken",
+  lang: "@@lang",
+  isLoadChatListSer: "isLoadChatListSer",
+};

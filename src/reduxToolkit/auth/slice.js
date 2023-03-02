@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { jwtdecode } from "../../helpers";
 
 export const initialAuthToken = {
   role: "",
@@ -16,7 +15,6 @@ const initialState = {
   loginSingIn: null,
   verificationCode: null,
   authToken: initialAuthToken,
-  headers: { accessToken: "" },
 };
 
 export const authSlice = createSlice({
@@ -24,14 +22,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     authTokenAction(state, { payload }) {
-      let payloadLocal = initialAuthToken;
-      try {
-        payloadLocal = payload ? jwtdecode(payload.token) : payloadLocal;
-      } catch (e) {}
-      state.authToken = payloadLocal;
-    },
-    setAuthHeadersAction(state, { payload }) {
-      state.headers = { ...state.headers, ...payload };
+      state.authToken = payload;
     },
     setLoginSingInAction(state, { payload }) {
       state.loginSingIn = payload;
@@ -40,14 +31,6 @@ export const authSlice = createSlice({
       state.verificationCode = payload;
     },
   },
-  // extraReducers: {
-  //   [HYDRATE]: (state, action) => {
-  //     return {
-  //       ...state,
-  //       ...action.payload.authSlice,
-  //     };
-  //   },
-  // },
 });
 
 export default authSlice.reducer;

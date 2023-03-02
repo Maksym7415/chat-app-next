@@ -56,6 +56,7 @@ const LayoutMain = ({
     () => (params?.id ? conversationsList[params?.id] || null : null),
     [params]
   );
+
   const titlePage = useMemo(() => {
     if (titlePageProps) {
       return titlePageProps;

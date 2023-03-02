@@ -1,13 +1,13 @@
-
-import { getSession } from "next-auth/react";
+import { getTokenCook } from "@/core/cookiesStorage/index";
 
 export const getHeaders = async () => {
   try {
     let headersConfig = {};
 
-    const session = await getSession();
-    if (session.accessToken) {
-      headersConfig.Authorization = "Bearer " + session.accessToken;
+    const accessToken = getTokenCook();
+
+    if (accessToken) {
+      headersConfig.Authorization = "Bearer " + accessToken;
     }
 
     return Object.keys(headersConfig).length ? headersConfig : null;

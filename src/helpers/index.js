@@ -3,6 +3,7 @@ export {
   fullDate,
   getCurrentDay,
   setMessageDate,
+  getDateFromToday,
 } from "./getCorrectDateFormat";
 export { jwtdecode } from "./jwtdecode";
 export { URL_WITHOUT_HTTP_REGEX, EMAIL_REGEX } from "./regx";
