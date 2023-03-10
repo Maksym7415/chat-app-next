@@ -1,4 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
+import { useDispatch } from "react-redux";
 import {
   Typography,
   Toolbar,
@@ -9,10 +10,7 @@ import {
   Box,
 } from "@mui/material";
 import * as config from "./config";
-import {
-  actionsMessagesChat,
-  actionsClearSelectedMessages,
-} from "@/actions/index";
+import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
@@ -21,17 +19,22 @@ const classes = {
 };
 
 const BottomToolbar = ({ conversationId, selectedMessages }) => {
+  // HOOKS
+  const dispatch = useDispatch();
+
   // VARIABLES
   const selectedMessagesAmount = Object.keys(selectedMessages.messages).length;
 
   // FUNCTIONS
   const handleClickAction = async (typeAction) => {
-    await actionsMessagesChat({
-      conversationId,
-      typeAction,
-    });
+    await dispatch(
+      allActionsStore.messagesChatAction({
+        conversationId,
+        typeAction,
+      })
+    );
 
-    actionsClearSelectedMessages(true);
+    dispatch(allActionsStore.resetSelectedMessagesAction());
   };
 
   return (
@@ -45,7 +48,7 @@ const BottomToolbar = ({ conversationId, selectedMessages }) => {
             aria-label="menu"
             sx={{ mr: 2 }}
             onClick={() => {
-              actionsClearSelectedMessages(true);
+              dispatch(allActionsStore.resetSelectedMessagesAction());
             }}
           >
             <CloseIcon />

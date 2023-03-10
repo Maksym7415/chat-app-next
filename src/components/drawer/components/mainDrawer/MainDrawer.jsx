@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { ListItemIcon, ListItemText, List, ListItem } from "@mui/material";
 import * as config from "./config";
 import { PATHS } from "@/core/constants/paths";
-import { actionLogOut } from "@/actions/index";
 import BaseSelect from "../../../selects/BaseSelect";
 import { userApi } from "@/store/user/api";
+import { actionLogOut } from "@/store/store";
 import { allActionsStore } from "@/store/rootActions";
 
 // STYLES

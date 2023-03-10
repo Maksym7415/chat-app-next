@@ -6,6 +6,11 @@ import { authApi } from "@/store/auth/api";
 import { userApi } from "@/store/user/api";
 import { searchApi } from "@/store/search/api";
 
+import {
+  removeTokenCook,
+  removeUserInfoTokenCook,
+} from "@/core/cookiesStorage/index";
+
 const rootReducer = combineReducers(reducers);
 
 const actionTypeLogout = "LOGOUT";
@@ -21,7 +26,6 @@ const logoutReducer = (state, action) => {
   return rootReducer(state, action);
 };
 
-
 export const store = configureStore({
   reducer: logoutReducer,
   devTools: true,
@@ -32,9 +36,15 @@ export const store = configureStore({
       conversationsApi.middleware,
       authApi.middleware,
       userApi.middleware,
-      searchApi.middleware,
+      searchApi.middleware
     ),
 });
 
-export const makeStore = () => store
+export const makeStore = () => store;
 export const wrapper = createWrapper(makeStore);
+
+export const actionLogOut = () => {
+  removeTokenCook();
+  removeUserInfoTokenCook();
+  store.dispatch(logOutAction());
+};

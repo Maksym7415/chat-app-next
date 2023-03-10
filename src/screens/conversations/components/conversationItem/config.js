@@ -1,4 +1,4 @@
-import { actionsTypeActionsConversation } from "@/actions/index";
+import { actionsTypeActionsConversation } from "@/core/constants/actions";
 import languages from "@/core/translations";
 
 export const selectedConversationContext = (lang) => [

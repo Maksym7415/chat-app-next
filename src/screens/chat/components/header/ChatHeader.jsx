@@ -1,6 +1,6 @@
 import { useMemo, useState, memo } from "react";
 import clsx from "clsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -10,14 +10,9 @@ import {
   headerChatDotsOptionsDialog,
 } from "./config";
 import { TYPES_CONVERSATIONS } from "@/core/constants/general";
+import { actionsTypeActionsConversation, actionsTypeActionsChat } from "@/core/constants/actions";
 import UserAvatar from "@/components/avatar/userAvatar";
 import SvgMaker from "@/components/svgMaker";
-import {
-  actionsMessagesChat,
-  actionsSelectedConversation,
-  actionsTypeActionsChat,
-  actionsTypeActionsConversation,
-} from "@/actions/index";
 import { allActionsStore } from "@/store/rootActions";
 import { store } from "@/store/store";
 
@@ -43,6 +38,9 @@ const ChatHeader = ({
   typeConversation,
   messages,
 }) => {
+  // HOOKS
+  const dispatch = useDispatch();
+
   // SELECTORS
   const selectedMessages = useSelector(
     ({ appSlice }) => appSlice.selectedMessages
@@ -66,16 +64,20 @@ const ChatHeader = ({
     handleClose();
 
     if (action.type === "conversation") {
-      return actionsSelectedConversation({
-        typeAction: action.value,
-        dataConversation: conversationData,
-      });
+      return dispatch(
+        allActionsStore.selectedChatAction({
+          typeAction: action.value,
+          dataConversation: conversationData,
+        })
+      );
     }
 
-    return actionsMessagesChat({
-      conversationId,
-      typeAction: action.value,
-    });
+    return dispatch(
+      allActionsStore.messagesChatAction({
+        conversationId,
+        typeAction: action.value,
+      })
+    );
   };
 
   const headerСhatDotsOptions = useMemo(() => {

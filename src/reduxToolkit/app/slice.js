@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
+import Snackbar from "@/helpers/notistack";
+import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
+import {
+  actionsTypeObject,
+  actionsTypeActionsChat,
+} from "@/core/constants/actions";
 
 export const initialState = {
   sideLeftConfig: {
@@ -47,12 +53,254 @@ export const initialState = {
     conversationData: null,
     newChatId: null,
   }, // need fix - коли зробитися роут newChatId перевірити чи потрібно цого обєкту
+  selectedChats: {},
 };
 
 export const appSlice = createSlice({
   name: "appSlice",
   initialState,
   reducers: {
+    /// ---- ///
+    selectedMessagesAction(state, { payload }) {
+      const { data, typeAction } = payload;
+      const copySelectedMessages = { ...state.selectedMessages.messages };
+
+      switch (typeAction) {
+        case actionsTypeObject.add:
+          state.selectedMessages = {
+            ...state.selectedMessages,
+            messages: {
+              ...copySelectedMessages,
+              [data?.id]: data,
+            },
+          };
+          break;
+        case actionsTypeObject.remove:
+          delete copySelectedMessages[data?.id];
+          const active = Object.keys(copySelectedMessages).length
+            ? true
+            : false;
+
+          state.selectedMessages = {
+            ...state.selectedMessages,
+            active,
+            messages: {
+              ...copySelectedMessages,
+            },
+          };
+          break;
+        default:
+          break;
+      }
+    },
+
+    messagesChatAction(state, { payload }) {
+      const { conversationId, typeAction, messageData = null } = payload;
+      const { store } = require("@/store/store");
+      const { allActionsStore } = require("@/store/rootActions");
+      const {
+        socketEmitChatsDeleteMessage,
+      } = require("@/core/socket/actions/socketEmit");
+
+      console.log(payload, "messagesChatAction");
+      let _messages = {};
+      let messagesMass = [];
+      if (Object.keys(state.selectedMessages.messages).length) {
+        _messages = state.selectedMessages.messages;
+      } else {
+        if (messageData) {
+          _messages = {
+            [messageData.id]: messageData,
+          };
+        }
+        if (!actionsTypeActionsChat.selectMessages === typeAction) {
+          return alert("Something error actionsMessagesChat");
+        }
+      }
+      switch (typeAction) {
+        // DELETE MESSAGE
+        case actionsTypeActionsChat.deleteMessages:
+          const getRemoveMessages = (conversationId, messagesIds) => {
+            const allMessages =
+              store.getState().conversationsSlice.historyConversationsId?.[
+                conversationId
+              ]?.messages;
+            const conversationsList =
+              store.getState().conversationsSlice.conversationsList.data;
+            // deleting a message from the message array
+            let allMessagesWithoutDeleteMessage = allMessages?.filter(
+              (message) => !messagesIds?.includes(message?.id)
+            );
+            // check for the last element in the message array, if it is a date object, then delete it as well
+            const checkIsLastDateComponent = (array) => {
+              const arrayLength = array.length - 1;
+              if (array?.[arrayLength]?.component) {
+                return checkIsLastDateComponent(array.slice(0, arrayLength));
+              }
+              return array;
+            };
+            const updateAllMessages = checkIsLastDateComponent(
+              allMessagesWithoutDeleteMessage
+            );
+            if (
+              messagesIds.includes(
+                conversationsList[conversationId].Messages[0]?.id
+              )
+            ) {
+              store.dispatch(
+                allActionsStore.updateConversationListAction({
+                  [conversationId]: {
+                    ...conversationsList[conversationId],
+                    Messages: [updateAllMessages[updateAllMessages.length - 1]],
+                  },
+                })
+              );
+            }
+            store.dispatch(
+              allActionsStore.setMessagesDataInConversationsIdAction({
+                conversationId: conversationId,
+                messages: updateAllMessages,
+                lastAction: LAST_ACTION_MESSAGES_STORE.remove,
+                // pagination: response.pagination,
+              })
+            );
+          };
+          // sorting through the selected messages and sending them through the socket and, if successful, delete them locally through the function - getRemoveMessages
+          const messagesIds = Object.keys(_messages).map(
+            (messageId) => +messageId
+          );
+          return socketEmitChatsDeleteMessage(
+            {
+              conversationId,
+              isDeleteMessage: true,
+              messageId: messagesIds,
+            },
+            () => {
+              getRemoveMessages(conversationId, messagesIds);
+            }
+          );
+        // EDIT MESSAGE
+        case actionsTypeActionsChat.editMessage:
+          return Object.keys(_messages).map(
+            (messageId) =>
+              (state.messageEdit = {
+                ...state.messageEdit,
+                message: _messages[messageId],
+                messageId,
+              })
+          );
+        // COPY MESSAGE
+        case actionsTypeActionsChat.copyMessage:
+          messagesMass = Object.keys(_messages).reduce((acc, messageId) => {
+            return [...acc, _messages[messageId].message];
+          }, []);
+          const CopyMessages = messagesMass.join("\n\n");
+          if (CopyMessages) {
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(CopyMessages);
+            } else alert("Ваш браузер не підтримує Clipboard");
+          }
+          Snackbar.success("Copy");
+          break;
+        // SELECT MESSAGES
+        case actionsTypeActionsChat.selectMessages:
+          state.selectedMessages = {
+            active: true,
+            messages: _messages,
+          };
+          break;
+        // FORWARD MESSAGES
+        case actionsTypeActionsChat.forwardMessage:
+          messagesMass = Object.keys(_messages).reduce((acc, messageId) => {
+            const messageData = _messages[messageId];
+            acc.push({
+              Files: messageData.Files,
+              User: messageData.User,
+              fkSenderId: messageData.fkSenderId,
+              id: messageData.id,
+              isEditing: messageData.isEditing,
+              message: messageData.message,
+              sendDate: messageData.sendDate,
+            });
+            return acc;
+          }, []);
+          state.dialogConfig = {
+            open: true,
+            typeContent: "shareMessage",
+            title: "Share Message",
+            data: messagesMass,
+          };
+          break;
+        default:
+          Snackbar.error("An unknown action in chat is selected");
+          break;
+      }
+    },
+
+    selectedChatAction(state, { payload }) {
+      const { typeAction, dataConversation = null } = payload;
+
+      let _conversations = {};
+
+      if (Object.keys(state.selectedChats).length) {
+        _conversations = state.selectedChats;
+      } else {
+        if (dataConversation) {
+          _conversations = {
+            [dataConversation.conversationId]: dataConversation,
+          };
+        } else {
+          return alert("Something error actionsSelectedConversation");
+        }
+      }
+
+      switch (typeAction) {
+        case actionsTypeActionsConversation.deleteChat:
+          // for ids
+          socketEmitDeleteConversation({
+            ids: Object.keys(_conversations),
+          });
+
+          return;
+        case actionsTypeActionsConversation.clearChat:
+          // for ids
+          socketEmitClearConversation({
+            ids: Object.keys(_conversations),
+          });
+          return;
+        default:
+          return;
+      }
+    },
+
+    createNewChatAction(state, { payload }) {
+      const { store } = require("@/store/store");
+
+      const { router, item } = payload;
+
+      const conversationsList =
+        store.getState().conversationsSlice.conversationsList.data;
+
+      const chat = Object.values(conversationsList).find(
+        (el) => el.conversationName === item.fullName
+      );
+
+      if (chat) {
+        return router.push(`${PATHS.chat}/${chat.conversationId}`);
+      }
+
+      state.newChatData = {
+        conversationData: {
+          conversationAvatar: item.userAvatar,
+          conversationName: item.fullName,
+          conversationType: "dialog",
+        },
+        newChatId: item.id,
+      };
+
+      router.push(`${PATHS.newChat}/${item.id}`);
+    },
+
     // sideLeftConfig
     setSideLeftConfigAction(state, { payload }) {
       state.sideLeftConfig = payload;
@@ -99,6 +347,9 @@ export const appSlice = createSlice({
     // selectedMessages
     setSelectedMessagesAction(state, { payload }) {
       state.selectedMessages = payload;
+    },
+    resetSelectedMessagesAction(state) {
+      state.selectedMessages = initialState.selectedMessages;
     },
     // newChatData
     setNewChatDataAction(state, { payload }) {

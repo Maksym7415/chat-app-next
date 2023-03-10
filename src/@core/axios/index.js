@@ -3,7 +3,7 @@ import { BASE_URL } from "@/core/constants/url";
 import { IS_CLIENT } from "@/core/constants/general";
 import { getHeaders } from "@/helpers/index";
 import Snackbar from "@/helpers/notistack";
-import { actionLogOut } from "@/actions/index";
+import { actionLogOut } from "@/store/store";
 
 const parseErrorCode = (error) => {
   console.log(error, "error");

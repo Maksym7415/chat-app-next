@@ -5,7 +5,6 @@ import Header from "./components/header";
 import SearchMain from "./components/searchMain";
 import { TYPES_FROM_TO_SEARCH_SCREEN } from "@/core/constants/general";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
-import { actionCreateNewConversation } from "@/actions/conversations";
 import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
@@ -78,7 +77,9 @@ const Search = ({ params }) => {
             return (
               <SearchMain
                 onClickContact={(item) => {
-                  actionCreateNewConversation(router, item);
+                  dispatch(
+                    allActionsStore.createNewChatAction({ router, item })
+                  );
 
                   dispatch(
                     allActionsStore.setSideLeftConfigAction({

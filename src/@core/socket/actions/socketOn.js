@@ -1,5 +1,4 @@
 import { socket } from "../index";
-import { actionsConversationList } from "@/actions/index";
 import { PATHS } from "@/core/constants/paths";
 import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
 import { store } from "@/store/store";
@@ -13,26 +12,28 @@ export const socketOnUserIdChat = (chat, options) =>
       return options.cb();
     }
     const allMessages =
-      store.getState().conversationsSlice?.historyConversationsId?.[chat.conversationId]?.messages;
+      store.getState().conversationsSlice?.historyConversationsId?.[
+        chat.conversationId
+      ]?.messages;
     const conversationsList =
       store.getState().conversationsSlice.conversationsList.data;
     const conversationFindStore = conversationsList?.[chat.conversationId];
 
     const updateMessageConversation = () => {
       store.dispatch(
-        actionsConversationList({
-          mode: "updateMessageConversation",
-          conversationId: chat.conversationId,
-          messages: message?.isEdit
-            ? [
-                {
-                  ...conversationFindStore?.Messages?.[0],
-                  message: message.message,
-                  isEdit: true,
-                },
-              ]
-            : [message],
-          conversationsList,
+        allActionsStore.updateConversationListAction({
+          [chat.conversationId]: {
+            ...conversationsList[chat.conversationId],
+            Messages: message?.isEdit
+              ? [
+                  {
+                    ...conversationFindStore?.Messages?.[0],
+                    message: message.message,
+                    isEdit: true,
+                  },
+                ]
+              : [message],
+          },
         })
       );
     };
@@ -76,7 +77,7 @@ export const socketOnUserIdChat = (chat, options) =>
           return item;
         });
       }
-      
+
       store.dispatch(
         allActionsStore.setMessagesDataInConversationsIdAction({
           conversationId: chat.conversationId,
@@ -147,8 +148,9 @@ export const socketOnTypingStateId = (chat) => {
 export const socketOnDeleteMessage = () => {
   const getRemoveMessages = (conversationId, messageId, lastMessage) => {
     const allMessages =
-      store.getState().conversationsSlice?.historyConversationsId?.[conversationId.toString()]
-        ?.messages;
+      store.getState().conversationsSlice?.historyConversationsId?.[
+        conversationId.toString()
+      ]?.messages;
     const conversationsList =
       store.getState().conversationsSlice.conversationsList.data;
 
@@ -169,11 +171,11 @@ export const socketOnDeleteMessage = () => {
 
     if (messageId === conversationFindStore?.Messages?.[0].id) {
       store.dispatch(
-        actionsConversationList({
-          mode: "updateMessageConversation",
-          conversationId,
-          messages: [lastMessage],
-          conversationsList,
+        allActionsStore.updateConversationListAction({
+          [conversationId]: {
+            ...conversationsList[conversationId],
+            Messages: [lastMessage],
+          },
         })
       );
     }

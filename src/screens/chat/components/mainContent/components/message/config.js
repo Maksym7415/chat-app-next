@@ -3,7 +3,8 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { actionsTypeActionsChat } from "@/actions/index";
+import { actionsTypeActionsChat } from "@/core/constants/actions";
+
 
 export const selectedMessageContext = (lang) => [
   {

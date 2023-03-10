@@ -11,10 +11,8 @@ import { CONTEXT_MENU_ID } from "@/core/constants/general";
 import { getCurrentDay } from "@/helpers/index";
 import UserAvatar from "@/components/avatar/userAvatar";
 import {
-  actionsTypeObjectSelected,
-  actionsSelectedMessages,
-  actionsMessagesChat,
-} from "@/actions/index";
+  actionsTypeObject,
+} from "@/core/constants/actions";
 import { allActionsStore } from "@/store/rootActions";
 import { store } from "@/store/store";
 
@@ -89,24 +87,29 @@ const Message = ({
   const handleOnPressChat = () => {
     if (selectedMessages.active && messageData.message) {
       selectedMessages?.messages?.[messageData.id]
-        ? store.dispatch(
-            actionsSelectedMessages(
-              messageData,
-              actionsTypeObjectSelected.remove
-            )
+        ? dispatch(
+            allActionsStore.selectedMessagesAction({
+              data: messageData,
+              typeAction: actionsTypeObject.remove,
+            })
           )
-        : store.dispatch(
-            actionsSelectedMessages(messageData, actionsTypeObjectSelected.add)
+        : dispatch(
+            allActionsStore.selectedMessagesAction({
+              data: messageData,
+              typeAction: actionsTypeObject.add,
+            })
           );
     }
   };
 
   const handleClickContextMessage = async (item) => {
-    await actionsMessagesChat({
-      conversationId,
-      typeAction: item.value,
-      messageData,
-    });
+    await dispatch(
+      allActionsStore.messagesChatAction({
+        conversationId,
+        typeAction: item.value,
+        messageData,
+      })
+    );
     contextMenu.hideAll();
   };
 

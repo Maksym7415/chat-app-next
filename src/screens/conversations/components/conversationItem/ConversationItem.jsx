@@ -10,10 +10,7 @@ import { PATHS } from "@/core/constants/paths";
 import { CONTEXT_MENU_ID } from "@/core/constants/general";
 import languages from "@/core/translations";
 import { getCurrentDay } from "@/helpers/index";
-import {
-  actionsSelectedConversation,
-  actionsTypeActionsConversation,
-} from "@/actions/index";
+import { actionsTypeActionsConversation } from "@/core/constants/actions";
 import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
@@ -65,10 +62,12 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
   };
 
   const handleClickContextChatItem = (item) => {
-    actionsSelectedConversation({
-      typeAction: item.value,
-      dataConversation: data,
-    });
+    dispatch(
+      allActionsStore.selectedChatAction({
+        typeAction: item.value,
+        dataConversation: data,
+      })
+    );
   };
 
   // VARIABLES
