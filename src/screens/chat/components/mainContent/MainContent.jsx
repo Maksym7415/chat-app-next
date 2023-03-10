@@ -51,7 +51,7 @@ const MainContent = ({
   const pagination =
     useSelector(
       ({ conversationsSlice }) =>
-      conversationsSlice.historyConversationsId?.[conversationId]?.pagination
+        conversationsSlice.historyConversationsId?.[conversationId]?.pagination
     ) || {};
 
   // STATES
@@ -150,14 +150,14 @@ const MainContent = ({
       data={messages}
       initialScrollTop={cacheScrollPosition || 0}
       itemsRendered={(items) => {
-        // if (!vDataChat.isScrollToDown && !vDataChat.id && items?.length) {
-        //   if (cacheScrollPosition) {
-        //     scrollToPosition();
-        //   } else {
-        //     // scrollToBottom();
-        //   }
-        //   vSetDataChat(conversationId, true);
-        // }
+        if (!vDataChat.isScrollToDown && !vDataChat.id && items?.length) {
+          if (cacheScrollPosition) {
+            scrollToPosition();
+          } else {
+            // scrollToBottom();
+          }
+          vSetDataChat(conversationId, true);
+        }
 
         // if (!vDataChat.isScrollToDown && !vDataChat.id && items?.length) {
         //   const cacheScrollPosition = scrollPositionChats[conversationId];
