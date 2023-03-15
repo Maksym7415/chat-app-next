@@ -1,26 +1,27 @@
-import { allActionsStore } from "@/store/rootActions";
 import { IS_CLIENT } from "@/core/constants/general";
+import {
+	getTokenCook,
+	getUserInfoTokenCook,
+} from "@/core/cookiesStorage/index";
+import { allActionsStore } from "@/store/rootActions";
 import { store } from "@/store/store";
-import { getTokenCook, getUserInfoTokenCook } from "@/core/cookiesStorage/index";
 
 const AuthProvider = ({ children }) => {
+	if (IS_CLIENT) {
+		const token = getTokenCook();
+		const userInfoTokenCook = getUserInfoTokenCook();
 
+		if (token) {
+			const authSlice = store.getState().authSlice;
 
-  if (IS_CLIENT) {
-    const token = getTokenCook();
-    const userInfoTokenCook = getUserInfoTokenCook();
+			!authSlice.authToken.userId &&
+				store.dispatch(
+					allActionsStore.authTokenAction(userInfoTokenCook),
+				);
+		}
+	}
 
-    if (token) {
-      const authSlice = store.getState().authSlice;
-      
-      !authSlice.authToken.userId &&
-        store.dispatch(
-          allActionsStore.authTokenAction(userInfoTokenCook)
-        );
-    }
-  }
-
-  return <>{children}</>;
+	return <>{children}</>;
 };
 
 export default AuthProvider;

@@ -1,7 +1,7 @@
 import Verification from "@/screens/verification";
 
 const VerificationPage = () => {
-  return <Verification />;
+	return <Verification />;
 };
 
 export default VerificationPage;

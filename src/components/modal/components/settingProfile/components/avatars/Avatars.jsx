@@ -1,250 +1,260 @@
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  ListItem,
-  List,
-  CircularProgress,
-} from "@mui/material";
-import { Navigation, Pagination } from "swiper";
-import { useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {
+	CircularProgress,
+	IconButton,
+	List,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
+	Menu,
+} from "@mui/material";
+import Image from "next/image";
 import { useSnackbar } from "notistack";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Navigation, Pagination } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
 import * as config from "./config";
 import DefaultAvatar from "@/components/avatar/defaultAvatar";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
-import { getNameShort } from "@/helpers/index";
 import { REACT_APP_BASE_URL } from "@/core/constants/url";
+import { getNameShort } from "@/helpers/index";
 import { userApi } from "@/store/user/api";
 
 // STYLES
 const classes = {
-  container: "relative",
-  wrapperAvatar: "p-[2px]",
-  listItem: "w-full cursor-pointer",
-  itemIcon: "mr-[15px]",
+	container: "relative",
+	wrapperAvatar: "p-[2px]",
+	listItem: "w-full cursor-pointer",
+	itemIcon: "mr-[15px]",
 };
 
 const Avatars = () => {
-  // HOOKS
-  const { enqueueSnackbar } = useSnackbar();
+	// HOOKS
+	const { enqueueSnackbar } = useSnackbar();
 
-  const { isLoading: isLoadingAvatars } = userApi.useGetUserAvatarsQuery({});
-  const [putMainPhoto] = userApi.usePutMainPhotoMutation({});
-  const [deleteAvatar] = userApi.useDeleteAvatarMutation({});
+	const { isLoading: isLoadingAvatars } = userApi.useGetUserAvatarsQuery({});
+	const [putMainPhoto] = userApi.usePutMainPhotoMutation({});
+	const [deleteAvatar] = userApi.useDeleteAvatarMutation({});
 
-  // SELECTORS
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-  const userAvatars = useSelector(({ userSlice }) => userSlice.avatars);
-  const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
+	// SELECTORS
+	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+	const userAvatars = useSelector(({ userSlice }) => userSlice.avatars);
+	const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
-  // STATES
-  const [photoIndexSelected, setPhotoIndexSelected] = useState(0);
-  const [anchorEl, setAnchorEl] = useState();
-  const [avatars, setAvatars] = useState([]);
-  const [mainAvatar, setMainAvatar] = useState({});
-  const open = Boolean(anchorEl);
+	// STATES
+	const [photoIndexSelected, setPhotoIndexSelected] = useState(0);
+	const [anchorEl, setAnchorEl] = useState();
+	const [avatars, setAvatars] = useState([]);
+	const [mainAvatar, setMainAvatar] = useState({});
+	const open = Boolean(anchorEl);
 
-  // FUNCTIONS
-  const handleMenuAction = (value) => {
-    handleClose();
+	// FUNCTIONS
+	const handleMenuAction = (value) => {
+		handleClose();
 
-    switch (value) {
-      case "addAPhoto":
-        // const file: FileList | null = event.target.files;
-        // const formData = new FormData();
-        // if (file) {
-        //   formData.append("file", file[0]);
-        //   // dispatch(uploadAvatarAction(formData));
-        // }
-        return;
-      case "setMainPhoto":
-        putMainPhoto({
-          id: avatars[photoIndexSelected]?.id,
-          additionalUrl: avatars[photoIndexSelected]?.id || "",
-          params: {
-            url: avatars[photoIndexSelected]?.fileName,
-          },
-        })
-          .unwrap()
-          .then(async () => {
-            enqueueSnackbar("Success set main photo", { variant: "success" });
-          });
-        return;
-      case "deletePhoto":
-        deleteAvatar({
-          id: avatars[photoIndexSelected]?.id,
-          params: {
-            id: avatars[photoIndexSelected]?.id,
-          },
-        })
-          .unwrap()
-          .then(async () => {
-            enqueueSnackbar("Success delete photo", { variant: "success" });
-          });
-        return;
-      default:
-        return null;
-    }
-  };
+		switch (value) {
+			case "addAPhoto":
+				// const file: FileList | null = event.target.files;
+				// const formData = new FormData();
+				// if (file) {
+				//   formData.append("file", file[0]);
+				//   // dispatch(uploadAvatarAction(formData));
+				// }
+				return;
+			case "setMainPhoto":
+				putMainPhoto({
+					id: avatars[photoIndexSelected]?.id,
+					additionalUrl: avatars[photoIndexSelected]?.id || "",
+					params: {
+						url: avatars[photoIndexSelected]?.fileName,
+					},
+				})
+					.unwrap()
+					.then(async () => {
+						enqueueSnackbar("Success set main photo", {
+							variant: "success",
+						});
+					});
+				return;
+			case "deletePhoto":
+				deleteAvatar({
+					id: avatars[photoIndexSelected]?.id,
+					params: {
+						id: avatars[photoIndexSelected]?.id,
+					},
+				})
+					.unwrap()
+					.then(async () => {
+						enqueueSnackbar("Success delete photo", {
+							variant: "success",
+						});
+					});
+				return;
+			default:
+				return null;
+		}
+	};
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+	const handleClick = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
 
-  // USEEFFECTS
-  useEffect(() => {
-    if (
-      JSON.stringify(userAvatars.data) !== JSON.stringify(avatars) &&
-      userAvatars.length
-    ) {
-      const findMainAvatar = userAvatars.find((item) => item.defaultAvatar);
-      findMainAvatar && setMainAvatar(findMainAvatar);
-      setAvatars(userAvatars);
-    }
-  }, [userAvatars]);
+	// USEEFFECTS
+	useEffect(() => {
+		if (
+			JSON.stringify(userAvatars.data) !== JSON.stringify(avatars) &&
+			userAvatars.length
+		) {
+			const findMainAvatar = userAvatars.find(
+				(item) => item.defaultAvatar,
+			);
+			findMainAvatar && setMainAvatar(findMainAvatar);
+			setAvatars(userAvatars);
+		}
+	}, [userAvatars]);
 
-  if (isLoadingAvatars) {
-    return (
-      <RenderInfoCenterBox styles={{ height: "300px", width: "300px" }}>
-        <CircularProgress size={100} />
-      </RenderInfoCenterBox>
-    );
-  }
+	if (isLoadingAvatars) {
+		return (
+			<RenderInfoCenterBox styles={{ height: "300px", width: "300px" }}>
+				<CircularProgress size={100} />
+			</RenderInfoCenterBox>
+		);
+	}
 
-  if (!userAvatars.length) {
-    const sizeAvatar = "300";
-    const fullName =
-      userInfo.fullName || `${userInfo.firstName} ${userInfo.lastName}`;
-    const nameShort = fullName ? getNameShort(fullName) : null;
+	if (!userAvatars.length) {
+		const sizeAvatar = "300";
+		const fullName =
+			userInfo.fullName || `${userInfo.firstName} ${userInfo.lastName}`;
+		const nameShort = fullName ? getNameShort(fullName) : null;
 
-    return (
-      <div className={classes.container}>
-        <div className={classes.wrapperAvatar}>
-          <DefaultAvatar
-            name={nameShort}
-            width={`${sizeAvatar}px`}
-            height={`${sizeAvatar}px`}
-            fontSize={"100px"}
-          />
-        </div>
-      </div>
-    );
-  }
+		return (
+			<div className={classes.container}>
+				<div className={classes.wrapperAvatar}>
+					<DefaultAvatar
+						name={nameShort}
+						width={`${sizeAvatar}px`}
+						height={`${sizeAvatar}px`}
+						fontSize={"100px"}
+					/>
+				</div>
+			</div>
+		);
+	}
 
-  return (
-    <>
-      <div className={classes.container}>
-        <Swiper
-          navigation={true}
-          modules={[Navigation, Pagination]}
-          spaceBetween={10}
-          style={{
-            width: "300px",
-            height: "300px",
-            maxWidth: "300px",
-            maxHeight: "300px",
-          }}
-          onRealIndexChange={(element) =>
-            setPhotoIndexSelected(element.activeIndex)
-          }
-        >
-          {avatars?.length ? (
-            avatars?.map((item) => {
-              return (
-                <SwiperSlide key={item.id} style={{ display: "flex" }}>
-                  <Image
-                    src={`${REACT_APP_BASE_URL}/${item.fileName}`}
-                    width={1000}
-                    height={300}
-                    alt="Picture of the author"
-                    style={{
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                    }}
-                  />
-                </SwiperSlide>
-              );
-            })
-          ) : (
-            <></>
-          )}
-        </Swiper>
-        <IconButton
-          aria-label="more"
-          id="long-button"
-          aria-controls={open ? "long-menu" : undefined}
-          aria-expanded={open ? "true" : undefined}
-          aria-haspopup="true"
-          onClick={handleClick}
-          style={{
-            position: "absolute",
-            right: "0",
-            top: "0",
-            zIndex: 2,
-          }}
-        >
-          <MoreVertIcon />
-        </IconButton>
-        {avatars[photoIndexSelected]?.id === mainAvatar?.id && (
-          <IconButton
-            color="primary"
-            component="span"
-            style={{
-              position: "absolute",
-              left: "0",
-              top: "0",
-              zIndex: 2,
-            }}
-          >
-            <CheckCircleIcon fontSize="medium" />
-          </IconButton>
-        )}
-      </div>
-      <Menu
-        id="long-menu"
-        MenuListProps={{
-          "aria-labelledby": "long-button",
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-      >
-        <List className={classes.list}>
-          {config.actionsPhoto.map(({ icon, id, title, value }) => {
-            if (
-              avatars[photoIndexSelected]?.id === mainAvatar?.id &&
-              value === "setMainPhoto"
-            )
-              return;
-            return (
-              <ListItem
-                key={id}
-                onClick={() => handleMenuAction(value)}
-                className={classes.listItem}
-              >
-                <ListItemIcon
-                  className={classes.itemIcon}
-                  style={{ minWidth: 0 }}
-                >
-                  {icon}
-                </ListItemIcon>
-                <ListItemText primary={title} />
-              </ListItem>
-            );
-          })}
-        </List>
-      </Menu>
-    </>
-  );
+	return (
+		<>
+			<div className={classes.container}>
+				<Swiper
+					navigation={true}
+					modules={[Navigation, Pagination]}
+					spaceBetween={10}
+					style={{
+						width: "300px",
+						height: "300px",
+						maxWidth: "300px",
+						maxHeight: "300px",
+					}}
+					onRealIndexChange={(element) =>
+						setPhotoIndexSelected(element.activeIndex)
+					}
+				>
+					{avatars?.length ? (
+						avatars?.map((item) => {
+							return (
+								<SwiperSlide
+									key={item.id}
+									style={{ display: "flex" }}
+								>
+									<Image
+										src={`${REACT_APP_BASE_URL}/${item.fileName}`}
+										width={1000}
+										height={300}
+										alt="Picture of the author"
+										style={{
+											borderRadius: "50%",
+											objectFit: "cover",
+										}}
+									/>
+								</SwiperSlide>
+							);
+						})
+					) : (
+						<></>
+					)}
+				</Swiper>
+				<IconButton
+					aria-label="more"
+					id="long-button"
+					aria-controls={open ? "long-menu" : undefined}
+					aria-expanded={open ? "true" : undefined}
+					aria-haspopup="true"
+					onClick={handleClick}
+					style={{
+						position: "absolute",
+						right: "0",
+						top: "0",
+						zIndex: 2,
+					}}
+				>
+					<MoreVertIcon />
+				</IconButton>
+				{avatars[photoIndexSelected]?.id === mainAvatar?.id && (
+					<IconButton
+						color="primary"
+						component="span"
+						style={{
+							position: "absolute",
+							left: "0",
+							top: "0",
+							zIndex: 2,
+						}}
+					>
+						<CheckCircleIcon fontSize="medium" />
+					</IconButton>
+				)}
+			</div>
+			<Menu
+				id="long-menu"
+				MenuListProps={{
+					"aria-labelledby": "long-button",
+				}}
+				anchorEl={anchorEl}
+				open={open}
+				onClose={handleClose}
+			>
+				<List className={classes.list}>
+					{config.actionsPhoto.map(({ icon, id, title, value }) => {
+						if (
+							avatars[photoIndexSelected]?.id ===
+								mainAvatar?.id &&
+							value === "setMainPhoto"
+						)
+							return;
+						return (
+							<ListItem
+								key={id}
+								onClick={() => handleMenuAction(value)}
+								className={classes.listItem}
+							>
+								<ListItemIcon
+									className={classes.itemIcon}
+									style={{ minWidth: 0 }}
+								>
+									{icon}
+								</ListItemIcon>
+								<ListItemText primary={title} />
+							</ListItem>
+						);
+					})}
+				</List>
+			</Menu>
+		</>
+	);
 };
 
 export default Avatars;

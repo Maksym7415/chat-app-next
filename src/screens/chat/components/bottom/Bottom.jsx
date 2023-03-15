@@ -1,39 +1,42 @@
 import { useRouter } from "next/router";
+import { memo, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { useMemo, memo } from "react";
-import MessageInput from "./components/messageInput/MessageInput";
 import BottomToolbar from "./components/bottomToolbar";
+import MessageInput from "./components/messageInput/MessageInput";
 
 const ChatBottom = ({ opponentId }) => {
-  // HOOKS
-  const router = useRouter();
+	// HOOKS
+	const router = useRouter();
 
-  // SELECTORS
-  const selectedMessages = useSelector(
-    ({ appSlice }) => appSlice.selectedMessages
-  );
+	// SELECTORS
+	const selectedMessages = useSelector(
+		({ appSlice }) => appSlice.selectedMessages,
+	);
 
-  // VARIABLES
-  const conversationId = useMemo(() => {
-    return router.query?.id;
-  }, [router.query?.id]);
+	// VARIABLES
+	const conversationId = useMemo(() => {
+		return router.query?.id;
+	}, [router.query?.id]);
 
-  const renderBottom = () => {
-    if (selectedMessages.active) {
-      return (
-        <BottomToolbar
-          conversationId={conversationId}
-          selectedMessages={selectedMessages}
-        />
-      );
-    } else {
-      return (
-        <MessageInput conversationId={conversationId} opponentId={opponentId} />
-      );
-    }
-  };
+	const renderBottom = () => {
+		if (selectedMessages.active) {
+			return (
+				<BottomToolbar
+					conversationId={conversationId}
+					selectedMessages={selectedMessages}
+				/>
+			);
+		} else {
+			return (
+				<MessageInput
+					conversationId={conversationId}
+					opponentId={opponentId}
+				/>
+			);
+		}
+	};
 
-  return <>{renderBottom()}</>;
+	return <>{renderBottom()}</>;
 };
 
 export default memo(ChatBottom);

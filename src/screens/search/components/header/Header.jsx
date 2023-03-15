@@ -7,33 +7,33 @@ import { useDebounce } from "@/hooks/useDebounce";
 const classes = {};
 
 const Header = ({ placeholder, textInputProps = {}, getRequest, styles }) => {
-  // HOOKS
+	// HOOKS
 
-  // STATES
-  const [search, setSearch] = React.useState("");
+	// STATES
+	const [search, setSearch] = React.useState("");
 
-  // CUSTOM HOOKS
-  const debouncedSearchValue = useDebounce(search, 300);
+	// CUSTOM HOOKS
+	const debouncedSearchValue = useDebounce(search, 300);
 
-  // FUNCTIONS
-  const clearSearch = () => {
-    setSearch("");
-  };
-  const onChangeText = (value) => {
-    setSearch(value);
-  };
+	// FUNCTIONS
+	const clearSearch = () => {
+		setSearch("");
+	};
+	const onChangeText = (value) => {
+		setSearch(value);
+	};
 
-  // USEEFFECTS
-  useEffect(() => {
-    getRequest &&
-      getRequest({
-        params: {
-          search: debouncedSearchValue,
-        },
-      });
-  }, [debouncedSearchValue]);
+	// USEEFFECTS
+	useEffect(() => {
+		getRequest &&
+			getRequest({
+				params: {
+					search: debouncedSearchValue,
+				},
+			});
+	}, [debouncedSearchValue]);
 
-  return <></>;
+	return <></>;
 };
 
 export default Header;

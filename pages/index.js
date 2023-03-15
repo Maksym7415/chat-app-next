@@ -1,7 +1,7 @@
 import LayoutMain from "@/core/layouts/LayoutMain";
 
 const HomePage = () => {
-  return <LayoutMain />;
+	return <LayoutMain />;
 };
 
 export default HomePage;

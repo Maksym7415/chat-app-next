@@ -1,77 +1,78 @@
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
-import languages from "@/core/translations";
-import Meta from "@/core/seo/Meta";
 import { PATHS } from "@/core/constants/paths";
+import Meta from "@/core/seo/Meta";
+import languages from "@/core/translations";
 import { authApi } from "@/store/auth/api";
 import { parseErrorResToType } from "@/store/helpers";
 
 export default function SignInClientPage() {
-  // HOOKS
-  const router = useRouter();
-  
-  // SELECTORS
-  const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-  const loginSingIn = useSelector(({ authSlice }) => authSlice.loginSingIn);
+	// HOOKS
+	const router = useRouter();
 
-  // STATES
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      login: loginSingIn || "",
-    },
-  });
+	// SELECTORS
+	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+	const loginSingIn = useSelector(({ authSlice }) => authSlice.loginSingIn);
 
-  // SERVICES
-  const [postLogin, { isLoading, error = {} }] = authApi.usePostLoginMutation();
+	// STATES
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		defaultValues: {
+			login: loginSingIn || "",
+		},
+	});
 
-  // FUNCTIONS
-  const onSubmit = (data) => {
-    const { login } = data;
+	// SERVICES
+	const [postLogin, { isLoading, error = {} }] =
+		authApi.usePostLoginMutation();
 
-    const sendData = {
-      login,
-    };
+	// FUNCTIONS
+	const onSubmit = (data) => {
+		const { login } = data;
 
-    postLogin(sendData)
-      .unwrap()
-      .then(() => {
-        router.push(PATHS.verification);
-      });
-  };
+		const sendData = {
+			login,
+		};
 
-  return (
-    <Meta title={"Sign-in"}>
-      <AuthForm
-        title={languages[lang].authorization.signIn}
-        submitBtnTitle={languages[lang].authorization.signIn}
-        configFields={config.signInFields}
-        onSubmit={onSubmit}
-        errorBack={parseErrorResToType({ error })}
-        isLoading={isLoading}
-        optionsForm={{
-          control,
-          handleSubmit,
-          errors,
-        }}
-        render={{
-          text: (styles) => (
-            <p
-              className={styles.text}
-              onClick={() => router.push(PATHS.signUp)}
-            >
-              {languages[lang].authorization.haveNoAccount}{" "}
-              {languages[lang].authorization.signUp} ?
-            </p>
-          ),
-        }}
-      />
-    </Meta>
-  );
+		postLogin(sendData)
+			.unwrap()
+			.then(() => {
+				router.push(PATHS.verification);
+			});
+	};
+
+	return (
+		<Meta title={"Sign-in"}>
+			<AuthForm
+				title={languages[lang].authorization.signIn}
+				submitBtnTitle={languages[lang].authorization.signIn}
+				configFields={config.signInFields}
+				onSubmit={onSubmit}
+				errorBack={parseErrorResToType({ error })}
+				isLoading={isLoading}
+				optionsForm={{
+					control,
+					handleSubmit,
+					errors,
+				}}
+				render={{
+					text: (styles) => (
+						<p
+							className={styles.text}
+							onClick={() => router.push(PATHS.signUp)}
+						>
+							{languages[lang].authorization.haveNoAccount}{" "}
+							{languages[lang].authorization.signUp} ?
+						</p>
+					),
+				}}
+			/>
+		</Meta>
+	);
 }

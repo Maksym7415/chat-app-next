@@ -1,7 +1,7 @@
 import SignUp from "@/screens/signUp";
 
 const SignUpPage = () => {
-  return <SignUp />;
+	return <SignUp />;
 };
 
 export default SignUpPage;
