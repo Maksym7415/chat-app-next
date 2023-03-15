@@ -7,8 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as config from "./config";
 import UserAvatar from "@/components/avatar/userAvatar";
 import { actionsTypeObject } from "@/core/constants/actions";
-import { TYPES_CONVERSATIONS } from "@/core/constants/general";
-import { CONTEXT_MENU_ID } from "@/core/constants/general";
+import { CONTEXT_MENU_ID, TYPES_CONVERSATIONS } from "@/core/constants/general";
 import languages from "@/core/translations";
 import { getCurrentDay } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
@@ -200,7 +199,7 @@ const Message = ({
 
 					contextMenu.show({
 						id: CONTEXT_MENU_ID.main,
-						event: event,
+						event,
 					});
 				}}
 			>

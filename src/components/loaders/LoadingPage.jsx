@@ -5,14 +5,12 @@ const classes = {
 	container: "h-screen w-screen flex items-center justify-center",
 };
 
-const LoadingPage = () => {
-	return (
-		<div className={classes.container}>
-			<div>
-				<CircularProgress size={60} />
-			</div>
+const LoadingPage = () => (
+	<div className={classes.container}>
+		<div>
+			<CircularProgress size={60} />
 		</div>
-	);
-};
+	</div>
+);
 
 export default LoadingPage;

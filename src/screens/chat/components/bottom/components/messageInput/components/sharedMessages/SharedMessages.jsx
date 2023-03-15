@@ -47,7 +47,7 @@ const SharedMessages = ({ forwardMessages }) => {
 							return forwardMessages[0].message;
 						}
 
-						let usersSharedMessages = forwardMessages?.reduce(
+						const usersSharedMessages = forwardMessages?.reduce(
 							(acc, item) => {
 								if (acc.includes(item.User.firstName))
 									return acc;
@@ -60,13 +60,12 @@ const SharedMessages = ({ forwardMessages }) => {
 							return `from ${usersSharedMessages[0]} and ${
 								usersSharedMessages.length - 1
 							} more`;
-						} else {
-							return `from ${usersSharedMessages[0]}${
-								usersSharedMessages?.[1]
-									? `, ${usersSharedMessages?.[1]}`
-									: ""
-							}`;
 						}
+						return `from ${usersSharedMessages[0]}${
+							usersSharedMessages?.[1]
+								? `, ${usersSharedMessages?.[1]}`
+								: ""
+						}`;
 					})()}
 				</p>
 			</div>

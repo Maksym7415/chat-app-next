@@ -6,18 +6,16 @@ const classes = {
 	emojis: "flex h-full  pl-[13px]",
 };
 
-const LeftInputComponent = () => {
-	return (
-		<>
-			<IconButton
-				aria-label="emojis"
-				className={classes.emojis}
-				disabled={true}
-			>
-				<SvgMaker name="svgs_line_emoji" />
-			</IconButton>
-		</>
-	);
-};
+const LeftInputComponent = () => (
+	<>
+		<IconButton
+			aria-label="emojis"
+			className={classes.emojis}
+			disabled
+		>
+			<SvgMaker name="svgs_line_emoji" />
+		</IconButton>
+	</>
+);
 
 export default LeftInputComponent;

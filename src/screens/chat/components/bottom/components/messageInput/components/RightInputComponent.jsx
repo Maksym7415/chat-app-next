@@ -15,8 +15,8 @@ const RightInputComponent = ({
 	const [toggleTypeMessage, setToggleTypeMessage] = useState("voice");
 
 	// FUNCTIONS
-	const stylesRightIcons = () => {
-		return message || forwardMessages.length
+	const stylesRightIcons = () =>
+		message || forwardMessages.length
 			? {
 					justifyContent: "flex-end",
 					width: 40,
@@ -25,7 +25,6 @@ const RightInputComponent = ({
 					justifyContent: "space-between",
 					width: 80,
 			  };
-	};
 
 	return (
 		<>
@@ -37,7 +36,7 @@ const RightInputComponent = ({
 					<div onClick={handleSendMessage}>
 						<SvgMaker
 							name="svgs_filled_send"
-							strokeFill={"#5EA7DE"}
+							strokeFill="#5EA7DE"
 						/>
 					</div>
 				) : (

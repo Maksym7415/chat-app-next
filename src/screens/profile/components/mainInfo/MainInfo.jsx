@@ -15,9 +15,6 @@ const classes = {
 	list: "mt-[9px]",
 };
 const MainInfo = ({ typeProfile }) => {
-	// SELECTORS
-	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
-
 	// STATES
 	const [isSwitchOn, setIsSwitchOn] = useState(false);
 
@@ -36,8 +33,8 @@ const MainInfo = ({ typeProfile }) => {
 								<p className={classes.listTitle}>Data</p>
 								<div className={classes.list}>
 									<RITitleWithSubtitleAndRightComponent
-										title={"+1 (234) 567 89 01*"}
-										subTitle={"Phone number"}
+										title="+1 (234) 567 89 01*"
+										subTitle="Phone number"
 										styles={{
 											wrapperItem: {
 												paddingLeft: 0,
@@ -50,7 +47,7 @@ const MainInfo = ({ typeProfile }) => {
 									<Divider className={classes.divider} />
 									<RITitleWithSubtitleAndRightComponent
 										title={`I'm fine and you?*`}
-										subTitle={"About myself"}
+										subTitle="About myself"
 										styles={{
 											wrapperItem: {
 												paddingLeft: 0,
@@ -62,8 +59,8 @@ const MainInfo = ({ typeProfile }) => {
 									/>
 									<Divider className={classes.divider} />
 									<RITitleWithSubtitleAndRightComponent
-										title={"@voidrainbow*"}
-										subTitle={"Pseudonym"}
+										title="@voidrainbow*"
+										subTitle="Pseudonym"
 										styles={{
 											wrapperItem: {
 												paddingLeft: 0,
@@ -83,9 +80,7 @@ const MainInfo = ({ typeProfile }) => {
 								<p className={classes.listTitle}>Вescription</p>
 								<div className={classes.list}>
 									<RITitleWithSubtitleAndRightComponent
-										title={
-											"a spoken or written representation or account of a person, object, or event.*"
-										}
+										title="a spoken or written representation or account of a person, object, or event.*"
 										styles={{
 											wrapperItem: {
 												paddingLeft: 0,
@@ -101,7 +96,7 @@ const MainInfo = ({ typeProfile }) => {
 				}
 			})()}
 			<RITitleWithSubtitleAndRightComponent
-				title={"Notification"}
+				title="Notification"
 				subTitle={isSwitchOn ? "enabled" : "turned off"}
 				styles={{
 					wrapperItem: {
@@ -111,25 +106,23 @@ const MainInfo = ({ typeProfile }) => {
 					title: {},
 					subTitle: {},
 				}}
-				renderRightComponent={() => {
-					return (
-						<div
-							className={classes.wrapperNotification}
-							onClick={() => console.log("wrapperNotification")}
-						>
-							<Divider
-								className={classes.dividerNotification}
-								orientation="vertical"
-								flexItem
-							/>
-							<Switch
-								value={isSwitchOn}
-								onChange={onToggleSwitch}
-								className={classes.switchNotification}
-							/>
-						</div>
-					);
-				}}
+				renderRightComponent={() => (
+					<div
+						className={classes.wrapperNotification}
+						onClick={() => {}}
+					>
+						<Divider
+							className={classes.dividerNotification}
+							orientation="vertical"
+							flexItem
+						/>
+						<Switch
+							value={isSwitchOn}
+							onChange={onToggleSwitch}
+							className={classes.switchNotification}
+						/>
+					</div>
+				)}
 			/>
 		</div>
 	);

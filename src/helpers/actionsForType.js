@@ -5,7 +5,7 @@ export const actionsTypeObject = {
 };
 
 export const actionsForTypeWithObjKey = (props) => {
-  const isDispatch = props?.dispatch ? true : false;
+  const isDispatch = !!props?.dispatch;
 
   switch (props.typeAction) {
     case actionsTypeObject.add:
@@ -24,6 +24,6 @@ export const actionsForTypeWithObjKey = (props) => {
       isDispatch ? props.dispatch(props.setAction({})) : props.setAction({});
       return {};
     default:
-      return;
+      
   }
 };

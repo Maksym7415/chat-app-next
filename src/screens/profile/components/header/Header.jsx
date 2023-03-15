@@ -1,7 +1,7 @@
 import CloseIcon from "@mui/icons-material/Close";
 import { IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import DefaultAvatar from "@/components/avatar/defaultAvatar";
 import ImagesProfile from "@/components/carousel/imagesProfile";
 
@@ -16,7 +16,7 @@ const classes = {
 	closeIcon: "",
 };
 
-//test
+// test
 const imagesTest = [
 	{
 		id: 1,
@@ -37,12 +37,8 @@ const imagesTest = [
 ];
 
 const Header = ({ setting, closeDrawer }) => {
-	// HOOKS
-	const dispatch = useDispatch();
-
 	// SELECTORS
 	const userAvatars = useSelector(({ userSlice }) => userSlice.avatars);
-	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
 	// STATES
 	const [images, setImages] = useState([]);
@@ -82,10 +78,10 @@ const Header = ({ setting, closeDrawer }) => {
 						noImagesComponent={() => (
 							<DefaultAvatar
 								name={setting.nameShort}
-								width={"100%"}
-								height={"300px"}
-								fontSize={"150px"}
-								isSquare={true}
+								width="100%"
+								height="300px"
+								fontSize="150px"
+								isSquare
 							/>
 						)}
 					/>

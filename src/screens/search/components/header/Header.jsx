@@ -1,27 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
 
 // rework
 
-// STYLES
-const classes = {};
-
-const Header = ({ placeholder, textInputProps = {}, getRequest, styles }) => {
+const Header = ({ getRequest }) => {
 	// HOOKS
 
 	// STATES
-	const [search, setSearch] = React.useState("");
+	const [search] = useState("");
 
 	// CUSTOM HOOKS
 	const debouncedSearchValue = useDebounce(search, 300);
-
-	// FUNCTIONS
-	const clearSearch = () => {
-		setSearch("");
-	};
-	const onChangeText = (value) => {
-		setSearch(value);
-	};
 
 	// USEEFFECTS
 	useEffect(() => {

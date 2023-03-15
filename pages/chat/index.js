@@ -1,7 +1,5 @@
 import LayoutMain from "@/core/layouts/LayoutMain";
 
-const ChatPage = () => {
-  return <LayoutMain titlePage={"Chat"} />;
-};
+const ChatPage = () => <LayoutMain titlePage="Chat" />;
 
 export default ChatPage;

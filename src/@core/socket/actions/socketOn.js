@@ -99,8 +99,7 @@ export const socketOnUserIdChat = (chat, options) =>
 let isEmit = false;
 const newTimer = {};
 export const socketOnTypingStateId = (chat) => {
-  const conversationTypeState =
-    store.getState().conversationsSlice.conversationTypeState;
+  const {conversationTypeState} = store.getState().conversationsSlice;
 
   const currentUserTyping = (user, conversationId) => {
     const fConversationType = (conversationId, user, isTyping = false) => {
@@ -111,7 +110,7 @@ export const socketOnTypingStateId = (chat) => {
       };
       store.dispatch(
         allActionsStore.updateConversationTypeStateAction({
-          conversationId: conversationId,
+          conversationId,
           data,
         })
       );
@@ -189,8 +188,7 @@ export const socketOnDeleteMessage = () => {
   );
 };
 
-export const socketOnUserIdNewChat = (userId, router) => {
-  return socket.on(
+export const socketOnUserIdNewChat = (userId, router) => socket.on(
     `userIdNewChat${userId}`,
     async (message, conversationId) => {
       const response = await store.dispatch(
@@ -199,21 +197,20 @@ export const socketOnUserIdNewChat = (userId, router) => {
       if (response?.data) {
         // ця перевірка потрібно для того щоб коли інший юзер створює чат зі мною щоб в мене не відкривалося зразу чат з цим юзером
         if (message.User?.id !== userId) {
-          return;
+          
         } else {
           router.push(`${PATHS.chat}/${conversationId}`);
         }
       }
     }
   );
-};
 
 export const socketOnDeleteConversation = ({ params, router }) => {
   socket.on("deleteChat", ({ ids }) => {
     const conversationsList =
       store.getState().conversationsSlice.conversationsList.data;
 
-    let copyConversationsList = { ...conversationsList };
+    const copyConversationsList = { ...conversationsList };
 
     ids.map((id) => {
       delete copyConversationsList[id];

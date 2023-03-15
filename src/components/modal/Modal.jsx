@@ -2,7 +2,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Backdrop, Box, IconButton, Modal, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import SettingProfile from "./components/settingProfile";
-import Fade from "@/components/reactSpring/fade/Fade";
 import { allActionsStore } from "@/store/rootActions";
 
 // rework fade

@@ -50,7 +50,7 @@ CustomDocument.getInitialProps = async (ctx) => {
 			enhanceApp: (App) => (props) =>
 				(
 					<App
-						{...props} // @ts-ignore
+						{...props}
 						emotionCache={cache}
 					/>
 				),
@@ -58,15 +58,13 @@ CustomDocument.getInitialProps = async (ctx) => {
 	const initialProps = await Document.getInitialProps(ctx);
 	const emotionStyles = extractCriticalToChunks(initialProps.html);
 
-	const emotionStyleTags = emotionStyles.styles.map((style) => {
-		return (
-			<style
-				key={style.key}
-				dangerouslySetInnerHTML={{ __html: style.css }}
-				data-emotion={`${style.key} ${style.ids.join(" ")}`}
-			/>
-		);
-	});
+	const emotionStyleTags = emotionStyles.styles.map((style) => (
+		<style
+			key={style.key}
+			dangerouslySetInnerHTML={{ __html: style.css }}
+			data-emotion={`${style.key} ${style.ids.join(" ")}`}
+		/>
+	));
 
 	return {
 		...initialProps,

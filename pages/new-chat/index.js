@@ -1,9 +1,7 @@
 import LayoutMain from "@/core/layouts/LayoutMain";
 
 
-const NewChatPage = () => {
-  return <LayoutMain />;
-};
+const NewChatPage = () => <LayoutMain />;
 
 
 

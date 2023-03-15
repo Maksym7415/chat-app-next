@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import * as config from "./config";
@@ -60,7 +60,7 @@ const VerificationClientPage = () => {
 	}, [verificationCode]);
 
 	return (
-		<Meta title={"Verification"}>
+		<Meta title="Verification">
 			<AuthForm
 				title={languages[lang].authorization.verification}
 				submitBtnTitle={languages[lang].authorization.verification}

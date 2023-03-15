@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Rnd } from "react-rnd";
 import LeftSide from "./components/leftSide";
@@ -115,7 +115,7 @@ const LayoutMain = ({
 						width: containerWidth,
 						height: "100%",
 					}}
-					onResize={(e, direction, ref, delta, position) => {
+					onResize={(e, direction, ref) => {
 						ref.offsetWidth < 200 && setContainerWidth(80);
 					}}
 					disableDragging

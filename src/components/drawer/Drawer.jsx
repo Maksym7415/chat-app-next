@@ -39,14 +39,13 @@ const SwipeableTemporaryDrawer = () => {
 
 		if (open) {
 			return setDrawerConfigAction();
-		} else {
-			setOpen(false);
-
-			const closeDialogTime = setTimeout(() => {
-				setDrawerConfigAction();
-				clearTimeout(closeDialogTime);
-			}, transitionDuration);
 		}
+		setOpen(false);
+
+		const closeDialogTime = setTimeout(() => {
+			setDrawerConfigAction();
+			clearTimeout(closeDialogTime);
+		}, transitionDuration);
 	};
 
 	useEffect(() => {
@@ -91,7 +90,7 @@ const SwipeableTemporaryDrawer = () => {
 			open={open}
 			onClose={toggleDrawer(drawerConfig.anchor, false)}
 			onOpen={toggleDrawer(drawerConfig.anchor, true)}
-			disableBackdropTransition={true}
+			disableBackdropTransition
 		>
 			{renderContent(drawerConfig.anchor)}
 		</SwipeableDrawer>

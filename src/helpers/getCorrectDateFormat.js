@@ -78,7 +78,7 @@ export  const getDateFromToday = ({
   minutes = 60,
   seconds = 60,
 }) => {
-  var d = new Date();
+  const d = new Date();
   d.setTime(d.getTime() + (days * hours * minutes * seconds * 1000));
   return d;
 }

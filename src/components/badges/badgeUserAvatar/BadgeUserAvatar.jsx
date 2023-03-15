@@ -5,10 +5,9 @@ const BadgeUserAvatar = ({
 	overlap = "circular",
 	anchorOrigin = { vertical: "bottom", horizontal: "right" },
 	variant = "dot",
-	sizeBadge = 18,
 	children,
-}) => {
-	return (() => {
+}) =>
+	(() => {
 		switch (typeBadge) {
 			case "online":
 				return (
@@ -21,12 +20,11 @@ const BadgeUserAvatar = ({
 					</StyledBadge>
 				);
 			case "selected":
-				return <div></div>;
+				return <div />;
 
 			default:
 				return <>{children}</>;
 		}
 	})();
-};
 
 export default BadgeUserAvatar;

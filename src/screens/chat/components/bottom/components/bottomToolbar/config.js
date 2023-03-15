@@ -1,10 +1,9 @@
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import languages from "@/core/translations/index";
 import { actionsTypeActionsChat } from "@/core/constants/actions";
 
-export const actionsMessagesToolbar = (lang) => [
+export const actionsMessagesToolbar = () => [
   {
     id: 1,
     title: "Forward",

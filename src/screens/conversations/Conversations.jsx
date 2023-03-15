@@ -33,16 +33,14 @@ const ConversationsPage = () => {
 
 	return (
 		<div className={classes.container}>
-			{dataSortDate.map((conversation) => {
-				return (
-					<ConversationItem
-						data={conversation}
-						usersTyping={usersTyping}
-						key={conversation.conversationId}
-						paramsId={router.query?.id}
-					/>
-				);
-			})}
+			{dataSortDate.map((conversation) => (
+				<ConversationItem
+					data={conversation}
+					usersTyping={usersTyping}
+					key={conversation.conversationId}
+					paramsId={router.query?.id}
+				/>
+			))}
 		</div>
 	);
 };

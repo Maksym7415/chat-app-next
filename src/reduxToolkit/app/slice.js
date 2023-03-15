@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
+import { SIDE_LEFT_TYPE_CONTENT , LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
 import Snackbar from "@/helpers/notistack";
-import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
 import {
   actionsTypeObject,
   actionsTypeActionsChat,
@@ -77,9 +76,7 @@ export const appSlice = createSlice({
           break;
         case actionsTypeObject.remove:
           delete copySelectedMessages[data?.id];
-          const active = Object.keys(copySelectedMessages).length
-            ? true
-            : false;
+          const active = !!Object.keys(copySelectedMessages).length;
 
           state.selectedMessages = {
             ...state.selectedMessages,
@@ -102,7 +99,6 @@ export const appSlice = createSlice({
         socketEmitChatsDeleteMessage,
       } = require("@/core/socket/actions/socketEmit");
 
-      console.log(payload, "messagesChatAction");
       let _messages = {};
       let messagesMass = [];
       if (Object.keys(state.selectedMessages.messages).length) {
@@ -128,7 +124,7 @@ export const appSlice = createSlice({
             const conversationsList =
               store.getState().conversationsSlice.conversationsList.data;
             // deleting a message from the message array
-            let allMessagesWithoutDeleteMessage = allMessages?.filter(
+            const allMessagesWithoutDeleteMessage = allMessages?.filter(
               (message) => !messagesIds?.includes(message?.id)
             );
             // check for the last element in the message array, if it is a date object, then delete it as well
@@ -158,7 +154,7 @@ export const appSlice = createSlice({
             }
             store.dispatch(
               allActionsStore.setMessagesDataInConversationsIdAction({
-                conversationId: conversationId,
+                conversationId,
                 messages: updateAllMessages,
                 lastAction: LAST_ACTION_MESSAGES_STORE.remove,
                 // pagination: response.pagination,
@@ -191,9 +187,7 @@ export const appSlice = createSlice({
           );
         // COPY MESSAGE
         case actionsTypeActionsChat.copyMessage:
-          messagesMass = Object.keys(_messages).reduce((acc, messageId) => {
-            return [...acc, _messages[messageId].message];
-          }, []);
+          messagesMass = Object.keys(_messages).reduce((acc, messageId) => [...acc, _messages[messageId].message], []);
           const CopyMessages = messagesMass.join("\n\n");
           if (CopyMessages) {
             if (navigator.clipboard) {
@@ -267,9 +261,9 @@ export const appSlice = createSlice({
           socketEmitClearConversation({
             ids: Object.keys(_conversations),
           });
-          return;
+          
         default:
-          return;
+          
       }
     },
 

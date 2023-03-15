@@ -48,7 +48,7 @@ export default function SignInClientPage() {
 	};
 
 	return (
-		<Meta title={"Sign-in"}>
+		<Meta title="Sign-in">
 			<AuthForm
 				title={languages[lang].authorization.signIn}
 				submitBtnTitle={languages[lang].authorization.signIn}

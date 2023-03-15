@@ -7,7 +7,7 @@ export const onlyText = (_string, limit) => {
       ""
     );
 
-  if (limit) result = result.slice(0, limit) + "...";
+  if (limit) result = `${result.slice(0, limit)  }...`;
 
   return result;
 };

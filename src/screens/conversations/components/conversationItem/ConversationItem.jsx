@@ -73,26 +73,25 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
 	// VARIABLES
 	const someBodyWriting = usersTyping[data.conversationId] && getString(data);
 	const isConversationDialog = data.conversationType === "Dialog";
-	const contextMenuConfig = useMemo(() => {
-		return selectedConversationContext(lang).filter((item) => {
-			if (
-				!data.Messages.length &&
-				[actionsTypeActionsConversation.clearChat].includes(item.value)
-			) {
-				return false;
-			}
-			return true;
-		});
-	}, [data.Messages, lang]);
+	const contextMenuConfig = useMemo(
+		() =>
+			selectedConversationContext(lang).filter((item) => {
+				if (
+					!data.Messages.length &&
+					[actionsTypeActionsConversation.clearChat].includes(
+						item.value,
+					)
+				) {
+					return false;
+				}
+				return true;
+			}),
+		[data.Messages, lang],
+	);
 
 	// test
-	const numberOfUnreadMessages = [1, 7].includes(data.conversationId)
-		? data.conversationId
-		: null;
 	const isMessageUserAuth = data.Messages[0]?.User?.id === authToken.userId;
-	const isReadMessageUserAuth = [1, 7].includes(data.conversationId)
-		? true
-		: false;
+	const isReadMessageUserAuth = !![1, 7].includes(data.conversationId);
 
 	return (
 		<div
@@ -108,7 +107,7 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
 
 				contextMenu.show({
 					id: CONTEXT_MENU_ID.main,
-					event: event,
+					event,
 				});
 			}}
 			onClick={() => handleClickChatItem(data.conversationId)}
@@ -141,14 +140,14 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
 												name="svgs_line_read"
 												width={20}
 												height={19}
-												strokeFill={"#48A938"}
+												strokeFill="#48A938"
 											/>
 										) : (
 											<SvgMaker
 												name="svgs_line_check"
 												width={20}
 												height={19}
-												strokeFill={"#48A938"}
+												strokeFill="#48A938"
 											/>
 										)}
 									</>
@@ -172,13 +171,11 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
 						) : (
 							<div className={classes.innerMessage}>
 								{(() => {
-									const renderTextMessage = (message) => {
-										return (
-											<p className={classes.messageText}>
-												{message}
-											</p>
-										);
-									};
+									const renderTextMessage = (message) => (
+										<p className={classes.messageText}>
+											{message}
+										</p>
+									);
 									if (data.Messages[0] !== undefined) {
 										if (isMessageUserAuth) {
 											return (
@@ -194,22 +191,19 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
 													)}
 												</>
 											);
-										} else {
-											if (!isConversationDialog) {
-												return renderTextMessage(
-													data.Messages[0].message,
-												);
-											} else {
-												return renderTextMessage(
-													`${data.Messages[0]?.User?.firstName}: ${data.Messages[0].message}`,
-												);
-											}
 										}
-									} else {
+										if (!isConversationDialog) {
+											return renderTextMessage(
+												data.Messages[0].message,
+											);
+										}
 										return renderTextMessage(
-											languages[lang].generals.noMessages,
+											`${data.Messages[0]?.User?.firstName}: ${data.Messages[0].message}`,
 										);
 									}
+									return renderTextMessage(
+										languages[lang].generals.noMessages,
+									);
 								})()}
 							</div>
 						)}

@@ -6,7 +6,7 @@ import SvgMaker from "@/components/svgMaker/index";
 import { CONTEXT_MENU_ID } from "@/core/constants/general";
 
 // makeStyles
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 	wrapperIcon: {
 		marginRight: 10,
 	},
@@ -24,10 +24,10 @@ const useStyles = makeStyles((theme) => ({
 // need style
 
 // STYLES
-const classes = {
-	wrapperIcon: "mr-[10px]",
-	item: "hover:",
-};
+// const classes = {
+// 	wrapperIcon: "mr-[10px]",
+// 	item: "hover:",
+// };
 
 const ContextMenu = () => {
 	// HOOKS
@@ -43,7 +43,7 @@ const ContextMenu = () => {
 				<Item
 					key={item.id}
 					onClick={() => contextMenuConfig.callBackItem(item)}
-					closeOnClick={item?.NoCloseOnClick ? false : true}
+					closeOnClick={!item?.NoCloseOnClick}
 					className={classes.item}
 				>
 					{item?.iconComponent || item?.icon?.name ? (

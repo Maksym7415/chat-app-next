@@ -46,8 +46,7 @@ const MainContent = ({
 	const [getConversationMessagesRequest] =
 		conversationsApi.useLazyGetConversationMessagesQuery();
 
-	// SELECTORS
-	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
+	// SELECTORS;
 	const pagination =
 		useSelector(
 			({ conversationsSlice }) =>
@@ -68,7 +67,7 @@ const MainContent = ({
 
 	// FUNCTIONS
 	const loadMessages = useCallback(
-		({ isOffset, direction }) => {
+		({ isOffset }) => {
 			const params = {};
 
 			if (isOffset) {
@@ -97,10 +96,6 @@ const MainContent = ({
 		},
 		[pagination, messages, firstItemIndex],
 	);
-
-	const scrollToBottom = () => {
-		virtuosoRef.current?.scrollToIndex(messages.length - 1);
-	};
 
 	const handleScroll = useCallback(
 		(event) => {

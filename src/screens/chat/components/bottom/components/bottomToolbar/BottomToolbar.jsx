@@ -68,26 +68,22 @@ const BottomToolbar = ({ conversationId, selectedMessages }) => {
 						{selectedMessagesAmount} message selected
 					</Typography>
 					{!!selectedMessagesAmount &&
-						config.actionsMessagesToolbar("lang").map((item) => {
-							return (
-								<IconButton
-									size="large"
-									color="inherit"
-									key={item.id}
-									onClick={() =>
-										handleClickAction(item.value)
-									}
+						config.actionsMessagesToolbar("lang").map((item) => (
+							<IconButton
+								size="large"
+								color="inherit"
+								key={item.id}
+								onClick={() => handleClickAction(item.value)}
+							>
+								<Tooltip
+									TransitionComponent={Fade}
+									TransitionProps={{ timeout: 600 }}
+									title={item.title}
 								>
-									<Tooltip
-										TransitionComponent={Fade}
-										TransitionProps={{ timeout: 600 }}
-										title={item.title}
-									>
-										{item.iconComponent}
-									</Tooltip>
-								</IconButton>
-							);
-						})}
+									{item.iconComponent}
+								</Tooltip>
+							</IconButton>
+						))}
 				</Toolbar>
 			</Paper>
 		</Box>

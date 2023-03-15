@@ -27,7 +27,7 @@ const ProfilePage = ({ typeProfile, conversationData, closeDrawer }) => {
 
 	// USEEFFECTS
 	useEffect(() => {
-		let settingLocal = {
+		const settingLocal = {
 			typeProfile:
 				typeProfile?.toLowerCase() || TYPES_CONVERSATIONS.dialog,
 			nameShort: getNameShort(conversationData?.conversationName),

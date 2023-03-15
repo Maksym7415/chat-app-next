@@ -39,7 +39,6 @@ const Avatars = () => {
 	const [deleteAvatar] = userApi.useDeleteAvatarMutation({});
 
 	// SELECTORS
-	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 	const userAvatars = useSelector(({ userSlice }) => userSlice.avatars);
 	const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
@@ -139,7 +138,7 @@ const Avatars = () => {
 						name={nameShort}
 						width={`${sizeAvatar}px`}
 						height={`${sizeAvatar}px`}
-						fontSize={"100px"}
+						fontSize="100px"
 					/>
 				</div>
 			</div>
@@ -150,7 +149,7 @@ const Avatars = () => {
 		<>
 			<div className={classes.container}>
 				<Swiper
-					navigation={true}
+					navigation
 					modules={[Navigation, Pagination]}
 					spaceBetween={10}
 					style={{
@@ -164,25 +163,23 @@ const Avatars = () => {
 					}
 				>
 					{avatars?.length ? (
-						avatars?.map((item) => {
-							return (
-								<SwiperSlide
-									key={item.id}
-									style={{ display: "flex" }}
-								>
-									<Image
-										src={`${REACT_APP_BASE_URL}/${item.fileName}`}
-										width={1000}
-										height={300}
-										alt="Picture of the author"
-										style={{
-											borderRadius: "50%",
-											objectFit: "cover",
-										}}
-									/>
-								</SwiperSlide>
-							);
-						})
+						avatars?.map((item) => (
+							<SwiperSlide
+								key={item.id}
+								style={{ display: "flex" }}
+							>
+								<Image
+									src={`${REACT_APP_BASE_URL}/${item.fileName}`}
+									width={1000}
+									height={300}
+									alt="Picture of the author"
+									style={{
+										borderRadius: "50%",
+										objectFit: "cover",
+									}}
+								/>
+							</SwiperSlide>
+						))
 					) : (
 						<></>
 					)}

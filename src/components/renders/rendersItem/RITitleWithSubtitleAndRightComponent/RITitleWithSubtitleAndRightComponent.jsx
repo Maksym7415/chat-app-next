@@ -17,43 +17,41 @@ const RITitleWithSubtitleAndRightComponent = ({
 		title: {},
 		subTitle: {},
 	},
-}) => {
-	return (
+}) => (
+	<div
+		className={classes.wrapperItem}
+		style={{
+			justifyContent: renderRightComponent ? "space-between" : null,
+			...styles.wrapperItem,
+		}}
+	>
 		<div
-			className={classes.wrapperItem}
+			onClick={onPressWrapperItemLeft}
+			className={classes.wrapperItemLeft}
 			style={{
-				justifyContent: renderRightComponent ? "space-between" : null,
-				...styles.wrapperItem,
+				...styles.wrapperItemLeft,
 			}}
 		>
-			<div
-				onClick={onPressWrapperItemLeft}
-				className={classes.wrapperItemLeft}
+			<p
+				className={classes.title}
 				style={{
-					...styles.wrapperItemLeft,
+					...styles.title,
 				}}
 			>
+				{title}
+			</p>
+			{subTitle ? (
 				<p
-					className={classes.title}
+					className={classes.subTitle}
 					style={{
-						...styles.title,
+						...styles.subTitle,
 					}}
 				>
-					{title}
+					{subTitle}
 				</p>
-				{subTitle ? (
-					<p
-						className={classes.subTitle}
-						style={{
-							...styles.subTitle,
-						}}
-					>
-						{subTitle}
-					</p>
-				) : null}
-			</div>
-			{renderRightComponent ? renderRightComponent() : null}
+			) : null}
 		</div>
-	);
-};
+		{renderRightComponent ? renderRightComponent() : null}
+	</div>
+);
 export default RITitleWithSubtitleAndRightComponent;

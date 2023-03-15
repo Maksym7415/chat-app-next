@@ -20,7 +20,6 @@ const SettingProfile = () => {
 	const { enqueueSnackbar } = useSnackbar();
 
 	// SELECTORS
-	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 	const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
 	// STATES
@@ -111,7 +110,7 @@ const SettingProfile = () => {
 						}}
 						disabled={isLoading}
 					>
-						{"Submit"}
+						Submit
 					</CustomButton>
 				</div>
 			</form>

@@ -63,7 +63,7 @@ const ChatHeader = ({
 		setAnchorEl(null);
 	};
 
-	const handleOptions = async (action, levelNames) => {
+	const handleOptions = async (action) => {
 		handleClose();
 
 		if (action.type === "conversation") {
@@ -106,100 +106,90 @@ const ChatHeader = ({
 	}, [typeConversation, messages]);
 
 	// RENDERS
-	const renderTopCenterComponent = () => {
-		return (
-			<div className={classes.wrapperConversationData}>
-				<div
-					className={classes.innerConversationData}
-					onClick={() => {
-						store.dispatch(
-							allActionsStore.setDrawerConfigAction({
-								anchor: "right",
-								open: true,
-								width: "400px",
-								type: "profile",
-								configContent: {
-									typeProfile:
-										conversationData.conversationType,
-									conversationData,
-								},
-							}),
-						);
-					}}
-				>
-					<div className={classes.wrapperAvatar}>
-						<UserAvatar
-							source={conversationData?.conversationAvatar}
-							name={
-								conversationData?.conversationName ||
-								"Test Test"
-							}
-							sizeAvatar={50}
-						/>
-					</div>
-					<div className={classes.wrapperAvatar}>
-						<p className={classes.title}>
-							{conversationData?.conversationName}
-						</p>
-						<span className={classes.subtitle}>{"Online*"}</span>
-					</div>
+	const renderTopCenterComponent = () => (
+		<div className={classes.wrapperConversationData}>
+			<div
+				className={classes.innerConversationData}
+				onClick={() => {
+					store.dispatch(
+						allActionsStore.setDrawerConfigAction({
+							anchor: "right",
+							open: true,
+							width: "400px",
+							type: "profile",
+							configContent: {
+								typeProfile: conversationData.conversationType,
+								conversationData,
+							},
+						}),
+					);
+				}}
+			>
+				<div className={classes.wrapperAvatar}>
+					<UserAvatar
+						source={conversationData?.conversationAvatar}
+						name={conversationData?.conversationName || "Test Test"}
+						sizeAvatar={50}
+					/>
+				</div>
+				<div className={classes.wrapperAvatar}>
+					<p className={classes.title}>
+						{conversationData?.conversationName}
+					</p>
+					<span className={classes.subtitle}>Online*</span>
 				</div>
 			</div>
-		);
-	};
+		</div>
+	);
 
-	const renderTopRightComponent = () => {
-		return (
-			<div
-				className={clsx(classes.wrapperAction, classes.wrapperOptions)}
+	const renderTopRightComponent = () => (
+		<div className={clsx(classes.wrapperAction, classes.wrapperOptions)}>
+			<IconButton
+				aria-label="more"
+				id="long-button"
+				aria-controls={open ? "long-menu" : undefined}
+				aria-expanded={open ? "true" : undefined}
+				aria-haspopup="true"
+				onClick={handleClick}
+				disabled={selectedMessages.active}
 			>
-				<IconButton
-					aria-label="more"
-					id="long-button"
-					aria-controls={open ? "long-menu" : undefined}
-					aria-expanded={open ? "true" : undefined}
-					aria-haspopup="true"
-					onClick={handleClick}
-					disabled={selectedMessages.active}
-				>
-					<MoreVertIcon />
-				</IconButton>
-				<Menu
-					id="long-menu"
-					MenuListProps={{
-						"aria-labelledby": "long-button",
-					}}
-					anchorEl={anchorEl}
-					open={open}
-					onClose={handleClose}
-				>
-					{headerСhatDotsOptions.map((action) => {
-						const isSubMenu =
-							action?.subMenu?.length && action.levelNames;
-						return (
-							<MenuItem
-								key={action.id}
-								className={classes.dotsOption}
-								style={{
-									marginRight: isSubMenu ? 26 : 0,
-								}}
-								onClick={() =>
-									handleOptions(action, action.levelNames)
-								}
-							>
-								{action.icon.name && (
-									<div className={classes.wrapperIconOption}>
-										<SvgMaker name={action.icon.name} />
-									</div>
-								)}
-								<p>{action.title}</p>
-							</MenuItem>
-						);
-					})}
-				</Menu>
-			</div>
-		);
-	};
+				<MoreVertIcon />
+			</IconButton>
+			<Menu
+				id="long-menu"
+				MenuListProps={{
+					"aria-labelledby": "long-button",
+				}}
+				anchorEl={anchorEl}
+				open={open}
+				onClose={handleClose}
+			>
+				{headerСhatDotsOptions.map((action) => {
+					const isSubMenu =
+						action?.subMenu?.length && action.levelNames;
+					return (
+						<MenuItem
+							key={action.id}
+							className={classes.dotsOption}
+							style={{
+								marginRight: isSubMenu ? 26 : 0,
+							}}
+							onClick={() =>
+								handleOptions(action, action.levelNames)
+							}
+						>
+							{action.icon.name && (
+								<div className={classes.wrapperIconOption}>
+									<SvgMaker name={action.icon.name} />
+								</div>
+							)}
+							<p>{action.title}</p>
+						</MenuItem>
+					);
+				})}
+			</Menu>
+		</div>
+	);
 
 	return (
 		<div className={classes.container}>

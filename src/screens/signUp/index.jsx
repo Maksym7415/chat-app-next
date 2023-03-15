@@ -43,7 +43,7 @@ const SignUpClientPage = () => {
 	};
 
 	return (
-		<Meta title={"Sign-up"}>
+		<Meta title="Sign-up">
 			<AuthForm
 				title={languages[lang].authorization.signUp}
 				submitBtnTitle={languages[lang].authorization.signUp}

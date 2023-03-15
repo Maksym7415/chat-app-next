@@ -22,56 +22,54 @@ const AuthForm = ({
 	submitBtnTitle,
 	render,
 	isLoading,
-}) => {
-	return (
-		<div className={classes.container}>
-			<form
-				className={classes.wrapperForm}
-				onSubmit={optionsForm.handleSubmit(onSubmit)}
+}) => (
+	<div className={classes.container}>
+		<form
+			className={classes.wrapperForm}
+			onSubmit={optionsForm.handleSubmit(onSubmit)}
+		>
+			{title && <p className={classes.title}>{title}</p>}
+			<>
+				{configFields.map((el, key) => (
+					<Controller
+						key={key}
+						control={optionsForm.control}
+						rules={el?.validate || {}}
+						render={({ field: { onChange, value } }) => (
+							<TextInputCustom
+								onChangeText={onChange}
+								value={value}
+								error={optionsForm.errors[el.fieldName]}
+								placeholder={el.placeholder}
+								secureTextEntry={false}
+								styles={el.styles}
+							/>
+						)}
+						name={el.fieldName}
+					/>
+				))}
+			</>
+			{errorBack && (
+				<div className={classes.error}>
+					<p className={classes.errorText}>{errorBack}</p>
+				</div>
+			)}
+			<CustomButton
+				onClick={optionsForm.handleSubmit(onSubmit)}
+				style={{ marginTop: 15, width: "100%", maxWidth: "200px" }}
+				disabled={isLoading}
 			>
-				{title && <p className={classes.title}>{title}</p>}
-				<React.Fragment>
-					{configFields.map((el, key) => (
-						<Controller
-							key={key}
-							control={optionsForm.control}
-							rules={el?.validate || {}}
-							render={({ field: { onChange, value } }) => (
-								<TextInputCustom
-									onChangeText={onChange}
-									value={value}
-									error={optionsForm.errors[el.fieldName]}
-									placeholder={el.placeholder}
-									secureTextEntry={false}
-									styles={el.styles}
-								/>
-							)}
-							name={el.fieldName}
-						/>
-					))}
-				</React.Fragment>
-				{errorBack && (
-					<div className={classes.error}>
-						<p className={classes.errorText}>{errorBack}</p>
-					</div>
-				)}
-				<CustomButton
-					onClick={optionsForm.handleSubmit(onSubmit)}
-					style={{ marginTop: 15, width: "100%", maxWidth: "200px" }}
-					disabled={isLoading}
-				>
-					{isLoading ? (
-						<CircularProgress
-							size={15}
-							style={{ color: "white" }}
-						/>
-					) : null}{" "}
-					{submitBtnTitle}
-				</CustomButton>
-				{render?.text && render.text(classes)}
-			</form>
-		</div>
-	);
-};
+				{isLoading ? (
+					<CircularProgress
+						size={15}
+						style={{ color: "white" }}
+					/>
+				) : null}{" "}
+				{submitBtnTitle}
+			</CustomButton>
+			{render?.text && render.text(classes)}
+		</form>
+	</div>
+);
 
 export default AuthForm;

@@ -38,8 +38,8 @@ const MessageInput = ({ conversationId, opponentId }) => {
 
 	// VARIABLES
 	const textPlaceholderInput = `${languages[lang].generals.typeMessage}...`;
-	const userId = authToken.userId;
-	const firstName = authToken.firstName;
+	const { userId } = authToken;
+	const { firstName } = authToken;
 
 	// STATES
 	const [sheredMessages, setSharedMessages] = useState([]);
@@ -86,9 +86,9 @@ const MessageInput = ({ conversationId, opponentId }) => {
 		}
 
 		if (sheredMessages.length) {
-			sheredMessages.map((message) => {
+			sheredMessages.map((messageEl) => {
 				const messageObj = {
-					...message,
+					...messageEl,
 				};
 				sendMessage(conversationId, messageObj, message.User.id);
 				return message;
@@ -124,16 +124,16 @@ const MessageInput = ({ conversationId, opponentId }) => {
 
 	const onKeyPress = (e) => {
 		if (e.keyCode === 13 && e.shiftKey) {
-			let start = e.target.selectionStart,
-				end = e.target.selectionEnd;
+			const start = e.target.selectionStart;
+			const end = e.target.selectionEnd;
 			e.preventDefault();
 
 			setMessage((prevState) => ({
 				...prevState,
-				[conversationId]:
-					prevState?.[conversationId].substring(0, start) +
-					"\n" +
-					prevState?.[conversationId].substring(end),
+				[conversationId]: `${prevState?.[conversationId].substring(
+					0,
+					start,
+				)}\n${prevState?.[conversationId].substring(end)}`,
 			}));
 		} else if (e.keyCode === 13) {
 			e.preventDefault();
@@ -181,7 +181,7 @@ const MessageInput = ({ conversationId, opponentId }) => {
 					<TextField
 						className={classes.input}
 						value={message[conversationId] || ""}
-						multiline={true}
+						multiline
 						variant="standard"
 						maxRows={4}
 						onChange={handleChangeMessage}

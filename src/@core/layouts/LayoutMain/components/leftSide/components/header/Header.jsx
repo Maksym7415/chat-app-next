@@ -4,7 +4,6 @@ import TopCenterComponent from "./components/topCenterComponent";
 import TopLeftComponent from "./components/topLeftComponent";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
 import { allActionsStore } from "@/store/rootActions";
-import { searchApi } from "@/store/search/api";
 
 // STYLES
 const classes = {

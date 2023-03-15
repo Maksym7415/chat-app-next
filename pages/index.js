@@ -1,7 +1,5 @@
 import LayoutMain from "@/core/layouts/LayoutMain";
 
-const HomePage = () => {
-	return <LayoutMain />;
-};
+const HomePage = () => <LayoutMain />;
 
 export default HomePage;

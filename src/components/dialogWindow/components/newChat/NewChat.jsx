@@ -54,7 +54,7 @@ const NewChat = () => {
 		];
 
 		socketEmitChatCreation({
-			data: data,
+			data,
 			date: fullDate(new Date()),
 			chatName: "Chat",
 			imageData: {},
@@ -105,8 +105,6 @@ const NewChat = () => {
 								}),
 							);
 						} catch (error) {}
-						console.log(params, "params");
-						console.log(response, "response");
 						return {
 							options: response?.data?.response || [],
 							limit: response?.data?.limit || 0,
@@ -141,7 +139,7 @@ const NewChat = () => {
 					),
 					className: classes.containerSelect,
 				}}
-				placeholder={"Select contact"}
+				placeholder="Select contact"
 				styles={{
 					root: {
 						marginLeft: 15,

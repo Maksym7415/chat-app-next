@@ -12,7 +12,7 @@ const AuthProvider = ({ children }) => {
 		const userInfoTokenCook = getUserInfoTokenCook();
 
 		if (token) {
-			const authSlice = store.getState().authSlice;
+			const { authSlice } = store.getState();
 
 			!authSlice.authToken.userId &&
 				store.dispatch(

@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { animated, useSpring } from "react-spring";
 
-const Fade = forwardRef(function Fade(props, ref) {
+const Fade = forwardRef((props, ref) => {
 	const { in: open, children, onEnter, onExited, ...other } = props;
 	const style = useSpring({
 		from: { opacity: 0 },

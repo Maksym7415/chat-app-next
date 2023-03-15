@@ -86,18 +86,16 @@ function MainDrawer({ closeDrawer }) {
 	return (
 		<>
 			<List className={classes.list}>
-				{config.drawerList.map(({ icon, id, title, value }) => {
-					return (
-						<ListItem
-							key={id}
-							onClick={() => handleMenuAction(value)}
-							className={classes.listItem}
-						>
-							<ListItemIcon>{icon}</ListItemIcon>
-							<ListItemText primary={title} />
-						</ListItem>
-					);
-				})}
+				{config.drawerList.map(({ icon, id, title, value }) => (
+					<ListItem
+						key={id}
+						onClick={() => handleMenuAction(value)}
+						className={classes.listItem}
+					>
+						<ListItemIcon>{icon}</ListItemIcon>
+						<ListItemText primary={title} />
+					</ListItem>
+				))}
 			</List>
 			<div className={classes.wrapperLangs}>
 				<BaseSelect

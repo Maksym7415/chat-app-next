@@ -38,7 +38,6 @@ const MyApp = ({ Component, ...rest }) => {
 };
 
 MyApp.getInitialProps = async ({ ctx }) => {
-	console.time("----time");
 	const token = ctx.res?.req?.cookies?.[namesCookies.accessToken];
 
 	if (!token) {
@@ -62,7 +61,6 @@ MyApp.getInitialProps = async ({ ctx }) => {
 		}
 	}
 
-	console.timeEnd("----time");
 	return {};
 };
 

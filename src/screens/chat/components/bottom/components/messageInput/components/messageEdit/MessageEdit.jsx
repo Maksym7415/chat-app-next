@@ -19,7 +19,7 @@ const MessageEdit = ({ data, onClose }) => {
 	return (
 		<div className={classes.root}>
 			<div className={classes.wrapperIconEdit}>
-				<SvgMaker name={"svgs_filled_pencil"} />
+				<SvgMaker name="svgs_filled_pencil" />
 			</div>
 			<div className={classes.wrapperMainContent}>
 				<p>{languages[lang].generals.editMessage}</p>

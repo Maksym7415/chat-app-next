@@ -47,24 +47,23 @@ const TopLeftComponent = () => {
 							</IconButton>
 						</>
 					);
-				} else {
-					return (
-						<IconButton
-							color="default"
-							aria-label="back"
-							edge="end"
-							onClick={() => {
-								dispatch(
-									allActionsStore.setSideLeftConfigAction({
-										page: SIDE_LEFT_TYPE_CONTENT.conversations,
-									}),
-								);
-							}}
-						>
-							<ArrowBackIcon />
-						</IconButton>
-					);
 				}
+				return (
+					<IconButton
+						color="default"
+						aria-label="back"
+						edge="end"
+						onClick={() => {
+							dispatch(
+								allActionsStore.setSideLeftConfigAction({
+									page: SIDE_LEFT_TYPE_CONTENT.conversations,
+								}),
+							);
+						}}
+					>
+						<ArrowBackIcon />
+					</IconButton>
+				);
 			})()}
 		</div>
 	);

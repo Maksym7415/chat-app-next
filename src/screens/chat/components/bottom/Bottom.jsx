@@ -14,9 +14,7 @@ const ChatBottom = ({ opponentId }) => {
 	);
 
 	// VARIABLES
-	const conversationId = useMemo(() => {
-		return router.query?.id;
-	}, [router.query?.id]);
+	const conversationId = useMemo(() => router.query?.id, [router.query?.id]);
 
 	const renderBottom = () => {
 		if (selectedMessages.active) {
@@ -26,14 +24,13 @@ const ChatBottom = ({ opponentId }) => {
 					selectedMessages={selectedMessages}
 				/>
 			);
-		} else {
-			return (
-				<MessageInput
-					conversationId={conversationId}
-					opponentId={opponentId}
-				/>
-			);
 		}
+		return (
+			<MessageInput
+				conversationId={conversationId}
+				opponentId={opponentId}
+			/>
+		);
 	};
 
 	return <>{renderBottom()}</>;

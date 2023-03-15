@@ -6,9 +6,7 @@ export const setTokenCook = (accessToken, options = {}) => {
   Cookies.set(namesCookies.accessToken, accessToken, options);
 };
 
-export const getTokenCook = () => {
-  return Cookies.get(namesCookies.accessToken);
-};
+export const getTokenCook = () => Cookies.get(namesCookies.accessToken);
 
 export const removeTokenCook = () => {
   Cookies.remove(namesCookies.accessToken);

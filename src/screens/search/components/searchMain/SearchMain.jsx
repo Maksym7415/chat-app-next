@@ -44,7 +44,7 @@ const SearchMain = ({ onClickContact }) => {
 	const params = useMemo(() => {
 		const paramsLoc = {};
 		const searchRequest = searchContactsParams.search;
-		const offset = searchContactsParams.offset;
+		const { offset } = searchContactsParams;
 
 		if (searchRequest) {
 			paramsLoc.searchRequest = searchRequest;
@@ -95,11 +95,12 @@ const SearchMain = ({ onClickContact }) => {
 		);
 	}, [currentData]);
 
-	useEffect(() => {
-		return () => {
+	useEffect(
+		() => () => {
 			dispatch(allActionsStore.resetSearchContactsAction());
-		};
-	}, []);
+		},
+		[],
+	);
 
 	// RENDER CONDITIONAL
 	if (!contacts.length || isLoading) {
@@ -134,36 +135,34 @@ const SearchMain = ({ onClickContact }) => {
 									<></>
 								),
 						}}
-						itemContent={(index, item) => {
-							return (
-								<div
-									// key={item.id}
-									className={classes.wrapperContact}
-									onClick={() => onClickContact(item)}
-								>
-									<div className={classes.avatarView}>
-										<UserAvatar
-											source={item.userAvatar}
-											status={
-												[1, 3].includes(index)
-													? "online"
-													: ""
-											}
-											name={item.fullName}
-											sizeAvatar={58}
-										/>
-									</div>
-									<div className={classes.wrapperInfo}>
-										<p className={classes.fullName}>
-											{item.fullName}
-										</p>
-										<p className={classes.login}>
-											{item.login}
-										</p>
-									</div>
+						itemContent={(index, item) => (
+							<div
+								// key={item.id}
+								className={classes.wrapperContact}
+								onClick={() => onClickContact(item)}
+							>
+								<div className={classes.avatarView}>
+									<UserAvatar
+										source={item.userAvatar}
+										status={
+											[1, 3].includes(index)
+												? "online"
+												: ""
+										}
+										name={item.fullName}
+										sizeAvatar={58}
+									/>
 								</div>
-							);
-						}}
+								<div className={classes.wrapperInfo}>
+									<p className={classes.fullName}>
+										{item.fullName}
+									</p>
+									<p className={classes.login}>
+										{item.login}
+									</p>
+								</div>
+							</div>
+						)}
 					/>
 				</div>
 			</div>

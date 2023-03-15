@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Header from "./components/header";
 import SearchMain from "./components/searchMain";
-import { TYPES_FROM_TO_SEARCH_SCREEN } from "@/core/constants/general";
-import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
+import {
+	SIDE_LEFT_TYPE_CONTENT,
+	TYPES_FROM_TO_SEARCH_SCREEN,
+} from "@/core/constants/general";
 import { allActionsStore } from "@/store/rootActions";
 
 // STYLES

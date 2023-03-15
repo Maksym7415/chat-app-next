@@ -37,13 +37,13 @@ const parseErrorCode = (error) => {
         message: error.message,
       },
     });
-  } else {
+  } 
     return Promise.reject({
       data: {
         message: error.message,
       },
     });
-  }
+  
 };
 
 const API = axios.create();
@@ -58,9 +58,9 @@ API.interceptors.request.use(
     if (headers) {
       config.headers = {
         common: {
-          ["Content-Type"]: "application/json",
+          "Content-Type": "application/json",
           accept: "application/json",
-          ["X-Requested-With"]: "XMLHttpRequest",
+          "X-Requested-With": "XMLHttpRequest",
         },
         ...headers,
       };

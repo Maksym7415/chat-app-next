@@ -9,8 +9,7 @@ const getRequestConfig = (args) => {
   return args;
 };
 
-export const axiosBaseQuery = ({ prepareHeaders, meta, transformResponse }) => {
-  return async (args, api, extraOptions) => {
+export const axiosBaseQuery = ({ prepareHeaders, meta, transformResponse }) => async (args, api, extraOptions) => {
     try {
       const requestConfig = getRequestConfig(args);
 
@@ -52,5 +51,4 @@ export const axiosBaseQuery = ({ prepareHeaders, meta, transformResponse }) => {
       };
     }
   };
-};
 

@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useLayoutEffect, useMemo, useState } from "react";
+import { useLayoutEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ChatBottom from "./components/bottom";
 import ChatHeader from "./components/header";
@@ -29,13 +29,8 @@ const Chat = ({ params }) => {
 	);
 	const newChatData = useSelector(({ appSlice }) => appSlice.newChatData);
 
-	// STATES
-	const [errorBack, setErrorBack] = useState("");
-
 	// VARIABLES
-	const conversationId = useMemo(() => {
-		return params?.id || null;
-	}, [params]);
+	const conversationId = useMemo(() => params?.id || null, [params]);
 
 	const opponentId = newChatData?.newChatId || null;
 	const conversationData = useMemo(
@@ -87,7 +82,7 @@ const Chat = ({ params }) => {
 		}
 	}, [conversationId]);
 
-	if (errorBack) {
+	if (false) {
 		return (
 			<RenderInfoCenterBox>
 				<Typography className={classes.errorBackText}>
@@ -96,8 +91,6 @@ const Chat = ({ params }) => {
 			</RenderInfoCenterBox>
 		);
 	}
-
-	console.log(params?.id, "!---reder---!");
 
 	if (!conversationId && !opponentId && !params?.newChatId) {
 		return <></>;
