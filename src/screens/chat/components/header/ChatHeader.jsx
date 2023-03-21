@@ -5,15 +5,20 @@ import MenuItem from "@mui/material/MenuItem";
 import clsx from "clsx";
 import { memo, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { headerChatDotsOptionsChat, headerChatDotsOptionsDialog } from "./config";
+import {
+	headerChatDotsOptionsChat,
+	headerChatDotsOptionsDialog,
+} from "./config";
 import UserAvatar from "@/components/avatar/userAvatar";
 import SvgMaker from "@/components/svgMaker";
-import { actionsTypeActionsChat, actionsTypeActionsConversation } from "@/core/constants/actions";
+import {
+	actionsTypeActionsChat,
+	actionsTypeActionsConversation,
+} from "@/core/constants/actions";
 import { TYPES_CONVERSATIONS } from "@/core/constants/general";
 import { handleKeyDown } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
 import { store } from "@/store/store";
-
 
 // STYLES
 const classes = {
@@ -123,7 +128,7 @@ const ChatHeader = ({
 					);
 				}}
 				onKeyDown={(event) =>
-					
+					// eslint-disable-next-line @typescript-eslint/no-empty-function
 					handleKeyDown({ event, fcClick: () => {} })
 				}
 			>

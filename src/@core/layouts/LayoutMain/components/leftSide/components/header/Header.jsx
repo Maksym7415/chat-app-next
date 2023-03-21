@@ -27,7 +27,9 @@ const Header = ({ children }) => {
 		topCenterComponent: {
 			type: "searchContacts",
 			placeholder: "Search",
-			getRequest: () => {},
+			getRequest: () => {
+				console.log("Search getRequest");
+			},
 			styles: {
 				headerLayout: {},
 			},

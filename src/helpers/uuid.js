@@ -1,4 +1,3 @@
-
 export const uuid = (keySize = 4, customAlpabet) => {
 	const alphabet =
 		customAlpabet ||
@@ -8,6 +7,7 @@ export const uuid = (keySize = 4, customAlpabet) => {
 		const random = Number((Math.random() * keyLen).toFixed());
 		return alphabet[random >= keyLen ? keyLen - 1 : random];
 	});
+	// eslint-disable-next-line no-use-before-define
 	return generationEngine(randomArrayOfSymbols, randomArrayOfSymbols.length);
 };
 

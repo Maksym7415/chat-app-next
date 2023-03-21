@@ -39,6 +39,7 @@ const RightInputComponent = ({
 						tabIndex="0"
 						onClick={handleSendMessage}
 						onKeyDown={(event) =>
+							// eslint-disable-next-line @typescript-eslint/no-empty-function
 							handleKeyDown({ event, fcClick: () => {} })
 						}
 					>
@@ -56,7 +57,7 @@ const RightInputComponent = ({
 								// refBottomSheet.current?.snapToIndex(0);
 							}}
 							onKeyDown={(event) =>
-							
+								// eslint-disable-next-line @typescript-eslint/no-empty-function
 								handleKeyDown({ event, fcClick: () => {} })
 							}
 						>
@@ -71,6 +72,7 @@ const RightInputComponent = ({
 								);
 							}}
 							onKeyDown={(event) =>
+								// eslint-disable-next-line @typescript-eslint/no-empty-function
 								handleKeyDown({ event, fcClick: () => {} })
 							}
 						>

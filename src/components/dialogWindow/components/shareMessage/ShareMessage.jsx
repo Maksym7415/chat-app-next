@@ -86,6 +86,7 @@ const SharedMessage = ({ data }) => {
 							className={classes.conversation}
 							key={element.conversationId}
 							onKeyDown={(event) =>
+								// eslint-disable-next-line @typescript-eslint/no-empty-function
 								handleKeyDown({ event, fcClick: () => {} })
 							}
 						>

@@ -104,6 +104,7 @@ const MessageInput = ({ conversationId, opponentId }) => {
 				sendMessage(conversationId, messageSend, null);
 			}
 		}
+		// eslint-disable-next-line no-use-before-define
 		messageEdit.messageId && clearMessageEdit();
 	};
 

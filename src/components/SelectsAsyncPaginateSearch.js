@@ -77,12 +77,11 @@ function SelectsAsyncPaginateSearch({
 			getSearchRequest,
 			...otherSettings
 		} = settings;
-		if (settings.getOptionValue)
-			settingsAsyncPaginate.getOptionValue = settings.getOptionValue;
-		if (settings.getOptionLabel)
-			settingsAsyncPaginate.getOptionLabel = settings.getOptionLabel;
-		if (settings.getSearchRequest)
-			settingsAsyncPaginate.loadOptions = loadOptions;
+		if (getOptionValue)
+			settingsAsyncPaginate.getOptionValue = getOptionValue;
+		if (getOptionLabel)
+			settingsAsyncPaginate.getOptionLabel = getOptionLabel;
+		if (getSearchRequest) settingsAsyncPaginate.loadOptions = loadOptions;
 		settingsAsyncPaginate = { ...settingsAsyncPaginate, ...otherSettings };
 	}
 

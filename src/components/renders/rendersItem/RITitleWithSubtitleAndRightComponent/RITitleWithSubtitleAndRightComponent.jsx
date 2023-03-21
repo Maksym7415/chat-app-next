@@ -12,6 +12,7 @@ const RITitleWithSubtitleAndRightComponent = ({
 	title = "",
 	subTitle = "",
 	renderRightComponent = null,
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	onPressWrapperItemLeft = () => {},
 	styles = {
 		wrapperItem: {},
@@ -36,6 +37,7 @@ const RITitleWithSubtitleAndRightComponent = ({
 				...styles.wrapperItemLeft,
 			}}
 			onKeyDown={(event) =>
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
 				handleKeyDown({ event, fcClick: () => {} })
 			}
 		>

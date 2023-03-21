@@ -51,6 +51,7 @@ const Avatars = () => {
 
 	// FUNCTIONS
 	const handleMenuAction = (value) => {
+		// eslint-disable-next-line no-use-before-define
 		handleClose();
 
 		switch (value) {
@@ -76,7 +77,7 @@ const Avatars = () => {
 							variant: "success",
 						});
 					});
-					return value;
+				return value;
 			case "deletePhoto":
 				deleteAvatar({
 					id: avatars[photoIndexSelected]?.id,

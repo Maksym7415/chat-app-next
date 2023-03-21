@@ -111,6 +111,7 @@ const MainContent = ({
 		prevChatId = conversationId;
 		scrollTopLocal = 0;
 		return () => {
+			// eslint-disable-next-line no-param-reassign
 			scrollPositionChats[conversationId] = scrollTopLocal;
 		};
 	}, [conversationId]);

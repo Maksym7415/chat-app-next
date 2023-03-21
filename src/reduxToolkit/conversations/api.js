@@ -12,6 +12,7 @@ export const conversationsApi = createApi({
 
 			// If we have a token set in state, let's assume that we should be passing it.
 			if (token) {
+				// eslint-disable-next-line no-param-reassign
 				headers.authorization = `Bearer ${token}`;
 			}
 
@@ -20,7 +21,7 @@ export const conversationsApi = createApi({
 	}),
 	endpoints: (builder) => ({
 		getUserConversations: builder.query({
-			query: (_) => pathBackConversations.getUserConversations,
+			query: () => pathBackConversations.getUserConversations,
 			transformResponse: (response, meta, arg) => {
 				const responseData = response?.data;
 				const transformData = responseData.reduce((acc, item) => {

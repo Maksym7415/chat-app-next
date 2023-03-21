@@ -111,9 +111,10 @@ const MainInfo = ({ typeProfile }) => {
 						role="button"
 						tabIndex="0"
 						className={classes.wrapperNotification}
-					
+						// eslint-disable-next-line @typescript-eslint/no-empty-function
 						onClick={() => {}}
 						onKeyDown={(event) =>
+							// eslint-disable-next-line @typescript-eslint/no-empty-function
 							handleKeyDown({ event, fcClick: () => {} })
 						}
 					>

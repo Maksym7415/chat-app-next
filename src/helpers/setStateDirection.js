@@ -5,6 +5,7 @@ export const setStateDirection = ({
 	direction = "",
 	typeData = "mass",
 	newData = [],
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	setState = () => {},
 }) => {
 	if (direction === "down") {

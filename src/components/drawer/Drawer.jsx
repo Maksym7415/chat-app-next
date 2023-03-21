@@ -37,6 +37,7 @@ const SwipeableTemporaryDrawer = () => {
 			);
 
 		if (open) {
+			// eslint-disable-next-line consistent-return
 			return setDrawerConfigAction();
 		}
 		setOpenDrawer(false);

@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 /* eslint-disable no-case-declarations */
 
 /* eslint-disable no-shadow */
@@ -8,12 +10,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
 	actionsTypeActionsChat,
+	actionsTypeActionsConversation,
 	actionsTypeObject,
 } from "@/core/constants/actions";
 import {
 	LAST_ACTION_MESSAGES_STORE,
 	SIDE_LEFT_TYPE_CONTENT,
 } from "@/core/constants/general";
+import { PATHS } from "@/core/constants/paths";
+import {
+	socketEmitClearConversation,
+	socketEmitDeleteConversation,
+} from "@/core/socket/actions/socketEmit";
 import Snackbar from "@/helpers/notistack";
 
 export const initialState = {
@@ -109,13 +117,13 @@ export const appSlice = createSlice({
 				socketEmitChatsDeleteMessage,
 			} = require("@/core/socket/actions/socketEmit");
 
-			let _messages = {};
+			let messages = {};
 			let messagesMass = [];
 			if (Object.keys(state.selectedMessages.messages).length) {
-				_messages = state.selectedMessages.messages;
+				messages = state.selectedMessages.messages;
 			} else {
 				if (messageData) {
-					_messages = {
+					messages = {
 						[messageData.id]: messageData,
 					};
 				}
@@ -187,7 +195,7 @@ export const appSlice = createSlice({
 						);
 					};
 					// sorting through the selected messages and sending them through the socket and, if successful, delete them locally through the function - getRemoveMessages
-					const messagesIds = Object.keys(_messages).map(
+					const messagesIds = Object.keys(messages).map(
 						(messageId) => +messageId,
 					);
 					return socketEmitChatsDeleteMessage(
@@ -202,10 +210,10 @@ export const appSlice = createSlice({
 					);
 				// EDIT MESSAGE
 				case actionsTypeActionsChat.editMessage:
-					return Object.keys(_messages).map((messageId) => {
+					return Object.keys(messages).map((messageId) => {
 						state.messageEdit = {
 							...state.messageEdit,
-							message: _messages[messageId],
+							message: messages[messageId],
 							messageId,
 						};
 
@@ -213,10 +221,10 @@ export const appSlice = createSlice({
 					});
 				// COPY MESSAGE
 				case actionsTypeActionsChat.copyMessage:
-					messagesMass = Object.keys(_messages).reduce(
+					messagesMass = Object.keys(messages).reduce(
 						(acc, messageId) => [
 							...acc,
-							_messages[messageId].message,
+							messages[messageId].message,
 						],
 						[],
 					);
@@ -235,15 +243,14 @@ export const appSlice = createSlice({
 				case actionsTypeActionsChat.selectMessages:
 					state.selectedMessages = {
 						active: true,
-						messages: _messages,
+						messages,
 					};
 					break;
 				// FORWARD MESSAGES
 				case actionsTypeActionsChat.forwardMessage:
-					messagesMass = Object.keys(_messages).reduce(
+					messagesMass = Object.keys(messages).reduce(
 						(acc, messageId) => {
-				
-							const messageData = _messages[messageId];
+							const messageData = messages[messageId];
 							acc.push({
 								Files: messageData.Files,
 								User: messageData.User,
@@ -275,13 +282,13 @@ export const appSlice = createSlice({
 		selectedChatAction(state, { payload }) {
 			const { typeAction, dataConversation = null } = payload;
 
-			let _conversations = {};
+			let conversations = {};
 
 			if (Object.keys(state.selectedChats).length) {
-				_conversations = state.selectedChats;
+				conversations = state.selectedChats;
 			} else {
 				if (dataConversation) {
-					_conversations = {
+					conversations = {
 						[dataConversation.conversationId]: dataConversation,
 					};
 				} else {
@@ -295,12 +302,12 @@ export const appSlice = createSlice({
 				case actionsTypeActionsConversation.deleteChat:
 					// for ids
 					return socketEmitDeleteConversation({
-						ids: Object.keys(_conversations),
+						ids: Object.keys(conversations),
 					});
 				case actionsTypeActionsConversation.clearChat:
 					// for ids
 					return socketEmitClearConversation({
-						ids: Object.keys(_conversations),
+						ids: Object.keys(conversations),
 					});
 				default:
 					return null;

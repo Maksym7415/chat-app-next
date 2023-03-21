@@ -86,7 +86,7 @@ const Chat = ({ params }) => {
 		return (
 			<RenderInfoCenterBox>
 				<Typography className={classes.errorBackText}>
-					{errorBack}
+					ErrorBack
 				</Typography>
 			</RenderInfoCenterBox>
 		);

@@ -20,7 +20,7 @@ export const logOutAction = () => ({
 
 const logoutReducer = (state, action) => {
 	if (action.type === actionTypeLogout) {
-
+		// eslint-disable-next-line no-param-reassign
 		state = undefined;
 	}
 	return rootReducer(state, action);

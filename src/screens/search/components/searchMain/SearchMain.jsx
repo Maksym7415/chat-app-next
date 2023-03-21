@@ -143,7 +143,7 @@ const SearchMain = ({ onClickContact }) => {
 								className={classes.wrapperContact}
 								onClick={() => onClickContact(item)}
 								onKeyDown={(event) =>
-									
+									// eslint-disable-next-line @typescript-eslint/no-empty-function
 									handleKeyDown({ event, fcClick: () => {} })
 								}
 							>

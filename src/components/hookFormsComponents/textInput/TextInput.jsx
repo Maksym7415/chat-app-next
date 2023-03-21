@@ -1,6 +1,5 @@
 import { TextField } from "@mui/material";
 import clsx from "clsx";
-import React from "react";
 
 // STYLES
 const classes = {

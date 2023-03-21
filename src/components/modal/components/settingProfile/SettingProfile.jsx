@@ -60,7 +60,7 @@ const SettingProfile = () => {
 					})
 					.catch((err) => {
 						console.log(err, "err");
-						enqueueSnackbar(error.message, { variant: "error" });
+						enqueueSnackbar(err.message, { variant: "error" });
 					})
 			: enqueueSnackbar("Немає змін щоб оновити дані", {
 					variant: "info",
