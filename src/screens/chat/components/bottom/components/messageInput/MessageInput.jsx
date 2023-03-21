@@ -82,7 +82,8 @@ const MessageInput = ({ conversationId, opponentId }) => {
 		};
 
 		if (!conversationId) {
-			return sendMessage(null, messageSend, null);
+			sendMessage(null, messageSend, null);
+			return;
 		}
 
 		if (sheredMessages.length) {

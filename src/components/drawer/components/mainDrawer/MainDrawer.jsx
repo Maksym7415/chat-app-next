@@ -42,8 +42,9 @@ function MainDrawer({ closeDrawer }) {
 					}),
 				);
 
-				return;
+				return value;
 			case "myProfile":
+				// eslint-disable-next-line no-case-declarations
 				const timerShowModal = setTimeout(() => {
 					dispatch(
 						allActionsStore.setModalConfigAction({
@@ -55,13 +56,13 @@ function MainDrawer({ closeDrawer }) {
 
 					clearTimeout(timerShowModal);
 				}, 100);
-				return;
+				return value;
 			case "logout":
 				actionLogOut();
 				router.push(PATHS.signIn);
-				return;
+				return value;
 			default:
-				return null;
+				return value;
 		}
 	};
 

@@ -1,9 +1,9 @@
-import appSlice from "./app/slice";
-import authSlice from "./auth/slice";
-import conversationsSlice from "./conversations/slice";
-import searchSlice from "./search/slice";
-import settingSlice from "./setting/slice";
-import userSlice from "./user/slice";
+import { appSlice } from "./app/slice";
+import { authSlice } from "./auth/slice";
+import { conversationsSlice } from "./conversations/slice";
+import { searchSlice } from "./search/slice";
+import { settingSlice } from "./setting/slice";
+import { userSlice } from "./user/slice";
 import { authApi } from "@/store/auth/api";
 import { conversationsApi } from "@/store/conversations/api";
 import { searchApi } from "@/store/search/api";
@@ -15,10 +15,11 @@ export const reducers = {
 	[userApi.reducerPath]: userApi.reducer,
 	[searchApi.reducerPath]: searchApi.reducer,
 
-	appSlice,
-	authSlice,
-	settingSlice,
-	conversationsSlice,
-	userSlice,
-	searchSlice,
+	[appSlice.name]: appSlice.reducer,
+	[authSlice.name]: authSlice.reducer,
+	[settingSlice.name]: settingSlice.reducer,
+	[settingSlice.name]: settingSlice.reducer,
+	[conversationsSlice.name]: conversationsSlice.reducer,
+	[userSlice.name]: userSlice.reducer,
+	[searchSlice.name]: searchSlice.reducer,
 };

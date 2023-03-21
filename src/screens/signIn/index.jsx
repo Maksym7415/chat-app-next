@@ -63,13 +63,14 @@ export default function SignInClientPage() {
 				}}
 				render={{
 					text: (styles) => (
-						<p
+						<button
+							type="button"
 							className={styles.text}
 							onClick={() => router.push(PATHS.signUp)}
 						>
 							{languages[lang].authorization.haveNoAccount}{" "}
 							{languages[lang].authorization.signUp} ?
-						</p>
+						</button>
 					),
 				}}
 			/>

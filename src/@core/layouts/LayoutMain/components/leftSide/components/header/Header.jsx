@@ -52,7 +52,7 @@ const Header = ({ children }) => {
 				}));
 
 			case SIDE_LEFT_TYPE_CONTENT.searchContacts:
-				setSettings(() => ({
+				return setSettings(() => ({
 					topCenterComponent: {
 						placeholder: "Search",
 						type: "searchContacts",
@@ -68,7 +68,6 @@ const Header = ({ children }) => {
 						},
 					},
 				}));
-				return;
 			default:
 				return null;
 		}

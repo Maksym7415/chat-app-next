@@ -53,7 +53,7 @@ const Chat = ({ params }) => {
 					?.messages,
 		) || [];
 
-	const [getConversationMessagesRequest] =
+	const [getConversationMessagesRequest, { isError }] =
 		conversationsApi.useLazyGetConversationMessagesQuery();
 
 	// USEEFFECTS
@@ -82,7 +82,7 @@ const Chat = ({ params }) => {
 		}
 	}, [conversationId]);
 
-	if (false) {
+	if (isError) {
 		return (
 			<RenderInfoCenterBox>
 				<Typography className={classes.errorBackText}>

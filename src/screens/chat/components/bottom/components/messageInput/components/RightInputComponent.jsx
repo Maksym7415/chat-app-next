@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SvgMaker from "@/components/svgMaker";
+import { handleKeyDown } from "@/helpers/index";
 
 // STYLES
 const classes = {
@@ -33,7 +34,14 @@ const RightInputComponent = ({
 				style={stylesRightIcons()}
 			>
 				{message || forwardMessages.length ? (
-					<div onClick={handleSendMessage}>
+					<div
+						role="button"
+						tabIndex="0"
+						onClick={handleSendMessage}
+						onKeyDown={(event) =>
+							handleKeyDown({ event, fcClick: () => {} })
+						}
+					>
 						<SvgMaker
 							name="svgs_filled_send"
 							strokeFill="#5EA7DE"
@@ -42,18 +50,29 @@ const RightInputComponent = ({
 				) : (
 					<>
 						<div
+							role="button"
+							tabIndex="0"
 							onClick={() => {
 								// refBottomSheet.current?.snapToIndex(0);
 							}}
+							onKeyDown={(event) =>
+							
+								handleKeyDown({ event, fcClick: () => {} })
+							}
 						>
 							<SvgMaker name="svgs_line_attach" />
 						</div>
 						<div
+							role="button"
+							tabIndex="0"
 							onClick={() => {
 								setToggleTypeMessage((prev) =>
 									prev === "voice" ? "video" : "voice",
 								);
 							}}
+							onKeyDown={(event) =>
+								handleKeyDown({ event, fcClick: () => {} })
+							}
 						>
 							{toggleTypeMessage === "voice" ? (
 								<SvgMaker name="svgs_line_voice" />

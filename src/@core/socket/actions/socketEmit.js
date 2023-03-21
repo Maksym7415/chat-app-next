@@ -2,18 +2,19 @@ import { socket } from "../index";
 import Snackbar from "@/helpers/notistack";
 import { store } from "@/store/store";
 
-const filesCount = 0;
+// const filesCount = 0;
 
 export const socketEmitSendFiles = (
-	data = {
-		userId: "",
-		conversationId: "",
-		message: "",
-	},
+	// data = {
+	// 	userId: "",
+	// 	conversationId: "",
+	// 	message: "",
+	// },
 	files,
 ) => {
-	if (!files) return;
+	if (!files) return null;
 
+	return null;
 	// let fileReader = new FileReader();
 	// if (files) {
 	//   let filesArray = Object.values(files);
@@ -67,7 +68,7 @@ export const socketEmitChatsDeleteMessage = (
 	},
 	cb,
 ) => {
-	socket.emit("chats", data, (success) => {
+	socket.emit("chats", data, () => {
 		// why success is false?
 		cb();
 	});

@@ -10,7 +10,7 @@ import { actionsTypeActionsConversation } from "@/core/constants/actions";
 import { CONTEXT_MENU_ID } from "@/core/constants/general";
 import { PATHS } from "@/core/constants/paths";
 import languages from "@/core/translations";
-import { getCurrentDay } from "@/helpers/index";
+import { getCurrentDay, handleKeyDown } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
@@ -51,7 +51,10 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
 			(el) => el.isTyping && el.userId !== authToken.userId,
 		);
 		let str = "";
-		arr.forEach((el) => (str += el.firstName));
+		arr.forEach((el) => {
+			str += el.firstName;
+			return el;
+		});
 		return str;
 	};
 
@@ -95,6 +98,8 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
 
 	return (
 		<div
+			role="button"
+			tabIndex="0"
 			onContextMenu={(event) => {
 				dispatch(
 					allActionsStore.setContextMenuConfigAction({
@@ -114,6 +119,15 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
 			className={clsx(classes.container, {
 				[classes.activeConversation]: data.conversationId === +paramsId,
 			})}
+			onKeyDown={(event) =>
+			
+				handleKeyDown({
+					event,
+					fcClick: () => {
+						handleClickChatItem(data.conversationId);
+					},
+				})
+			}
 		>
 			<div className={classes.dataView}>
 				<div className={classes.avatarView}>

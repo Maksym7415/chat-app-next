@@ -11,7 +11,7 @@ import { Virtuoso } from "react-virtuoso";
 import UserAvatar from "@/components/avatar/userAvatar";
 import RenderConditionsList from "@/components/renders/renderConditionsList";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
-import { setStateDirection } from "@/helpers/index";
+import { handleKeyDown, setStateDirection } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
 import { searchApi } from "@/store/search/api";
 
@@ -137,9 +137,15 @@ const SearchMain = ({ onClickContact }) => {
 						}}
 						itemContent={(index, item) => (
 							<div
-								// key={item.id}
+								key={item?.id}
+								role="button"
+								tabIndex="0"
 								className={classes.wrapperContact}
 								onClick={() => onClickContact(item)}
+								onKeyDown={(event) =>
+									
+									handleKeyDown({ event, fcClick: () => {} })
+								}
 							>
 								<div className={classes.avatarView}>
 									<UserAvatar

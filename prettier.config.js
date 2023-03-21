@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable global-require */
 /** @type {import('prettier').Config} */
 module.exports = {
 	tabWidth: 4,

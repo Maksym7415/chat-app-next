@@ -58,13 +58,14 @@ const SignUpClientPage = () => {
 				}}
 				render={{
 					text: (styles) => (
-						<p
+						<button
+							type="button"
 							className={styles.text}
 							onClick={() => router.push(PATHS.signIn)}
 						>
 							{languages[lang].authorization.haveAnAccount}{" "}
 							{languages[lang].authorization.signIn}?
-						</p>
+						</button>
 					),
 				}}
 			/>

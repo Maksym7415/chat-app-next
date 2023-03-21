@@ -142,7 +142,7 @@ const MainContent = ({
 		<Virtuoso
 			ref={virtuosoRef}
 			firstItemIndex={firstItemIndex}
-			initialTopMostItemIndex={messages?.length - 1}
+			initialTopMostItemIndex={(messages?.length || 1) - 1}
 			data={messages}
 			initialScrollTop={cacheScrollPosition || 0}
 			itemsRendered={(items) => {

@@ -61,6 +61,7 @@ CustomDocument.getInitialProps = async (ctx) => {
 	const emotionStyleTags = emotionStyles.styles.map((style) => (
 		<style
 			key={style.key}
+			/* eslint-disable react/no-danger */
 			dangerouslySetInnerHTML={{ __html: style.css }}
 			data-emotion={`${style.key} ${style.ids.join(" ")}`}
 		/>

@@ -9,7 +9,7 @@ import UserAvatar from "@/components/avatar/userAvatar";
 import { actionsTypeObject } from "@/core/constants/actions";
 import { CONTEXT_MENU_ID, TYPES_CONVERSATIONS } from "@/core/constants/general";
 import languages from "@/core/translations";
-import { getCurrentDay } from "@/helpers/index";
+import { getCurrentDay, handleKeyDown } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
 
 const stylePaper = {
@@ -144,10 +144,16 @@ const Message = ({
 
 	return (
 		<div
+			role="button"
+			tabIndex="0"
 			className={clsx(classes.root, {
 				[classes.selectedMessages]: selectedMessages?.[messageData.id],
 			})}
 			onClick={handleOnPressChat}
+			onKeyDown={(event) =>
+				
+				handleKeyDown({ event, fcClick: handleOnPressChat })
+			}
 			style={{
 				gridTemplateColumns: selectedMessages.active
 					? "26px 1fr"

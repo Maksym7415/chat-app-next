@@ -1,8 +1,8 @@
 import { Divider, Switch } from "@mui/material";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import RITitleWithSubtitleAndRightComponent from "@/components/renders/rendersItem/RITitleWithSubtitleAndRightComponent";
 import { TYPES_CONVERSATIONS } from "@/core/constants/general";
+import { handleKeyDown } from "@/helpers/index";
 
 // STYLES
 const classes = {
@@ -108,8 +108,14 @@ const MainInfo = ({ typeProfile }) => {
 				}}
 				renderRightComponent={() => (
 					<div
+						role="button"
+						tabIndex="0"
 						className={classes.wrapperNotification}
+					
 						onClick={() => {}}
+						onKeyDown={(event) =>
+							handleKeyDown({ event, fcClick: () => {} })
+						}
 					>
 						<Divider
 							className={classes.dividerNotification}

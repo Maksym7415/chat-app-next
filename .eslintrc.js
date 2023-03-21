@@ -12,8 +12,8 @@ module.exports = {
 	},
 	plugins: ["react", "prettier"],
 	rules: {
-		"no-use-before-define": "off",
-		"import/prefer-default-export": "off",
+		// "no-use-before-define": "off",
+		"import/prefer-default-export": "off", // In exporting files, this rule checks if there is default export or not. - https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/prefer-default-export.md
 		"react/react-in-jsx-scope": "off",
 		"react/prop-types": "off",
 		"react/jsx-props-no-spreading": "off",
@@ -32,14 +32,19 @@ module.exports = {
 		"no-lonely-if": "off",
 		"arrow-body-style": ["error", "as-needed"],
 		"no-restricted-exports": "off",
-		"no-param-reassign": [
-			"error",
-			{
-				props: true,
-				ignorePropertyModificationsFor: ["state"],
-			},
-		],
+
 		"react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }],
-		"no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
+		// "no-plusplus": ["error", { allowForLoopAfterthoughts: false }],
+		"no-unused-expressions": "off",
+		"no-console": "off",
+		"no-plusplus": "off",
+		"react/no-unstable-nested-components": [
+			"off",
+			{
+				allowAsProps: true,
+			},
+		], // Заборонити створення нестабільних компонентів усередині компонентів ( react/no-unstable-nested-components) - https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/no-unstable-nested-components.md
+		"prefer-promise-reject-errors": "off", // Вимагати використання об’єктів Error як причин відхилення Promise (prefer-promise-reject-errors) - https://eslint.org/docs/latest/rules/prefer-promise-reject-errors
+		"no-param-reassign": [2, { props: false }],
 	},
 };

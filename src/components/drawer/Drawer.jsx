@@ -16,7 +16,7 @@ const SwipeableTemporaryDrawer = () => {
 	const drawerConfig = useSelector(({ appSlice }) => appSlice.drawerConfig);
 
 	// STATES
-	const [open, setOpen] = useState(false);
+	const [openDrawer, setOpenDrawer] = useState(false);
 
 	// FUNCTIONS
 	const toggleDrawer = (anchor, open) => (event) => {
@@ -28,19 +28,18 @@ const SwipeableTemporaryDrawer = () => {
 			return;
 		}
 
-		const setDrawerConfigAction = () => {
+		const setDrawerConfigAction = () =>
 			dispatch(
 				allActionsStore.setDrawerConfigAction({
 					anchor,
 					open,
 				}),
 			);
-		};
 
 		if (open) {
 			return setDrawerConfigAction();
 		}
-		setOpen(false);
+		setOpenDrawer(false);
 
 		const closeDialogTime = setTimeout(() => {
 			setDrawerConfigAction();
@@ -49,8 +48,8 @@ const SwipeableTemporaryDrawer = () => {
 	};
 
 	useEffect(() => {
-		if (drawerConfig.open !== open) {
-			setOpen(drawerConfig.open);
+		if (drawerConfig.open !== openDrawer) {
+			setOpenDrawer(drawerConfig.open);
 		}
 	}, [drawerConfig.open]);
 
@@ -87,7 +86,7 @@ const SwipeableTemporaryDrawer = () => {
 	return (
 		<SwipeableDrawer
 			anchor={drawerConfig.anchor}
-			open={open}
+			open={openDrawer}
 			onClose={toggleDrawer(drawerConfig.anchor, false)}
 			onOpen={toggleDrawer(drawerConfig.anchor, true)}
 			disableBackdropTransition

@@ -5,6 +5,7 @@ const classes = {
 
 const CustomButton = ({ children, onClick, style, ...rest }) => (
 	<button
+		type="button"
 		onClick={onClick}
 		className={classes.root}
 		style={style}

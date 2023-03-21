@@ -15,7 +15,7 @@ const customStylesSelect = (styles) => ({
 		width: "100%",
 		...styles?.control,
 	}),
-	singleValue: (provided, state) => {
+	singleValue: (provided) => {
 		const transition = "opacity 300ms";
 		return { ...provided, transition };
 	},

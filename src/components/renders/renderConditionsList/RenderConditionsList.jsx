@@ -55,6 +55,8 @@ const RenderConditionsList = ({
 			</div>
 		);
 	}
+
+	return null;
 };
 
 export default RenderConditionsList;

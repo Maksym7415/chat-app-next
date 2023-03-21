@@ -20,6 +20,7 @@ export const logOutAction = () => ({
 
 const logoutReducer = (state, action) => {
 	if (action.type === actionTypeLogout) {
+
 		state = undefined;
 	}
 	return rootReducer(state, action);

@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { HYDRATE } from "next-redux-wrapper";
 import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
 import { pathBackUser } from "@/core/constants/urlBack";
 import {
@@ -12,11 +12,6 @@ import { allActionsStore } from "@/store/rootActions";
 export const userApi = createApi({
 	reducerPath: "userApi",
 	baseQuery: axiosBaseQuery({}),
-	extractRehydrationInfo(action, { reducerPath }) {
-		if (action.type === HYDRATE) {
-			return action.payload?.[reducerPath];
-		}
-	},
 	tagTypes: ["Avatar", "UserData"],
 	endpoints: (builder) => ({
 		getUserProfileData: builder.query({

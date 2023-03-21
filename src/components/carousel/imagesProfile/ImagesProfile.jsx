@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 const ImagesProfile = ({ images, noImagesComponent }) => {
 	// STATES
-	const [activeIndex, setActiveIndex] = useState(0);
+	const [, setActiveIndex] = useState(0);
 
 	return (
 		<>

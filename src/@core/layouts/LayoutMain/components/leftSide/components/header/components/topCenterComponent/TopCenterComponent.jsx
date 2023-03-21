@@ -25,10 +25,10 @@ function TopCenterComponent({ parentSettings }) {
 	// VARIABLES
 	const params = useMemo(() => {
 		const paramsLoc = {};
-		const search = debouncedSearchValue;
+		const searchLoc = debouncedSearchValue;
 
-		if (search) {
-			paramsLoc.search = search;
+		if (searchLoc) {
+			paramsLoc.search = searchLoc;
 		}
 
 		return paramsLoc;
@@ -88,6 +88,7 @@ function TopCenterComponent({ parentSettings }) {
 						/>
 					);
 				}
+				return <></>;
 			})()}
 		</>
 	);

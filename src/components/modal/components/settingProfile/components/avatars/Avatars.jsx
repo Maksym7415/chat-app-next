@@ -61,7 +61,7 @@ const Avatars = () => {
 				//   formData.append("file", file[0]);
 				//   // dispatch(uploadAvatarAction(formData));
 				// }
-				return;
+				return value;
 			case "setMainPhoto":
 				putMainPhoto({
 					id: avatars[photoIndexSelected]?.id,
@@ -76,7 +76,7 @@ const Avatars = () => {
 							variant: "success",
 						});
 					});
-				return;
+					return value;
 			case "deletePhoto":
 				deleteAvatar({
 					id: avatars[photoIndexSelected]?.id,
@@ -90,9 +90,9 @@ const Avatars = () => {
 							variant: "success",
 						});
 					});
-				return;
+				return value;
 			default:
-				return null;
+				return value;
 		}
 	};
 
@@ -230,23 +230,24 @@ const Avatars = () => {
 							avatars[photoIndexSelected]?.id ===
 								mainAvatar?.id &&
 							value === "setMainPhoto"
-						)
-							return;
-						return (
-							<ListItem
-								key={id}
-								onClick={() => handleMenuAction(value)}
-								className={classes.listItem}
-							>
-								<ListItemIcon
-									className={classes.itemIcon}
-									style={{ minWidth: 0 }}
+						) {
+							return (
+								<ListItem
+									key={id}
+									onClick={() => handleMenuAction(value)}
+									className={classes.listItem}
 								>
-									{icon}
-								</ListItemIcon>
-								<ListItemText primary={title} />
-							</ListItem>
-						);
+									<ListItemIcon
+										className={classes.itemIcon}
+										style={{ minWidth: 0 }}
+									>
+										{icon}
+									</ListItemIcon>
+									<ListItemText primary={title} />
+								</ListItem>
+							);
+						}
+						return <></>;
 					})}
 				</List>
 			</Menu>

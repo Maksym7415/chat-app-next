@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UserAvatar from "@/components/avatar/userAvatar/index";
 import { PATHS } from "@/core/constants/paths";
 import languages from "@/core/translations";
+import { handleKeyDown } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
 
 // rework
@@ -77,11 +78,16 @@ const SharedMessage = ({ data }) => {
 				{conversationsFiltered.length ? (
 					conversationsFiltered.map((element) => (
 						<div
+							role="button"
+							tabIndex="0"
 							onClick={() =>
 								handleShareMessageId(element.conversationId)
 							}
 							className={classes.conversation}
 							key={element.conversationId}
+							onKeyDown={(event) =>
+								handleKeyDown({ event, fcClick: () => {} })
+							}
 						>
 							<UserAvatar
 								source={element.conversationAvatar}

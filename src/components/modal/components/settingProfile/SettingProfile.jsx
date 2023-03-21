@@ -83,9 +83,9 @@ const SettingProfile = () => {
 			<h1 className={classes.title}>Profile</h1>
 			<Avatars />
 			<form>
-				{config.fieldsEditName.map((el, key) => (
+				{config.fieldsEditName.map((el) => (
 					<Controller
-						key={key}
+						key={el.id}
 						control={control}
 						rules={el.validate}
 						render={({ field: { onChange, value } }) => (

@@ -1,17 +1,17 @@
 import LayoutMain from "@/core/layouts/LayoutMain";
 import Chat from "@/screens/chat/index";
 
-const ChatIdPage = (props) => (
-    <LayoutMain params={props.params}>
-      <Chat params={props.params} />
-    </LayoutMain>
-  );
+const ChatIdPage = ({ params }) => (
+	<LayoutMain params={params}>
+		<Chat params={params} />
+	</LayoutMain>
+);
 
 export const getServerSideProps = async (ctx) => ({
-    props: {
-      params: ctx.params,
-    },
-  });
+	props: {
+		params: ctx.params,
+	},
+});
 
 // TEST
 

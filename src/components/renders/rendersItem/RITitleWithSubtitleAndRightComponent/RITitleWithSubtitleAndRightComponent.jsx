@@ -1,3 +1,5 @@
+import { handleKeyDown } from "@/helpers/index";
+
 // STYLES
 const classes = {
 	title: "font-normal text-[15px] text-[#202020] m-0",
@@ -26,11 +28,16 @@ const RITitleWithSubtitleAndRightComponent = ({
 		}}
 	>
 		<div
+			role="button"
+			tabIndex="0"
 			onClick={onPressWrapperItemLeft}
 			className={classes.wrapperItemLeft}
 			style={{
 				...styles.wrapperItemLeft,
 			}}
+			onKeyDown={(event) =>
+				handleKeyDown({ event, fcClick: () => {} })
+			}
 		>
 			<p
 				className={classes.title}

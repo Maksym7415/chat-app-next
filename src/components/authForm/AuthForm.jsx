@@ -32,7 +32,7 @@ const AuthForm = ({
 			<>
 				{configFields.map((el, key) => (
 					<Controller
-						key={key}
+						key={el?.id || key}
 						control={optionsForm.control}
 						rules={el?.validate || {}}
 						render={({ field: { onChange, value } }) => (

@@ -53,7 +53,7 @@ const NewChat = () => {
 			},
 		];
 
-		socketEmitChatCreation({
+		return socketEmitChatCreation({
 			data,
 			date: fullDate(new Date()),
 			chatName: "Chat",
@@ -104,7 +104,9 @@ const NewChat = () => {
 									params,
 								}),
 							);
-						} catch (error) {}
+						} catch (error) {
+							console.dir(error, "getSearchRequest");
+						}
 						return {
 							options: response?.data?.response || [],
 							limit: response?.data?.limit || 0,
