@@ -1,21 +1,30 @@
 /* eslint-disable no-underscore-dangle */
 
 /* eslint-disable no-param-reassign */
+// APPROVED +
 import axios from "axios";
-import { IS_CLIENT } from "@/core/constants/general";
-import { BASE_URL } from "@/core/constants/url";
-import { getHeaders } from "@/helpers/index";
-import Snackbar from "@/helpers/notistack";
+import { IS_CLIENT, langsData } from "@/core/constants/general";
+// import { PATHS } from "@/core/constants/paths";
+import Snackbar from "@/helpers/toastify";
 import { actionLogOut } from "@/store/store";
 
 const parseErrorCode = (error) => {
-	console.log(error, "error");
 	if (error?.response) {
 		if (error.response?._response) {
 			Snackbar.error(error.response?._response);
 		}
 		if (error.response.status === 401) {
-			actionLogOut(true);
+			// actionLogOut(true);
+		} else if (error.response.status === 403) {
+			const { message } = error.response.data;
+
+			// actionLogOut();
+
+			return Promise.reject({
+				data: {
+					message: message || error.response.data,
+				},
+			});
 		} else if (error.response.status === 404) {
 			const { message } = error.response.data;
 
@@ -25,8 +34,6 @@ const parseErrorCode = (error) => {
 				},
 			});
 		}
-	} else {
-		// error something
 	}
 
 	if (error?.response) {
@@ -50,23 +57,45 @@ const parseErrorCode = (error) => {
 
 const API = axios.create();
 
+const insertLocalInUrl = ({ url, locale }) => {
+	if (locale === "en" || !langsData[locale] || url.includes(`/${locale}/`)) {
+		return url;
+	}
+
+	const regex = /^(https?:\/\/[^/]+)(.*)$/i;
+	const domain = url.replace(regex, "$1");
+	const restUrl = url.replace(regex, "$2");
+	const newUrl = `${domain}/${locale}${restUrl}`;
+
+	return newUrl;
+};
+
 // Request parsing interceptor
 API.interceptors.request.use(
 	async (config) => {
-		const headers = await getHeaders();
+		if (config.url.includes("http://")) {
+			config.baseURL = "";
 
-		config.baseURL = BASE_URL;
-		config.timeout = 10000;
-		if (headers) {
-			config.headers = {
-				common: {
-					"Content-Type": "application/json",
-					accept: "application/json",
-					"X-Requested-With": "XMLHttpRequest",
-				},
-				...headers,
-			};
+			const replaceHttps = config.url.replace("http://", "https://");
+
+			config.url = insertLocalInUrl({
+				locale: config.locale,
+				url: replaceHttps,
+			});
+		} else {
+			config.baseURL = insertLocalInUrl({
+				locale: config.locale,
+				url: process.env.BASE_URL_API,
+			});
 		}
+
+		config.headers = {
+			"Content-Type": "application/json",
+			accept: "application/json",
+			"X-Requested-With": "XMLHttpRequest",
+			...config?.headers,
+		};
+
 		return config;
 	},
 	(error) => Promise.reject(error),

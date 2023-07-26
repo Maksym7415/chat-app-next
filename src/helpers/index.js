@@ -24,3 +24,4 @@ export { onlyText } from "./string/clearText";
 export { parseStringJSON } from "./string/parseStringJSON";
 
 export { handleKeyDown } from "./handleKeyDown";
+export { fetchQuery } from "./fetchQuery";

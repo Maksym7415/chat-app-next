@@ -16,6 +16,7 @@ const initialState = {
 		userLastTimeOnline: "",
 		Roles: [],
 		lang: "",
+		token: "",
 	},
 	avatars: [],
 };

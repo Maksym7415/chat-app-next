@@ -1,5 +1,5 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import SignUp from "@/screens/signUp";
+import SignUp from "@/screens/(auth)/signUp";
 
 const SignUpPage = () => <SignUp />;
 

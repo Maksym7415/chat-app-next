@@ -48,36 +48,36 @@ export const authApi = createApi({
 			}),
 			transformErrorResponse: (response, meta, args) =>
 				fErrorResponse({ response, meta, args }),
-			async onQueryStarted(dataSend, options) {
-				options.dispatch(
-					allActionsStore.setLoginSingInAction(dataSend.login),
-				);
+			// async onQueryStarted(dataSend, options) {
+			// 	options.dispatch(
+			// 		allActionsStore.setLoginSingInAction(dataSend.login),
+			// 	);
 
-				onQueryStartedFulfilled({
-					options,
-					cb: async (res) => {
-						const { data } = res;
+			// 	onQueryStartedFulfilled({
+			// 		options,
+			// 		cb: async (res) => {
+			// 			const { data } = res;
 
-						const jwtDecode = data.accessToken
-							? await jwtdecode(data.accessToken)
-							: null;
+			// 			const jwtDecode = data.accessToken
+			// 				? await jwtdecode(data.accessToken)
+			// 				: null;
 
-						const optionsCook = {
-							expires: getDateFromToday({
-								days: 365,
-							}),
-							secure: true,
-						};
+			// 			const optionsCook = {
+			// 				expires: getDateFromToday({
+			// 					days: 365,
+			// 				}),
+			// 				secure: true,
+			// 			};
 
-						setTokenCook(data.accessToken, optionsCook);
-						setUserInfoTokenCook(jwtDecode, optionsCook);
+			// 			setTokenCook(data.accessToken, optionsCook);
+			// 			setUserInfoTokenCook(jwtDecode, optionsCook);
 
-						options.dispatch(
-							allActionsStore.authTokenAction(jwtDecode),
-						);
-					},
-				});
-			},
+			// 			options.dispatch(
+			// 				allActionsStore.authTokenAction(jwtDecode),
+			// 			);
+			// 		},
+			// 	});
+			// },
 		}),
 
 		postSingUp: builder.mutation({

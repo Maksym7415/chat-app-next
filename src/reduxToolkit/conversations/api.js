@@ -6,23 +6,27 @@ import { allActionsStore } from "@/store/rootActions";
 
 export const conversationsApi = createApi({
 	reducerPath: "conversationsApi",
-	baseQuery: axiosBaseQuery({
+		baseQuery: axiosBaseQuery({
 		prepareHeaders: (headers, { getState }) => {
-			const token = getState().authSlice.headers?.accessToken;
+			const token = getState().userSlice.userInfo?.token;
 
-			// If we have a token set in state, let's assume that we should be passing it.
+			let headersCopy = { ...headers };
+
 			if (token) {
-				// eslint-disable-next-line no-param-reassign
-				headers.authorization = `Bearer ${token}`;
+				headersCopy = Object.assign(headersCopy, {
+					Authorization: token,
+				});
 			}
-
-			return headers;
+			return {
+				...headersCopy,
+			};
 		},
 	}),
 	endpoints: (builder) => ({
 		getUserConversations: builder.query({
 			query: () => pathBackConversations.getUserConversations,
 			transformResponse: (response, meta, arg) => {
+				console.log(response, 'response')
 				const responseData = response?.data;
 				const transformData = responseData.reduce((acc, item) => {
 					acc[item.conversationId] = item;
@@ -35,18 +39,18 @@ export const conversationsApi = createApi({
 			},
 			transformErrorResponse: (response, meta, args) =>
 				fErrorResponse({ response, meta, args }),
-			async onQueryStarted(_, options) {
-				onQueryStartedFulfilled({
-					options,
-					cb: (res) => {
-						const { data } = res;
+			// async onQueryStarted(_, options) {
+			// 	onQueryStartedFulfilled({
+			// 		options,
+			// 		cb: (res) => {
+			// 			const { data } = res;
 
-						options.dispatch(
-							allActionsStore.setConversationListAction(data),
-						);
-					},
-				});
-			},
+			// 			options.dispatch(
+			// 				allActionsStore.setConversationListAction(data),
+			// 			);
+			// 		},
+			// 	});
+			// },
 		}),
 
 		getConversationMessages: builder.query({

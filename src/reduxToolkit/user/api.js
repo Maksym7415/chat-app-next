@@ -11,7 +11,22 @@ import { allActionsStore } from "@/store/rootActions";
 
 export const userApi = createApi({
 	reducerPath: "userApi",
-	baseQuery: axiosBaseQuery({}),
+		baseQuery: axiosBaseQuery({
+		prepareHeaders: (headers, { getState }) => {
+			const token = getState().userSlice.userInfo?.token;
+
+			let headersCopy = { ...headers };
+
+			if (token) {
+				headersCopy = Object.assign(headersCopy, {
+					Authorization: token,
+				});
+			}
+			return {
+				...headersCopy,
+			};
+		},
+	}),
 	tagTypes: ["Avatar", "UserData"],
 	endpoints: (builder) => ({
 		getUserProfileData: builder.query({

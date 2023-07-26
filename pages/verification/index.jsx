@@ -1,7 +1,7 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Verification from "@/screens/verification";
+import {VerificationScreen} from "@/screens/(auth)/verification/index";
 
-const VerificationPage = () => <Verification />;
+const VerificationPage = () => <VerificationScreen />;
 
 export const getStaticProps = async (ctx) => {
 	const { locale } = ctx;

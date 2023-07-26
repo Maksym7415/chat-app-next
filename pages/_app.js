@@ -16,12 +16,25 @@ import ModalCustom from "@/components/modal";
 import { authOptions } from "./api/auth/[...nextauth]";
 import Providers from "@/providers/MainProvider";
 import { store } from "@/store/store";
+import { useIsMounted } from "@/hooks/use-ref/useIsMounted";
+import { allActionsStore } from "@/store/rootActions";
 
 if (!process.browser) React.useLayoutEffect = React.useEffect;
 
 const App = ({ Component, ...rest }) => {
+		const isMounted = useIsMounted()?.current;
+
 	const { pageProps } = rest;
-	
+
+		if (!isMounted) {
+		store.dispatch(
+			allActionsStore.setUserInfoAction(
+				pageProps.session?.user || {},
+			),
+		);
+	}
+
+
 	return (
 		<>
 			<Provider store={store}>

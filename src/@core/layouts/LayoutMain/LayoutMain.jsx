@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Rnd } from "react-rnd";
@@ -30,20 +31,25 @@ const LayoutMain = ({
 	children,
 	titlePage: titlePageProps = "",
 	params = {},
+	dataUserConversations
 }) => {
 	// HOOKS
 	const router = useRouter();
+	const session = useSession();
 
 	// SERVICES
 	conversationsApi.useGetUserConversationsQuery({});
-	userApi.useGetUserProfileDataQuery();
+	// userApi.useGetUserProfileDataQuery();
 
 	// SELECTORS
 	const conversationsList = useSelector(
 		({ conversationsSlice }) => conversationsSlice.conversationsList.data,
 	);
-	const authToken = useSelector(({ authSlice }) => authSlice.authToken);
+	const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
+		// console.log(session.data, 'session')
+		// 	console.log(userInfo, 'userInfo')
+		console.log(dataUserConversations, 'dataUserConversations')
 	// STATES
 	const [containerWidth, setContainerWidth] = useState(300);
 
@@ -81,7 +87,8 @@ const LayoutMain = ({
 
 	// USEEFFECTS
 	useEffect(() => {
-		socket.removeAllListeners();
+		if(userInfo?.id) {
+	socket.removeAllListeners();
 		if (conversationsListMass?.length) {
 			conversationsListMass.forEach((chat) => {
 				socketOnUserIdChat(chat);
@@ -89,7 +96,7 @@ const LayoutMain = ({
 			});
 		}
 		socketOnDeleteMessage();
-		socketOnUserIdNewChat(authToken.userId, router);
+		socketOnUserIdNewChat(userInfo?.id, router);
 		socketOnDeleteConversation({
 			params: {
 				id: router.query.id,
@@ -97,6 +104,7 @@ const LayoutMain = ({
 			router,
 		});
 		socketOnClearConversation();
+		}
 	}, [conversationsListMass]);
 
 	return (

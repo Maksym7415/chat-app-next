@@ -1,9 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { signOut } from 'next-auth/react';
 import { reducers } from "./rootReducer";
-import {
-	removeTokenCook,
-	removeUserInfoTokenCook,
-} from "@/core/cookiesStorage/index";
 import { authApi } from "@/store/auth/api";
 import { conversationsApi } from "@/store/conversations/api";
 import { searchApi } from "@/store/search/api";
@@ -40,8 +37,9 @@ export const store = configureStore({
 });
 
 
-export const actionLogOut = () => {
-	removeTokenCook();
-	removeUserInfoTokenCook();
+export const actionLogOut = async () => {
+	await signOut({
+		redirect: false,
+	});
 	store.dispatch(logOutAction());
 };

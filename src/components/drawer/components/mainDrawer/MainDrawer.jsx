@@ -28,7 +28,7 @@ function MainDrawer({ closeDrawer }) {
 	const [putUpdateProfileData] = userApi.usePutUpdateProfileDataMutation();
 
 	// FUNCTIONS
-	const handleMenuAction = (value) => {
+	const handleMenuAction = async (value) => {
 		closeDrawer();
 
 		switch (value) {
@@ -58,7 +58,7 @@ function MainDrawer({ closeDrawer }) {
 				}, 100);
 				return value;
 			case "logout":
-				actionLogOut();
+				await actionLogOut();
 				router.push(PATHS.signIn);
 				return value;
 			default:

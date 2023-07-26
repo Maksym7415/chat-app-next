@@ -1,19 +1,28 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { signIn, useSession } from "next-auth/react";
+import { useDispatch, useSelector } from "react-redux";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
-import { PATHS } from "@/core/constants/paths";
+import { fetchQuery } from "@/helpers/index";
+import { pathBackUser } from "@/constants/urlBack";
+import { PATHS } from "@/constants/paths";
 import Meta from "@/core/seo/Meta";
 import languages from "@/core/translations";
 import { authApi } from "@/store/auth/api";
 import { parseErrorResToType } from "@/store/helpers";
+import { allActionsStore } from "@/store/rootActions";
+import toast from "@/helpers/toastify";
 
-const VerificationClientPage = () => {
+export const VerificationScreen = () => {
 	// HOOKS
 	const router = useRouter();
+	const dispatch = useDispatch();
+	const session = useSession();
 
+	console.log(session.data, 'session')
+	
 	// SELECTORS
 	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 	const loginSingIn = useSelector(({ authSlice }) => authSlice.loginSingIn);
@@ -46,8 +55,47 @@ const VerificationClientPage = () => {
 
 		postVerification(sendData)
 			.unwrap()
-			.then(async () => {
-				router.push(PATHS.main);
+			.then(async ({accessToken, refreshToken}) => {
+
+				const token = accessToken
+				dispatch(
+					allActionsStore.setLoginSingInAction(loginSingIn),
+				);
+
+		const resUserMe = await fetchQuery({
+			url: pathBackUser.getUserProfileData,
+			token,
+		});
+
+		if (resUserMe.response.ok) {
+			const setCredentials = async (dataUser) => {
+
+				const resCredentials = await signIn("credentials", {
+					user: JSON.stringify({
+						...dataUser,
+						refreshToken,
+						token
+					}),
+					redirect: false,
+					accessToken,
+				});
+
+				if (resCredentials.ok) {
+					dispatch(
+						allActionsStore.setUserInfoAction(
+							data || {},
+						),
+					);
+
+					router.push(PATHS.main);
+				} else {
+					toast.warning("warning");
+				}
+			};
+
+			setCredentials(resUserMe.data);
+		}
+
 			});
 	};
 
@@ -77,5 +125,3 @@ const VerificationClientPage = () => {
 		</Meta>
 	);
 };
-
-export default VerificationClientPage;
