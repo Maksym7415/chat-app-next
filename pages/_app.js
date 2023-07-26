@@ -15,15 +15,13 @@ import DrawerCustom from "@/components/drawer";
 import ModalCustom from "@/components/modal";
 import { authOptions } from "./api/auth/[...nextauth]";
 import Providers from "@/providers/MainProvider";
-import { wrapper } from "@/store/store";
+import { store } from "@/store/store";
 
 if (!process.browser) React.useLayoutEffect = React.useEffect;
 
 const App = ({ Component, ...rest }) => {
 	const { pageProps } = rest;
-
-	const { store } = wrapper.useWrappedStore(rest);
-
+	
 	return (
 		<>
 			<Provider store={store}>

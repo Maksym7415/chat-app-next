@@ -1,5 +1,4 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { createWrapper } from "next-redux-wrapper";
 import { reducers } from "./rootReducer";
 import {
 	removeTokenCook,
@@ -40,8 +39,6 @@ export const store = configureStore({
 		),
 });
 
-export const makeStore = () => store;
-export const wrapper = createWrapper(makeStore);
 
 export const actionLogOut = () => {
 	removeTokenCook();

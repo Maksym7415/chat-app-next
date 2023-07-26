@@ -1,0 +1,55 @@
+const Shadows = (mode) => {
+	if (mode === "light") {
+		return [
+			"none",
+			"0px 3px 6px rgba(0, 0, 0, 0.16)",
+			"0 0 13px 0 rgba(224, 233, 243, 1)",
+			"0 3px 6px 0 rgba(112, 112, 112, 0.3)",
+			"3px 5px 6px rgba(0, 0, 0, 0.16)",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+			"none",
+		];
+	}
+	return [
+		"none",
+		"0px 3px 6px rgba(0, 0, 0, 0.16)",
+		"0 0 13px 0 rgba(224, 233, 243, 1)",
+		"0 3px 6px 0 rgba(112, 112, 112, 0.3)",
+		"3px 5px 6px rgba(0, 0, 0, 0.16)",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+		"none",
+	];
+};
+
+export default Shadows;

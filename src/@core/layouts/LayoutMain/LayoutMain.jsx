@@ -18,7 +18,7 @@ import { userApi } from "@/store/user/api";
 
 // STYLES
 const classes = {
-	container: "flex h-screen bg-[url('/bg5.png')]",
+	container: "flex h-screen bg-[url('/images/generals/bgMain.avif')]",
 };
 
 const styleRnd = {
