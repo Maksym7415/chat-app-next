@@ -1,5 +1,8 @@
 import React from "react";
 import { Provider } from "react-redux";
+import { SessionProvider } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import { appWithTranslation } from "next-i18next";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -10,14 +13,13 @@ import ContextMenu from "@/components/contextMenu";
 import DialogCustom from "@/components/dialogWindow/Dialog";
 import DrawerCustom from "@/components/drawer";
 import ModalCustom from "@/components/modal";
-import { namesCookies } from "@/core/constants/general";
-import { PATHS } from "@/core/constants/paths";
+import { authOptions } from "./api/auth/[...nextauth]";
 import Providers from "@/providers/MainProvider";
 import { wrapper } from "@/store/store";
 
 if (!process.browser) React.useLayoutEffect = React.useEffect;
 
-const MyApp = ({ Component, ...rest }) => {
+const App = ({ Component, ...rest }) => {
 	const { pageProps } = rest;
 
 	const { store } = wrapper.useWrappedStore(rest);
@@ -25,43 +27,37 @@ const MyApp = ({ Component, ...rest }) => {
 	return (
 		<>
 			<Provider store={store}>
-				<Providers Component={Component}>
-					<DrawerCustom />
-					<ContextMenu />
-					<ModalCustom />
-					<DialogCustom />
-					<Component {...pageProps} />
-				</Providers>
+				<SessionProvider session={pageProps.session}>
+						<Providers Component={Component}>
+							<DrawerCustom />
+							<ContextMenu />
+							<ModalCustom />
+							<DialogCustom />
+							<Component {...pageProps} />
+						</Providers>
+				</SessionProvider>
 			</Provider>
 		</>
 	);
 };
 
-MyApp.getInitialProps = async ({ ctx }) => {
-	const token = ctx.res?.req?.cookies?.[namesCookies.accessToken];
-
-	if (!token) {
-		if (
-			![PATHS.signIn, PATHS.signUp, PATHS.verification].includes(
-				ctx.asPath,
-			)
-		) {
-			ctx.res?.writeHead(302, { Location: PATHS.signIn });
-			ctx.res?.end();
-			return {};
-		}
-	} else {
-		if (
-			[PATHS.signIn, PATHS.verification, PATHS.signUp].includes(
-				ctx.asPath,
-			)
-		) {
-			ctx.res?.writeHead(302, { Location: PATHS.main });
-			ctx.res?.end();
-		}
+App.getInitialProps = async ({ Component, ctx }) => {
+	let pageProps = {};
+	
+	if (Component.getInitialProps) {
+		pageProps = await Component.getInitialProps(ctx);
 	}
 
-	return {};
+	const locale = ctx?.locale;
+	const req = ctx?.req;
+
+	return {
+		pageProps: {
+			...pageProps,
+			locale,
+			session: await getServerSession(req, ctx.res, authOptions),
+		},
+	};
 };
 
-export default MyApp;
+export default appWithTranslation(App);
