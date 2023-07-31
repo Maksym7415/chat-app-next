@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
-import { PATHS } from "@/core/constants/paths";
+import { PATHS } from "@/constants/paths";
 import Meta from "@/core/seo/Meta";
 import languages from "@/core/translations";
 import { authApi } from "@/store/auth/api";

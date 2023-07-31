@@ -1,12 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
-import { pathBackSearch } from "@/core/constants/urlBack";
+import { pathBackSearch } from "@/constants/urlBack";
 import { fErrorResponse } from "@/store/helpers";
 
 export const searchApi = createApi({
 	reducerPath: "searchApi",
 	baseQuery: axiosBaseQuery({
-			prepareHeaders: (headers, { getState }) => {
+		prepareHeaders: (headers, { getState }) => {
 			const token = getState().userSlice.userInfo?.token;
 
 			let headersCopy = { ...headers };

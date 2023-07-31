@@ -4,7 +4,7 @@
 // APPROVED +
 import axios from "axios";
 import { IS_CLIENT, langsData } from "@/constants/general";
-// import { PATHS } from "@/core/constants/paths";
+// import { PATHS } from "@/constants/paths";
 import Snackbar from "@/helpers/toastify";
 // import { actionLogOut } from "@/store/store";
 

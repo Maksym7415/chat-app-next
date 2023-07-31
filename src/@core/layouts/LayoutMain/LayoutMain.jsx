@@ -30,7 +30,6 @@ const LayoutMain = ({
 	children,
 	titlePage: titlePageProps = "",
 	params = {},
-	dataUserConversations,
 }) => {
 	// HOOKS
 	const router = useRouter();
@@ -44,8 +43,6 @@ const LayoutMain = ({
 		({ conversationsSlice }) => conversationsSlice.conversationsList.data,
 	);
 	const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
-
-	console.log(dataUserConversations, "dataUserConversations");
 
 	// STATES
 	const [containerWidth, setContainerWidth] = useState(300);

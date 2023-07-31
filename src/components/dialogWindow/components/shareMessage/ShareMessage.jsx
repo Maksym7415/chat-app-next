@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserAvatar from "@/components/avatar/userAvatar/index";
-import { PATHS } from "@/core/constants/paths";
+import { PATHS } from "@/constants/paths";
 import languages from "@/core/translations";
 import { handleKeyDown } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";

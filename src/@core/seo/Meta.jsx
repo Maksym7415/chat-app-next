@@ -2,12 +2,11 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { MetaNoIndex } from "./MetaNoIndex";
 import { siteName, titleMerge } from "./config";
-import { REACT_APP_BASE_URL } from "@/core/constants/url";
 import { onlyText } from "@/helpers/index";
 
 const Meta = ({ title, description, image = null, children }) => {
 	const { asPath } = useRouter();
-	const currentUrl = `${REACT_APP_BASE_URL}${asPath}`;
+	const currentUrl = `${process.env.BASE_URL}${asPath}`;
 
 	return (
 		<>

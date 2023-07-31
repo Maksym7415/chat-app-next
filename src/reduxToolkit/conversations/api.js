@@ -1,12 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
-import { pathBackConversations } from "@/core/constants/urlBack";
+import { pathBackConversations } from "@/constants/urlBack";
 import { fErrorResponse, onQueryStartedFulfilled } from "@/store/helpers";
 import { allActionsStore } from "@/store/rootActions";
 
 export const conversationsApi = createApi({
 	reducerPath: "conversationsApi",
-		baseQuery: axiosBaseQuery({
+	baseQuery: axiosBaseQuery({
 		prepareHeaders: (headers, { getState }) => {
 			const token = getState().userSlice.userInfo?.token;
 
@@ -26,7 +26,7 @@ export const conversationsApi = createApi({
 		getUserConversations: builder.query({
 			query: () => pathBackConversations.getUserConversations,
 			transformResponse: (response, meta, arg) => {
-				console.log(response, 'response')
+				console.log(response, "response");
 				const responseData = response?.data;
 				const transformData = responseData.reduce((acc, item) => {
 					acc[item.conversationId] = item;

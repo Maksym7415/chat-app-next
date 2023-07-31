@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
-import { pathBackUser } from "@/core/constants/urlBack";
+import { pathBackUser } from "@/constants/urlBack";
 import {
 	fErrorResponse,
 	onQueryStartedFulfilled,
@@ -11,7 +11,7 @@ import { allActionsStore } from "@/store/rootActions";
 
 export const userApi = createApi({
 	reducerPath: "userApi",
-		baseQuery: axiosBaseQuery({
+	baseQuery: axiosBaseQuery({
 		prepareHeaders: (headers, { getState }) => {
 			const token = getState().userSlice.userInfo?.token;
 

@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import * as config from "./config";
 import { allActionsStore } from "@/store/rootActions";
 
+// fix locale
 // STYLES
 const classes = {
 	root: "flex px-[0px] py-[10px] justify-center",

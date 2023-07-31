@@ -5,10 +5,12 @@ import ChatBottom from "./components/bottom";
 import ChatHeader from "./components/header";
 import ChatContent from "./components/mainContent";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
-import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
+import { LAST_ACTION_MESSAGES_STORE } from "@/constants/general";
 import { getMessagesWithSendDate } from "@/helpers/index";
 import { conversationsApi } from "@/store/conversations/api";
 import { allActionsStore } from "@/store/rootActions";
+
+// fix locale
 
 // STYLES
 const classes = {

@@ -1,5 +1,5 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import {VerificationScreen} from "@/screens/(auth)/verification/index";
+import { VerificationScreen } from "@/screens/(auth)/verification/index";
 
 const VerificationPage = () => <VerificationScreen />;
 
@@ -12,6 +12,5 @@ export const getStaticProps = async (ctx) => {
 		},
 	};
 };
-
 
 export default VerificationPage;

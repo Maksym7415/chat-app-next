@@ -6,7 +6,7 @@ import SearchMain from "./components/searchMain";
 import {
 	SIDE_LEFT_TYPE_CONTENT,
 	TYPES_FROM_TO_SEARCH_SCREEN,
-} from "@/core/constants/general";
+} from "@/constants/general";
 import { allActionsStore } from "@/store/rootActions";
 
 // STYLES

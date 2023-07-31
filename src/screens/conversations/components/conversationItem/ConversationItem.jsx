@@ -6,12 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectedConversationContext } from "./config";
 import UserAvatar from "@/components/avatar/userAvatar";
 import SvgMaker from "@/components/svgMaker";
-import { actionsTypeActionsConversation } from "@/core/constants/actions";
-import { CONTEXT_MENU_ID } from "@/core/constants/general";
-import { PATHS } from "@/core/constants/paths";
+import { actionsTypeActionsConversation } from "@/constants/actions";
+import { CONTEXT_MENU_ID } from "@/constants/general";
+import { PATHS } from "@/constants/paths";
 import languages from "@/core/translations";
 import { getCurrentDay, handleKeyDown } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
+
+// fix conversationType
 
 // STYLES
 const classes = {
@@ -120,7 +122,6 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
 				[classes.activeConversation]: data.conversationId === +paramsId,
 			})}
 			onKeyDown={(event) =>
-			
 				handleKeyDown({
 					event,
 					fcClick: () => {

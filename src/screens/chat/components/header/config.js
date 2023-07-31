@@ -1,7 +1,7 @@
 import {
 	actionsTypeActionsChat,
 	actionsTypeActionsConversation,
-} from "@/core/constants/actions";
+} from "@/constants/actions";
 import languages from "@/core/translations/index";
 
 export const headerSelectedChatsAmount = () => [

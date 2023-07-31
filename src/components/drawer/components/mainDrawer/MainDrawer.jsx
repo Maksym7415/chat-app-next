@@ -4,7 +4,7 @@ import { useSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
 import BaseSelect from "../../../selects/BaseSelect";
 import * as config from "./config";
-import { PATHS } from "@/core/constants/paths";
+import { PATHS } from "@/constants/paths";
 import { allActionsStore } from "@/store/rootActions";
 import { actionLogOut } from "@/store/store";
 import { userApi } from "@/store/user/api";

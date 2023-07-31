@@ -18,7 +18,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import * as config from "./config";
 import DefaultAvatar from "@/components/avatar/defaultAvatar";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
-import { REACT_APP_BASE_URL } from "@/core/constants/url";
 import { getNameShort } from "@/helpers/index";
 import { userApi } from "@/store/user/api";
 
@@ -170,7 +169,7 @@ const Avatars = () => {
 								style={{ display: "flex" }}
 							>
 								<Image
-									src={`${REACT_APP_BASE_URL}/${item.fileName}`}
+									src={`${process.env.BASE_URL}/${item.fileName}`}
 									width={1000}
 									height={300}
 									alt="Picture of the author"

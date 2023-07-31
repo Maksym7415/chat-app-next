@@ -2,12 +2,12 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuIcon from "@mui/icons-material/Menu";
 import { IconButton } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
+import { SIDE_LEFT_TYPE_CONTENT } from "@/constants/general";
 import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
 const classes = {
-	container: "mr-[15px] ",
+	container: "mr-[15px]",
 };
 
 const TopLeftComponent = () => {

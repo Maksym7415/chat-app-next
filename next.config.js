@@ -55,9 +55,8 @@ const nextConfig = {
 	env: {
 		BASE_URL: process.env.BASE_URL,
 		BASE_URL_API: process.env.BASE_URL_API,
-		PK_STRIPE: process.env.PK_STRIPE,
-		CLOUD_FRONT: process.env.CLOUD_FRONT,
-		NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET
+		BASE_URL_SOCKET: process.env.BASE_URL_SOCKET,
+		NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
 	},
 	images: {
 		remotePatterns: [

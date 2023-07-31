@@ -6,8 +6,8 @@ import { contextMenu } from "react-contexify";
 import { useDispatch, useSelector } from "react-redux";
 import * as config from "./config";
 import UserAvatar from "@/components/avatar/userAvatar";
-import { actionsTypeObject } from "@/core/constants/actions";
-import { CONTEXT_MENU_ID, TYPES_CONVERSATIONS } from "@/core/constants/general";
+import { actionsTypeObject } from "@/constants/actions";
+import { CONTEXT_MENU_ID, TYPES_CONVERSATIONS } from "@/constants/general";
 import languages from "@/core/translations";
 import { getCurrentDay, handleKeyDown } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
@@ -151,7 +151,6 @@ const Message = ({
 			})}
 			onClick={handleOnPressChat}
 			onKeyDown={(event) =>
-				
 				handleKeyDown({ event, fcClick: handleOnPressChat })
 			}
 			style={{

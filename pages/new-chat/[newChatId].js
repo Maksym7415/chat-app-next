@@ -3,10 +3,10 @@ import LayoutMain from "@/core/layouts/LayoutMain";
 import Chat from "@/screens/chat/index";
 
 const NewChatPage = ({ params }) => (
-    <LayoutMain>
-      <Chat params={params} />
-    </LayoutMain>
-  );
+	<LayoutMain>
+		<Chat params={params} />
+	</LayoutMain>
+);
 
 export const getServerSideProps = async (ctx) => {
 	const { locale } = ctx;
@@ -16,8 +16,7 @@ export const getServerSideProps = async (ctx) => {
 			...(await serverSideTranslations(locale || "en", "common")),
 			params: ctx.params,
 		},
-	}
+	};
 };
-
 
 export default NewChatPage;

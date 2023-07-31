@@ -1,6 +1,6 @@
 import { socket } from "../index";
-import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
-import { PATHS } from "@/core/constants/paths";
+import { LAST_ACTION_MESSAGES_STORE } from "@/constants/general";
+import { PATHS } from "@/constants/paths";
 import { conversationsApi } from "@/store/conversations/api";
 import { allActionsStore } from "@/store/rootActions";
 import { store } from "@/store/store";

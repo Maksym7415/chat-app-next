@@ -22,15 +22,13 @@ import { allActionsStore } from "@/store/rootActions";
 if (!process.browser) React.useLayoutEffect = React.useEffect;
 
 const App = ({ Component, ...rest }) => {
-		const isMounted = useIsMounted()?.current;
+	const isMounted = useIsMounted()?.current;
 
 	const { pageProps } = rest;
 
-		if (!isMounted) {
+	if (!isMounted) {
 		store.dispatch(
-			allActionsStore.setUserInfoAction(
-				pageProps.session?.user || {},
-			),
+			allActionsStore.setUserInfoAction(pageProps.session?.user || {}),
 		);
 
 		store.dispatch(
@@ -40,18 +38,17 @@ const App = ({ Component, ...rest }) => {
 		);
 	}
 
-
 	return (
 		<>
 			<Provider store={store}>
 				<SessionProvider session={pageProps.session}>
-						<Providers Component={Component}>
-							<DrawerCustom />
-							<ContextMenu />
-							<ModalCustom />
-							<DialogCustom />
-							<Component {...pageProps} />
-						</Providers>
+					<Providers Component={Component}>
+						<DrawerCustom />
+						<ContextMenu />
+						<ModalCustom />
+						<DialogCustom />
+						<Component {...pageProps} />
+					</Providers>
 				</SessionProvider>
 			</Provider>
 		</>
@@ -60,7 +57,7 @@ const App = ({ Component, ...rest }) => {
 
 App.getInitialProps = async ({ Component, ctx }) => {
 	let pageProps = {};
-	
+
 	if (Component.getInitialProps) {
 		pageProps = await Component.getInitialProps(ctx);
 	}

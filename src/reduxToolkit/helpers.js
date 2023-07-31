@@ -1,4 +1,4 @@
-import { IS_CLIENT, IS_SERVER } from "@/core/constants/general";
+import { IS_CLIENT, IS_SERVER } from "@/constants/general";
 import Snackbar from "@/helpers/notistack";
 
 // redux createApi

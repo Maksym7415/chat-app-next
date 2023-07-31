@@ -1,4 +1,3 @@
-export { getHeaders } from "./auth";
 export {
 	fullDate,
 	getCurrentDay,

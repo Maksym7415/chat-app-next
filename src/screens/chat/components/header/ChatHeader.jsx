@@ -14,8 +14,8 @@ import SvgMaker from "@/components/svgMaker";
 import {
 	actionsTypeActionsChat,
 	actionsTypeActionsConversation,
-} from "@/core/constants/actions";
-import { TYPES_CONVERSATIONS } from "@/core/constants/general";
+} from "@/constants/actions";
+import { TYPES_CONVERSATIONS } from "@/constants/general";
 import { handleKeyDown } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
 import { store } from "@/store/store";

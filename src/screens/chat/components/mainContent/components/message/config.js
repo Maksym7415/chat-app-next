@@ -3,8 +3,9 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
-import { actionsTypeActionsChat } from "@/core/constants/actions";
+import { actionsTypeActionsChat } from "@/constants/actions";
 
+// fix locale
 export const selectedMessageContext = () => [
 	{
 		id: 1,

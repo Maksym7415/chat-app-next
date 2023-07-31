@@ -9,7 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Virtuoso } from "react-virtuoso";
 import RowItemMessage from "./RowItemMessage";
-import { LAST_ACTION_MESSAGES_STORE } from "@/core/constants/general";
+import { LAST_ACTION_MESSAGES_STORE } from "@/constants/general";
 import { conversationsApi } from "@/store/conversations/api";
 import { allActionsStore } from "@/store/rootActions";
 

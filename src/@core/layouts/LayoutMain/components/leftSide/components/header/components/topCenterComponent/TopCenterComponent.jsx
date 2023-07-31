@@ -1,8 +1,8 @@
+import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, OutlinedInput } from "@mui/material";
-import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
+import { SIDE_LEFT_TYPE_CONTENT } from "@/constants/general";
 import { useDebounce } from "@/hooks/useDebounce";
 import { searchApi } from "@/store/search/api";
 
@@ -10,13 +10,14 @@ import { searchApi } from "@/store/search/api";
 const classes = {
 	inputSearch: "w-full max-w-[240px] p-[0] pl-[5px] rounded-[20px] h-[40px]",
 };
+
 function TopCenterComponent({ parentSettings }) {
-	// STORE
+	// SELECTORS
 	const sideLeftConfig = useSelector(
 		({ appSlice }) => appSlice.sideLeftConfig,
 	);
 
-	// SELECTORS
+	// STATES
 	const [search, setSearch] = useState("");
 
 	// CUSTOM HOOKS
@@ -34,7 +35,7 @@ function TopCenterComponent({ parentSettings }) {
 		return paramsLoc;
 	}, [debouncedSearchValue]);
 
-	// SERVICES
+	// API
 	searchApi.useGetSearchContactsQuery(
 		{
 			params: {

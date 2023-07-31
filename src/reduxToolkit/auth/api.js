@@ -1,10 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/core/axios/axiosBaseQuery";
-import { pathBackAuth } from "@/core/constants/urlBack";
-import {
-	setTokenCook,
-	setUserInfoTokenCook,
-} from "@/core/cookiesStorage/index";
+import { pathBackAuth } from "@/constants/urlBack";
 import { getDateFromToday, jwtdecode } from "@/helpers/index";
 import { fErrorResponse, onQueryStartedFulfilled } from "@/store/helpers";
 import { allActionsStore } from "@/store/rootActions";

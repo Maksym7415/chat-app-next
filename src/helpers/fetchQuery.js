@@ -1,4 +1,4 @@
-import { langsData } from "@/core/constants/general";
+import { langsData } from "@/constants/general";
 
 const insertLocalInUrl = ({ url, locale }) => {
 	if (locale === "en" || !langsData[locale] || url.includes(`/${locale}/`)) {

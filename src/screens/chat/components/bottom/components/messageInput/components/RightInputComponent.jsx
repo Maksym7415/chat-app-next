@@ -2,6 +2,8 @@ import { useState } from "react";
 import SvgMaker from "@/components/svgMaker";
 import { handleKeyDown } from "@/helpers/index";
 
+// fix type tiggle
+
 // STYLES
 const classes = {
 	attachAndTypeMessage: "flex h-full bg-white px-[7px]",

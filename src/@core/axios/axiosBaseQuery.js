@@ -12,12 +12,6 @@ const getRequestConfig = (args) => {
 export const axiosBaseQuery = ({ prepareHeaders, meta, transformResponse }) => async (args, api, extraOptions) => {
     try {
       const requestConfig = getRequestConfig(args);
-
-      // console.log(meta, "meta");
-      // console.log(args, "args");
-      // console.log(api, "api");
-      // console.log(extraOptions, "extraOptions");
-
       const headers = prepareHeaders
         ? prepareHeaders(requestConfig.headers || {}, api)
         : requestConfig.headers;

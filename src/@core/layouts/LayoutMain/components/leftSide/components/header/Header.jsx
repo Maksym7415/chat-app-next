@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TopCenterComponent from "./components/topCenterComponent";
 import TopLeftComponent from "./components/topLeftComponent";
-import { SIDE_LEFT_TYPE_CONTENT } from "@/core/constants/general";
+import { SIDE_LEFT_TYPE_CONTENT } from "@/constants/general";
 import { allActionsStore } from "@/store/rootActions";
 
 // STYLES
@@ -26,7 +26,7 @@ const Header = ({ children }) => {
 		noSettings: true,
 		topCenterComponent: {
 			type: "searchContacts",
-			placeholder: "Search",
+			placeholder: "Search", // fix locale
 			getRequest: () => {
 				console.log("Search getRequest");
 			},
@@ -56,8 +56,8 @@ const Header = ({ children }) => {
 			case SIDE_LEFT_TYPE_CONTENT.searchContacts:
 				return setSettings(() => ({
 					topCenterComponent: {
-						placeholder: "Search",
 						type: "searchContacts",
+						placeholder: "Search", // fix locale
 						getRequest: (options) => {
 							dispatch(
 								allActionsStore.setSearchContactsAction({

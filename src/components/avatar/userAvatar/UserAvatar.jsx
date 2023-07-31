@@ -1,7 +1,6 @@
 import { Avatar } from "@mui/material";
 import DefaultAvatar from "../defaultAvatar";
 import BadgeUserAvatar from "@/components/badges/badgeUserAvatar";
-import { REACT_APP_BASE_URL } from "@/core/constants/url";
 import { getNameShort } from "@/helpers/index";
 
 const UserAvatar = ({
@@ -23,7 +22,7 @@ const UserAvatar = ({
 			>
 				{source ? (
 					<Avatar
-						src={`${REACT_APP_BASE_URL}/${source}`}
+						src={`${process.env.BASE_URL}/${source}`}
 						style={{ height: sizeAvatar, width: sizeAvatar }}
 					/>
 				) : (

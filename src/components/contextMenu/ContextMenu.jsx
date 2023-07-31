@@ -3,7 +3,7 @@ import { Item, Menu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { useSelector } from "react-redux";
 import SvgMaker from "@/components/svgMaker/index";
-import { CONTEXT_MENU_ID } from "@/core/constants/general";
+import { CONTEXT_MENU_ID } from "@/constants/general";
 
 // makeStyles
 const useStyles = makeStyles(() => ({

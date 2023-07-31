@@ -6,7 +6,9 @@ import { getInitialDataAuth } from "@/helpers/forSSR/getInitialData";
 import { redirectToPageAuth } from "@/helpers/forSSR/redirectToPage";
 import { PATHS } from "@/constants/paths";
 
-const HomePage = ({dataUserConversations}) => <LayoutMain dataUserConversations={dataUserConversations}/>;
+const HomePage = ({ dataUserConversations }) => (
+	<LayoutMain dataUserConversations={dataUserConversations} />
+);
 
 export const getServerSideProps = async (ctx) => {
 	const { locale, res, req, query } = ctx;
@@ -21,9 +23,9 @@ export const getServerSideProps = async (ctx) => {
 		});
 	}
 
-	const {dataUserConversations} = await getInitialDataAuth({
-		session
-	})
+	const { dataUserConversations } = await getInitialDataAuth({
+		session,
+	});
 
 	try {
 		return {
@@ -47,6 +49,5 @@ export const getServerSideProps = async (ctx) => {
 		};
 	}
 };
-
 
 export default HomePage;

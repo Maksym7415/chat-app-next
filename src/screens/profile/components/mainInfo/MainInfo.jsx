@@ -1,7 +1,7 @@
 import { Divider, Switch } from "@mui/material";
 import { useState } from "react";
 import RITitleWithSubtitleAndRightComponent from "@/components/renders/rendersItem/RITitleWithSubtitleAndRightComponent";
-import { TYPES_CONVERSATIONS } from "@/core/constants/general";
+import { TYPES_CONVERSATIONS } from "@/constants/general";
 import { handleKeyDown } from "@/helpers/index";
 
 // STYLES

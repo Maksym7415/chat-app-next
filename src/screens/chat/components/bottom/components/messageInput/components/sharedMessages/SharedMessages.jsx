@@ -5,6 +5,8 @@ import SvgMaker from "@/components/svgMaker";
 import languages from "@/core/translations";
 import { allActionsStore } from "@/store/rootActions";
 
+// fix locale
+
 // STYLES
 const classes = {
 	root: "bg-white flex px-[10px] py-[5px] border-b border-[#d1d1d1] items-center",

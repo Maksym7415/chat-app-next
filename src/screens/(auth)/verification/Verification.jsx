@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
 import * as config from "./config";
 import AuthForm from "@/components/authForm";
@@ -19,10 +19,7 @@ export const VerificationScreen = () => {
 	// HOOKS
 	const router = useRouter();
 	const dispatch = useDispatch();
-	const session = useSession();
 
-	console.log(session.data, 'session')
-	
 	// SELECTORS
 	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 	const loginSingIn = useSelector(({ authSlice }) => authSlice.loginSingIn);
@@ -55,47 +52,40 @@ export const VerificationScreen = () => {
 
 		postVerification(sendData)
 			.unwrap()
-			.then(async ({accessToken, refreshToken}) => {
+			.then(async ({ accessToken, refreshToken }) => {
+				const token = accessToken;
+				dispatch(allActionsStore.setLoginSingInAction(loginSingIn));
 
-				const token = accessToken
-				dispatch(
-					allActionsStore.setLoginSingInAction(loginSingIn),
-				);
-
-		const resUserMe = await fetchQuery({
-			url: pathBackUser.getUserProfileData,
-			token,
-		});
-
-		if (resUserMe.response.ok) {
-			const setCredentials = async (dataUser) => {
-
-				const resCredentials = await signIn("credentials", {
-					user: JSON.stringify({
-						...dataUser,
-						refreshToken,
-						token
-					}),
-					redirect: false,
-					accessToken,
+				const resUserMe = await fetchQuery({
+					url: pathBackUser.getUserProfileData,
+					token,
 				});
 
-				if (resCredentials.ok) {
-					dispatch(
-						allActionsStore.setUserInfoAction(
-							data || {},
-						),
-					);
+				if (resUserMe.response.ok) {
+					const setCredentials = async (dataUser) => {
+						const resCredentials = await signIn("credentials", {
+							user: JSON.stringify({
+								...dataUser,
+								refreshToken,
+								token,
+							}),
+							redirect: false,
+							accessToken,
+						});
 
-					router.push(PATHS.main);
-				} else {
-					toast.warning("warning");
+						if (resCredentials.ok) {
+							dispatch(
+								allActionsStore.setUserInfoAction(data || {}),
+							);
+
+							router.push(PATHS.main);
+						} else {
+							toast.warning("warning");
+						}
+					};
+
+					setCredentials(resUserMe.data);
 				}
-			};
-
-			setCredentials(resUserMe.data);
-		}
-
 			});
 	};
 

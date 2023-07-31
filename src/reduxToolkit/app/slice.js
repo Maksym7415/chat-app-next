@@ -12,12 +12,12 @@ import {
 	actionsTypeActionsChat,
 	actionsTypeActionsConversation,
 	actionsTypeObject,
-} from "@/core/constants/actions";
+} from "@/constants/actions";
 import {
 	LAST_ACTION_MESSAGES_STORE,
 	SIDE_LEFT_TYPE_CONTENT,
-} from "@/core/constants/general";
-import { PATHS } from "@/core/constants/paths";
+} from "@/constants/general";
+import { PATHS } from "@/constants/paths";
 import {
 	socketEmitClearConversation,
 	socketEmitDeleteConversation,
