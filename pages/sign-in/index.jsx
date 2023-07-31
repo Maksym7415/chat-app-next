@@ -1,7 +1,7 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import SignIn from "@/screens/(auth)/signIn";
+import {SignInScreen} from "@/screens/(auth)/signIn";
 
-const SignInPage = () => <SignIn />;
+const SignInPage = () => <SignInScreen />;
 
 SignInPage.getLayout = (page) => <>{page}</>;
 

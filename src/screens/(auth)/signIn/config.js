@@ -1,14 +1,19 @@
-export const signInFields = [
-  {
-    fieldName: "login",
-    placeholder: "email@example.com",
-    validate: {
-      required: "required",
-    },
-    styles: {
-      container: {
-        marginTop: 16,
-      },
-    },
-  },
-];
+import { z } from "zod";
+
+const login = {
+	fieldName: "login",
+	placeholder: "email@example.com",
+	styles: {
+		container: {
+			marginTop: 16,
+		},
+	},
+};
+
+export const signInFields = [login];
+
+export const validationSchema = z.object({
+	[login.fieldName]: z.string().nonempty({
+		message: "required",
+	}),
+});

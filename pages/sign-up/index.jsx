@@ -1,7 +1,7 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import SignUp from "@/screens/(auth)/signUp";
+import { SignUpScreen } from "@/screens/(auth)/signUp/index";
 
-const SignUpPage = () => <SignUp />;
+const SignUpPage = () => <SignUpScreen />;
 
 SignUpPage.getLayout = (page) => <>{page}</>;
 

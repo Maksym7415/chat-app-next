@@ -1,15 +1,16 @@
 import { useRouter } from "next/router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "next-i18next";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
 import * as config from "./config";
-import AuthForm from "@/components/authForm";
+import AuthForm from "@/screens/(auth)/components/authForm";
 import { fetchQuery } from "@/helpers/index";
 import { pathBackUser } from "@/constants/urlBack";
 import { PATHS } from "@/constants/paths";
 import Meta from "@/core/seo/Meta";
-import languages from "@/core/translations";
 import { authApi } from "@/store/auth/api";
 import { parseErrorResToType } from "@/store/helpers";
 import { allActionsStore } from "@/store/rootActions";
@@ -19,9 +20,9 @@ export const VerificationScreen = () => {
 	// HOOKS
 	const router = useRouter();
 	const dispatch = useDispatch();
+	const { t } = useTranslation("common");
 
 	// SELECTORS
-	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 	const loginSingIn = useSelector(({ authSlice }) => authSlice.loginSingIn);
 	const verificationCode = useSelector(
 		({ authSlice }) => authSlice.verificationCode,
@@ -29,12 +30,8 @@ export const VerificationScreen = () => {
 	const callbackUrl = decodeURI(router.query?.callbackUrl ?? PATHS.main);
 
 	// STATES
-	const {
-		control,
-		handleSubmit,
-		setValue,
-		formState: { errors },
-	} = useForm({
+	const methodsForm = useForm({
+		resolver: zodResolver(config.validationSchema),
 		defaultValues: {
 			verificationCode: "",
 		},
@@ -98,25 +95,22 @@ export const VerificationScreen = () => {
 	useEffect(() => {
 		// set defaultValues form from back
 		if (verificationCode) {
-			setValue("verificationCode", `${verificationCode}`);
+			methodsForm.setValue("verificationCode", `${verificationCode}`);
 		}
 	}, [verificationCode]);
 
 	return (
-		<Meta title="Verification">
-			<AuthForm
-				title={languages[lang].authorization.verification}
-				submitBtnTitle={languages[lang].authorization.verification}
-				configFields={config.verificationFields}
-				isLoading={isLoading}
-				onSubmit={onSubmit}
-				errorBack={parseErrorResToType({ error })}
-				optionsForm={{
-					control,
-					handleSubmit,
-					errors,
-				}}
-			/>
+		<Meta title="verification">
+			<FormProvider {...methodsForm}>
+				<AuthForm
+					title={t("authorization.verification")}
+					submitBtnTitle={t("authorization.verification")}
+					configFields={config.verificationFields}
+					isLoading={isLoading}
+					onSubmit={onSubmit}
+					errorBack={parseErrorResToType({ error })}
+				/>
+			</FormProvider>
 		</Meta>
 	);
 };

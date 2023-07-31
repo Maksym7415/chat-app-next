@@ -1,4 +1,5 @@
 import React from "react";
+import { CacheProvider } from "@emotion/react";
 import { Provider } from "react-redux";
 import { SessionProvider } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
@@ -19,13 +20,18 @@ import { store } from "@/store/store";
 import { useIsMounted } from "@/hooks/use-ref/useIsMounted";
 import { allActionsStore } from "@/store/rootActions";
 import LayoutMain from "@/core/layouts/LayoutMain";
+import ThemeComponent from "@/core/theme/ThemeComponent";
+import createEmotionCache from "@/core/theme/createEmotionCache";
+import themeConfig from "@/core/theme/themeConfig";
 
 if (!process.browser) React.useLayoutEffect = React.useEffect;
+
+const clientSideEmotionCache = createEmotionCache();
 
 const App = ({ Component, ...rest }) => {
 	const isMounted = useIsMounted()?.current;
 
-	const { pageProps } = rest;
+	const { pageProps, emotionCache = clientSideEmotionCache } = rest;
 
 	if (!isMounted) {
 		store.dispatch(
@@ -47,6 +53,8 @@ const App = ({ Component, ...rest }) => {
 		<>
 			<Provider store={store}>
 				<SessionProvider session={pageProps.session}>
+				<CacheProvider value={emotionCache}>
+				<ThemeComponent settings={themeConfig}>
 					<Providers Component={Component}>
 						<DrawerCustom />
 						<ContextMenu />
@@ -54,6 +62,8 @@ const App = ({ Component, ...rest }) => {
 						<DialogCustom />
 							{getLayout(<Component {...pageProps} />)}
 					</Providers>
+					</ThemeComponent>
+								</CacheProvider>
 				</SessionProvider>
 			</Provider>
 		</>
