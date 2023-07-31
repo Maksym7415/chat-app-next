@@ -44,9 +44,9 @@ export const userApi = createApi({
 							options.dispatch(
 								allActionsStore.setLangAction(data?.lang),
 							);
-						options.dispatch(
-							allActionsStore.setUserInfoAction(data),
-						);
+						// options.dispatch(
+						// 	allActionsStore.setUserInfoAction(data),
+						// );
 
 						onQueryStartedFulfilledCb({ propsData, data });
 					},

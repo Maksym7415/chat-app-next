@@ -18,6 +18,7 @@ import Providers from "@/providers/MainProvider";
 import { store } from "@/store/store";
 import { useIsMounted } from "@/hooks/use-ref/useIsMounted";
 import { allActionsStore } from "@/store/rootActions";
+import LayoutMain from "@/core/layouts/LayoutMain";
 
 if (!process.browser) React.useLayoutEffect = React.useEffect;
 
@@ -38,6 +39,10 @@ const App = ({ Component, ...rest }) => {
 		);
 	}
 
+	const getLayout =
+		Component.getLayout ??
+		((page) => <LayoutMain titlePage={pageProps?.titlePage || ""}>{page}</LayoutMain>);
+
 	return (
 		<>
 			<Provider store={store}>
@@ -47,7 +52,7 @@ const App = ({ Component, ...rest }) => {
 						<ContextMenu />
 						<ModalCustom />
 						<DialogCustom />
-						<Component {...pageProps} />
+							{getLayout(<Component {...pageProps} />)}
 					</Providers>
 				</SessionProvider>
 			</Provider>

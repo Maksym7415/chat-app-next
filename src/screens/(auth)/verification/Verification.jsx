@@ -26,6 +26,7 @@ export const VerificationScreen = () => {
 	const verificationCode = useSelector(
 		({ authSlice }) => authSlice.verificationCode,
 	);
+	const callbackUrl = decodeURI(router.query?.callbackUrl ?? PATHS.main);
 
 	// STATES
 	const {
@@ -63,22 +64,26 @@ export const VerificationScreen = () => {
 
 				if (resUserMe.response.ok) {
 					const setCredentials = async (dataUser) => {
+						const userData = {
+							...dataUser,
+							refreshToken,
+							token,
+						};
+
 						const resCredentials = await signIn("credentials", {
-							user: JSON.stringify({
-								...dataUser,
-								refreshToken,
-								token,
-							}),
+							user: JSON.stringify(userData),
 							redirect: false,
 							accessToken,
 						});
 
 						if (resCredentials.ok) {
 							dispatch(
-								allActionsStore.setUserInfoAction(data || {}),
+								allActionsStore.setUserInfoAction(
+									userData || {},
+								),
 							);
 
-							router.push(PATHS.main);
+							router.push(callbackUrl);
 						} else {
 							toast.warning("warning");
 						}

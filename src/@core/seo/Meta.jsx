@@ -1,18 +1,23 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 import { MetaNoIndex } from "./MetaNoIndex";
 import { siteName, titleMerge } from "./config";
 import { onlyText } from "@/helpers/index";
 
 const Meta = ({ title, description, image = null, children }) => {
 	const { asPath } = useRouter();
+	const { t } = useTranslation("common");
+
+	// VARIABLES
 	const currentUrl = `${process.env.BASE_URL}${asPath}`;
+	const titlePage = t(title);
 
 	return (
 		<>
 			{description ? (
 				<Head>
-					<title itemProp="headline">{titleMerge(title)}</title>
+					<title itemProp="headline">{titleMerge(titlePage)}</title>
 					<meta
 						itemProp="description"
 						name="description"
@@ -28,7 +33,7 @@ const Meta = ({ title, description, image = null, children }) => {
 					/>
 					<meta
 						property="og:title"
-						content={titleMerge(title)}
+						content={titleMerge(titlePage)}
 					/>
 					<meta
 						property="og:url"
@@ -48,7 +53,7 @@ const Meta = ({ title, description, image = null, children }) => {
 					/>
 				</Head>
 			) : (
-				<MetaNoIndex title={title} />
+				<MetaNoIndex title={titlePage} />
 			)}
 			{children}
 		</>

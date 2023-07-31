@@ -1,14 +1,10 @@
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton } from "@mui/material";
+// import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowBackIcon from "public/icons/generals/arrowBack.svg";
+import MenuIcon from "public/icons/generals/menu.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/constants/general";
 import { allActionsStore } from "@/store/rootActions";
-
-// STYLES
-const classes = {
-	container: "mr-[15px]",
-};
+import { SDW, SDIconButton } from "./styles";
 
 const TopLeftComponent = () => {
 	// HOOKS
@@ -20,7 +16,7 @@ const TopLeftComponent = () => {
 	);
 
 	return (
-		<div className={classes.container}>
+		<SDW>
 			{(() => {
 				if (
 					[SIDE_LEFT_TYPE_CONTENT.conversations].includes(
@@ -29,10 +25,9 @@ const TopLeftComponent = () => {
 				) {
 					return (
 						<>
-							<IconButton
+							<SDIconButton
 								color="default"
 								aria-label="menu"
-								edge="end"
 								onClick={() => {
 									dispatch(
 										allActionsStore.setDrawerConfigAction({
@@ -44,15 +39,14 @@ const TopLeftComponent = () => {
 								}}
 							>
 								<MenuIcon />
-							</IconButton>
+							</SDIconButton>
 						</>
 					);
 				}
 				return (
-					<IconButton
+					<SDIconButton
 						color="default"
 						aria-label="back"
-						edge="end"
 						onClick={() => {
 							dispatch(
 								allActionsStore.setSideLeftConfigAction({
@@ -62,10 +56,10 @@ const TopLeftComponent = () => {
 						}}
 					>
 						<ArrowBackIcon />
-					</IconButton>
+					</SDIconButton>
 				);
 			})()}
-		</div>
+		</SDW>
 	);
 };
 

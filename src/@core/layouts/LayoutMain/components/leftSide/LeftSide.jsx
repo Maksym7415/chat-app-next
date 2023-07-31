@@ -1,5 +1,6 @@
 import { memo, useMemo } from "react";
 import { useSelector } from "react-redux";
+import { SDRoot } from "./styles";
 import Header from "./components/header";
 import {
 	SIDE_LEFT_TYPE_CONTENT,
@@ -8,12 +9,8 @@ import {
 import Conversations from "@/screens/conversations/index";
 import SearchPage from "@/screens/search";
 
-// STYLES
-const classes = {
-	container: "flex bg-white flex-col h-full",
-};
-
 const LeftSide = () => {
+	// SELECTORS
 	const sideLeftConfig = useSelector(
 		({ appSlice }) => appSlice.sideLeftConfig,
 	);
@@ -37,10 +34,10 @@ const LeftSide = () => {
 	}, [sideLeftConfig]);
 
 	return (
-		<div className={classes.container}>
+		<SDRoot>
 			<Header />
 			{renderContent}
-		</div>
+		</SDRoot>
 	);
 };
 export default memo(LeftSide);

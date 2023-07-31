@@ -39,18 +39,18 @@ export const conversationsApi = createApi({
 			},
 			transformErrorResponse: (response, meta, args) =>
 				fErrorResponse({ response, meta, args }),
-			// async onQueryStarted(_, options) {
-			// 	onQueryStartedFulfilled({
-			// 		options,
-			// 		cb: (res) => {
-			// 			const { data } = res;
+			async onQueryStarted(_, options) {
+				onQueryStartedFulfilled({
+					options,
+					cb: (res) => {
+						const { data } = res;
 
-			// 			options.dispatch(
-			// 				allActionsStore.setConversationListAction(data),
-			// 			);
-			// 		},
-			// 	});
-			// },
+						options.dispatch(
+							allActionsStore.setConversationListAction(data),
+						);
+					},
+				});
+			},
 		}),
 
 		getConversationMessages: builder.query({

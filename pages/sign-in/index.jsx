@@ -3,6 +3,8 @@ import SignIn from "@/screens/(auth)/signIn";
 
 const SignInPage = () => <SignIn />;
 
+SignInPage.getLayout = (page) => <>{page}</>;
+
 export const getStaticProps = async (ctx) => {
 	const { locale } = ctx;
 

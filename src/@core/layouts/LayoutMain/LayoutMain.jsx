@@ -1,8 +1,10 @@
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
 import { Rnd } from "react-rnd";
+import { SDMain } from "./styles";
 import LeftSide from "./components/leftSide";
 import Meta from "@/core/seo/Meta";
 import { socket } from "@/core/socket";
@@ -15,16 +17,7 @@ import {
 	socketOnUserIdNewChat,
 } from "@/core/socket/actions/socketOn";
 import { userApi } from "@/store/user/api";
-
-// STYLES
-const classes = {
-	container: "flex h-screen bg-[url('/images/generals/bgMain.avif')]",
-};
-
-const styleRnd = {
-	position: "relative",
-	borderRight: "1px solid rgba(0, 0, 0, 0.2)",
-};
+import { conversationsApi } from "@/store/conversations/api";
 
 const LayoutMain = ({
 	children,
@@ -34,9 +27,12 @@ const LayoutMain = ({
 	// HOOKS
 	const router = useRouter();
 	const session = useSession();
+	const { t } = useTranslation("common");
 
-	// SERVICES
-	userApi.useGetUserProfileDataQuery();
+	// API
+	const [getUserConversations] =
+		conversationsApi.useLazyGetUserConversationsQuery();
+	const [getUserProfileData] = userApi.useLazyGetUserProfileDataQuery();
 
 	// SELECTORS
 	const conversationsList = useSelector(
@@ -59,14 +55,14 @@ const LayoutMain = ({
 
 	const titlePage = useMemo(() => {
 		if (titlePageProps) {
-			return titlePageProps;
+			return t(titlePageProps);
 		}
 
 		if (params?.id) {
 			if (conversationSelect?.conversationName) {
 				return conversationSelect?.conversationName;
 			}
-			return "Chat";
+			return t("generals.chat");
 		}
 
 		return "";
@@ -80,6 +76,11 @@ const LayoutMain = ({
 	}, [params]);
 
 	// USEEFFECTS
+	useEffect(() => {
+		getUserConversations();
+		getUserProfileData();
+	}, []);
+
 	useEffect(() => {
 		if (session.data?.user?.id) {
 			socket.removeAllListeners();
@@ -106,9 +107,13 @@ const LayoutMain = ({
 			title={titlePage}
 			description={descriptionPage}
 		>
-			<main className={classes.container}>
+			<SDMain component="main">
 				<Rnd
-					style={styleRnd}
+					style={{
+						position: "relative",
+						borderRight: "1px solid rgba(0, 0, 0, 0.2)",
+						backgroundColor: "#ffffff",
+					}}
 					minWidth="20vw"
 					maxWidth="40vw"
 					default={{
@@ -135,7 +140,7 @@ const LayoutMain = ({
 					<LeftSide />
 				</Rnd>
 				{children}
-			</main>
+			</SDMain>
 		</Meta>
 	);
 };

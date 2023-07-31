@@ -1,20 +1,16 @@
 import { memo, useEffect, useState } from "react";
+import { useTranslation } from "next-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import TopCenterComponent from "./components/topCenterComponent";
 import TopLeftComponent from "./components/topLeftComponent";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/constants/general";
 import { allActionsStore } from "@/store/rootActions";
-
-// STYLES
-const classes = {
-	container: "px-[8px] py-[15px]",
-	containerTop: "flex",
-	wrapperTopCenterComponent: "flex",
-};
+import { SDRoot, SDTop } from "./styles";
 
 const Header = ({ children }) => {
 	// HOOKS
 	const dispatch = useDispatch();
+	const { t } = useTranslation("common");
 
 	// SELECTORS
 	const sideLeftConfig = useSelector(
@@ -25,8 +21,8 @@ const Header = ({ children }) => {
 	const [settings, setSettings] = useState({
 		noSettings: true,
 		topCenterComponent: {
-			type: "searchContacts",
-			placeholder: "Search", // fix locale
+			type: SIDE_LEFT_TYPE_CONTENT.searchContacts,
+			placeholder: t("generals.search"),
 			getRequest: () => {
 				console.log("Search getRequest");
 			},
@@ -42,7 +38,7 @@ const Header = ({ children }) => {
 			case SIDE_LEFT_TYPE_CONTENT.conversations:
 				return setSettings(() => ({
 					topCenterComponent: {
-						placeholder: "Search",
+						placeholder: t("generals.search"),
 						onFocus: () => {
 							dispatch(
 								allActionsStore.setSideLeftConfigAction({
@@ -56,8 +52,8 @@ const Header = ({ children }) => {
 			case SIDE_LEFT_TYPE_CONTENT.searchContacts:
 				return setSettings(() => ({
 					topCenterComponent: {
-						type: "searchContacts",
-						placeholder: "Search", // fix locale
+						type: SIDE_LEFT_TYPE_CONTENT.searchContacts,
+						placeholder: t("generals.search"),
 						getRequest: (options) => {
 							dispatch(
 								allActionsStore.setSearchContactsAction({
@@ -82,17 +78,15 @@ const Header = ({ children }) => {
 	}, [sideLeftConfig]);
 
 	return (
-		<div className={classes.container}>
-			<div className={`${classes.containerTop} flex`}>
+		<SDRoot>
+			<SDTop>
 				<TopLeftComponent />
-				<div className={classes.wrapperTopCenterComponent}>
-					<TopCenterComponent
-						parentSettings={settings.topCenterComponent}
-					/>
-				</div>
-			</div>
+				<TopCenterComponent
+					parentSettings={settings.topCenterComponent}
+				/>
+			</SDTop>
 			{children}
-		</div>
+		</SDRoot>
 	);
 };
 

@@ -1,17 +1,12 @@
 import { useCallback, useLayoutEffect, useMemo, useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
-import { InputAdornment, OutlinedInput } from "@mui/material";
+import SearchIcon from "public/icons/generals/search.svg";
 import { useSelector } from "react-redux";
+import { SDInputSearch, SDInputAdornmentLeft } from "./styles";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/constants/general";
 import { useDebounce } from "@/hooks/useDebounce";
 import { searchApi } from "@/store/search/api";
 
-// STYLES
-const classes = {
-	inputSearch: "w-full max-w-[240px] p-[0] pl-[5px] rounded-[20px] h-[40px]",
-};
-
-function TopCenterComponent({ parentSettings }) {
+const TopCenterComponent = ({ parentSettings }) => {
 	// SELECTORS
 	const sideLeftConfig = useSelector(
 		({ appSlice }) => appSlice.sideLeftConfig,
@@ -43,7 +38,7 @@ function TopCenterComponent({ parentSettings }) {
 			},
 		},
 		{
-			skip: parentSettings.type !== "searchContacts",
+			skip: parentSettings.type !== SIDE_LEFT_TYPE_CONTENT.searchContacts,
 		},
 	);
 
@@ -74,16 +69,14 @@ function TopCenterComponent({ parentSettings }) {
 					].includes(sideLeftConfig.page)
 				) {
 					return (
-						<OutlinedInput
-							id="outlined-adornment-weight"
+						<SDInputSearch
 							value={search}
 							onChange={onChangeText}
 							placeholder={parentSettings.placeholder}
-							className={classes.inputSearch}
 							startAdornment={
-								<InputAdornment position="end">
+								<SDInputAdornmentLeft position="start">
 									<SearchIcon />
-								</InputAdornment>
+								</SDInputAdornmentLeft>
 							}
 							onFocus={parentSettings.onFocus}
 						/>
@@ -93,6 +86,6 @@ function TopCenterComponent({ parentSettings }) {
 			})()}
 		</>
 	);
-}
+};
 
 export default TopCenterComponent;

@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { TYPES_CONVERSATIONS } from "../../@core/constants/general";
+import { TYPES_CONVERSATIONS } from "@/constants/general";
 import { getNameShort } from "../../helpers";
 import Header from "./components/header";
 import MainInfo from "./components/mainInfo";

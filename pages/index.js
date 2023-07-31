@@ -1,31 +1,24 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getServerSession } from "next-auth/next";
-import LayoutMain from "@/core/layouts/LayoutMain";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { getInitialDataAuth } from "@/helpers/forSSR/getInitialData";
 import { redirectToPageAuth } from "@/helpers/forSSR/redirectToPage";
 import { PATHS } from "@/constants/paths";
 
-const HomePage = ({ dataUserConversations }) => (
-	<LayoutMain dataUserConversations={dataUserConversations} />
-);
+const HomePage = () => <></>;
 
 export const getServerSideProps = async (ctx) => {
 	const { locale, res, req, query } = ctx;
 
+	const titlePage = "generals.main";
 	const session = await getServerSession(req, res, authOptions);
 	const token = session?.user?.token;
 
 	if (!token) {
 		return redirectToPageAuth({
 			queryParams: query,
-			callbackUrl: PATHS.user_profile_edit,
+			callbackUrl: PATHS.main,
 		});
 	}
-
-	const { dataUserConversations } = await getInitialDataAuth({
-		session,
-	});
 
 	try {
 		return {
@@ -34,7 +27,7 @@ export const getServerSideProps = async (ctx) => {
 					"common",
 					"home",
 				])),
-				dataUserConversations,
+				titlePage,
 			},
 		};
 	} catch (error) {
@@ -44,7 +37,7 @@ export const getServerSideProps = async (ctx) => {
 					"common",
 					"home",
 				])),
-				dataUserConversations,
+				titlePage,
 			},
 		};
 	}

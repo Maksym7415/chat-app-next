@@ -3,6 +3,8 @@ import { VerificationScreen } from "@/screens/(auth)/verification/index";
 
 const VerificationPage = () => <VerificationScreen />;
 
+VerificationPage.getLayout = (page) => <>{page}</>;
+
 export const getStaticProps = async (ctx) => {
 	const { locale } = ctx;
 

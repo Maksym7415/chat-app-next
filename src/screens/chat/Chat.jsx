@@ -1,6 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { useLayoutEffect, useMemo } from "react";
+import { useTranslation } from "next-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import Head from "next/head";
 import ChatBottom from "./components/bottom";
 import ChatHeader from "./components/header";
 import ChatContent from "./components/mainContent";
@@ -24,6 +26,7 @@ const scrollPositionChats = {};
 const Chat = ({ params }) => {
 	// HOOKS
 	const dispatch = useDispatch();
+	const { t } = useTranslation("common");
 
 	// SELECTORS
 	const conversationsList = useSelector(
@@ -100,6 +103,9 @@ const Chat = ({ params }) => {
 
 	return (
 		<>
+		 	<Head>
+				<title>{conversationData?.conversationName || t("generals.chat")}</title>
+			</Head>
 			<Box className={classes.container}>
 				<ChatHeader
 					conversationData={conversationData}
