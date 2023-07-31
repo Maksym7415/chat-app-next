@@ -36,3 +36,17 @@ export const namesCookies = {
   lang: "@@lang",
   isLoadChatListSer: "isLoadChatListSer",
 };
+
+export const defaultLocale = {
+	id: 1,
+	title: "ENG",
+	value: "en",
+	longTitle: "english",
+};
+
+export const langsData = {
+	en: defaultLocale,
+	ru: { id: 2, title: "RUS", value: "ru", longTitle: "russian" },
+};
+
+export const langs = Object.values(langsData);

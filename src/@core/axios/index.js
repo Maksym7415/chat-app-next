@@ -3,10 +3,10 @@
 /* eslint-disable no-param-reassign */
 // APPROVED +
 import axios from "axios";
-import { IS_CLIENT, langsData } from "@/core/constants/general";
+import { IS_CLIENT, langsData } from "@/constants/general";
 // import { PATHS } from "@/core/constants/paths";
 import Snackbar from "@/helpers/toastify";
-import { actionLogOut } from "@/store/store";
+// import { actionLogOut } from "@/store/store";
 
 const parseErrorCode = (error) => {
 	if (error?.response) {
@@ -20,6 +20,12 @@ const parseErrorCode = (error) => {
 
 			// actionLogOut();
 
+			// if (IS_CLIENT) {
+			// 	window.open(
+			// 		`${window.location.origin}${PATHS.signIn}`,
+			// 		"_self",
+			// 	);
+			// }
 			return Promise.reject({
 				data: {
 					message: message || error.response.data,
@@ -79,12 +85,12 @@ API.interceptors.request.use(
 			const replaceHttps = config.url.replace("http://", "https://");
 
 			config.url = insertLocalInUrl({
-				locale: config.locale,
+				locale: config?.locale || "",
 				url: replaceHttps,
 			});
 		} else {
 			config.baseURL = insertLocalInUrl({
-				locale: config.locale,
+				locale: config?.locale || "",
 				url: process.env.BASE_URL_API,
 			});
 		}

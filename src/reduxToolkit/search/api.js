@@ -5,7 +5,22 @@ import { fErrorResponse } from "@/store/helpers";
 
 export const searchApi = createApi({
 	reducerPath: "searchApi",
-	baseQuery: axiosBaseQuery({}),
+	baseQuery: axiosBaseQuery({
+			prepareHeaders: (headers, { getState }) => {
+			const token = getState().userSlice.userInfo?.token;
+
+			let headersCopy = { ...headers };
+
+			if (token) {
+				headersCopy = Object.assign(headersCopy, {
+					Authorization: token,
+				});
+			}
+			return {
+				...headersCopy,
+			};
+		},
+	}),
 	endpoints: (builder) => ({
 		getSearchContacts: builder.query({
 			query: ({ params }) => ({

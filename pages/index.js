@@ -2,41 +2,30 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getServerSession } from "next-auth/next";
 import LayoutMain from "@/core/layouts/LayoutMain";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { fetchQuery } from "@/helpers/index";
-import { pathBackConversations } from "@/constants/urlBack";
+import { getInitialDataAuth } from "@/helpers/forSSR/getInitialData";
+import { redirectToPageAuth } from "@/helpers/forSSR/redirectToPage";
+import { PATHS } from "@/constants/paths";
 
 const HomePage = ({dataUserConversations}) => <LayoutMain dataUserConversations={dataUserConversations}/>;
 
 export const getServerSideProps = async (ctx) => {
-	const { locale, res, req } = ctx;
+	const { locale, res, req, query } = ctx;
 
 	const session = await getServerSession(req, res, authOptions);
-	const token = session?.user?.token
+	const token = session?.user?.token;
 
-	let dataUserConversations = {}
+	if (!token) {
+		return redirectToPageAuth({
+			queryParams: query,
+			callbackUrl: PATHS.user_profile_edit,
+		});
+	}
+
+	const {dataUserConversations} = await getInitialDataAuth({
+		session
+	})
+
 	try {
-		// check for the city, if there is a city, make a redirect to the city
-
-		// get trending events
-		const [resUserConversations] = await Promise.all([
-			fetchQuery({
-				url: pathBackConversations.getUserConversations,
-				token,
-			}),
-		]);
-
-
-		console.log(resUserConversations, 'resUserConversations')
-		if (resUserConversations.data?.data) {
-								const responseData = resUserConversations?.data?.data;
-				const transformData = responseData?.reduce((acc, item) => {
-					acc[item.conversationId] = item;
-					return acc;
-				}, {});
-
-				dataUserConversations = transformData
-		}
-
 		return {
 			props: {
 				...(await serverSideTranslations(locale ?? "en", [

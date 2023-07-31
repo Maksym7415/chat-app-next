@@ -32,6 +32,12 @@ const App = ({ Component, ...rest }) => {
 				pageProps.session?.user || {},
 			),
 		);
+
+		store.dispatch(
+			allActionsStore.setConversationListAction(
+				pageProps.dataUserConversations || {},
+			),
+		);
 	}
 
 

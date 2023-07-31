@@ -14,7 +14,6 @@ import {
 	socketOnUserIdChat,
 	socketOnUserIdNewChat,
 } from "@/core/socket/actions/socketOn";
-import { conversationsApi } from "@/store/conversations/api";
 import { userApi } from "@/store/user/api";
 
 // STYLES
@@ -31,15 +30,14 @@ const LayoutMain = ({
 	children,
 	titlePage: titlePageProps = "",
 	params = {},
-	dataUserConversations
+	dataUserConversations,
 }) => {
 	// HOOKS
 	const router = useRouter();
 	const session = useSession();
 
 	// SERVICES
-	conversationsApi.useGetUserConversationsQuery({});
-	// userApi.useGetUserProfileDataQuery();
+	userApi.useGetUserProfileDataQuery();
 
 	// SELECTORS
 	const conversationsList = useSelector(
@@ -47,9 +45,8 @@ const LayoutMain = ({
 	);
 	const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
 
-		// console.log(session.data, 'session')
-		// 	console.log(userInfo, 'userInfo')
-		console.log(dataUserConversations, 'dataUserConversations')
+	console.log(dataUserConversations, "dataUserConversations");
+
 	// STATES
 	const [containerWidth, setContainerWidth] = useState(300);
 
@@ -87,23 +84,23 @@ const LayoutMain = ({
 
 	// USEEFFECTS
 	useEffect(() => {
-		if(userInfo?.id) {
-	socket.removeAllListeners();
-		if (conversationsListMass?.length) {
-			conversationsListMass.forEach((chat) => {
-				socketOnUserIdChat(chat);
-				socketOnTypingStateId(chat);
+		if (session.data?.user?.id) {
+			socket.removeAllListeners();
+			if (conversationsListMass?.length) {
+				conversationsListMass.forEach((chat) => {
+					socketOnUserIdChat(chat);
+					socketOnTypingStateId(chat);
+				});
+			}
+			socketOnDeleteMessage();
+			socketOnUserIdNewChat(userInfo?.id, router);
+			socketOnDeleteConversation({
+				params: {
+					id: router.query.id,
+				},
+				router,
 			});
-		}
-		socketOnDeleteMessage();
-		socketOnUserIdNewChat(userInfo?.id, router);
-		socketOnDeleteConversation({
-			params: {
-				id: router.query.id,
-			},
-			router,
-		});
-		socketOnClearConversation();
+			socketOnClearConversation();
 		}
 	}, [conversationsListMass]);
 
