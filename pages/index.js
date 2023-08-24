@@ -23,20 +23,14 @@ export const getServerSideProps = async (ctx) => {
 	try {
 		return {
 			props: {
-				...(await serverSideTranslations(locale ?? "en", [
-					"common",
-					"home",
-				])),
+				...(await serverSideTranslations(locale ?? "en", ["common"])),
 				titlePage,
 			},
 		};
 	} catch (error) {
 		return {
 			props: {
-				...(await serverSideTranslations(locale ?? "en", [
-					"common",
-					"home",
-				])),
+				...(await serverSideTranslations(locale ?? "en", ["common"])),
 				titlePage,
 			},
 		};
