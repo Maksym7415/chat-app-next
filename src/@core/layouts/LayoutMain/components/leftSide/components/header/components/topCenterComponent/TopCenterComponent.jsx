@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect, useMemo, useState } from "react";
-import SearchIcon from "public/icons/generals/search.svg";
+// import SearchIcon from "public/icons/generals/search.svg";
 import { useSelector } from "react-redux";
 import { SDInputSearch, SDInputAdornmentLeft } from "./styles";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/constants/general";
@@ -75,7 +75,8 @@ const TopCenterComponent = ({ parentSettings }) => {
 							placeholder={parentSettings.placeholder}
 							startAdornment={
 								<SDInputAdornmentLeft position="start">
-									<SearchIcon />
+									{/* <SearchIcon /> */}
+									SearchIcon
 								</SDInputAdornmentLeft>
 							}
 							onFocus={parentSettings.onFocus}
