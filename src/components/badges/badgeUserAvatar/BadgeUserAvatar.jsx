@@ -1,3 +1,4 @@
+// +
 import { SDBadge } from "./styles";
 import { STATUS_AVATAR } from "@/constants/general";
 

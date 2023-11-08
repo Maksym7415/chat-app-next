@@ -1,26 +1,28 @@
 "use client";
+// +
 
 import List from "@mui/material/List";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
-import BaseSelect from "../../../selects/BaseSelect";
 import * as config from "./config";
+import { SDWLangs, SDListItem } from "./styles";
+import BaseSelect from "@/components/selects/BaseSelect";
+import toast from "@/helpers/toastify";
 import { PATHS } from "@/constants/paths";
 import { allActionsStore } from "@/store/rootActions";
+import { typeContentModal } from "@/components/modal";
+import { typeContentDialog } from "@/components/dialogWindow";
 import { actionLogOut } from "@/store/store";
 import { userApi } from "@/store/user/api";
-import { SDWLangs, SDListItem } from "./styles";
 
 function MainDrawer({ closeDrawer }) {
 	// HOOKS
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const { t } = useTranslation("common");
-	const { enqueueSnackbar } = useSnackbar();
 
 	// SELECTORS
 	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
@@ -39,7 +41,7 @@ function MainDrawer({ closeDrawer }) {
 					dispatch(
 						allActionsStore.setModalConfigAction({
 							open: true,
-							renderContent: "settingProfile",
+							renderContent: typeContentModal.settingProfile,
 							styles: {},
 						}),
 					);
@@ -52,7 +54,7 @@ function MainDrawer({ closeDrawer }) {
 				dispatch(
 					allActionsStore.setDialogWindowConfigAction({
 						open: true,
-						typeContent: "newChat",
+						typeContent: typeContentDialog.newChat,
 						title: t("generals.newChat"),
 						data: [],
 					}),
@@ -81,9 +83,7 @@ function MainDrawer({ closeDrawer }) {
 		putUpdateProfileData(sendData)
 			.unwrap()
 			.then(() => {
-				enqueueSnackbar(t("generals.successChangeLanguage"), {
-					variant: "success",
-				});
+				toast.success(t("generals.successChangeLanguage"));
 			});
 	};
 

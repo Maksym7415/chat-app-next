@@ -36,7 +36,8 @@
 		"deletePhoto": "Удалить фотографию",
 		"createdNewChat": "Создан новый чат",
 		"selectContact": "Выбрать контакт",
-		"successChangeLanguage": "Успешная смена языка"
+		"successChangeLanguage": "Успешная смена языка",
+		"noSelectedContacts": "Нет выбранных контактов"
 	},
 	"authorization": {
 		"signIn": "Войти",

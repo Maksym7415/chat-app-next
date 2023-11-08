@@ -1,3 +1,4 @@
+// +
 import { SDRoot, SDLabel, SDTextError, SDTextField } from "./styles";
 
 const TextInputField = ({
@@ -15,9 +16,6 @@ const TextInputField = ({
 	<SDRoot sx={optionsTagsSx?.root}>
 		{label && <SDLabel sx={optionsTagsSx?.label}>{label}</SDLabel>}
 		<SDTextField
-			// className={clsx(classes.inputStyle, {
-			// 	[classes.errorInputStyle]: error,
-			// })}
 			onChange={onChangeText}
 			value={value}
 			placeholder={placeholder}

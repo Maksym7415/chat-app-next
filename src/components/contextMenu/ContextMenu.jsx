@@ -1,3 +1,6 @@
+"use client";
+// +
+
 import { Menu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { useSelector } from "react-redux";

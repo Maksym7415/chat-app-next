@@ -1,6 +1,7 @@
+// +
+
 import { CircularProgress } from "@mui/material";
 import { SDBoxCenter, SDTextNoResults } from "./styles";
-
 
 const RenderConditionsList = ({
 	list = [],

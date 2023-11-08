@@ -1,7 +1,7 @@
 import CircularProgress from "@mui/material/CircularProgress";
+import Button from "@mui/material/Button";
 import { Controller, useFormContext } from "react-hook-form";
 import { SDSection, SDContainer, SDForm, SDTitle } from "./styles";
-import CustomButton from "@/components/buttons/customButton"; // replace
 import TextInputCustom from "@/components/hookFormsComponents/textInput";
 
 // STYLES
@@ -57,7 +57,7 @@ const AuthForm = ({
 							<p className={classes.errorText}>{errorBack}</p>
 						</div>
 					)}
-					<CustomButton
+					<Button
 						onClick={handleSubmit(onSubmit)}
 						style={{
 							marginTop: 15,
@@ -73,7 +73,7 @@ const AuthForm = ({
 							/>
 						) : null}{" "}
 						{submitBtnTitle}
-					</CustomButton>
+					</Button>
 					{render?.text && render.text(classes)}
 				</SDForm>
 			</SDContainer>

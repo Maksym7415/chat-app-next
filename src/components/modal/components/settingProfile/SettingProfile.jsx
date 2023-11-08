@@ -1,7 +1,7 @@
 "use client";
+// +
 
 import { useTranslation } from "next-i18next";
-import { useSnackbar } from "notistack";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -9,11 +9,12 @@ import { SDRoot, SDWBtn, SDButton, SDTitle } from "./styles";
 import Avatars from "./components/avatars";
 import * as config from "./config";
 import TextInputCustom from "@/components/hookFormsComponents/textInput";
+import toast from "@/helpers/toastify";
 import { userApi } from "@/store/user/api";
 
+// fix locale
 const SettingProfile = () => {
 	// HOOKS
-	const { enqueueSnackbar } = useSnackbar();
 	const { t } = useTranslation("common");
 
 	// SELECTORS
@@ -50,30 +51,30 @@ const SettingProfile = () => {
 		Object.keys(sendData).length
 			? putUpdateProfileData(sendData)
 					.unwrap()
-					.then(() => {
-						enqueueSnackbar("Success change language", {
-							variant: "success",
-						});
-					})
+					.then(() => toast.success(t("Success change language")))
 					.catch((err) => {
 						console.log(err, "err");
-						enqueueSnackbar(err.message, { variant: "error" });
+						toast.error(err.message);
 					})
-			: enqueueSnackbar("Немає змін щоб оновити дані", {
-					variant: "info",
-			  });
+			: toast.info("Немає змін щоб оновити дані");
 	};
 
 	// USEEFFECTS
 	useEffect(() => {
 		// set defaultValues form from back
-		if (!getValues(config.fieldsKeysData.firstName.key) && userInfo.firstName) {
+		if (
+			!getValues(config.fieldsKeysData.firstName.key) &&
+			userInfo.firstName
+		) {
 			setValue(
 				config.fieldsKeysData.firstName.key,
 				`${userInfo.firstName}`,
 			);
 		}
-		if (!getValues(config.fieldsKeysData.lastName.key) && userInfo.lastName) {
+		if (
+			!getValues(config.fieldsKeysData.lastName.key) &&
+			userInfo.lastName
+		) {
 			setValue(
 				config.fieldsKeysData.lastName.key,
 				`${userInfo.lastName}`,
@@ -83,7 +84,7 @@ const SettingProfile = () => {
 
 	return (
 		<SDRoot>
-			<SDTitle>{t("generals.search")}</SDTitle>
+			<SDTitle variant="h1">{t("generals.search")}</SDTitle>
 			<Avatars />
 			<form>
 				{config.fields.map((el) => (

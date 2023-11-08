@@ -1,3 +1,4 @@
+// +
 import { Avatar } from "@mui/material";
 import { SDRoot } from "./styles";
 import DefaultAvatar from "../defaultAvatar";
@@ -11,8 +12,8 @@ const UserAvatar = ({
 	sizeBadge = 18,
 	name = "",
 	optionsTags = {
-		root: {}
-	}
+		root: {},
+	},
 }) => {
 	// VARIABLES
 	const nameShort = name ? getNameShort(name) : "";

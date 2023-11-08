@@ -1,3 +1,4 @@
+// +
 import { SDBoxCenter } from "./styles";
 
 const RenderInfoCenterBox = ({ children, optionsTagSx = {} }) => (

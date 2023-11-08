@@ -1,5 +1,6 @@
+// +
+import styled from "@mui/system/styled";
 import Badge from "@mui/material/Badge";
-import { styled } from "@mui/material/styles";
 
 export const SDBadge = styled(Badge)(() => ({
 	"& .MuiBadge-badge": {

@@ -1,6 +1,14 @@
+"use client";
+// +
+
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { CircularProgress, ListItemText, Menu } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Navigation, Pagination } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import * as config from "./config";
 import {
 	SDRoot,
 	SDIconButton,
@@ -10,21 +18,15 @@ import {
 	SDListItem,
 	SDListItemIcon,
 } from "./styles";
-import { useSnackbar } from "notistack";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Navigation, Pagination } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-import * as config from "./config";
 import DefaultAvatar from "@/components/avatar/defaultAvatar";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
+import toast from "@/helpers/toastify";
 import { getNameShort } from "@/helpers/index";
 import { userApi } from "@/store/user/api";
 
+// fix locale
 const Avatars = () => {
-	// HOOKS
-	const { enqueueSnackbar } = useSnackbar();
-
+	// API
 	const { isLoading: isLoadingAvatars } = userApi.useGetUserAvatarsQuery({});
 	const [putMainPhoto] = userApi.usePutMainPhotoMutation({});
 	const [deleteAvatar] = userApi.useDeleteAvatarMutation({});
@@ -57,11 +59,8 @@ const Avatars = () => {
 					},
 				})
 					.unwrap()
-					.then(async () => {
-						enqueueSnackbar("Success set main photo", {
-							variant: "success",
-						});
-					});
+					.then(() => toast.success(t("Success set main photo")));
+
 				return key;
 			case config.actionsPhotoKeysData.deletePhoto.key:
 				deleteAvatar({
@@ -71,11 +70,7 @@ const Avatars = () => {
 					},
 				})
 					.unwrap()
-					.then(async () => {
-						enqueueSnackbar("Success delete photo", {
-							variant: "success",
-						});
-					});
+					.then(() => toast.success(t("Success delete photo")));
 				return key;
 			default:
 				return key;
@@ -103,6 +98,7 @@ const Avatars = () => {
 		}
 	}, [userAvatars]);
 
+	// CONDITIONALS
 	if (isLoadingAvatars) {
 		return (
 			<RenderInfoCenterBox

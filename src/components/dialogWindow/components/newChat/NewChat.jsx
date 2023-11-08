@@ -1,16 +1,23 @@
 "use client";
+// +
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SDRoot, SDWContact, SDWInfo, SDFullName, SDLogin } from "./styles";
+import {
+	SDRoot,
+	SDWContact,
+	SDWInfo,
+	SDFullName,
+	SDLogin,
+	SDButton,
+} from "./styles";
 import SelectsAsyncPaginateSearch from "@/components/SelectsAsyncPaginateSearch";
 import UserAvatar from "@/components/avatar/userAvatar/index";
 import { socketEmitChatCreation } from "@/core/socket/actions/socketEmit";
 import { fullDate } from "@/helpers/index";
-import Snackbar from "@/helpers/notistack";
+import toast from "@/helpers/toastify";
 import { allActionsStore } from "@/store/rootActions";
 import { searchApi } from "@/store/search/api";
 import { STATUS_AVATAR } from "@/constants/general";
@@ -29,7 +36,7 @@ const NewChat = () => {
 	// FUNCTIONS
 	const createChat = () => {
 		if (!selectedContacts.length) {
-			return Snackbar.error("No selected contacts");
+			return toast.error(t("generals.noSelectedContacts"));
 		}
 
 		const data = [
@@ -52,7 +59,7 @@ const NewChat = () => {
 			imageFormat: "",
 			cb: () => {
 				dispatch(allActionsStore.setDialogWindowClearConfigAction());
-				return Snackbar.success(t("generals.createdNewChat"));
+				return toast.success(t("generals.createdNewChat"));
 			},
 		});
 	};
@@ -133,16 +140,9 @@ const NewChat = () => {
 					},
 				}}
 			/>
-			<Button
-				onClick={createChat}
-				style={{
-					margin: "10px auto 0",
-					width: "100%",
-					maxWidth: "200px",
-				}}
-			>
+			<SDButton onClick={createChat}>
 				{t("generals.createAChat")}
-			</Button>
+			</SDButton>
 		</SDRoot>
 	);
 };

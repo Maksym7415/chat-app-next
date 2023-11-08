@@ -1,3 +1,4 @@
+// +
 import { SDRoot, SDText } from "./styles";
 
 const DefaultAvatar = ({

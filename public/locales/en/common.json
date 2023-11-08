@@ -36,7 +36,8 @@
 		"deletePhoto": "Delete photo",
 		"createdNewChat": "Created new chat",
 		"selectContact": "Select contact",
-		"successChangeLanguage": "Success change language"
+		"successChangeLanguage": "Success change language",
+		"noSelectedContacts": "No selected contacts"
 	},
 	"authorization": {
 		"signIn": "Sign in",
