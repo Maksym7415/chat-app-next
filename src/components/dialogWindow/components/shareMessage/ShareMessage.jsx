@@ -1,37 +1,30 @@
-import { Box, TextField, Typography } from "@mui/material";
+import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import UserAvatar from "@/components/avatar/userAvatar/index";
 import { PATHS } from "@/constants/paths";
-import languages from "@/core/translations";
+import UserAvatar from "@/components/avatar/userAvatar/index";
+import {
+	SDRoot,
+	SDWConversation,
+	SDConversation,
+	SDInfo,
+	SDNoUsersFound,
+	SDName,
+	SDTextMessage,
+	SDTextNoUsersFound,
+	SDTextField,
+} from "./styles";
 import { handleKeyDown } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
-
-// rework
-
-// STYLES
-const classes = {
-	container:
-		"m-0 p-[10px] h-min-[50vh] h-max-[50vh] relative overflow-hidden",
-	conversation:
-		"flex mt-[10px] rounded-[10px] duration-2000 hover:bg-[#b9e6e1] cursor-pointer ",
-	name: "font-bold",
-	messageText: "max-w-[90%] line-camp-1",
-	inputFilter: "w-full",
-	wrapperConversation: "h-full flex flex-col overflow-auto mt-[10px]",
-	noUsersFound: "flex-center-center",
-	noUsersFoundText: "font-semibold text-[24px]",
-	info: "ml-[10px]",
-};
 
 const SharedMessage = ({ data }) => {
 	// HOOKS
 	const router = useRouter();
 	const dispatch = useDispatch();
+	const { t } = useTranslation("common");
 
 	// SELECTORS
-	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 	const conversationsList = useSelector(
 		({ conversationsSlice }) => conversationsSlice.conversationsList.data,
 	);
@@ -65,25 +58,23 @@ const SharedMessage = ({ data }) => {
 	};
 
 	return (
-		<div className={classes.container}>
-			<TextField
+		<SDRoot>
+			<SDTextField
 				id="name"
 				variant="outlined"
 				size="small"
-				placeholder={`${languages[lang].generals.shareMessageWith}...`}
-				className={classes.inputFilter}
+				placeholder={`${t("generals.shareMessageWith")}...`}
 				onChange={handleChatNameHandler}
 			/>
-			<div className={classes.wrapperConversation}>
+			<SDWConversation>
 				{conversationsFiltered.length ? (
 					conversationsFiltered.map((element) => (
-						<div
+						<SDConversation
 							role="button"
 							tabIndex="0"
 							onClick={() =>
 								handleShareMessageId(element.conversationId)
 							}
-							className={classes.conversation}
 							key={element.conversationId}
 							onKeyDown={(event) =>
 								// eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -95,31 +86,25 @@ const SharedMessage = ({ data }) => {
 								name={element.conversationName}
 								sizeAvatar={38}
 							/>
-							<div className={classes.info}>
-								<Typography
-									className={classes.name}
-									variant="subtitle1"
-								>
+							<SDInfo>
+								<SDName variant="subtitle1">
 									{element.conversationName}
-								</Typography>
-								<Typography
-									variant="caption"
-									className={classes.messageText}
-								>
+								</SDName>
+								<SDTextMessage variant="caption">
 									{element.conversationType}
-								</Typography>
-							</div>
-						</div>
+								</SDTextMessage>
+							</SDInfo>
+						</SDConversation>
 					))
 				) : (
-					<Box className={classes.noUsersFound}>
-						<Typography className={classes.noUsersFoundText}>
-							{languages[lang].generals.noUsersFound}.
-						</Typography>
-					</Box>
+					<SDNoUsersFound>
+						<SDTextNoUsersFound>
+							{t("generals.noUsersFound")}.
+						</SDTextNoUsersFound>
+					</SDNoUsersFound>
 				)}
-			</div>
-		</div>
+			</SDWConversation>
+		</SDRoot>
 	);
 };
 

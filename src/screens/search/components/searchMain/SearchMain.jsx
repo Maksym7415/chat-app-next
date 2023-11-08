@@ -14,6 +14,7 @@ import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
 import { handleKeyDown, setStateDirection } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
 import { searchApi } from "@/store/search/api";
+import { STATUS_AVATAR } from "@/constants/general";
 
 // STYLES
 const classes = {
@@ -152,7 +153,7 @@ const SearchMain = ({ onClickContact }) => {
 										source={item.userAvatar}
 										status={
 											[1, 3].includes(index)
-												? "online"
+												? STATUS_AVATAR.online
 												: ""
 										}
 										name={item.fullName}

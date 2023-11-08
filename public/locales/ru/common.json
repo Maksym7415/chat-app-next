@@ -1,12 +1,4 @@
 {
-	"authorization": {
-		"signIn": "Войти",
-		"haveAnAccount": "Есть учетная запись",
-		"haveNoAccount": "Нет учетной записи",
-		"signUp": "Зарегистрироваться",
-		"verificationYourAccount": "Подтвердите свою учетную запись",
-		"verification": "Проверить"
-	},
 	"generals": {
 		"main": "Главная",
 		"you": "Вы",
@@ -38,7 +30,21 @@
 		"isTyping": "Печатает",
 		"forwardedMessage": "Пересланное сообщение",
 		"search": "Поиск",
-		"chat": "Беседа"
+		"chat": "Беседа",
+		"addAPhoto": "Добавить фотографию",
+		"setMainPhoto": "Установить главную фотографию",
+		"deletePhoto": "Удалить фотографию",
+		"createdNewChat": "Создан новый чат",
+		"selectContact": "Выбрать контакт",
+		"successChangeLanguage": "Успешная смена языка"
+	},
+	"authorization": {
+		"signIn": "Войти",
+		"haveAnAccount": "Есть учетная запись",
+		"haveNoAccount": "Нет учетной записи",
+		"signUp": "Зарегистрироваться",
+		"verificationYourAccount": "Подтвердите свою учетную запись",
+		"verification": "Проверить"
 	},
 	"mainScreen": {
 		"chooseAChat": "Выберите чат",

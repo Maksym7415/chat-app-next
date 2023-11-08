@@ -214,7 +214,13 @@ const Message = ({
 							source={messageData.User.userAvatar}
 							name={`${messageData.User.firstName} ${messageData.User.lastName}`}
 							sizeAvatar={38}
-							styles={{ marginRight: "10px" }}
+							optionsTags={{
+								root: {
+									sx: {
+										mr: "10px",
+									},
+								},
+							}}
 						/>
 					)}
 				<div className={classes.wrapper}>

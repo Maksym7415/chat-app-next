@@ -1,25 +1,17 @@
 import CloseIcon from "@mui/icons-material/Close";
-import {
-	Dialog,
-	DialogContent,
-	DialogTitle,
-	IconButton,
-	Typography,
-} from "@mui/material";
+import Dialog from "@mui/material/Dialog";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {
+	SDDialogTitle,
+	SDDialogContent,
+	SDTitle,
+	SDIconButton,
+} from "./styles";
 import NewChat from "./components/newChat";
 import ShareMessage from "./components/shareMessage";
 import { allActionsStore } from "@/store/rootActions";
 
-// STYLES
-const classes = {
-	closeIcon: "w-[30px] h-[30px]",
-	closeIconButton: "w-[30px] h-[30px]",
-	titleContainer: "w-full flex justify-between",
-	title: "text-[1.3rem] block",
-	dialogContent: "w-[400px] h-full relative p-[0px] overflow-visible",
-};
 
 const transitionDuration = 700;
 
@@ -30,6 +22,7 @@ const DialogComponent = () => {
 	// SELECTORS
 	const dialogConfig = useSelector(({ appSlice }) => appSlice.dialogConfig);
 
+	// STATES
 	const [open, setOpen] = useState(false);
 
 	// FUNCTIONS
@@ -42,6 +35,14 @@ const DialogComponent = () => {
 		}, transitionDuration);
 	};
 
+	// USEEFFECTS
+	useEffect(() => {
+		if (dialogConfig.open !== open) {
+			setOpen(dialogConfig.open);
+		}
+	}, [dialogConfig.open]);
+
+	// RENDERS
 	const Content = () => {
 		switch (dialogConfig.typeContent) {
 			case "newChat":
@@ -52,12 +53,6 @@ const DialogComponent = () => {
 				return <></>;
 		}
 	};
-
-	useEffect(() => {
-		if (dialogConfig.open !== open) {
-			setOpen(dialogConfig.open);
-		}
-	}, [dialogConfig.open]);
 
 	return (
 		<Dialog
@@ -70,21 +65,18 @@ const DialogComponent = () => {
 			}}
 			transitionDuration={transitionDuration}
 		>
-			<DialogTitle className={classes.titleContainer}>
-				<Typography className={classes.title}>
-					{dialogConfig.title}
-				</Typography>
-				<IconButton
+			<SDDialogTitle>
+				<SDTitle>{dialogConfig.title}</SDTitle>
+				<SDIconButton
 					size="large"
-					className={classes.closeIconButton}
 					onClick={handleClose}
 				>
 					<CloseIcon />
-				</IconButton>
-			</DialogTitle>
-			<DialogContent className={classes.dialogContent}>
+				</SDIconButton>
+			</SDDialogTitle>
+			<SDDialogContent>
 				<Content />
-			</DialogContent>
+			</SDDialogContent>
 		</Dialog>
 	);
 };

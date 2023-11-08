@@ -20,23 +20,29 @@ export const languagesList = [
 	},
 ];
 
+export const drawerListValues = {
+	myProfile: "myProfile",
+	newChat: "newChat",
+	logout: "logout",
+}; 
+
 export const drawerList = [
 	{
 		id: 1,
-		title: "Profile",
+		title: "profile",
 		icon: <PersonIcon />,
-		value: "myProfile",
+		value: drawerListValues.myProfile,
 	},
 	{
 		id: 2,
-		title: "New Chat",
+		title: "newChat",
 		icon: <GroupIcon />,
-		value: "newChat",
+		value: drawerListValues.newChat
 	},
 	{
 		id: 3,
-		title: "Logout",
+		title: "logout",
 		icon: <ExitToAppIcon />,
-		value: "logout",
+		value: drawerListValues.logout
 	},
 ];

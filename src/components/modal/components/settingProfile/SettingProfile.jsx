@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import Avatars from "./components/avatars";
 import * as config from "./config";
-import CustomButton from "@/components/buttons/customButton";
+import CustomButton from "@/components/buttons/customButton"; // replace
 import TextInputCustom from "@/components/hookFormsComponents/textInput";
 import { userApi } from "@/store/user/api";
 

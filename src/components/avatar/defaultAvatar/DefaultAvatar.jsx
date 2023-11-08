@@ -1,7 +1,4 @@
-const lettersStyle = {
-	fontWeight: 700,
-	color: "#ffffff",
-};
+import { SDRoot, SDText } from "./styles";
 
 const DefaultAvatar = ({
 	name = "Chat",
@@ -10,20 +7,15 @@ const DefaultAvatar = ({
 	fontSize,
 	isSquare,
 }) => (
-	<div
+	<SDRoot
 		style={{
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "center",
-			backgroundColor: "#48b7db",
 			borderRadius: isSquare ? 0 : "50%",
 			width,
 			height,
-			flexShrink: 0,
 		}}
 	>
-		<span style={{ ...lettersStyle, fontSize }}>{name}</span>
-	</div>
+		<SDText variant="span" style={{ fontSize }}>{name}</SDText>
+	</SDRoot>
 );
 
 export default DefaultAvatar;

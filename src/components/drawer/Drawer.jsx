@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MainDrawer from "./components/mainDrawer";
 import ProfilePage from "@/screens/profile/Profile";
 import { allActionsStore } from "@/store/rootActions";
+import { drawerConfigTypes } from "./config";
 
 const transitionDuration = 300;
 
@@ -58,7 +59,7 @@ const SwipeableTemporaryDrawer = () => {
 		<Box sx={{ width: drawerConfig?.width || 300 }}>
 			{(() => {
 				switch (drawerConfig?.type) {
-					case "profile":
+					case drawerConfigTypes.profile:
 						return (
 							<ProfilePage
 								typeProfile={
@@ -71,7 +72,7 @@ const SwipeableTemporaryDrawer = () => {
 							/>
 						);
 
-					case "main":
+					case drawerConfigTypes.main:
 						return (
 							<MainDrawer
 								closeDrawer={toggleDrawer(anchor, false)}

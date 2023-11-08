@@ -1,4 +1,7 @@
-import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import List from "@mui/material/List";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,23 +11,19 @@ import { PATHS } from "@/constants/paths";
 import { allActionsStore } from "@/store/rootActions";
 import { actionLogOut } from "@/store/store";
 import { userApi } from "@/store/user/api";
-
-// STYLES
-const classes = {
-	list: "",
-	wrapperLangs: "p-[15px]",
-	listItem: "w-full cursor-pointer",
-};
+import { SDWLangs, SDListItem } from "./styles";
 
 function MainDrawer({ closeDrawer }) {
 	// HOOKS
 	const router = useRouter();
 	const dispatch = useDispatch();
+	const { t } = useTranslation("common");
 	const { enqueueSnackbar } = useSnackbar();
 
 	// SELECTORS
 	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 
+	// API
 	const [putUpdateProfileData] = userApi.usePutUpdateProfileDataMutation();
 
 	// FUNCTIONS
@@ -32,18 +31,18 @@ function MainDrawer({ closeDrawer }) {
 		closeDrawer();
 
 		switch (value) {
-			case "newChat":
+			case config.drawerListValues.newChat:
 				dispatch(
 					allActionsStore.setDialogWindowConfigAction({
 						open: true,
 						typeContent: "newChat",
-						title: "New Chat",
+						title: t("generals.newChat"),
 						data: [],
 					}),
 				);
 
 				return value;
-			case "myProfile":
+			case config.drawerListValues.myProfile:
 				// eslint-disable-next-line no-case-declarations
 				const timerShowModal = setTimeout(() => {
 					dispatch(
@@ -57,7 +56,7 @@ function MainDrawer({ closeDrawer }) {
 					clearTimeout(timerShowModal);
 				}, 100);
 				return value;
-			case "logout":
+			case config.drawerListValues.logout:
 				await actionLogOut();
 				router.push(PATHS.signIn);
 				return value;
@@ -78,7 +77,7 @@ function MainDrawer({ closeDrawer }) {
 		putUpdateProfileData(sendData)
 			.unwrap()
 			.then(() => {
-				enqueueSnackbar("Success change language", {
+				enqueueSnackbar(t("generals.successChangeLanguage"), {
 					variant: "success",
 				});
 			});
@@ -86,19 +85,18 @@ function MainDrawer({ closeDrawer }) {
 
 	return (
 		<>
-			<List className={classes.list}>
+			<List>
 				{config.drawerList.map(({ icon, id, title, value }) => (
-					<ListItem
+					<SDListItem
 						key={id}
 						onClick={() => handleMenuAction(value)}
-						className={classes.listItem}
 					>
 						<ListItemIcon>{icon}</ListItemIcon>
-						<ListItemText primary={title} />
-					</ListItem>
+						<ListItemText primary={t(title)} />
+					</SDListItem>
 				))}
 			</List>
-			<div className={classes.wrapperLangs}>
+			<SDWLangs>
 				<BaseSelect
 					selectSetting={{
 						label: "language",
@@ -107,7 +105,7 @@ function MainDrawer({ closeDrawer }) {
 						handleChange: handleSetLanguage,
 					}}
 				/>
-			</div>
+			</SDWLangs>
 		</>
 	);
 }

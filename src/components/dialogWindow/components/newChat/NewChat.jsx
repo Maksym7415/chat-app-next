@@ -1,35 +1,26 @@
-import { Box, Grid } from "@mui/material";
+import Box from "@mui/material/Box";
+import { useTranslation } from "next-i18next";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { SDRoot, SDWContact, SDWInfo, SDFullName, SDLogin } from "./styles";
 import SelectsAsyncPaginateSearch from "@/components/SelectsAsyncPaginateSearch";
 import UserAvatar from "@/components/avatar/userAvatar/index";
-import CustomButton from "@/components/buttons/customButton/index";
+import CustomButton from "@/components/buttons/customButton/index"; // replace
 import { socketEmitChatCreation } from "@/core/socket/actions/socketEmit";
-import languages from "@/core/translations";
 import { fullDate } from "@/helpers/index";
 import Snackbar from "@/helpers/notistack";
 import { allActionsStore } from "@/store/rootActions";
 import { searchApi } from "@/store/search/api";
-
-// STYLES
-const classes = {
-	container: "m-[0px] px-[10px] py-[20px] h-full flex flex-col",
-	wrapperContact: "flex px-[10px] py-[5px] cursor-pointer rounded-[20px]",
-	wrapperInfo: "pl-[20px]",
-	fullName: "text-[16px] m-[0px] line-camp-1",
-	login: "m-[0px] mt-[3px] text-[12px] line-camp-1",
-	avatarView: "",
-	containerSelect: "",
-};
+import { STATUS_AVATAR } from "@/constants/general";
 
 // rework style
 
 const NewChat = () => {
 	// HOOKS
 	const dispatch = useDispatch();
+	const { t } = useTranslation("common");
 
 	// SELECTORS
-	const lang = useSelector(({ settingSlice }) => settingSlice.lang);
 	const authToken = useSelector(({ authSlice }) => authSlice.authToken);
 
 	// STATES
@@ -61,16 +52,13 @@ const NewChat = () => {
 			imageFormat: "",
 			cb: () => {
 				dispatch(allActionsStore.setDialogWindowClearConfigAction());
-				return Snackbar.success("Create new chat");
+				return Snackbar.success(t("generals.createdNewChat"));
 			},
 		});
 	};
 
 	return (
-		<Grid
-			container
-			className={classes.container}
-		>
+		<SDRoot>
 			<SelectsAsyncPaginateSearch
 				setSelected={(selected) => {
 					setSelectedContacts(selected);
@@ -114,34 +102,30 @@ const NewChat = () => {
 					},
 					getOptionValue: (option) => option.id,
 					getOptionLabel: (option) => (
-						<Box
+						<SDWContact
 							component="li"
-							className={classes.wrapperContact}
 							key={option.id}
 						>
-							<div className={classes.avatarView}>
+							<Box>
 								<UserAvatar
 									source={option.userAvatar}
 									status={
 										[1, 3].includes(option.id)
-											? "online"
+											? STATUS_AVATAR.online
 											: ""
 									}
 									name={option.fullName}
 									sizeAvatar={38}
 								/>
-							</div>
-							<div className={classes.wrapperInfo}>
-								<p className={classes.fullName}>
-									{option.fullName}
-								</p>
-								<p className={classes.login}>{option.login}</p>
-							</div>
-						</Box>
+							</Box>
+							<SDWInfo>
+								<SDFullName>{option.fullName}</SDFullName>
+								<SDLogin>{option.login}</SDLogin>
+							</SDWInfo>
+						</SDWContact>
 					),
-					className: classes.containerSelect,
 				}}
-				placeholder="Select contact"
+				placeholder={t("generals.selectContact")}
 				styles={{
 					root: {
 						marginLeft: 15,
@@ -157,9 +141,9 @@ const NewChat = () => {
 					maxWidth: "200px",
 				}}
 			>
-				{languages[lang].generals.createAChat}
+				{t("generals.createAChat")}
 			</CustomButton>
-		</Grid>
+		</SDRoot>
 	);
 };
 

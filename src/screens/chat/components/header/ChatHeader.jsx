@@ -16,6 +16,7 @@ import {
 	actionsTypeActionsConversation,
 } from "@/constants/actions";
 import { TYPES_CONVERSATIONS } from "@/constants/general";
+import { drawerConfigTypes } from "@/components/drawer/index";
 import { handleKeyDown } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
 import { store } from "@/store/store";
@@ -119,7 +120,7 @@ const ChatHeader = ({
 							anchor: "right",
 							open: true,
 							width: "400px",
-							type: "profile",
+							type: drawerConfigTypes.profile,
 							configContent: {
 								typeProfile: conversationData.conversationType,
 								conversationData,

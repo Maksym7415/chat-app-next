@@ -1,4 +1,5 @@
 import { Avatar } from "@mui/material";
+import { SDRoot } from "./styles";
 import DefaultAvatar from "../defaultAvatar";
 import BadgeUserAvatar from "@/components/badges/badgeUserAvatar";
 import { getNameShort } from "@/helpers/index";
@@ -9,13 +10,15 @@ const UserAvatar = ({
 	status = "",
 	sizeBadge = 18,
 	name = "",
-	styles = {},
+	optionsTags = {
+		root: {}
+	}
 }) => {
 	// VARIABLES
 	const nameShort = name ? getNameShort(name) : "";
 
 	return (
-		<div style={{ position: "relative", ...styles }}>
+		<SDRoot {...optionsTags.root}>
 			<BadgeUserAvatar
 				typeBadge={status}
 				sizeBadge={sizeBadge}
@@ -33,7 +36,7 @@ const UserAvatar = ({
 					/>
 				)}
 			</BadgeUserAvatar>
-		</div>
+		</SDRoot>
 	);
 };
 

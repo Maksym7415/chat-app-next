@@ -1,12 +1,4 @@
 {
-	"authorization": {
-		"signIn": "Sign in",
-		"haveAnAccount": "Have an account",
-		"haveNoAccount": "Have no account",
-		"signUp": "Sign Up",
-		"verificationYourAccount": "Verification your account",
-		"verification": "Verification"
-	},
 	"generals": {
 		"main": "Main",
 		"you": "You",
@@ -38,7 +30,21 @@
 		"isTyping": "Іs typing",
 		"forwardedMessage": "Forwarded message",
 		"search": "Search",
-		"chat": "Chat"
+		"chat": "Chat",
+		"addAPhoto": "Add a photo",
+		"setMainPhoto": "Set main photo",
+		"deletePhoto": "Delete photo",
+		"createdNewChat": "Created new chat",
+		"selectContact": "Select contact",
+		"successChangeLanguage": "Success change language"
+	},
+	"authorization": {
+		"signIn": "Sign in",
+		"haveAnAccount": "Have an account",
+		"haveNoAccount": "Have no account",
+		"signUp": "Sign Up",
+		"verificationYourAccount": "Verification your account",
+		"verification": "Verification"
 	},
 	"mainScreen": {
 		"chooseAChat": "Choose a chat",

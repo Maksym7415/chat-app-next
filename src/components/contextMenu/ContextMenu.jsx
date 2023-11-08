@@ -1,38 +1,12 @@
-import { makeStyles } from "@mui/styles";
-import { Item, Menu } from "react-contexify";
+import { Menu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { useSelector } from "react-redux";
+import { SDItem, SDWrapperIcon } from "./styles";
 import SvgMaker from "@/components/svgMaker/index";
 import { CONTEXT_MENU_ID } from "@/constants/general";
 
-// makeStyles
-const useStyles = makeStyles(() => ({
-	wrapperIcon: {
-		marginRight: 10,
-	},
-	item: {
-		"&:hover": {
-			"& svg": {
-				"& path": {
-					stroke: "#ffffff",
-				},
-			},
-		},
-	},
-}));
-
-// need style
-
-// STYLES
-// const classes = {
-// 	wrapperIcon: "mr-[10px]",
-// 	item: "hover:",
-// };
-
 const ContextMenu = () => {
-	// HOOKS
-	const classes = useStyles();
-
+	// SELECTORS
 	const contextMenuConfig = useSelector(
 		({ appSlice }) => appSlice.contextMenuConfig,
 	);
@@ -40,22 +14,21 @@ const ContextMenu = () => {
 	return (
 		<Menu id={CONTEXT_MENU_ID.main}>
 			{contextMenuConfig?.config?.map((item) => (
-				<Item
+				<SDItem
 					key={item.id}
 					onClick={() => contextMenuConfig.callBackItem(item)}
 					closeOnClick={!item?.NoCloseOnClick}
-					className={classes.item}
 				>
 					{item?.iconComponent || item?.icon?.name ? (
-						<div className={classes.wrapperIcon}>
+						<SDWrapperIcon>
 							{item?.iconComponent}
 							{item?.icon?.name && (
 								<SvgMaker name={item?.icon?.name} />
 							)}
-						</div>
+						</SDWrapperIcon>
 					) : null}
 					{item.title}
-				</Item>
+				</SDItem>
 			))}
 		</Menu>
 	);

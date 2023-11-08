@@ -12,6 +12,7 @@ import { PATHS } from "@/constants/paths";
 import languages from "@/core/translations";
 import { getCurrentDay, handleKeyDown } from "@/helpers/index";
 import { allActionsStore } from "@/store/rootActions";
+import { STATUS_AVATAR } from "@/constants/general";
 
 // fix conversationType
 
@@ -134,7 +135,7 @@ const ConversationItem = ({ data, usersTyping, paramsId }) => {
 				<div className={classes.avatarView}>
 					<UserAvatar
 						source={data.conversationAvatar}
-						status={!isConversationDialog ? "online" : ""}
+						status={!isConversationDialog ? STATUS_AVATAR.online : ""}
 						name={data.conversationName}
 						sizeAvatar={48}
 					/>

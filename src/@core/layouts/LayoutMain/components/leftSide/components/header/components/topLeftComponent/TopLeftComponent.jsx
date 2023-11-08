@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/constants/general";
 import { allActionsStore } from "@/store/rootActions";
 import { SDW, SDIconButton } from "./styles";
+import { drawerConfigTypes } from "@/components/drawer/index";
 
 const TopLeftComponent = () => {
 	// HOOKS
@@ -33,7 +34,7 @@ const TopLeftComponent = () => {
 										allActionsStore.setDrawerConfigAction({
 											anchor: "left",
 											open: true,
-											type: "main",
+											type: drawerConfigTypes.main,
 										}),
 									);
 								}}

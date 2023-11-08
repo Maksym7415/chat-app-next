@@ -30,6 +30,12 @@ export const LAST_ACTION_MESSAGES_STORE = {
   clear: "clear",
 };
 
+export const STATUS_AVATAR = {
+	online: "online",
+	selected: "selected",
+};
+
+
 export const namesCookies = {
   accessToken: "accessToken",
   userInfoToken: "userInfoToken",

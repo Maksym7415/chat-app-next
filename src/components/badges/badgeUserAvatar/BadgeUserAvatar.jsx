@@ -1,4 +1,5 @@
-import { StyledBadge } from "./styles";
+import { SDBadge } from "./styles";
+import { STATUS_AVATAR } from "@/constants/general";
 
 const BadgeUserAvatar = ({
 	typeBadge,
@@ -6,25 +7,24 @@ const BadgeUserAvatar = ({
 	anchorOrigin = { vertical: "bottom", horizontal: "right" },
 	variant = "dot",
 	children,
-}) =>
-	(() => {
+}) => {
 		switch (typeBadge) {
-			case "online":
+			case STATUS_AVATAR.online:
 				return (
-					<StyledBadge
+					<SDBadge
 						overlap={overlap}
 						anchorOrigin={anchorOrigin}
 						variant={variant}
 					>
 						{children}
-					</StyledBadge>
+					</SDBadge>
 				);
-			case "selected":
+			case STATUS_AVATAR.selected:
 				return <div />;
 
 			default:
 				return <>{children}</>;
 		}
-	})();
+}
 
 export default BadgeUserAvatar;

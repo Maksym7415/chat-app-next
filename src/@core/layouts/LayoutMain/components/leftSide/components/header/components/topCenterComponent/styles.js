@@ -9,6 +9,9 @@ export const SDInputSearch = styled(OutlinedInput)(() => ({
 	padding: "0",
 	borderRadius: "20px",
 	height: "40px",
+	input: {
+		backgroundColor: "unset",
+	},
 }));
 
 export const SDInputAdornmentLeft = styled(InputAdornment)(() => ({
