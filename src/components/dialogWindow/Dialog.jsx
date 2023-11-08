@@ -1,3 +1,5 @@
+"use client";
+ 
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
 import { useEffect, useState } from "react";
@@ -9,11 +11,9 @@ import {
 	SDIconButton,
 } from "./styles";
 import NewChat from "./components/newChat";
+import * as config from "./config";
 import ShareMessage from "./components/shareMessage";
 import { allActionsStore } from "@/store/rootActions";
-
-
-const transitionDuration = 700;
 
 const DialogComponent = () => {
 	// HOOKS
@@ -32,7 +32,7 @@ const DialogComponent = () => {
 		const closeDialogTime = setTimeout(() => {
 			dispatch(allActionsStore.setDialogWindowClearConfigAction());
 			clearTimeout(closeDialogTime);
-		}, transitionDuration);
+		}, config.transitionDuration);
 	};
 
 	// USEEFFECTS
@@ -44,14 +44,14 @@ const DialogComponent = () => {
 
 	// RENDERS
 	const Content = () => {
-		switch (dialogConfig.typeContent) {
-			case "newChat":
-				return <NewChat />;
-			case "shareMessage":
-				return <ShareMessage data={dialogConfig.data} />;
-			default:
-				return <></>;
-		}
+		const variantContent = {
+			[config.typeContent.newChat]: <NewChat />,
+			[config.typeContent.shareMessage]: (
+				<ShareMessage data={dialogConfig.data} />
+			),
+		};
+
+		return variantContent?.[dialogConfig.typeContent] || null;
 	};
 
 	return (
@@ -63,7 +63,7 @@ const DialogComponent = () => {
 					overflow: "unset",
 				},
 			}}
-			transitionDuration={transitionDuration}
+			transitionDuration={config.transitionDuration}
 		>
 			<SDDialogTitle>
 				<SDTitle>{dialogConfig.title}</SDTitle>

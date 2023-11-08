@@ -1,15 +1,7 @@
-// STYLES
-const classes = {
-	wrapperInfoCenter: "flex-center-center text-center w-full h-full ",
-};
+import { SDBoxCenter } from "./styles";
 
-const RenderInfoCenterBox = ({ children, styles }) => (
-	<div
-		className={classes.wrapperInfoCenter}
-		style={styles}
-	>
-		{children}
-	</div>
+const RenderInfoCenterBox = ({ children, optionsTagSx = {} }) => (
+	<SDBoxCenter sx={optionsTagSx}>{children}</SDBoxCenter>
 );
 
 export default RenderInfoCenterBox;

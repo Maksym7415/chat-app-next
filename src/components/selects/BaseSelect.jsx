@@ -3,7 +3,7 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 export default function BaseSelect({ selectSetting }) {
 	return (
 		<FormControl
-			style={{ width: "100%" }}
+			sx={{ width: "100%" }}
 			variant="outlined"
 		>
 			<InputLabel>{selectSetting.label}</InputLabel>

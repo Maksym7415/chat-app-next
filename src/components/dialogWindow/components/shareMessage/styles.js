@@ -44,16 +44,13 @@ export const SDName = styled(Typography)(() => ({
 
 export const SDTextMessage = styled(Typography)(() => ({
 	maxWidth: "90%",
-	// "line-camp-1" fix
 }));
-
 
 export const SDTextNoUsersFound = styled(Typography)(() => ({
 	fontWeight: 600,
-	fontSize: "24px"
+	fontSize: "24px",
 }));
 
 export const SDTextField = styled(TextField)(() => ({
-	width: "100%"
+	width: "100%",
 }));
-

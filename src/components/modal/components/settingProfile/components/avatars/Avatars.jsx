@@ -1,15 +1,15 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { CircularProgress, ListItemText, Menu } from "@mui/material";
 import {
-	CircularProgress,
-	IconButton,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemText,
-	Menu,
-} from "@mui/material";
-import Image from "next/image";
+	SDRoot,
+	SDIconButton,
+	SDWAvatar,
+	SDImgAvatar,
+	SDList,
+	SDListItem,
+	SDListItemIcon,
+} from "./styles";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -20,14 +20,6 @@ import DefaultAvatar from "@/components/avatar/defaultAvatar";
 import RenderInfoCenterBox from "@/components/renders/renderInfoCenterBox";
 import { getNameShort } from "@/helpers/index";
 import { userApi } from "@/store/user/api";
-
-// STYLES
-const classes = {
-	container: "relative",
-	wrapperAvatar: "p-[2px]",
-	listItem: "w-full cursor-pointer",
-	itemIcon: "mr-[15px]",
-};
 
 const Avatars = () => {
 	// HOOKS
@@ -49,20 +41,14 @@ const Avatars = () => {
 	const open = Boolean(anchorEl);
 
 	// FUNCTIONS
-	const handleMenuAction = (value) => {
+	const handleMenuAction = (key) => {
 		// eslint-disable-next-line no-use-before-define
 		handleClose();
 
-		switch (value) {
-			case "addAPhoto":
-				// const file: FileList | null = event.target.files;
-				// const formData = new FormData();
-				// if (file) {
-				//   formData.append("file", file[0]);
-				//   // dispatch(uploadAvatarAction(formData));
-				// }
-				return value;
-			case "setMainPhoto":
+		switch (key) {
+			case config.actionsPhotoKeysData.addAPhoto.key:
+				return key;
+			case config.actionsPhotoKeysData.setMainPhoto.key:
 				putMainPhoto({
 					id: avatars[photoIndexSelected]?.id,
 					additionalUrl: avatars[photoIndexSelected]?.id || "",
@@ -76,8 +62,8 @@ const Avatars = () => {
 							variant: "success",
 						});
 					});
-				return value;
-			case "deletePhoto":
+				return key;
+			case config.actionsPhotoKeysData.deletePhoto.key:
 				deleteAvatar({
 					id: avatars[photoIndexSelected]?.id,
 					params: {
@@ -90,9 +76,9 @@ const Avatars = () => {
 							variant: "success",
 						});
 					});
-				return value;
+				return key;
 			default:
-				return value;
+				return key;
 		}
 	};
 
@@ -119,7 +105,9 @@ const Avatars = () => {
 
 	if (isLoadingAvatars) {
 		return (
-			<RenderInfoCenterBox styles={{ height: "300px", width: "300px" }}>
+			<RenderInfoCenterBox
+				optionsTagSx={{ height: "300px", width: "300px" }}
+			>
 				<CircularProgress size={100} />
 			</RenderInfoCenterBox>
 		);
@@ -132,22 +120,20 @@ const Avatars = () => {
 		const nameShort = fullName ? getNameShort(fullName) : null;
 
 		return (
-			<div className={classes.container}>
-				<div className={classes.wrapperAvatar}>
-					<DefaultAvatar
-						name={nameShort}
-						width={`${sizeAvatar}px`}
-						height={`${sizeAvatar}px`}
-						fontSize="100px"
-					/>
-				</div>
-			</div>
+			<SDWAvatar>
+				<DefaultAvatar
+					name={nameShort}
+					width={`${sizeAvatar}px`}
+					height={`${sizeAvatar}px`}
+					fontSize="100px"
+				/>
+			</SDWAvatar>
 		);
 	}
 
 	return (
 		<>
-			<div className={classes.container}>
+			<SDRoot>
 				<Swiper
 					navigation
 					modules={[Navigation, Pagination]}
@@ -168,15 +154,11 @@ const Avatars = () => {
 								key={item.id}
 								style={{ display: "flex" }}
 							>
-								<Image
+								<SDImgAvatar
 									src={`${process.env.BASE_URL}/${item.fileName}`}
 									width={1000}
 									height={300}
 									alt="Picture of the author"
-									style={{
-										borderRadius: "50%",
-										objectFit: "cover",
-									}}
 								/>
 							</SwiperSlide>
 						))
@@ -184,37 +166,25 @@ const Avatars = () => {
 						<></>
 					)}
 				</Swiper>
-				<IconButton
+				<SDIconButton
 					aria-label="more"
 					id="long-button"
 					aria-controls={open ? "long-menu" : undefined}
 					aria-expanded={open ? "true" : undefined}
 					aria-haspopup="true"
 					onClick={handleClick}
-					style={{
-						position: "absolute",
-						right: "0",
-						top: "0",
-						zIndex: 2,
-					}}
 				>
 					<MoreVertIcon />
-				</IconButton>
+				</SDIconButton>
 				{avatars[photoIndexSelected]?.id === mainAvatar?.id && (
-					<IconButton
+					<SDIconButton
 						color="primary"
 						component="span"
-						style={{
-							position: "absolute",
-							left: "0",
-							top: "0",
-							zIndex: 2,
-						}}
 					>
 						<CheckCircleIcon fontSize="medium" />
-					</IconButton>
+					</SDIconButton>
 				)}
-			</div>
+			</SDRoot>
 			<Menu
 				id="long-menu"
 				MenuListProps={{
@@ -224,32 +194,31 @@ const Avatars = () => {
 				open={open}
 				onClose={handleClose}
 			>
-				<List className={classes.list}>
-					{config.actionsPhoto.map(({ icon, id, title, value }) => {
+				<SDList>
+					{config.actionsPhoto.map((item) => {
+						const icon = item?.icon || null;
+						const id = item?.id || null;
+						const title = item?.title || null;
+						const key = item?.key || null;
+
 						if (
 							avatars[photoIndexSelected]?.id ===
 								mainAvatar?.id &&
-							value === "setMainPhoto"
+							key === config.actionsPhotoKeysData.setMainPhoto.key
 						) {
 							return (
-								<ListItem
+								<SDListItem
 									key={id}
-									onClick={() => handleMenuAction(value)}
-									className={classes.listItem}
+									onClick={() => handleMenuAction(key)}
 								>
-									<ListItemIcon
-										className={classes.itemIcon}
-										style={{ minWidth: 0 }}
-									>
-										{icon}
-									</ListItemIcon>
+									<SDListItemIcon>{icon}</SDListItemIcon>
 									<ListItemText primary={title} />
-								</ListItem>
+								</SDListItem>
 							);
 						}
 						return <></>;
 					})}
-				</List>
+				</SDList>
 			</Menu>
 		</>
 	);

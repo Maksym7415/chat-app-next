@@ -1,4 +1,6 @@
-export const drawerConfigTypes = {
-	profile: "profile",
-	main: "main",
+export const typeContent = {
+	newChat: "newChat",
+	shareMessage: "shareMessage",
 };
+
+export const transitionDuration = 700;

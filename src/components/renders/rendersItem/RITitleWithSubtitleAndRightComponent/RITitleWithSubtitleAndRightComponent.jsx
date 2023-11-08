@@ -1,12 +1,10 @@
 import { handleKeyDown } from "@/helpers/index";
-
-// STYLES
-const classes = {
-	title: "font-normal text-[15px] text-[#202020] m-0",
-	subTitle: "font-normal text-[12px] text-[#83868B] mt-[6px]",
-	wrapperItem: "py-[12px] px-[10px] pointer-events-none flex items-center",
-	wrapperItemLeft: "",
-};
+import {
+	SDWrapperItem,
+	SDWrapperItemLeft,
+	SDTitle,
+	SDSubTitle,
+} from "./styles";
 
 const RITitleWithSubtitleAndRightComponent = ({
 	title = "",
@@ -14,53 +12,49 @@ const RITitleWithSubtitleAndRightComponent = ({
 	renderRightComponent = null,
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	onPressWrapperItemLeft = () => {},
-	styles = {
+	optionsTagsSx: {
 		wrapperItem: {},
 		wrapperItemLeft: {},
 		title: {},
 		subTitle: {},
 	},
 }) => (
-	<div
-		className={classes.wrapperItem}
-		style={{
+	<SDWrapperItem
+		sx={{
 			justifyContent: renderRightComponent ? "space-between" : null,
-			...styles.wrapperItem,
+			...optionsTagsSx?.wrapperItem,
 		}}
 	>
-		<div
+		<SDWrapperItemLeft
 			role="button"
 			tabIndex="0"
 			onClick={onPressWrapperItemLeft}
-			className={classes.wrapperItemLeft}
-			style={{
-				...styles.wrapperItemLeft,
+			sx={{
+				...optionsTagsSx?.wrapperItem,
 			}}
 			onKeyDown={(event) =>
 				// eslint-disable-next-line @typescript-eslint/no-empty-function
 				handleKeyDown({ event, fcClick: () => {} })
 			}
 		>
-			<p
-				className={classes.title}
-				style={{
-					...styles.title,
+			<SDTitle
+				sx={{
+					...optionsTagsSx?.title,
 				}}
 			>
 				{title}
-			</p>
+			</SDTitle>
 			{subTitle ? (
-				<p
-					className={classes.subTitle}
-					style={{
-						...styles.subTitle,
+				<SDSubTitle
+					sx={{
+						...optionsTagsSx?.title,
 					}}
 				>
 					{subTitle}
-				</p>
+				</SDSubTitle>
 			) : null}
-		</div>
+		</SDWrapperItemLeft>
 		{renderRightComponent ? renderRightComponent() : null}
-	</div>
+	</SDWrapperItem>
 );
 export default RITitleWithSubtitleAndRightComponent;

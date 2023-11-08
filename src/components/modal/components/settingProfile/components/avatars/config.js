@@ -2,23 +2,29 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
+export const actionsPhotoKeysData = {
+	addAPhoto: {
+		key: "addAPhoto",
+		id: 1,
+		title: "addAPhoto",
+		icon: <AddAPhotoIcon />,
+	},
+	setMainPhoto: {
+		key: "setMainPhoto",
+		id: 2,
+		title: "setMainPhoto",
+		icon: <CheckCircleIcon />,
+	},
+	deletePhoto: {
+		key: "deletePhoto",
+		id: 3,
+		title: "deletePhoto",
+		icon: <DeleteIcon />,
+	},
+};
+
 export const actionsPhoto = [
-  {
-    id: 1,
-    title: "Add A Photo",
-    icon: <AddAPhotoIcon />,
-    value: "addAPhoto",
-  },
-  {
-    id: 2,
-    title: "Set main Photo",
-    icon: <CheckCircleIcon />,
-    value: "setMainPhoto",
-  },
-  {
-    id: 3,
-    title: "Delete photo",
-    icon: <DeleteIcon />,
-    value: "deletePhoto",
-  },
+	actionsPhotoKeysData.addAPhoto,
+	actionsPhotoKeysData.setMainPhoto,
+	actionsPhotoKeysData.deletePhoto,
 ];

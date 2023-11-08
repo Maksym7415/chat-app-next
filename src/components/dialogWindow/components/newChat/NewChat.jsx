@@ -1,19 +1,19 @@
+"use client";
+
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SDRoot, SDWContact, SDWInfo, SDFullName, SDLogin } from "./styles";
 import SelectsAsyncPaginateSearch from "@/components/SelectsAsyncPaginateSearch";
 import UserAvatar from "@/components/avatar/userAvatar/index";
-import CustomButton from "@/components/buttons/customButton/index"; // replace
 import { socketEmitChatCreation } from "@/core/socket/actions/socketEmit";
 import { fullDate } from "@/helpers/index";
 import Snackbar from "@/helpers/notistack";
 import { allActionsStore } from "@/store/rootActions";
 import { searchApi } from "@/store/search/api";
 import { STATUS_AVATAR } from "@/constants/general";
-
-// rework style
 
 const NewChat = () => {
 	// HOOKS
@@ -133,7 +133,7 @@ const NewChat = () => {
 					},
 				}}
 			/>
-			<CustomButton
+			<Button
 				onClick={createChat}
 				style={{
 					margin: "10px auto 0",
@@ -142,7 +142,7 @@ const NewChat = () => {
 				}}
 			>
 				{t("generals.createAChat")}
-			</CustomButton>
+			</Button>
 		</SDRoot>
 	);
 };

@@ -1,3 +1,5 @@
+"use client";
+
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { useEffect, useState } from "react";
@@ -49,6 +51,7 @@ const SwipeableTemporaryDrawer = () => {
 		}, transitionDuration);
 	};
 
+	// USEEFFECTS
 	useEffect(() => {
 		if (drawerConfig.open !== openDrawer) {
 			setOpenDrawer(drawerConfig.open);
@@ -58,29 +61,24 @@ const SwipeableTemporaryDrawer = () => {
 	const renderContent = (anchor) => (
 		<Box sx={{ width: drawerConfig?.width || 300 }}>
 			{(() => {
-				switch (drawerConfig?.type) {
-					case drawerConfigTypes.profile:
-						return (
-							<ProfilePage
-								typeProfile={
-									drawerConfig.configContent?.typeProfile
-								}
-								conversationData={
-									drawerConfig.configContent?.conversationData
-								}
-								closeDrawer={toggleDrawer(anchor, false)}
-							/>
-						);
+				const contentVariant = {
+					[drawerConfigTypes.profile]: (
+						<ProfilePage
+							typeProfile={
+								drawerConfig.configContent?.typeProfile
+							}
+							conversationData={
+								drawerConfig.configContent?.conversationData
+							}
+							closeDrawer={toggleDrawer(anchor, false)}
+						/>
+					),
+					[drawerConfigTypes.main]: (
+						<MainDrawer closeDrawer={toggleDrawer(anchor, false)} />
+					),
+				};
 
-					case drawerConfigTypes.main:
-						return (
-							<MainDrawer
-								closeDrawer={toggleDrawer(anchor, false)}
-							/>
-						);
-					default:
-						return <></>;
-				}
+				return contentVariant?.[drawerConfig?.type] || null;
 			})()}
 		</Box>
 	);

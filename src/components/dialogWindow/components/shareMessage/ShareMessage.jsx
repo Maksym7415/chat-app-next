@@ -47,14 +47,9 @@ const SharedMessage = ({ data }) => {
 
 	const handleShareMessageId = (conversationId) => {
 		dispatch(allActionsStore.shareMessageAction(data));
-		router.push(`${PATHS.chat}/${conversationId}`);
-		// history.push({
-		//   pathname: `${PATHS.chat}/${conversationId}`,
-		//   state: {
-		//     from: "shareMessage",
-		//   },
-		// });
 		dispatch(allActionsStore.setDialogWindowClearConfigAction());
+
+		router.push(`${PATHS.chat}/${conversationId}`);
 	};
 
 	return (

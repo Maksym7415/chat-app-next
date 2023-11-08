@@ -1,23 +1,20 @@
+"use client";
+
+import { useTranslation } from "next-i18next";
 import { useSnackbar } from "notistack";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { SDRoot, SDWBtn, SDButton, SDTitle } from "./styles";
 import Avatars from "./components/avatars";
 import * as config from "./config";
-import CustomButton from "@/components/buttons/customButton"; // replace
 import TextInputCustom from "@/components/hookFormsComponents/textInput";
 import { userApi } from "@/store/user/api";
-
-// STYLES
-const classes = {
-	container: "w-max w-min-[300px]",
-	wrapperBtn: "mt-[15px] flex justify-center",
-	title: "text-center",
-};
 
 const SettingProfile = () => {
 	// HOOKS
 	const { enqueueSnackbar } = useSnackbar();
+	const { t } = useTranslation("common");
 
 	// SELECTORS
 	const userInfo = useSelector(({ userSlice }) => userSlice.userInfo);
@@ -70,20 +67,26 @@ const SettingProfile = () => {
 	// USEEFFECTS
 	useEffect(() => {
 		// set defaultValues form from back
-		if (!getValues("firstName") && userInfo.firstName) {
-			setValue("firstName", `${userInfo.firstName}`);
+		if (!getValues(config.fieldsKeysData.firstName.key) && userInfo.firstName) {
+			setValue(
+				config.fieldsKeysData.firstName.key,
+				`${userInfo.firstName}`,
+			);
 		}
-		if (!getValues("lastName") && userInfo.lastName) {
-			setValue("lastName", `${userInfo.lastName}`);
+		if (!getValues(config.fieldsKeysData.lastName.key) && userInfo.lastName) {
+			setValue(
+				config.fieldsKeysData.lastName.key,
+				`${userInfo.lastName}`,
+			);
 		}
 	}, [userInfo]);
 
 	return (
-		<div className={classes.container}>
-			<h1 className={classes.title}>Profile</h1>
+		<SDRoot>
+			<SDTitle>{t("generals.search")}</SDTitle>
 			<Avatars />
 			<form>
-				{config.fieldsEditName.map((el) => (
+				{config.fields.map((el) => (
 					<Controller
 						key={el.id}
 						control={control}
@@ -95,26 +98,22 @@ const SettingProfile = () => {
 								error={errors[el.fieldName]}
 								placeholder={el.placeholder}
 								secureTextEntry={false}
-								styles={el.styles}
+								optionsTagsSx={el.optionsTagsSx}
 							/>
 						)}
 						name={el.fieldName}
 					/>
 				))}
-				<div className={classes.wrapperBtn}>
-					<CustomButton
+				<SDWBtn>
+					<SDButton
 						onClick={handleSubmit(onSubmit)}
-						style={{
-							width: "100%",
-							maxWidth: "200px",
-						}}
 						disabled={isLoading}
 					>
 						Submit
-					</CustomButton>
-				</div>
+					</SDButton>
+				</SDWBtn>
 			</form>
-		</div>
+		</SDRoot>
 	);
 };
 

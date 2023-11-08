@@ -1,5 +1,6 @@
-// import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-// import ArrowBackIcon from "public/icons/generals/arrowBack.svg";
+"use client";
+
+import ArrowBackIcon from "public/icons/generals/arrowBack.svg";
 import MenuIcon from "public/icons/generals/menu.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { SIDE_LEFT_TYPE_CONTENT } from "@/constants/general";
@@ -44,6 +45,7 @@ const TopLeftComponent = () => {
 						</>
 					);
 				}
+
 				return (
 					<SDIconButton
 						color="default"
@@ -56,9 +58,7 @@ const TopLeftComponent = () => {
 							);
 						}}
 					>
-						{/* <ArrowBackIcon /> */}
-
-						ArrowBackIcon
+						<ArrowBackIcon />
 					</SDIconButton>
 				);
 			})()}

@@ -1,3 +1,5 @@
+"use client";
+
 import List from "@mui/material/List";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -27,22 +29,11 @@ function MainDrawer({ closeDrawer }) {
 	const [putUpdateProfileData] = userApi.usePutUpdateProfileDataMutation();
 
 	// FUNCTIONS
-	const handleMenuAction = async (value) => {
+	const handleMenuAction = async (key) => {
 		closeDrawer();
 
-		switch (value) {
-			case config.drawerListValues.newChat:
-				dispatch(
-					allActionsStore.setDialogWindowConfigAction({
-						open: true,
-						typeContent: "newChat",
-						title: t("generals.newChat"),
-						data: [],
-					}),
-				);
-
-				return value;
-			case config.drawerListValues.myProfile:
+		switch (key) {
+			case config.drawerListKeysData.profile.key:
 				// eslint-disable-next-line no-case-declarations
 				const timerShowModal = setTimeout(() => {
 					dispatch(
@@ -55,13 +46,26 @@ function MainDrawer({ closeDrawer }) {
 
 					clearTimeout(timerShowModal);
 				}, 100);
-				return value;
-			case config.drawerListValues.logout:
+
+				return key;
+			case config.drawerListKeysData.newChat.key:
+				dispatch(
+					allActionsStore.setDialogWindowConfigAction({
+						open: true,
+						typeContent: "newChat",
+						title: t("generals.newChat"),
+						data: [],
+					}),
+				);
+
+				return key;
+			case config.drawerListKeysData.logout.key:
 				await actionLogOut();
 				router.push(PATHS.signIn);
-				return value;
+
+				return key;
 			default:
-				return value;
+				return key;
 		}
 	};
 
@@ -86,15 +90,22 @@ function MainDrawer({ closeDrawer }) {
 	return (
 		<>
 			<List>
-				{config.drawerList.map(({ icon, id, title, value }) => (
-					<SDListItem
-						key={id}
-						onClick={() => handleMenuAction(value)}
-					>
-						<ListItemIcon>{icon}</ListItemIcon>
-						<ListItemText primary={t(title)} />
-					</SDListItem>
-				))}
+				{config.drawerList.map((item) => {
+					const icon = item?.icon || null;
+					const id = item?.id || null;
+					const title = item?.title || null;
+					const key = item?.key || null;
+
+					return (
+						<SDListItem
+							key={id}
+							onClick={() => handleMenuAction(key)}
+						>
+							<ListItemIcon>{icon}</ListItemIcon>
+							<ListItemText primary={t(title)} />
+						</SDListItem>
+					);
+				})}
 			</List>
 			<SDWLangs>
 				<BaseSelect

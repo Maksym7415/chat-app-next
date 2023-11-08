@@ -8,13 +8,13 @@ const DefaultAvatar = ({
 	isSquare,
 }) => (
 	<SDRoot
-		style={{
+		sx={{
 			borderRadius: isSquare ? 0 : "50%",
 			width,
 			height,
 		}}
 	>
-		<SDText variant="span" style={{ fontSize }}>{name}</SDText>
+		<SDText variant="span" sx={{ fontSize }}>{name}</SDText>
 	</SDRoot>
 );
 

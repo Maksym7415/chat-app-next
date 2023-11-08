@@ -1,16 +1,10 @@
 import CloseIcon from "@mui/icons-material/Close";
-import { Backdrop, Box, IconButton, Modal, Typography } from "@mui/material";
+import { Backdrop, IconButton, Modal, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import SettingProfile from "./components/settingProfile";
+import { SDRoot } from "./styles";
 import { allActionsStore } from "@/store/rootActions";
-
-// rework fade
-
-// STYLES
-const classes = {
-	container:
-		"absolute w-max-[90vw] h-max-[90vh] overflow-auto bg-white p-[10px] rounded-[20px] top-[50%] left-[50%] -translate-x-2/4 -translate-y-2/4",
-};
+import SettingProfile from "./components/settingProfile";
+import * as config from "./config";
 
 const ModalComponent = () => {
 	// HOOKS
@@ -34,10 +28,7 @@ const ModalComponent = () => {
 			}}
 		>
 			{/* <Fade in={modalConfig.open}> */}
-			<Box
-				className={classes.container}
-				style={modalConfig?.styles?.container}
-			>
+			<SDRoot sx={modalConfig?.styles?.container}>
 				<IconButton
 					aria-label="close"
 					onClick={handleClose}
@@ -46,22 +37,24 @@ const ModalComponent = () => {
 					<CloseIcon />
 				</IconButton>
 				{(() => {
-					switch (modalConfig.renderContent) {
-						case "settingProfile":
-							return <SettingProfile />;
-						default:
-							return (
-								<Typography
-									id="spring-modal-title"
-									variant="h6"
-									component="h2"
-								>
-									Немає такої модалки
-								</Typography>
-							);
-					}
+					const contentVariant = {
+						[config.typeContent.settingProfile]: <SettingProfile />,
+					};
+
+					return (
+						contentVariant?.[modalConfig.renderContent] || (
+							<Typography
+								id="spring-modal-title"
+								variant="h6"
+								component="h2"
+							>
+								Немає такої модалки
+							</Typography>
+						)
+					);
 				})()}
-			</Box>
+				;
+			</SDRoot>
 			{/* </Fade> */}
 		</Modal>
 	);

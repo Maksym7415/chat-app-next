@@ -1,10 +1,6 @@
 import { CircularProgress } from "@mui/material";
+import { SDBoxCenter, SDTextNoResults } from "./styles";
 
-// STYLES
-const classes = {
-	boxCenter: "flex items-center justify-center h-full",
-	noResults: "text-[20px] font-semibold",
-};
 
 const RenderConditionsList = ({
 	list = [],
@@ -12,7 +8,7 @@ const RenderConditionsList = ({
 	isError = false,
 	errorMessage = "error",
 	noResultsText = "No results",
-	styles = {
+	optionsTagsSx = {
 		boxCenter: {},
 		noResults: {},
 	},
@@ -20,39 +16,27 @@ const RenderConditionsList = ({
 	// RENDER CONDITIONS
 	if (isError) {
 		return (
-			<div
-				className={classes.boxCenter}
-				style={styles?.boxCenter}
-			>
+			<SDBoxCenter sx={optionsTagsSx?.boxCenter}>
 				{errorMessage}
-			</div>
+			</SDBoxCenter>
 		);
 	}
 
 	if (isLoading) {
 		return (
-			<div
-				className={classes.boxCenter}
-				style={styles?.boxCenter}
-			>
+				<SDBoxCenter sx={optionsTagsSx?.boxCenter}>
 				<CircularProgress size={50} />
-			</div>
+			</SDBoxCenter>
 		);
 	}
 
 	if (!list.length) {
 		return (
-			<div
-				className={classes.boxCenter}
-				style={styles?.boxCenter}
-			>
-				<p
-					className={classes.noResults}
-					style={styles?.noResults}
-				>
+			<SDBoxCenter sx={optionsTagsSx?.boxCenter}>
+				<SDTextNoResults sx={optionsTagsSx?.noResults}>
 					{noResultsText}
-				</p>
-			</div>
+				</SDTextNoResults>
+			</SDBoxCenter>
 		);
 	}
 

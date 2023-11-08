@@ -17,20 +17,18 @@ const LeftSide = () => {
 
 	// RENDERS
 	const renderContent = useMemo(() => {
-		switch (sideLeftConfig.page) {
-			case SIDE_LEFT_TYPE_CONTENT.conversations:
-				return <Conversations />;
-			case SIDE_LEFT_TYPE_CONTENT.searchContacts:
-				return (
-					<SearchPage
-						params={{
-							from: TYPES_FROM_TO_SEARCH_SCREEN.main,
-						}}
-					/>
-				);
-			default:
-				return <></>;
-		}
+		const contentVariant = {
+			[SIDE_LEFT_TYPE_CONTENT.conversations]: <Conversations />,
+			[SIDE_LEFT_TYPE_CONTENT.searchContacts]: (
+				<SearchPage
+					params={{
+						from: TYPES_FROM_TO_SEARCH_SCREEN.main,
+					}}
+				/>
+			),
+		};
+
+		return contentVariant?.[sideLeftConfig.page] || null;
 	}, [sideLeftConfig]);
 
 	return (

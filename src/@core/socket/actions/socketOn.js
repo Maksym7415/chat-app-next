@@ -88,7 +88,6 @@ export const socketOnUserIdChat = (chat, options) =>
 					conversationId: chat.conversationId,
 					messages: updateMessages,
 					lastAction: LAST_ACTION_MESSAGES_STORE.add,
-					// pagination: response.pagination,
 				}),
 			);
 		}
